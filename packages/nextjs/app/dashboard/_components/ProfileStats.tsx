@@ -9,12 +9,11 @@ const ProfileStats: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-800 text-white p-4 rounded-lg flex items-center space-x-4">
+    <header className="bg-slate-800 text-white px-12 py-8 rounded-2xl flex flex-col space-y-2 w-3/5 m-auto">
       <div className="flex items-center space-x-2">
         <div className="text-2xl">🔷</div>
         <div>
-          <div className="text-xl font-semibold">Ethereum Market</div>
-          <div className="text-sm text-gray-400">Version 3</div>
+          <div className="text-2xl font-semibold">Ethereum Market</div>
         </div>
       </div>
       <div className="flex items-center space-x-8">
@@ -31,10 +30,10 @@ const ProfileStats: React.FC = () => {
           <div className="text-lg font-semibold">{data.healthFactor}</div>
         </div>
         <div className="flex items-center space-x-2">
-          <button className="bg-yellow-500 text-gray-800 px-2 py-1 rounded">RISK DETAILS</button>
+          <button className="bg-warning text-slate-800 px-2 py-1 rounded uppercase">risk details</button>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 
