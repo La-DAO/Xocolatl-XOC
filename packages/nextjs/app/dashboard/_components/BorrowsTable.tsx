@@ -1,19 +1,7 @@
 import React from "react";
+import { BorrowTableProps } from "@/types/assets/assets";
 
-interface Asset {
-  asset: string;
-  available?: string;
-  debt?: string;
-  apy: string;
-  apyType?: string;
-}
-
-interface AssetsTableProps {
-  assets: Asset[];
-  isBorrowed: boolean;
-}
-
-const AssetsTable: React.FC<AssetsTableProps> = ({ assets, isBorrowed }) => {
+const AssetsTable: React.FC<BorrowTableProps> = ({ assets, isBorrowed }) => {
   return (
     <table className="min-w-full divide-y divide-gray-200">
       <thead className="bg-gray-50 text-center">

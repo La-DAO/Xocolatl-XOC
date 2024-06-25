@@ -14,6 +14,11 @@ const Supplies: React.FC = () => {
 
   const hasSupplies = true;
 
+  // Adjust walletBalance to 0 if hasSupplies is false
+  const adjustedAssetsToSupply = hasSupplies
+    ? assetsToSupply
+    : assetsToSupply.map(asset => ({ ...asset, walletBalance: "0" }));
+
   return (
     <div className="rounded-md">
       {/* Container for supplies section */}
@@ -36,7 +41,7 @@ const Supplies: React.FC = () => {
         <h2 className="text-xl text-primary font-semibold mb-4">Assets to Supply</h2>
         <p className="text-gray-500 mb-4">Select the amount of WETH to deposit as collateral</p>
         {/* Table displaying assets available to supply */}
-        <SupplyTable assets={assetsToSupply} isSupplied={false} />
+        <SupplyTable assets={adjustedAssetsToSupply} isSupplied={false} />
       </div>
     </div>
   );

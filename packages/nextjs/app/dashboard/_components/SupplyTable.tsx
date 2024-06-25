@@ -1,17 +1,5 @@
 import React from "react";
-
-interface Asset {
-  asset: string;
-  walletBalance?: string;
-  balance?: string;
-  apy: string;
-  collateral: boolean;
-}
-
-interface SupplyTableProps {
-  assets: Asset[];
-  isSupplied: boolean;
-}
+import { SupplyTableProps } from "@/types/assets/assets";
 
 const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied }) => {
   return (
