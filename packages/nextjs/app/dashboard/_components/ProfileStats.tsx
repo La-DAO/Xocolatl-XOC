@@ -9,7 +9,7 @@ const ProfileStats: React.FC = () => {
   };
 
   return (
-    <header className="bg-slate-800 text-white px-12 py-8 rounded-2xl flex flex-col space-y-2 w-3/5 m-auto">
+    <header className="bg-slate-800 text-white px-12 py-8 rounded-2xl flex flex-col space-y-2 w-4/5 m-auto">
       <div className="flex items-center space-x-2">
         <div className="text-2xl">🔷</div>
         <div>
