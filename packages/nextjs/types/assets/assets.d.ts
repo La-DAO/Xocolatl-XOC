@@ -21,3 +21,10 @@ export interface BorrowTableProps {
   assets: Asset[];
   isBorrowed: boolean;
 }
+
+// Props for a modal component used to supply an asset.
+interface SupplyModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  asset: Asset | null;
+}

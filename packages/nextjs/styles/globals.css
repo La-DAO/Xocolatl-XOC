@@ -19,10 +19,6 @@ h4 {
   line-height: 1;
 }
 
-p {
-  margin: 1rem 0;
-}
-
 .btn {
   @apply shadow-md;
 }
