@@ -22,7 +22,7 @@ module.exports = {
           "base-300": "#DAE8FF",
           "base-content": "#212638",
           info: "#93BBFB",
-          success: "#34EEB6",
+          success: "#4caf50",
           warning: "#FFCF72",
           error: "#FF8863",
 
@@ -54,7 +54,7 @@ module.exports = {
           "base-300": "#212638",
           "base-content": "#F9FBFF",
           info: "#385183",
-          success: "#34EEB6",
+          success: "#4caf50",
           warning: "#FFCF72",
           error: "#FF8863",
 

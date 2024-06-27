@@ -8,8 +8,8 @@ const Dashboard: NextPage = () => {
     <div className="flex flex-col">
       <ProfileStats />
       <div className="grid grid-cols-2 gap-4 w-4/5 m-auto mt-4">
-        <Borrows />
         <Supplies />
+        <Borrows />
       </div>
     </div>
   );

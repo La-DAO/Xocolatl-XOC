@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import BorrowsTable from "./BorrowsTable";
+
+// import BorrowsTable from "./BorrowsTable";
 
 /**
  * Borrows component displays a list of assets available to borrow.
@@ -9,13 +10,13 @@ import BorrowsTable from "./BorrowsTable";
  */
 const Borrows: React.FC = () => {
   // Sample data for assets available to borrow
-  const assetsToBorrow = [
+  /* const assetsToBorrow = [
     { asset: "WETH", available: "0.01", apy: "0.46%" },
     { asset: "USDC", available: "100", apy: "2.10%" },
-  ];
+  ];*/
 
   // Sample data for assets borrowed
-  const borrowedAssets = [{ asset: "WETH", debt: "1", apy: "8.6%", apyType: "Variable" }];
+  // const borrowedAssets = [{ asset: "WETH", debt: "1", apy: "8.6%", apyType: "Variable" }];
 
   // To show the borrowed assets table information
   const hasBorrows = true;
@@ -32,7 +33,7 @@ const Borrows: React.FC = () => {
               <span className="text-gray-500 bg-gray-200 px-2 py-1 rounded-md">APY 8.70%</span>
               <span className="text-gray-500 bg-gray-200 px-2 py-1 rounded-md">Borrow power used 25.93%</span>
             </div>
-            <BorrowsTable assets={borrowedAssets} isBorrowed={true} />
+            {/** <BorrowsTable assets={borrowedAssets} isBorrowed={true} /> */}
           </>
         ) : (
           <p className="text-slate-800">Nothing borrowed yet</p>
@@ -44,7 +45,7 @@ const Borrows: React.FC = () => {
         <h2 className="text-xl text-primary font-semibold mb-4">Assets to Borrow</h2>
         <p className="text-gray-500 mb-4">Select the amount of WETH to deposit as collateral</p>
         {/* Table displaying assets available to borrow */}
-        <BorrowsTable assets={assetsToBorrow} isBorrowed={false} />
+        {/**<BorrowsTable assets={assetsToBorrow} isBorrowed={false} />*/}
       </div>
     </div>
   );

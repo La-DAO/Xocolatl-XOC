@@ -1,12 +1,12 @@
 // Represents an individual asset with optional and mandatory properties.
 export interface Asset {
   asset: string;
-  walletBalance?: string;
-  balance?: string;
-  apy: string;
+  walletBalance?: number;
+  balance?: number;
+  apy: number;
   collateral?: boolean;
-  available?: string;
-  debt?: string;
+  available?: number;
+  debt?: number;
   apyType?: string;
 }
 
@@ -14,6 +14,7 @@ export interface Asset {
 export interface SupplyTableProps {
   assets: Asset[];
   isSupplied: boolean;
+  onAction: (asset: Asset) => void;
 }
 
 // Props for a component displaying a table of borrowed assets.

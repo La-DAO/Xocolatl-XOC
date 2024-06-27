@@ -51,6 +51,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    "@heroicons/react": "^2.1.4"
+    "@heroicons/react": "^2.1.4",
+    "fs": "^0.0.1-security"
   }
 }

@@ -26,3 +26,39 @@ h4 {
 .btn.btn-ghost {
   @apply shadow-none;
 }
+
+/* Estilos para el toggle switch */
+.toggle-checkbox {
+  display: none; /* Oculta el checkbox original */
+}
+
+.toggle-label {
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: background-color 0.2s;
+}
+
+.toggle-label::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.toggle-checkbox:checked + .toggle-label {
+  background-color: #4caf50;
+}
+
+.toggle-checkbox:checked + .toggle-label::before {
+  transform: translateX(14px);
+}

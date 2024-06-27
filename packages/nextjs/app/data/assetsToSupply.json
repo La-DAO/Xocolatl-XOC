@@ -1,0 +1,62 @@
+[
+  {
+    "asset": "XOC",
+    "walletBalance": 20000,
+    "apy": 3.6,
+    "collateral": true
+  },
+  {
+    "asset": "BTC",
+    "walletBalance": 1.5,
+    "apy": 4.2,
+    "collateral": false
+  },
+  {
+    "asset": "ETH",
+    "walletBalance": 10.0,
+    "apy": 5.0,
+    "collateral": true
+  },
+  {
+    "asset": "LTC",
+    "walletBalance": 150.0,
+    "apy": 2.8,
+    "collateral": false
+  },
+  {
+    "asset": "ADA",
+    "walletBalance": 5000.0,
+    "apy": 4.5,
+    "collateral": true
+  },
+  {
+    "asset": "DOT",
+    "walletBalance": 120.0,
+    "apy": 6.0,
+    "collateral": true
+  },
+  {
+    "asset": "SOL",
+    "walletBalance": 300.0,
+    "apy": 3.2,
+    "collateral": false
+  },
+  {
+    "asset": "BNB",
+    "walletBalance": 50.0,
+    "apy": 5.1,
+    "collateral": true
+  },
+  {
+    "asset": "AVAX",
+    "walletBalance": 80.0,
+    "apy": 4.0,
+    "collateral": true
+  },
+  {
+    "asset": "MATIC",
+    "walletBalance": 2000.0,
+    "apy": 3.8,
+    "collateral": false
+  }
+]
