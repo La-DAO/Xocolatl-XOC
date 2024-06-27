@@ -2,6 +2,7 @@
 export interface Asset {
   asset: string;
   walletBalance?: number;
+  walletBalanceConverted?: number;
   balance?: number;
   apy: number;
   collateral?: boolean;
@@ -28,4 +29,7 @@ interface SupplyModalProps {
   isOpen: boolean;
   onClose: () => void;
   asset: Asset | null;
+  transferAmount: number;
+  setTransferAmount: (amount: number) => void;
+  onConfirm: (amount: number) => void; // New prop for confirmation with amount
 }

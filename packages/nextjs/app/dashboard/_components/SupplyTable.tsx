@@ -8,6 +8,7 @@ const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied, onAction 
       <table className="min-w-full divide-y divide-gray-200">
         <thead>
           <tr className="text-center">
+            {/* Column headers */}
             <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
               Assets
             </th>
@@ -31,15 +32,26 @@ const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied, onAction 
         <tbody className="bg-white divide-y divide-gray-200 text-center">
           {assets.map((asset, index) => (
             <tr key={index}>
+              {/* Asset name */}
               <td className="py-4">
                 <p className="text-sm font-medium text-gray-900">{asset.asset}</p>
               </td>
+              {/* Display balance or wallet balance */}
               <td className="py-4">
-                <p className="text-sm text-gray-900">{isSupplied ? asset.balance : asset.walletBalance}</p>
+                {isSupplied ? (
+                  <>
+                    <p className="text-sm text-gray-900 font-medium">{asset.balance}</p>
+                    <p className="text-xs text-gray-900">${asset.walletBalanceConverted}</p>
+                  </>
+                ) : (
+                  <p className="text-sm text-gray-900 font-medium">{asset.walletBalance}</p>
+                )}
               </td>
+              {/* Display APY */}
               <td className="py-4">
                 <p className="text-sm text-gray-900">{asset.apy}%</p>
               </td>
+              {/* Display collateral status */}
               <td className="py-4">
                 <div className="text-sm text-gray-900">
                   {isSupplied ? (
@@ -58,6 +70,7 @@ const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied, onAction 
                   )}
                 </div>
               </td>
+              {/* Action button for supply or withdraw */}
               <td className="py-4 whitespace-nowrap text-sm font-medium">
                 <button onClick={() => onAction(asset)} className="bg-accent text-white px-3 py-1 rounded-md">
                   {isSupplied ? "Withdraw" : "Supply"}
