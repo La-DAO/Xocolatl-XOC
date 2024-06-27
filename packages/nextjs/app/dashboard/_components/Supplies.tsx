@@ -7,13 +7,14 @@ import SupplyModal from "./SupplyModal";
 import SupplyTable from "./SupplyTable";
 import { Asset } from "@/types/assets/assets";
 
-// Transform JSON data to match the Asset type
+// Import and transform JSON data for assets available to supply
 const assetsData: Asset[] = assetsDataRaw.map((asset: any) => ({
   ...asset,
   walletBalance: Number(asset.walletBalance),
   apy: Number(asset.apy),
 }));
 
+// Import and transform JSON data for already supplied assets
 const yourSupplyData: Asset[] = yourSupplyDataRaw.map((asset: any) => ({
   ...asset,
   walletBalance: Number(asset.walletBalance),
@@ -21,21 +22,21 @@ const yourSupplyData: Asset[] = yourSupplyDataRaw.map((asset: any) => ({
 }));
 
 const Supplies: React.FC = () => {
-  // State for assets available to supply, user's supplied assets, modal visibility, selected asset, and transfer amount
+  // State hooks for managing assets and modal visibility
   const [assetsToSupply, setAssetsToSupply] = useState<Asset[]>(assetsData);
   const [yourSupply, setYourSupply] = useState<Asset[]>(yourSupplyData);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
   const [transferAmount, setTransferAmount] = useState<number>(0);
 
-  // Open the supply modal with the selected asset
+  // Open modal and set selected asset and default transfer amount
   const openModal = (asset: Asset) => {
     setSelectedAsset(asset);
     setTransferAmount(asset.walletBalance || 0); // Default transfer amount to the wallet balance
     setIsModalOpen(true);
   };
 
-  // Close the supply modal
+  // Close modal and reset selected asset
   const closeModal = () => {
     setSelectedAsset(null);
     setIsModalOpen(false);
@@ -56,7 +57,7 @@ const Supplies: React.FC = () => {
       .filter(a => a.walletBalance! > 0);
     setAssetsToSupply(updatedAssetsToSupply);
 
-    // Update user's supplied assets
+    // Update assets already supplied
     const existingAssetInYourSupply = yourSupply.find(a => a.asset === selectedAsset.asset);
     if (existingAssetInYourSupply) {
       const updatedYourSupply = yourSupply.map(a => {
@@ -74,9 +75,8 @@ const Supplies: React.FC = () => {
     closeModal();
   };
 
-  // Handle the withdraw action
+  // Handle the withdrawal action
   const handleWithdraw = (asset: Asset) => {
-    // Update user's supplied assets
     const updatedYourSupply = yourSupply.filter(a => a.asset !== asset.asset);
     setYourSupply(updatedYourSupply);
 
@@ -96,6 +96,18 @@ const Supplies: React.FC = () => {
     }
   };
 
+  // Toggle collateral status for an asset
+  const handleCollateralToggle = (asset: Asset) => {
+    const updatedYourSupply = yourSupply.map(a => {
+      if (a.asset === asset.asset) {
+        const newCollateralStatus = !a.collateral;
+        return { ...a, collateral: newCollateralStatus };
+      }
+      return a;
+    });
+    setYourSupply(updatedYourSupply);
+  };
+
   return (
     <div className="rounded-md">
       <div className="w-full bg-white px-6 py-4 rounded-2xl shadow-md mb-4">
@@ -105,7 +117,12 @@ const Supplies: React.FC = () => {
             <div className="flex justify-between mb-2 text-sm w-fit m-auto gap-2">
               <span className="text-gray-500 bg-gray-200 px-2 py-1 rounded-md">Collateral $5,443.12</span>
             </div>
-            <SupplyTable assets={yourSupply} isSupplied={true} onAction={handleWithdraw} />
+            <SupplyTable
+              assets={yourSupply}
+              isSupplied={true}
+              onAction={handleWithdraw}
+              onCollateralToggle={handleCollateralToggle}
+            />
           </>
         ) : (
           <p className="text-slate-800">Nothing supplied yet</p>

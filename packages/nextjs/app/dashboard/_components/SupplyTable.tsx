@@ -2,7 +2,14 @@ import React from "react";
 import IsolatedStateComponent from "./IsolatedState";
 import { SupplyTableProps } from "@/types/assets/assets";
 
-const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied, onAction }) => {
+const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied, onAction, onCollateralToggle }) => {
+  const handleCollateralToggle = (asset: any) => {
+    console.log("Toggling collateral for asset:", asset);
+    if (onCollateralToggle) {
+      onCollateralToggle(asset);
+    }
+  };
+
   return (
     <div>
       <table className="min-w-full divide-y divide-gray-200">
@@ -55,14 +62,21 @@ const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied, onAction 
               <td className="py-4">
                 <div className="text-sm text-gray-900">
                   {isSupplied ? (
-                    asset.collateral ? (
+                    asset.isIsolated ? (
+                      <IsolatedStateComponent message="Isolated" />
+                    ) : (
                       <label className="toggle-label">
-                        <input type="checkbox" checked={asset.collateral} className="toggle-checkbox" />
+                        <input
+                          type="checkbox"
+                          checked={asset.collateral}
+                          className="toggle-checkbox"
+                          onChange={() => handleCollateralToggle(asset)}
+                        />
                         <span className="toggle-label"></span>
                       </label>
-                    ) : (
-                      <IsolatedStateComponent message="Isolated" />
                     )
+                  ) : asset.isIsolated ? (
+                    <IsolatedStateComponent message="Isolated" />
                   ) : asset.collateral ? (
                     <span className="text-xl text-success font-bold">&#10003;</span>
                   ) : (

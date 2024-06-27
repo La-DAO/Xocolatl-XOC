@@ -5,6 +5,7 @@ export interface Asset {
   walletBalanceConverted?: number;
   balance?: number;
   apy: number;
+  isIsolated?: boolean;
   collateral?: boolean;
   available?: number;
   debt?: number;
@@ -16,6 +17,7 @@ export interface SupplyTableProps {
   assets: Asset[];
   isSupplied: boolean;
   onAction: (asset: Asset) => void;
+  onCollateralToggle?: (asset: Asset) => void;
 }
 
 // Props for a component displaying a table of borrowed assets.
@@ -25,11 +27,11 @@ export interface BorrowTableProps {
 }
 
 // Props for a modal component used to supply an asset.
-interface SupplyModalProps {
+export interface SupplyModalProps {
   isOpen: boolean;
   onClose: () => void;
   asset: Asset | null;
   transferAmount: number;
   setTransferAmount: (amount: number) => void;
-  onConfirm: (amount: number) => void; // New prop for confirmation with amount
+  onConfirm: (amount: number) => void;
 }
