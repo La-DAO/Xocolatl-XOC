@@ -35,3 +35,10 @@ export interface SupplyModalProps {
   setTransferAmount: (amount: number) => void;
   onConfirm: (amount: number) => void;
 }
+
+// For InfoTag component props
+interface InfoTagProps {
+  className?: string;
+  children: React.ReactNode;
+  onClick?: () => void;
+}

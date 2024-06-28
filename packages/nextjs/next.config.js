@@ -13,7 +13,6 @@ const nextConfig = {
     config.resolve.fallback = { fs: false, net: false, tls: false };
     config.externals.push("pino-pretty", "lokijs", "encoding");
 
-    // Añadir el alias @
     const path = require("path");
     config.resolve.alias["@"] = path.resolve(__dirname);
 

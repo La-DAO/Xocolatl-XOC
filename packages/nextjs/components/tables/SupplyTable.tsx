@@ -1,5 +1,5 @@
 import React from "react";
-import IsolatedStateComponent from "./IsolatedState";
+import IsolatedStateComponent from "@/components/tags/IsolatedState";
 import { SupplyTableProps } from "@/types/assets/assets";
 
 const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied, onAction, onCollateralToggle }) => {

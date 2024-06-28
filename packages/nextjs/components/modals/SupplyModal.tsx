@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import IsolatedStateComponent from "./IsolatedState";
+import IsolatedStateComponent from "@/components/tags/IsolatedState";
 import { SupplyModalProps } from "@/types/assets/assets";
 import { faCircleExclamation, faGear } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -87,14 +87,6 @@ const SupplyModal: React.FC<SupplyModalProps> = ({
               <p className="text-sm font-bold text-success">4.15</p>
             </div>
           </div>
-        </div>
-
-        {/* Attention notice */}
-        <div className="bg-neutral mt-2 rounded-xl p-4 border-slate-800 border">
-          <p>
-            <span className="font-medium">Attention:</span> This can notice the user to communicate very important
-            information
-          </p>
         </div>
 
         {/* Confirmation button */}

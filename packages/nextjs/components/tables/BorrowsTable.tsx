@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import BorrowModal from "./BorrowModal";
+import BorrowModal from "@/components/modals/BorrowModal";
 import { Asset, BorrowTableProps } from "@/types/assets/assets";
 
 const BorrowsTable: React.FC<BorrowTableProps> = ({ assets, isBorrowed }) => {
