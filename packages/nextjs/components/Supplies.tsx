@@ -8,7 +8,6 @@ import yourSupplyDataRaw from "@/data/yourSupplies.json";
 import useApy from "@/hooks/useApy";
 import useBalance from "@/hooks/useBalance";
 import useCollateralBalance from "@/hooks/useCollateralBalance";
-// Importa el nuevo hook
 import { Asset } from "@/types/assets/assets";
 
 // Import and transform JSON data for assets available to supply

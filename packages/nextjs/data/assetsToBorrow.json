@@ -1,0 +1,82 @@
+[
+  {
+    "asset": "XOC",
+    "amount": 20000,
+    "amountConverted": 500,
+    "apy": 3.6,
+    "borrowRate": 2.1,
+    "apyType": "Low Risk"
+  },
+  {
+    "asset": "BTC",
+    "amount": 1.5,
+    "amountConverted": 200,
+    "apy": 4.2,
+    "borrowRate": 3.0,
+    "apyType": "Moderate Risk"
+  },
+  {
+    "asset": "ETH",
+    "amount": 10.0,
+    "amountConverted": 100,
+    "apy": 5.0,
+    "borrowRate": 4.0,
+    "apyType": "Moderate Risk"
+  },
+  {
+    "asset": "LTC",
+    "amount": 150.0,
+    "amountConverted": 600,
+    "apy": 2.8,
+    "borrowRate": 2.0,
+    "apyType": "Low Risk"
+  },
+  {
+    "asset": "ADA",
+    "amount": 5000.0,
+    "amountConverted": 200,
+    "apy": 4.5,
+    "borrowRate": 3.5,
+    "apyType": "High Risk"
+  },
+  {
+    "asset": "DOT",
+    "amount": 120.0,
+    "amountConverted": 300,
+    "apy": 6.0,
+    "borrowRate": 4.6,
+    "apyType": "High Risk"
+  },
+  {
+    "asset": "SOL",
+    "amount": 300.0,
+    "amountConverted": 10,
+    "apy": 3.2,
+    "borrowRate": 2.2,
+    "apyType": "Low Risk"
+  },
+  {
+    "asset": "BNB",
+    "amount": 50.0,
+    "amountConverted": 70,
+    "apy": 5.1,
+    "borrowRate": 3.8,
+    "apyType": "Moderate Risk"
+  },
+  {
+    "asset": "AVAX",
+    "amount": 80.0,
+    "amountConverted": 50,
+    "apy": 4.0,
+    "borrowRate": 3.1,
+    "apyType": "Moderate Risk"
+  },
+  {
+    "asset": "MATIC",
+    "amount": 2000.0,
+    "amountConverted": 500,
+    "apy": 3.8,
+    "borrowRate": 2.8,
+    "apyType": "Low Risk"
+  }
+]

@@ -4,7 +4,6 @@ import { SupplyTableProps } from "@/types/assets/assets";
 
 const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied, onAction, onCollateralToggle }) => {
   const handleCollateralToggle = (asset: any) => {
-    console.log("Toggling collateral for asset:", asset);
     if (onCollateralToggle) {
       onCollateralToggle(asset);
     }

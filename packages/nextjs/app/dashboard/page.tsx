@@ -1,6 +1,6 @@
-import Borrows from "../../components/Borrows";
-import ProfileStats from "../../components/ProfileStats";
-import Supplies from "../../components/Supplies";
+import Borrows from "@/components/Borrows";
+import ProfileStats from "@/components/ProfileStats";
+import Supplies from "@/components/Supplies";
 import { NextPage } from "next";
 
 const Dashboard: NextPage = () => {

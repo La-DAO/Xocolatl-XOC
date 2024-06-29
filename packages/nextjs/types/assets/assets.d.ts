@@ -4,36 +4,52 @@ export interface Asset {
   walletBalance?: number;
   walletBalanceConverted?: number;
   balance?: number;
+  amount?: number;
+  amountConverted?: number;
   apy: number;
+  apyType?: string;
+  borrowRate: number;
   isIsolated?: boolean;
   collateral?: boolean;
-  available?: number;
   debt?: number;
   apyType?: string;
 }
 
-// Props for a component displaying a table of supplied assets.
-export interface SupplyTableProps {
+// Defines the base interface for common table properties.
+interface AssetTableProps {
   assets: Asset[];
-  isSupplied: boolean;
   onAction: (asset: Asset) => void;
   onCollateralToggle?: (asset: Asset) => void;
 }
 
+// Props for a component displaying a table of supplied assets.
+export interface SupplyTableProps extends AssetTableProps {
+  isSupplied: boolean;
+}
+
 // Props for a component displaying a table of borrowed assets.
-export interface BorrowTableProps {
-  assets: Asset[];
+export interface BorrowTableProps extends AssetTableProps {
   isBorrowed: boolean;
 }
 
-// Props for a modal component used to supply an asset.
-export interface SupplyModalProps {
+// Defines the base interface for common modal properties.
+interface ModalProps {
+  asset: Asset | null;
   isOpen: boolean;
   onClose: () => void;
-  asset: Asset | null;
+  onConfirm: (amount: number) => void;
+}
+
+// Props for a modal used to supply an asset.
+export interface SupplyModalProps extends ModalProps {
   transferAmount: number;
   setTransferAmount: (amount: number) => void;
-  onConfirm: (amount: number) => void;
+}
+
+// Props for a modal used to borrow an asset.
+export interface BorrowModalProps extends ModalProps {
+  borrowAmount: number;
+  setBorrowAmount: (amount: number) => void;
 }
 
 // For InfoTag component props
