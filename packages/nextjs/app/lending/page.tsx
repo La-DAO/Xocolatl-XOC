@@ -1,7 +1,7 @@
-import Borrows from "@/components/Borrows";
-import ProfileStats from "@/components/ProfileStats";
-import Supplies from "@/components/Supplies";
 import { NextPage } from "next";
+import Borrows from "~~/app/lending/components/Borrows";
+import ProfileStats from "~~/app/lending/components/ProfileStats";
+import Supplies from "~~/app/lending/components/Supplies";
 
 const Dashboard: NextPage = () => {
   return (

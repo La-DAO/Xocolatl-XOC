@@ -8,23 +8,23 @@
     "collateral": true
   },
   {
-    "asset": "BTC",
+    "asset": "CETES",
     "walletBalance": 1.5,
     "walletBalanceConverted": 200,
-    "apy": 4.2,
-    "isIsolated": true,
-    "collateral": false
-  },
-  {
-    "asset": "ETH",
-    "walletBalance": 10.0,
-    "walletBalanceConverted": 100,
-    "apy": 5.0,
+    "apy": 14.2,
     "isIsolated": false,
     "collateral": true
   },
   {
-    "asset": "LTC",
+    "asset": "WETH",
+    "walletBalance": 1.32,
+    "walletBalanceConverted": 10,
+    "apy": 2.1,
+    "isIsolated": false,
+    "collateral": true
+  },
+  {
+    "asset": "MXNe",
     "walletBalance": 150.0,
     "walletBalanceConverted": 600,
     "apy": 2.8,
@@ -32,7 +32,7 @@
     "collateral": false
   },
   {
-    "asset": "ADA",
+    "asset": "USDC",
     "walletBalance": 5000.0,
     "walletBalanceConverted": 200,
     "apy": 4.5,
@@ -40,43 +40,19 @@
     "collateral": true
   },
   {
-    "asset": "DOT",
-    "walletBalance": 120.0,
+    "asset": "USDT",
+    "walletBalance": 1200.0,
     "walletBalanceConverted": 300,
-    "apy": 6.0,
-    "isIsolated": false,
-    "collateral": true
-  },
-  {
-    "asset": "SOL",
-    "walletBalance": 300.0,
-    "walletBalanceConverted": 10,
-    "apy": 3.2,
+    "apy": 6.1,
     "isIsolated": true,
     "collateral": false
   },
   {
-    "asset": "BNB",
-    "walletBalance": 50.0,
+    "asset": "wstETH",
+    "walletBalance": 5.0,
     "walletBalanceConverted": 70,
-    "apy": 5.1,
+    "apy": 6.5,
     "isIsolated": false,
     "collateral": true
-  },
-  {
-    "asset": "AVAX",
-    "walletBalance": 80.0,
-    "walletBalanceConverted": 50,
-    "apy": 4.0,
-    "isIsolated": false,
-    "collateral": true
-  },
-  {
-    "asset": "MATIC",
-    "walletBalance": 2000.0,
-    "walletBalanceConverted": 500,
-    "apy": 3.8,
-    "isIsolated": true,
-    "collateral": false
   }
 ]

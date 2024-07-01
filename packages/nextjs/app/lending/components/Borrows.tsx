@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import BorrowModal from "@/components/modals/BorrowModal";
-import BorrowTable from "@/components/tables/BorrowTable";
 import borrowsDataRaw from "@/data/assetsToBorrow.json";
 import yourBorrowDataRaw from "@/data/yourBorrows.json";
 import useApy from "@/hooks/useApy";
 import useBalance from "@/hooks/useBalance";
 import useBorrowPower from "@/hooks/useBorrowPower";
 import { Asset } from "@/types/assets/assets";
+import BorrowModal from "~~/app/lending/components/modals/BorrowModal";
+import BorrowTable from "~~/app/lending/components/tables/BorrowTable";
 
 // Import and transform JSON data for assets available to borrow
 const assetsData: Asset[] = borrowsDataRaw.map((asset: any) => ({
@@ -146,6 +146,7 @@ const Borrows: React.FC = () => {
       {/* Section for displaying assets available to borrow */}
       <div className="bg-white p-6 rounded-2xl shadow-md">
         <h2 className="text-xl text-primary font-semibold mb-4">Assets to Borrow</h2>
+        <p className="text-gray-500 mb-4">Select the asset you want to borrow against your supplies</p>
         <BorrowTable assets={assetsToBorrow} isBorrowed={false} onAction={openModal} />
       </div>
 

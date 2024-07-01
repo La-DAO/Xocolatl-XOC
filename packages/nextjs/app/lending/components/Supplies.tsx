@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import SupplyModal from "@/components/modals/SupplyModal";
-import SupplyTable from "@/components/tables/SupplyTable";
 import assetsDataRaw from "@/data/assetsToSupply.json";
 import yourSupplyDataRaw from "@/data/yourSupplies.json";
 import useApy from "@/hooks/useApy";
 import useBalance from "@/hooks/useBalance";
 import useCollateralBalance from "@/hooks/useCollateralBalance";
 import { Asset } from "@/types/assets/assets";
+import SupplyModal from "~~/app/lending/components/modals/SupplyModal";
+import SupplyTable from "~~/app/lending/components/tables/SupplyTable";
 
 // Import and transform JSON data for assets available to supply
 const assetsData: Asset[] = assetsDataRaw.map((asset: any) => ({
@@ -147,7 +147,7 @@ const Supplies: React.FC = () => {
 
       <div className="bg-white p-6 rounded-2xl shadow-md">
         <h2 className="text-xl text-primary font-semibold mb-4">Assets to Supply</h2>
-        <p className="text-gray-500 mb-4">Select the amount of WETH to deposit as collateral</p>
+        <p className="text-gray-500 mb-4">Select the asset to deposit as collateral</p>
         <SupplyTable assets={assetsToSupply} isSupplied={false} onAction={openModal} />
       </div>
 
