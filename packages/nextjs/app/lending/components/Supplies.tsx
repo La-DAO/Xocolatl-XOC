@@ -57,14 +57,14 @@ const Supplies: React.FC = () => {
     if (!selectedAsset) return;
 
     // Update assets available to supply
-    const updatedAssetsToSupply = assetsToSupply
-      .map(a => {
-        if (a.asset === selectedAsset.asset) {
-          return { ...a, walletBalance: (a.walletBalance || 0) - amount };
-        }
-        return a;
-      })
-      .filter(a => a.walletBalance! > 0);
+    const updatedAssetsToSupply = assetsToSupply.map(a => {
+      if (a.asset === selectedAsset.asset) {
+        return { ...a, walletBalance: (a.walletBalance || 0) - amount };
+      }
+      return a;
+    });
+
+    //.filter(a => a.walletBalance! > 0);
     setAssetsToSupply(updatedAssetsToSupply);
 
     // Update assets already supplied

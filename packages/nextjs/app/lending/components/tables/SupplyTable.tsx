@@ -2,6 +2,16 @@ import React from "react";
 import IsolatedStateComponent from "@/components/tags/IsolatedState";
 import { SupplyTableProps } from "@/types/assets/assets";
 
+/**
+ * SupplyTable component displays a table of assets with various details and actions,
+ * including balance, APY, collateral status, and supply/withdraw actions.
+ *
+ * @param {SupplyTableProps} props - Props containing assets data and action handlers.
+ * @param {Array<any>} props.assets - Array of assets to display in the table.
+ * @param {boolean} props.isSupplied - Flag indicating whether the table is displaying supplied assets.
+ * @param {Function} props.onAction - Handler function invoked when an action (supply or withdraw) button is clicked.
+ * @param {Function} props.onCollateralToggle - Optional: Handler function invoked when collateral toggle changes.
+ */
 const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied, onAction, onCollateralToggle }) => {
   const handleCollateralToggle = (asset: any) => {
     if (onCollateralToggle) {
@@ -14,7 +24,6 @@ const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied, onAction,
       <table className="min-w-full divide-y divide-gray-200">
         <thead>
           <tr className="text-center">
-            {/* Column headers */}
             <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
               Assets
             </th>
@@ -24,10 +33,7 @@ const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied, onAction,
             <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
               APY
             </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
+            <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
               {isSupplied ? "Collateral" : "Can be collateral"}
             </th>
             <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -38,27 +44,17 @@ const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied, onAction,
         <tbody className="bg-white divide-y divide-gray-200 text-center">
           {assets.map((asset, index) => (
             <tr key={index}>
-              {/* Asset name */}
-              <td className="py-4">
+              <td className="px-6 py-4">
                 <p className="text-sm font-medium text-gray-900">{asset.asset}</p>
               </td>
-              {/* Display balance or wallet balance */}
-              <td className="py-4">
-                {isSupplied ? (
-                  <>
-                    <p className="text-sm text-gray-900 font-medium">{asset.balance}</p>
-                    <p className="text-xs text-gray-900">${asset.walletBalanceConverted}</p>
-                  </>
-                ) : (
-                  <p className="text-sm text-gray-900 font-medium">{asset.walletBalance}</p>
-                )}
+              <td className="px-6 py-4">
+                <p className="text-sm text-gray-900">{isSupplied ? asset.balance : asset.walletBalance}</p>
+                {isSupplied && <p className="text-xs text-gray-900">${asset.walletBalanceConverted}</p>}
               </td>
-              {/* Display APY */}
-              <td className="py-4">
+              <td className="px-6 py-4">
                 <p className="text-sm text-gray-900">{asset.apy}%</p>
               </td>
-              {/* Display collateral status */}
-              <td className="py-4">
+              <td className="px-6 py-4">
                 <div className="text-sm text-gray-900">
                   {isSupplied ? (
                     asset.isIsolated ? (
@@ -74,18 +70,19 @@ const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied, onAction,
                         <span className="toggle-label"></span>
                       </label>
                     )
-                  ) : asset.isIsolated ? (
-                    <IsolatedStateComponent message="Isolated" />
-                  ) : asset.collateral ? (
-                    <span className="text-xl text-success font-bold">&#10003;</span>
                   ) : (
-                    <IsolatedStateComponent message="Isolated" />
+                    asset.collateral && <span className="text-xl text-success font-bold">&#10003;</span>
                   )}
                 </div>
               </td>
-              {/* Action button for supply or withdraw */}
               <td className="py-4 whitespace-nowrap text-sm font-medium">
-                <button onClick={() => onAction(asset)} className="bg-accent text-white px-3 py-1 rounded-md">
+                <button
+                  onClick={() => onAction(asset)}
+                  className={`px-3 py-1 rounded-md ${
+                    asset.walletBalance === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-accent text-white"
+                  }`}
+                  disabled={asset.walletBalance === 0}
+                >
                   {isSupplied ? "Withdraw" : "Supply"}
                 </button>
               </td>
