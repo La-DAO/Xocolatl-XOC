@@ -1,6 +1,6 @@
-"use client";
-
+// SupplyModal.tsx
 import React, { useEffect, useState } from "react";
+import AmountInput from "@/components/inputs/AmountInput";
 import IsolatedStateComponent from "@/components/tags/IsolatedState";
 import { SupplyModalProps } from "@/types/assets/assets";
 import { faCircleExclamation, faGear } from "@fortawesome/free-solid-svg-icons";
@@ -14,9 +14,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
  * @param {boolean} props.isOpen - Flag indicating if the modal is open.
  * @param {Function} props.onClose - Callback function to close the modal.
  * @param {object} props.asset - The asset to supply.
- * @param {number} props.transferAmount - Amount of asset to transfer.
- * @param {Function} props.setTransferAmount - Function to set the transfer amount.
- * @param {Function} props.onConfirm - Callback function to confirm the supply action.
+ * @param {number} props.transferAmount - Amount of asset to supply.
+ * @param {Function} props.setTransferAmount - Function to transfer the supply amount.
+ * @param {Function} props.onConfirm - Callback function to confirm the supplying action.
  */
 const SupplyModal: React.FC<SupplyModalProps> = ({
   isOpen,
@@ -26,8 +26,10 @@ const SupplyModal: React.FC<SupplyModalProps> = ({
   setTransferAmount,
   onConfirm,
 }) => {
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true); // State to disable the button
+  // State for error message
+  const [errorMessage, setErrorMessage] = useState("");
+  // State to disable the button
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   useEffect(() => {
     // Effect to validate transfer amount based on asset balance
@@ -54,12 +56,6 @@ const SupplyModal: React.FC<SupplyModalProps> = ({
     }
   };
 
-  // Handle the change in input value
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(e.target.value);
-    setTransferAmount(value);
-  };
-
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 text-slate-800">
       {/* Overlay to close modal when clicking outside */}
@@ -84,26 +80,15 @@ const SupplyModal: React.FC<SupplyModalProps> = ({
           </div>
         </div>
         <div className="mt-2 border rounded-xl p-4">
-          <div className="flex flex-col rounded-md gap-1">
-            <div className="flex w-full justify-between items-center">
-              <input
-                type="number"
-                value={transferAmount}
-                onChange={handleChange}
-                className="bg-white border rounded-lg p-2 w-2/5"
-                min="0"
-                max={asset.walletBalance || 0}
-              />
-              <p className="text-xl font-bold">${asset.asset}</p>
-            </div>
-            <div className="flex w-full justify-between items-center">
-              <span className="text-xs">${asset.walletBalanceConverted} USD</span>
-              <p className="text-xs">
-                Available Balance {asset.walletBalance} <span className="font-medium">Max</span>
-              </p>
-            </div>
-          </div>
-          {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>} {/* Error message display */}
+          <AmountInput
+            value={transferAmount}
+            onChange={setTransferAmount}
+            max={asset.walletBalance || 0}
+            assetSymbol={asset.asset}
+            walletBalanceConverted={asset.walletBalanceConverted}
+            walletBalance={asset.walletBalance}
+          />
+          {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
         </div>
 
         {/* Transaction overview section */}

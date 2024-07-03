@@ -1,21 +1,19 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import { BorrowModalProps } from "@/types/assets/assets";
 import { faCircleExclamation, faGear } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 /**
- * BorrowModal component displays a modal for supplying assets,
- * allowing users to enter an amount and confirm the supply action.
+ * BorrowModal component displays a modal for borrowing assets,
+ * allowing users to enter an amount and confirm the borrowing action.
  *
  * @param {BorrowModalProps} props - Props containing modal state and actions.
  * @param {boolean} props.isOpen - Flag indicating if the modal is open.
  * @param {Function} props.onClose - Callback function to close the modal.
- * @param {object} props.asset - The asset to supply.
+ * @param {object} props.asset - The asset to borrow.
  * @param {number} props.borrowAmount - Amount of asset to borrow.
- * @param {Function} props.setborrowAmount - Function to set the borrow amount.
- * @param {Function} props.onConfirm - Callback function to confirm the supply action.
+ * @param {Function} props.setBorrowAmount - Function to set the borrow amount.
+ * @param {Function} props.onConfirm - Callback function to confirm the borrowing action.
  */
 const BorrowModal: React.FC<BorrowModalProps> = ({
   isOpen,
@@ -96,9 +94,9 @@ const BorrowModal: React.FC<BorrowModalProps> = ({
               <p className="text-xl font-bold">${asset.asset}</p>
             </div>
             <div className="flex w-full justify-between items-center">
-              <span className="text-xs">${asset.amountConverted} USD</span>
+              <span className="text-xs">${asset.amountConverted || 0} USD</span>
               <p className="text-xs">
-                Available Balance {asset.amount} <span className="font-medium">Max</span>
+                Available Balance {asset.amount || 0} <span className="font-medium">Max</span>
               </p>
             </div>
           </div>
