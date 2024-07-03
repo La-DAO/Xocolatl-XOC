@@ -1,11 +1,23 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BorrowModalProps } from "@/types/assets/assets";
 import { faCircleExclamation, faGear } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const SupplyModal: React.FC<BorrowModalProps> = ({
+/**
+ * BorrowModal component displays a modal for supplying assets,
+ * allowing users to enter an amount and confirm the supply action.
+ *
+ * @param {BorrowModalProps} props - Props containing modal state and actions.
+ * @param {boolean} props.isOpen - Flag indicating if the modal is open.
+ * @param {Function} props.onClose - Callback function to close the modal.
+ * @param {object} props.asset - The asset to supply.
+ * @param {number} props.borrowAmount - Amount of asset to borrow.
+ * @param {Function} props.setborrowAmount - Function to set the borrow amount.
+ * @param {Function} props.onConfirm - Callback function to confirm the supply action.
+ */
+const BorrowModal: React.FC<BorrowModalProps> = ({
   isOpen,
   onClose,
   asset,
@@ -13,13 +25,38 @@ const SupplyModal: React.FC<BorrowModalProps> = ({
   setBorrowAmount,
   onConfirm,
 }) => {
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true); // State to disable the button
+
+  useEffect(() => {
+    // Effect to validate borrow amount based on asset balance
+    if (asset) {
+      const amount = asset.amount || 0;
+      if (borrowAmount <= 0 || borrowAmount > amount) {
+        setErrorMessage("Please enter a valid amount not exceeding your available balance.");
+        setIsButtonDisabled(true);
+      } else {
+        setErrorMessage("");
+        setIsButtonDisabled(false);
+      }
+    }
+  }, [borrowAmount, asset]);
+
   // Return null if modal is not open or no asset is selected
   if (!isOpen || !asset) return null;
 
   // Handle the confirmation of the borrow action
   const handleConfirm = () => {
-    onConfirm(borrowAmount);
-    onClose();
+    if (asset) {
+      onConfirm(borrowAmount);
+      onClose();
+    }
+  };
+
+  // Handle the change in input value
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(e.target.value);
+    setBorrowAmount(value);
   };
 
   return (
@@ -51,7 +88,7 @@ const SupplyModal: React.FC<BorrowModalProps> = ({
               <input
                 type="number"
                 value={borrowAmount}
-                onChange={e => setBorrowAmount(Number(e.target.value))}
+                onChange={handleChange}
                 className="bg-white border rounded-lg p-2 w-2/5"
                 min="0"
                 max={asset.amount || 0}
@@ -65,6 +102,7 @@ const SupplyModal: React.FC<BorrowModalProps> = ({
               </p>
             </div>
           </div>
+          {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>} {/* Error message display */}
         </div>
 
         {/* Transaction overview section */}
@@ -86,7 +124,13 @@ const SupplyModal: React.FC<BorrowModalProps> = ({
         </div>
 
         {/* Confirmation button */}
-        <button onClick={handleConfirm} className="mt-6 w-full bg-accent text-white px-4 py-2 rounded-md">
+        <button
+          onClick={handleConfirm}
+          className={`mt-6 w-full px-4 py-2 rounded-md ${
+            isButtonDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-accent text-white"
+          }`}
+          disabled={isButtonDisabled}
+        >
           Confirm
         </button>
       </div>
@@ -94,4 +138,4 @@ const SupplyModal: React.FC<BorrowModalProps> = ({
   );
 };
 
-export default SupplyModal;
+export default BorrowModal;
