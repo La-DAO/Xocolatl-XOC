@@ -38,6 +38,29 @@ const useAssetOperations = (initialAssets: Asset[], initialYourAssets: Asset[]) 
   };
 
   /**
+   * Updates assets or yourAssets based on the provided parameters.
+   * @param list The list to update (assets or yourAssets).
+   * @param assetKey The key to identify the asset (walletBalance or amount).
+   * @param assetName The name of the asset.
+   * @param amount The amount to update.
+   * @param isAddition Whether to add (true) or subtract (false) the amount.
+   */
+  const updateAssetList = (
+    list: Asset[],
+    assetKey: "walletBalance" | "amount" | "balance",
+    assetName: string,
+    amount: number,
+    isAddition: boolean,
+  ): Asset[] => {
+    return list.map(asset => {
+      if (asset.asset === assetName) {
+        return { ...asset, [assetKey]: isAddition ? (asset[assetKey] || 0) + amount : (asset[assetKey] || 0) - amount };
+      }
+      return asset;
+    });
+  };
+
+  /**
    * Handles the confirmation of the action (borrow or supply) with the specified amount.
    * @param amount The amount to borrow or supply.
    */
@@ -50,125 +73,57 @@ const useAssetOperations = (initialAssets: Asset[], initialYourAssets: Asset[]) 
   };
 
   /**
-   * Handles the borrow action for the selected asset.
-   * @param amount The amount to borrow.
+   * Handles the borrow or supply action for the selected asset.
+   * @param amount The amount to borrow or supply.
    */
   const handleAction = (amount: number) => {
     if (!selectedAsset) return;
 
-    if (selectedAsset.walletBalance !== undefined) {
-      // Update for Supply
-      const updatedAssets = assets.map(a => {
-        if (a.asset === selectedAsset.asset) {
-          return { ...a, walletBalance: (a.walletBalance || 0) - amount };
-        }
-        return a;
-      });
-      setAssets(updatedAssets);
+    const assetKey = selectedAsset.walletBalance !== undefined ? "walletBalance" : "amount";
 
-      // Update for Your Assets
-      const existingAssetInYourAssets = yourAssets.find(a => a.asset === selectedAsset.asset);
-      if (existingAssetInYourAssets) {
-        const updatedYourAssets = yourAssets.map(a => {
-          if (a.asset === selectedAsset.asset) {
-            return { ...a, balance: (a.balance || 0) + amount };
-          }
-          return a;
-        });
-        setYourAssets(updatedYourAssets);
-      } else {
-        const updatedYourAssets = [...yourAssets, { ...selectedAsset, balance: amount }];
-        setYourAssets(updatedYourAssets);
+    setAssets(prevAssets => updateAssetList(prevAssets, assetKey, selectedAsset.asset, amount, false));
+    setYourAssets(prevYourAssets => {
+      const updatedYourAssets = updateAssetList(
+        prevYourAssets,
+        assetKey === "walletBalance" ? "balance" : "amount",
+        selectedAsset.asset,
+        amount,
+        true,
+      );
+      if (!prevYourAssets.find(a => a.asset === selectedAsset.asset)) {
+        updatedYourAssets.push({ ...selectedAsset, [assetKey === "walletBalance" ? "balance" : "amount"]: amount });
       }
-    } else {
-      // Update for Borrow
-      const updatedAssets = assets.map(a => {
-        if (a.asset === selectedAsset.asset) {
-          return { ...a, amount: (a.amount || 0) - amount };
-        }
-        return a;
-      });
-      setAssets(updatedAssets);
-
-      // Update for Your Assets
-      const existingAssetInYourAssets = yourAssets.find(a => a.asset === selectedAsset.asset);
-      if (existingAssetInYourAssets) {
-        const updatedYourAssets = yourAssets.map(a => {
-          if (a.asset === selectedAsset.asset) {
-            return { ...a, amount: (a.amount || 0) + amount };
-          }
-          return a;
-        });
-        setYourAssets(updatedYourAssets);
-      } else {
-        const updatedYourAssets = [...yourAssets, { ...selectedAsset, amount: amount }];
-        setYourAssets(updatedYourAssets);
-      }
-    }
+      return updatedYourAssets;
+    });
 
     closeModal(); // Close modal after action
   };
 
   /**
-   * Handles the opposite action (repay or withdraw) for the selected asset.
+   * Handles the repay or withdraw action for the selected asset.
    * @param amount The amount to repay or withdraw.
    */
   const handleOppositeAction = (amount: number) => {
     if (!selectedAsset) return;
 
-    if (selectedAsset.walletBalance !== undefined) {
-      // Update for Supply
-      const updatedYourAssets = yourAssets
-        .map(a => {
-          if (a.asset === selectedAsset.asset) {
-            return { ...a, balance: (a.balance || 0) - amount };
-          }
-          return a;
-        })
-        .filter(a => a.balance! > 0);
-      setYourAssets(updatedYourAssets);
+    const assetKey = selectedAsset.walletBalance !== undefined ? "walletBalance" : "amount";
 
-      // Update for Assets
-      const existingAssetInAssets = assets.find(a => a.asset === selectedAsset.asset);
-      if (existingAssetInAssets) {
-        const updatedAssets = assets.map(a => {
-          if (a.asset === selectedAsset.asset) {
-            return { ...a, walletBalance: (a.walletBalance || 0) + amount };
-          }
-          return a;
-        });
-        setAssets(updatedAssets);
-      } else {
-        const updatedAssets = [...assets, { ...selectedAsset, walletBalance: amount }];
-        setAssets(updatedAssets);
+    setYourAssets(prevYourAssets =>
+      updateAssetList(
+        prevYourAssets,
+        assetKey === "walletBalance" ? "balance" : "amount",
+        selectedAsset.asset,
+        amount,
+        false,
+      ),
+    );
+    setAssets(prevAssets => {
+      const updatedAssets = updateAssetList(prevAssets, assetKey, selectedAsset.asset, amount, true);
+      if (!prevAssets.find(a => a.asset === selectedAsset.asset)) {
+        updatedAssets.push({ ...selectedAsset, [assetKey]: amount });
       }
-    } else {
-      // Update for Borrow
-      const updatedYourAssets = yourAssets
-        .map(a => {
-          if (a.asset === selectedAsset.asset) {
-            return { ...a, amount: (a.amount || 0) - amount };
-          }
-          return a;
-        })
-        .filter(a => a.amount! > 0);
-      setYourAssets(updatedYourAssets);
-
-      // Update for Assets
-      const existingAssetInAssets = assets.find(a => a.asset === selectedAsset.asset);
-      if (existingAssetInAssets) {
-        const updatedAssets = assets.map(a => {
-          if (a.asset === selectedAsset.asset) {
-            return { ...a, amount: (a.amount || 0) + amount };
-          }
-          return a;
-        });
-        setAssets(updatedAssets);
-      } else {
-        const updatedAssets = [...assets, { ...selectedAsset, amount: amount }];
-        setAssets(updatedAssets);
-      }
-    }
+      return updatedAssets;
+    });
 
     closeModal(); // Close modal after action
   };
