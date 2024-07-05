@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import SupplyModal from "./modals/SupplyModal";
+import AssetModal from "./modals/AssetModal";
 import SupplyTable from "./tables/SupplyTable";
 import assetsDataRaw from "@/data/assetsToSupply.json";
 import yourSupplyDataRaw from "@/data/yourSupplies.json";
@@ -11,8 +11,10 @@ import useBalance from "@/hooks/useBalance";
 import useCollateralBalance from "@/hooks/useCollateralBalance";
 import { Asset } from "@/types/assets/assets";
 
-// Process raw data into typed assets
-const assetsData: Asset[] = assetsDataRaw.map((asset: any) => ({
+/**
+ * Component representing the supplies section, displaying user's current supplies
+ * and available assets to supply, with modal functionality for supplying actions.
+ */ const assetsData: Asset[] = assetsDataRaw.map((asset: any) => ({
   ...asset,
   walletBalance: Number(asset.walletBalance),
   apy: Number(asset.apy),
@@ -20,7 +22,7 @@ const assetsData: Asset[] = assetsDataRaw.map((asset: any) => ({
 
 const yourSupplyData: Asset[] = yourSupplyDataRaw.map((asset: any) => ({
   ...asset,
-  amount: Number(asset.walletBalance), // Ensure amount is initialized with walletBalance
+  amount: Number(asset.walletBalance),
   apy: Number(asset.apy),
 }));
 
@@ -47,15 +49,21 @@ const Supplies: React.FC = () => {
   const averageApy = useApy(yourSupply);
   const collateralBalance = useCollateralBalance(yourSupply);
 
-  // Toggle collateral status for the asset
+  /**
+   * Toggles the collateral status of the specified asset in the user's supply list.
+   * @param asset The asset for which to toggle the collateral status.
+   */
   const handleCollateralToggle = (asset: Asset) => {
     const updatedYourSupply = yourSupply.map(a => {
       if (a.asset === asset.asset) {
+        // Toggle the collateral status
         const newCollateralStatus = !a.collateral;
         return { ...a, collateral: newCollateralStatus };
       }
       return a;
     });
+
+    // Update the user's assets with the new collateral status
     updateYourAssets(updatedYourSupply);
   };
 
@@ -92,14 +100,15 @@ const Supplies: React.FC = () => {
         <SupplyTable assets={assetsToSupply} isSupplied={false} onAction={asset => openModal(asset, true)} />
       </div>
 
-      <SupplyModal
+      <AssetModal
         isOpen={isModalOpen}
         onClose={closeModal}
         asset={selectedAsset}
         transferAmount={transferAmount}
         setTransferAmount={setTransferAmount}
         onConfirm={handleConfirm}
-        isSupplyAction={isSupplyAction}
+        isAction={isSupplyAction}
+        isBorrowAction={false}
       />
     </div>
   );

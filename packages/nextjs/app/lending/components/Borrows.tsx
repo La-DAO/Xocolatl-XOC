@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import BorrowModal from "./modals/BorrowModal";
+import AssetModal from "./modals/AssetModal";
 import BorrowTable from "./tables/BorrowTable";
 import borrowsDataRaw from "@/data/assetsToBorrow.json";
 import yourBorrowDataRaw from "@/data/yourBorrows.json";
@@ -77,14 +77,15 @@ const Borrows: React.FC = () => {
         <BorrowTable assets={assetsToBorrow} isBorrowed={false} onAction={asset => openModal(asset, true)} />
       </div>
 
-      <BorrowModal
+      <AssetModal
         isOpen={isModalOpen}
         onClose={closeModal}
         asset={selectedAsset}
-        borrowAmount={borrowAmount}
-        setBorrowAmount={setBorrowAmount}
+        transferAmount={borrowAmount}
+        setTransferAmount={setBorrowAmount}
         onConfirm={handleConfirm}
-        isBorrowAction={isBorrowAction}
+        isAction={isBorrowAction}
+        isBorrowAction={true}
       />
     </div>
   );

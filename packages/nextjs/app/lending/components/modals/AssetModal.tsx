@@ -1,36 +1,36 @@
 import React, { useEffect, useState } from "react";
-import AmountInput from "@/components/inputs/AmountInput";
-import IsolatedStateComponent from "@/components/tags/IsolatedState";
 import { Asset } from "@/types/assets/assets";
 import { faCircleExclamation, faGear } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-interface ModalProps {
-  asset: Asset | null;
+interface AssetModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (amount: number) => void;
+  asset: Asset | null;
   transferAmount: number;
   setTransferAmount: (amount: number) => void;
-  isSupplyAction: boolean;
+  onConfirm: (amount: number) => void;
+  isAction: boolean; // True for borrow/supply, false for repay/withdraw
+  isBorrowAction: boolean; // True for borrow/repay, false for supply/withdraw
 }
 
-const SupplyModal: React.FC<ModalProps> = ({
+const AssetModal: React.FC<AssetModalProps> = ({
   isOpen,
   onClose,
   asset,
   transferAmount,
   setTransferAmount,
   onConfirm,
-  isSupplyAction,
+  isAction,
+  isBorrowAction,
 }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   useEffect(() => {
     if (asset) {
-      const walletBalance = asset.walletBalance || 0;
-      if (transferAmount <= 0 || transferAmount > walletBalance) {
+      const balance = isBorrowAction ? asset.amount || 0 : asset.walletBalance || 0;
+      if (transferAmount <= 0 || transferAmount > balance) {
         setErrorMessage("Please enter a valid amount not exceeding your available balance.");
         setIsButtonDisabled(true);
       } else {
@@ -38,7 +38,7 @@ const SupplyModal: React.FC<ModalProps> = ({
         setIsButtonDisabled(false);
       }
     }
-  }, [transferAmount, asset]);
+  }, [transferAmount, asset, isBorrowAction]);
 
   if (!isOpen || !asset) return null;
 
@@ -49,12 +49,25 @@ const SupplyModal: React.FC<ModalProps> = ({
     }
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(e.target.value);
+    setTransferAmount(value);
+  };
+
+  const actionText = isBorrowAction
+    ? isAction
+      ? `Borrow ${asset.asset}`
+      : `Repay ${asset.asset}`
+    : isAction
+    ? `Supply ${asset.asset}`
+    : `Withdraw ${asset.asset}`;
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 text-slate-800">
       <div className="bg-black bg-opacity-50 absolute inset-0" onClick={onClose}></div>
       <div className="bg-white rounded-lg p-4 z-50 w-3/12">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">{isSupplyAction ? `Supply ${asset.asset}` : `Withdraw ${asset.asset}`}</h2>
+          <h2 className="text-2xl font-bold">{actionText}</h2>
           <button onClick={onClose} className="text-3xl">
             &times;
           </button>
@@ -69,34 +82,44 @@ const SupplyModal: React.FC<ModalProps> = ({
           </div>
         </div>
         <div className="mt-2 border rounded-xl p-4">
-          <AmountInput
-            value={transferAmount}
-            onChange={setTransferAmount}
-            max={asset.walletBalance || 0}
-            assetSymbol={asset.asset}
-            walletBalanceConverted={asset.walletBalanceConverted}
-            walletBalance={asset.walletBalance}
-          />
+          <div className="flex flex-col rounded-md gap-1">
+            <div className="flex w-full justify-between items-center">
+              <input
+                type="number"
+                value={transferAmount}
+                onChange={handleChange}
+                className="bg-white border rounded-lg p-2 w-2/5"
+                min="0"
+                max={isBorrowAction ? asset.amount || 0 : asset.walletBalance || 0}
+              />
+              <p className="text-xl font-bold">${asset.asset}</p>
+            </div>
+            <div className="flex w-full justify-between items-center">
+              <span className="text-xs">
+                ${isBorrowAction ? asset.amountConverted : asset.walletBalanceConverted} USD
+              </span>
+              <p className="text-xs">
+                Available Balance {isBorrowAction ? asset.amount : asset.walletBalance}{" "}
+                <span className="font-medium">Max</span>
+              </p>
+            </div>
+          </div>
           {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
         </div>
         <h2 className="mt-4 text-xl font-medium">Transaction Overview</h2>
         <div className="mt-2 border rounded-xl p-4">
           <div className="flex flex-col rounded-md gap-1">
             <div className="flex w-full justify-between items-center">
-              <p className="text-md font-medium">Supply APY</p>
-              <p className="text-sm font-bold">{asset.apy}%</p>
-            </div>
-            <div className="flex w-full justify-between items-center">
-              <p className="text-md font-medium">Collateralization</p>
-              <p className="text-sm font-bold text-success">
-                {asset.collateral ? "Enabled" : <IsolatedStateComponent message="Isolated" />}
-              </p>
-            </div>
-            <div className="flex w-full justify-between items-center">
               <p className="text-md font-medium">Health Factor</p>
               <p className="text-sm font-bold text-success">4.15</p>
             </div>
           </div>
+        </div>
+        <div className="bg-neutral mt-2 rounded-xl p-4 border-slate-800 border">
+          <p>
+            <span className="font-medium">Attention:</span> This can notice to the user to communicate very important
+            information
+          </p>
         </div>
         <button
           onClick={handleConfirm}
@@ -112,4 +135,4 @@ const SupplyModal: React.FC<ModalProps> = ({
   );
 };
 
-export default SupplyModal;
+export default AssetModal;
