@@ -2,16 +2,6 @@ import React from "react";
 import IsolatedStateComponent from "@/components/tags/IsolatedState";
 import { SupplyTableProps } from "@/types/assets/assets";
 
-/**
- * SupplyTable component displays a table of assets with various details and actions,
- * including balance, APY, collateral status, and supply/withdraw actions.
- *
- * @param {SupplyTableProps} props - Props containing assets data and action handlers.
- * @param {Array<any>} props.assets - Array of assets to display in the table.
- * @param {boolean} props.isSupplied - Flag indicating whether the table is displaying supplied assets.
- * @param {Function} props.onAction - Handler function invoked when an action (supply or withdraw) button is clicked.
- * @param {Function} props.onCollateralToggle - Optional: Handler function invoked when collateral toggle changes.
- */
 const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied, onAction, onCollateralToggle }) => {
   const handleCollateralToggle = (asset: any) => {
     if (onCollateralToggle) {

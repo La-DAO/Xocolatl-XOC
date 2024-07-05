@@ -1,38 +1,33 @@
-// SupplyModal.tsx
 import React, { useEffect, useState } from "react";
 import AmountInput from "@/components/inputs/AmountInput";
 import IsolatedStateComponent from "@/components/tags/IsolatedState";
-import { SupplyModalProps } from "@/types/assets/assets";
+import { Asset } from "@/types/assets/assets";
 import { faCircleExclamation, faGear } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-/**
- * SupplyModal component displays a modal for supplying assets,
- * allowing users to enter an amount and confirm the supply action.
- *
- * @param {SupplyModalProps} props - Props containing modal state and actions.
- * @param {boolean} props.isOpen - Flag indicating if the modal is open.
- * @param {Function} props.onClose - Callback function to close the modal.
- * @param {object} props.asset - The asset to supply.
- * @param {number} props.transferAmount - Amount of asset to supply.
- * @param {Function} props.setTransferAmount - Function to transfer the supply amount.
- * @param {Function} props.onConfirm - Callback function to confirm the supplying action.
- */
-const SupplyModal: React.FC<SupplyModalProps> = ({
+interface ModalProps {
+  asset: Asset | null;
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (amount: number) => void;
+  transferAmount: number;
+  setTransferAmount: (amount: number) => void;
+  isSupplyAction: boolean;
+}
+
+const SupplyModal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   asset,
   transferAmount,
   setTransferAmount,
   onConfirm,
+  isSupplyAction,
 }) => {
-  // State for error message
   const [errorMessage, setErrorMessage] = useState("");
-  // State to disable the button
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   useEffect(() => {
-    // Effect to validate transfer amount based on asset balance
     if (asset) {
       const walletBalance = asset.walletBalance || 0;
       if (transferAmount <= 0 || transferAmount > walletBalance) {
@@ -45,10 +40,8 @@ const SupplyModal: React.FC<SupplyModalProps> = ({
     }
   }, [transferAmount, asset]);
 
-  // Return null if modal is not open or no asset is selected
   if (!isOpen || !asset) return null;
 
-  // Handle the confirmation of the supply action
   const handleConfirm = () => {
     if (asset) {
       onConfirm(transferAmount);
@@ -58,18 +51,14 @@ const SupplyModal: React.FC<SupplyModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 text-slate-800">
-      {/* Overlay to close modal when clicking outside */}
       <div className="bg-black bg-opacity-50 absolute inset-0" onClick={onClose}></div>
       <div className="bg-white rounded-lg p-4 z-50 w-3/12">
-        {/* Modal header */}
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Supply {asset.asset}</h2>
+          <h2 className="text-2xl font-bold">{isSupplyAction ? `Supply ${asset.asset}` : `Withdraw ${asset.asset}`}</h2>
           <button onClick={onClose} className="text-3xl">
             &times;
           </button>
         </div>
-
-        {/* Amount input section */}
         <div className="flex justify-between items-center mt-6">
           <div className="flex justify-between gap-4 items-center">
             <p className="text-xl font-medium">Amount</p>
@@ -90,8 +79,6 @@ const SupplyModal: React.FC<SupplyModalProps> = ({
           />
           {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
         </div>
-
-        {/* Transaction overview section */}
         <h2 className="mt-4 text-xl font-medium">Transaction Overview</h2>
         <div className="mt-2 border rounded-xl p-4">
           <div className="flex flex-col rounded-md gap-1">
@@ -111,8 +98,6 @@ const SupplyModal: React.FC<SupplyModalProps> = ({
             </div>
           </div>
         </div>
-
-        {/* Confirmation button */}
         <button
           onClick={handleConfirm}
           className={`mt-6 w-full px-4 py-2 rounded-md ${
