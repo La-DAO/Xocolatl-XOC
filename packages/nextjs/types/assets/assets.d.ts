@@ -32,28 +32,6 @@ export interface BorrowTableProps extends AssetTableProps {
   isBorrowed: boolean;
 }
 
-// Defines the base interface for common modal properties.
-interface ModalProps {
-  asset: Asset | null;
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: (amount: number) => void;
-}
-
-// Props for a modal used to supply an asset.
-export interface SupplyModalProps extends ModalProps {
-  transferAmount: number;
-  isSupplyAction: boolean;
-  setTransferAmount: (amount: number) => void;
-}
-
-// Props for a modal used to borrow an asset.
-export interface BorrowModalProps extends ModalProps {
-  borrowAmount: number;
-  isBorrowAction: boolean;
-  setBorrowAmount: (amount: number) => void;
-}
-
 // For InfoTag component props
 interface InfoTagProps {
   className?: string;

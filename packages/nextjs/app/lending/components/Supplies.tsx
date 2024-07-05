@@ -11,10 +11,8 @@ import useBalance from "@/hooks/useBalance";
 import useCollateralBalance from "@/hooks/useCollateralBalance";
 import { Asset } from "@/types/assets/assets";
 
-/**
- * Component representing the supplies section, displaying user's current supplies
- * and available assets to supply, with modal functionality for supplying actions.
- */ const assetsData: Asset[] = assetsDataRaw.map((asset: any) => ({
+// Process raw data into typed assets
+const assetsData: Asset[] = assetsDataRaw.map((asset: any) => ({
   ...asset,
   walletBalance: Number(asset.walletBalance),
   apy: Number(asset.apy),
@@ -22,7 +20,7 @@ import { Asset } from "@/types/assets/assets";
 
 const yourSupplyData: Asset[] = yourSupplyDataRaw.map((asset: any) => ({
   ...asset,
-  amount: Number(asset.walletBalance),
+  amount: Number(asset.walletBalance), // Ensure amount is initialized with walletBalance
   apy: Number(asset.apy),
 }));
 
@@ -49,21 +47,15 @@ const Supplies: React.FC = () => {
   const averageApy = useApy(yourSupply);
   const collateralBalance = useCollateralBalance(yourSupply);
 
-  /**
-   * Toggles the collateral status of the specified asset in the user's supply list.
-   * @param asset The asset for which to toggle the collateral status.
-   */
+  // Toggle collateral status for the asset
   const handleCollateralToggle = (asset: Asset) => {
     const updatedYourSupply = yourSupply.map(a => {
       if (a.asset === asset.asset) {
-        // Toggle the collateral status
         const newCollateralStatus = !a.collateral;
         return { ...a, collateral: newCollateralStatus };
       }
       return a;
     });
-
-    // Update the user's assets with the new collateral status
     updateYourAssets(updatedYourSupply);
   };
 
