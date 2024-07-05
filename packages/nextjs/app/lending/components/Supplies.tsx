@@ -1,15 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
+import SupplyModal from "./modals/SupplyModal";
+import SupplyTable from "./tables/SupplyTable";
 import assetsDataRaw from "@/data/assetsToSupply.json";
 import yourSupplyDataRaw from "@/data/yourSupplies.json";
 import useApy from "@/hooks/useApy";
+import useAssetOperations from "@/hooks/useAssetOperations";
 import useBalance from "@/hooks/useBalance";
 import useCollateralBalance from "@/hooks/useCollateralBalance";
 import { Asset } from "@/types/assets/assets";
-import SupplyModal from "~~/app/lending/components/modals/SupplyModal";
-import SupplyTable from "~~/app/lending/components/tables/SupplyTable";
 
+// Process raw data into typed assets
 const assetsData: Asset[] = assetsDataRaw.map((asset: any) => ({
   ...asset,
   walletBalance: Number(asset.walletBalance),
@@ -18,100 +20,34 @@ const assetsData: Asset[] = assetsDataRaw.map((asset: any) => ({
 
 const yourSupplyData: Asset[] = yourSupplyDataRaw.map((asset: any) => ({
   ...asset,
-  walletBalance: Number(asset.walletBalance),
+  amount: Number(asset.walletBalance), // Ensure amount is initialized with walletBalance
   apy: Number(asset.apy),
 }));
 
+/**
+ * Supplies component manages and displays the user's supplied assets and available assets to supply.
+ * It provides a modal for performing supply actions and shows relevant financial data.
+ */
 const Supplies: React.FC = () => {
-  const [assetsToSupply, setAssetsToSupply] = useState<Asset[]>(assetsData);
-  const [yourSupply, setYourSupply] = useState<Asset[]>(yourSupplyData);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
-  const [transferAmount, setTransferAmount] = useState<number>(0);
-  const [isSupplyAction, setIsSupplyAction] = useState(true);
+  const {
+    assets: assetsToSupply,
+    yourAssets: yourSupply,
+    isModalOpen,
+    selectedAsset,
+    transferAmount,
+    isAction: isSupplyAction,
+    openModal,
+    closeModal,
+    handleConfirm,
+    setTransferAmount,
+    updateYourAssets,
+  } = useAssetOperations(assetsData, yourSupplyData);
 
   const balance = useBalance(yourSupply);
   const averageApy = useApy(yourSupply);
   const collateralBalance = useCollateralBalance(yourSupply);
 
-  const openModal = (asset: Asset, isSupply: boolean) => {
-    setSelectedAsset(asset);
-    setTransferAmount(asset.walletBalance || 0);
-    setIsSupplyAction(isSupply);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setSelectedAsset(null);
-    setIsModalOpen(false);
-  };
-
-  const handleSupply = (amount: number) => {
-    if (!selectedAsset) return;
-
-    const updatedAssetsToSupply = assetsToSupply.map(a => {
-      if (a.asset === selectedAsset.asset) {
-        return { ...a, walletBalance: (a.walletBalance || 0) - amount };
-      }
-      return a;
-    });
-    setAssetsToSupply(updatedAssetsToSupply);
-
-    const existingAssetInYourSupply = yourSupply.find(a => a.asset === selectedAsset.asset);
-    if (existingAssetInYourSupply) {
-      const updatedYourSupply = yourSupply.map(a => {
-        if (a.asset === selectedAsset.asset) {
-          return { ...a, balance: (a.balance || 0) + amount };
-        }
-        return a;
-      });
-      setYourSupply(updatedYourSupply);
-    } else {
-      const updatedYourSupply = [...yourSupply, { ...selectedAsset, balance: amount }];
-      setYourSupply(updatedYourSupply);
-    }
-
-    closeModal();
-  };
-
-  const handleWithdraw = (amount: number) => {
-    if (!selectedAsset) return;
-
-    const updatedYourSupply = yourSupply
-      .map(a => {
-        if (a.asset === selectedAsset.asset) {
-          return { ...a, balance: (a.balance || 0) - amount };
-        }
-        return a;
-      })
-      .filter(a => a.balance! > 0);
-    setYourSupply(updatedYourSupply);
-
-    const existingAssetInAssetsToSupply = assetsToSupply.find(a => a.asset === selectedAsset.asset);
-    if (existingAssetInAssetsToSupply) {
-      const updatedAssetsToSupply = assetsToSupply.map(a => {
-        if (a.asset === selectedAsset.asset) {
-          return { ...a, walletBalance: (a.walletBalance || 0) + amount };
-        }
-        return a;
-      });
-      setAssetsToSupply(updatedAssetsToSupply);
-    } else {
-      const updatedAssetsToSupply = [...assetsToSupply, { ...selectedAsset, walletBalance: amount }];
-      setAssetsToSupply(updatedAssetsToSupply);
-    }
-
-    closeModal();
-  };
-
-  const handleConfirm = (amount: number) => {
-    if (isSupplyAction) {
-      handleSupply(amount);
-    } else {
-      handleWithdraw(amount);
-    }
-  };
-
+  // Toggle collateral status for the asset
   const handleCollateralToggle = (asset: Asset) => {
     const updatedYourSupply = yourSupply.map(a => {
       if (a.asset === asset.asset) {
@@ -120,7 +56,7 @@ const Supplies: React.FC = () => {
       }
       return a;
     });
-    setYourSupply(updatedYourSupply);
+    updateYourAssets(updatedYourSupply);
   };
 
   return (
@@ -163,7 +99,7 @@ const Supplies: React.FC = () => {
         transferAmount={transferAmount}
         setTransferAmount={setTransferAmount}
         onConfirm={handleConfirm}
-        isSupplyAction={isSupplyAction} // Aquí se pasa la variable
+        isSupplyAction={isSupplyAction}
       />
     </div>
   );

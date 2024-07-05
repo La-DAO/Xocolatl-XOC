@@ -1,15 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
+import BorrowModal from "./modals/BorrowModal";
+import BorrowTable from "./tables/BorrowTable";
 import borrowsDataRaw from "@/data/assetsToBorrow.json";
 import yourBorrowDataRaw from "@/data/yourBorrows.json";
 import useApy from "@/hooks/useApy";
+import useAssetOperations from "@/hooks/useAssetOperations";
 import useBalance from "@/hooks/useBalance";
 import useBorrowPower from "@/hooks/useBorrowPower";
 import { Asset } from "@/types/assets/assets";
-import BorrowModal from "~~/app/lending/components/modals/BorrowModal";
-import BorrowTable from "~~/app/lending/components/tables/BorrowTable";
 
+/**
+ * Component representing the borrows section, displaying user's current borrows
+ * and available assets to borrow, with modal functionality for borrowing actions.
+ */
 const assetsData: Asset[] = borrowsDataRaw.map((asset: any) => ({
   ...asset,
   amount: Number(asset.amount),
@@ -22,95 +27,27 @@ const yourBorrowData: Asset[] = yourBorrowDataRaw.map((asset: any) => ({
   apy: Number(asset.apy),
 }));
 
+/**
+ * Borrows component manages and displays the user's borrowed assets and available assets to borrow.
+ * It provides a modal for performing borrow actions and shows relevant financial data.
+ */
 const Borrows: React.FC = () => {
-  const [assetsToBorrow, setAssetsToBorrow] = useState<Asset[]>(assetsData);
-  const [yourBorrow, setYourBorrow] = useState<Asset[]>(yourBorrowData);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
-  const [borrowAmount, setBorrowAmount] = useState<number>(0);
-  const [isBorrowAction, setIsBorrowAction] = useState(true); // Nueva propiedad de estado
+  const {
+    assets: assetsToBorrow,
+    yourAssets: yourBorrow,
+    isModalOpen,
+    selectedAsset,
+    transferAmount: borrowAmount,
+    isAction: isBorrowAction,
+    openModal,
+    closeModal,
+    handleConfirm,
+    setTransferAmount: setBorrowAmount,
+  } = useAssetOperations(assetsData, yourBorrowData);
 
   const balance = useBalance(yourBorrow);
   const averageApy = useApy(yourBorrow);
   const borrowPower = useBorrowPower(yourBorrow);
-
-  const openModal = (asset: Asset, isBorrow: boolean) => {
-    setSelectedAsset(asset);
-    setBorrowAmount(asset.amount || 0); // Default transfer amount to the wallet balance
-    setIsBorrowAction(isBorrow);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setSelectedAsset(null);
-    setIsModalOpen(false);
-  };
-
-  const handleBorrow = (amount: number) => {
-    if (!selectedAsset) return;
-
-    const updatedAssetsToBorrow = assetsToBorrow.map(a => {
-      if (a.asset === selectedAsset.asset) {
-        return { ...a, amount: (a.amount || 0) - amount };
-      }
-      return a;
-    });
-
-    const existingAsset = yourBorrow.find(a => a.asset === selectedAsset.asset);
-    if (existingAsset) {
-      const updatedYourBorrow = yourBorrow.map(a => {
-        if (a.asset === selectedAsset.asset) {
-          return { ...a, amount: (a.amount || 0) + amount };
-        }
-        return a;
-      });
-      setYourBorrow(updatedYourBorrow);
-    } else {
-      const newBorrow = { ...selectedAsset, amount };
-      setYourBorrow([...yourBorrow, newBorrow]);
-    }
-
-    setAssetsToBorrow(updatedAssetsToBorrow);
-    closeModal();
-  };
-
-  const handleRepay = (amount: number) => {
-    if (!selectedAsset) return;
-
-    const updatedYourBorrow = yourBorrow
-      .map(a => {
-        if (a.asset === selectedAsset.asset) {
-          return { ...a, amount: (a.amount || 0) - amount };
-        }
-        return a;
-      })
-      .filter(a => a.amount! > 0);
-    setYourBorrow(updatedYourBorrow);
-
-    const existingAssetInAssetsToBorrow = assetsToBorrow.find(a => a.asset === selectedAsset.asset);
-    if (existingAssetInAssetsToBorrow) {
-      const updatedAssetsToBorrow = assetsToBorrow.map(a => {
-        if (a.asset === selectedAsset.asset) {
-          return { ...a, amount: (a.amount || 0) + amount };
-        }
-        return a;
-      });
-      setAssetsToBorrow(updatedAssetsToBorrow);
-    } else {
-      const updatedAssetsToBorrow = [...assetsToBorrow, { ...selectedAsset, amount }];
-      setAssetsToBorrow(updatedAssetsToBorrow);
-    }
-
-    closeModal();
-  };
-
-  const handleConfirm = (amount: number) => {
-    if (isBorrowAction) {
-      handleBorrow(amount);
-    } else {
-      handleRepay(amount);
-    }
-  };
 
   return (
     <div className="rounded-md">
@@ -147,7 +84,7 @@ const Borrows: React.FC = () => {
         borrowAmount={borrowAmount}
         setBorrowAmount={setBorrowAmount}
         onConfirm={handleConfirm}
-        isBorrowAction={isBorrowAction} // Pasar la propiedad isBorrowAction
+        isBorrowAction={isBorrowAction}
       />
     </div>
   );
