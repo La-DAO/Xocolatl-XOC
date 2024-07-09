@@ -60,8 +60,10 @@ const SupplyTable: React.FC<SupplyTableProps> = ({ assets, isSupplied, onAction,
                         <span className="toggle-label"></span>
                       </label>
                     )
+                  ) : asset.collateral ? (
+                    <span className="text-xl text-success font-bold">&#10003;</span>
                   ) : (
-                    asset.collateral && <span className="text-xl text-success font-bold">&#10003;</span>
+                    <IsolatedStateComponent message="Isolated" />
                   )}
                 </div>
               </td>
