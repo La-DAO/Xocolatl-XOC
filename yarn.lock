@@ -5728,6 +5728,41 @@ __metadata:
   languageName: node
   linkType: hard
 
+"framer-motion-3d@npm:^11.2.13":
+  version: 11.2.13
+  resolution: "framer-motion-3d@npm:11.2.13"
+  dependencies:
+    framer-motion: ^11.2.13
+    react-merge-refs: ^2.0.1
+  peerDependencies:
+    "@react-three/fiber": ^8.2.2
+    react: ">=18.0"
+    react-dom: ">=18.0"
+    three: ">=0.133"
+  checksum: a6dcaa62a1c00ca79a81cdd5330a58a5ddd3e36844f8e9fd042eaf8b8313003942ff594465ce101dc477dd965015ecf91da5284f96b40cd5f1f787ef275e445b
+  languageName: node
+  linkType: hard
+
+"framer-motion@npm:^11.2.13":
+  version: 11.2.13
+  resolution: "framer-motion@npm:11.2.13"
+  dependencies:
+    tslib: ^2.4.0
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: bc8f74f78d490bc4e30662d538cbc9516430047a128cbd6a759fc003675483201f04eb28b68614965c9738a96bf5f102d5c100c1d4f9cd2f03abb8d80b7f6931
+  languageName: node
+  linkType: hard
+
 "fs-extra@npm:11.1.0":
   version: 11.1.0
   resolution: "fs-extra@npm:11.1.0"
@@ -8873,6 +8908,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-merge-refs@npm:^2.0.1":
+  version: 2.1.1
+  resolution: "react-merge-refs@npm:2.1.1"
+  checksum: 40564bc4c16520ef830d4fe7a2bd298c23a42d644a8fcb2353cdc6cf16aa82eac681c554df4c849397b25af9dbe728086566e1a01f65f95d2301dc8fc8f6809f
+  languageName: node
+  linkType: hard
+
 "react-native-webview@npm:^11.26.0":
   version: 11.26.1
   resolution: "react-native-webview@npm:11.26.1"
@@ -9309,6 +9351,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": ^6.5.2
     "@fortawesome/react-fontawesome": ^0.2.2
     "@heroicons/react": ^2.1.4
+    framer-motion-3d: ^11.2.13
     fs: ^0.0.1-security
     husky: ~8.0.3
     lint-staged: ~13.2.2
