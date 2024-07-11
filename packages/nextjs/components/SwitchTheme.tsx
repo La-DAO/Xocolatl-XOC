@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
@@ -13,9 +11,10 @@ export const SwitchTheme = ({ className }: { className?: string }) => {
   const handleToggle = () => {
     if (isDarkMode) {
       setTheme("light");
-      return;
+    } else {
+      setTheme("dark");
     }
-    setTheme("dark");
+    console.log(`Tema cambiado a ${isDarkMode ? "light" : "dark"}`);
   };
 
   useEffect(() => {

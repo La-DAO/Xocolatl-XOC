@@ -2,17 +2,20 @@ import React from "react";
 import Image from "next/image";
 import BaseLogo from "../../../public/Base-Logo.jpg";
 
-const ProfileStats: React.FC = () => {
-  // Simulated data
+interface ProfileStatsProps {
+  balance: number;
+}
+
+const ProfileStats: React.FC<ProfileStatsProps> = ({ balance }) => {
   const data = {
-    netWorth: "106.04K",
+    netWorth: balance,
     netAPY: "-3.73%",
     healthFactor: 1.42,
   };
 
   return (
-    <header className=" bg-neutral text-white px-12 py-8 flex flex-col space-y-2 w-full  m-auto">
-      <div className=" pl-32">
+    <header className="bg-neutral text-white px-12 py-8 flex flex-col space-y-2 w-full m-auto">
+      <div className="pl-32">
         <div className="flex items-center space-x-2">
           <div className="text-2xl">
             <Image src={BaseLogo} alt="Base Logo" className="h-8 w-8" />

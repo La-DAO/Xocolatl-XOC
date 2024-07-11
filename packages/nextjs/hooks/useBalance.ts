@@ -11,7 +11,7 @@ const useBalance = (assets: Asset[]) => {
 
   useEffect(() => {
     // Calculate the total balance by summing up the 'balance' property of each asset
-    const total = assets.reduce((sum, asset) => sum + (asset.balance || 0), 0);
+    const total = assets.reduce((sum, asset) => sum + (asset.balance || asset.amount || 0), 0);
     setBalance(total);
   }, [assets]);
 
