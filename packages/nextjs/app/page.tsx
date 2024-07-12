@@ -1,69 +1,56 @@
 "use client";
 
-import Link from "next/link";
+// import Image from "next/image";
+import FeaturesTab from "../app/components/FeaturesTab";
+import Benefits from "../app/components/benefits";
+import Cta from "../app/components/cta";
+import { benefitOne, benefitTwo } from "../app/components/data";
+import Faq from "../app/components/faq";
+import Hero from "../app/components/hero";
+import SectionTitle from "../app/components/sectionTitle";
+import Testimonials from "../app/components/testimonials";
 import type { NextPage } from "next";
-import { useAccount } from "wagmi";
-import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { Address } from "~~/components/scaffold-eth";
 
 const Home: NextPage = () => {
-  const { address: connectedAddress } = useAccount();
-
   return (
     <>
-      <div className="flex items-center flex-col flex-grow pt-10">
-        <div className="px-5">
-          <h1 className="text-center">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
-          </h1>
-          <div className="flex justify-center items-center space-x-2">
-            <p className="my-2 font-medium">Connected Address:</p>
-            <Address address={connectedAddress} />
-          </div>
-          <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/nextjs/app/page.tsx
-            </code>
-          </p>
-          <p className="text-center text-lg">
-            Edit your smart contract{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              YourContract.sol
-            </code>{" "}
-            in{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/hardhat/contracts
-            </code>
-          </p>
+      <Hero />
+      <div className="divider"></div>
+      <SectionTitle pretitle="This is our pitch" title="Why $XOC?" />
+      <Benefits data={benefitOne} />
+      <Benefits imgPos="right" data={benefitTwo} />
+      {/*       <SectionTitle pretitle="¡Mira el Video!" title="Sumérgete en el mundo de $XOC">
+        <div>
+          <p>¿Te preguntas cómo se lleva a cabo la magia de $XOC? ¿Quieres entender cómo funciona este innovador protocolo y cómo puedes comenzar a usarlo? ¡No busques más! Te presentamos un video que te llevará paso a paso a través del fascinante mundo de $XOC.</p>
+      
+          <h2>Descubre la magia de $XOC:</h2>
+          
+          <ul>
+            <li>Aprende cómo funciona el protocolo.</li>
+            <li>Descubre las posibilidades que ofrece.</li>
+            <li>Prepárate para ser parte de la revolución financiera.</li>
+            <li>¡Prepárate para una experiencia visual que te dejará con ganas de más!</li>
+          </ul>
         </div>
-
-        <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
-          <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Tinker with your smart contract using the{" "}
-                <Link href="/debug" passHref className="link">
-                  Debug Contracts
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Explore your local transactions with the{" "}
-                <Link href="/blockexplorer" passHref className="link">
-                  Block Explorer
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      </SectionTitle> */}
+      <div className="divider"></div>
+      <SectionTitle pretitle="Curious?" title="Explore what you can do with $XOC" />
+      <FeaturesTab />
+      <div className="divider"></div>
+      <SectionTitle pretitle="¡Inspiring testimonials!" title="Explore the voices of the $XOC community">
+        Discover authentic testimonials from those who are part of the vibrant community building and using $XOC. From
+        transformative experiences to success stories, here you&apos;ll find the inspiration you need to join this
+        exciting financial revolution.
+      </SectionTitle>
+      <Testimonials />
+      <div className="divider"></div>
+      <SectionTitle pretitle="FAQ" title="Frequently Asked Questions">
+        This section is for answering frequently asked questions from the emerging community around $XOC and all that
+        jazz.
+      </SectionTitle>
+      <Faq />
+      <div className="divider mt-24"></div>
+      <Cta />
     </>
   );
 };
