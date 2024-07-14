@@ -1662,6 +1662,7 @@ __metadata:
     dotenv: ~16.3.1
     envfile: ~6.18.0
     ethers: ~5.7.1
+    framer-motion-3d: ^11.3.2
     prettier: ~2.8.8
     qrcode: ~1.5.3
     toml: ~3.0.0
@@ -5728,6 +5729,41 @@ __metadata:
   languageName: node
   linkType: hard
 
+"framer-motion-3d@npm:^11.3.2":
+  version: 11.3.2
+  resolution: "framer-motion-3d@npm:11.3.2"
+  dependencies:
+    framer-motion: ^11.3.2
+    react-merge-refs: ^2.0.1
+  peerDependencies:
+    "@react-three/fiber": ^8.2.2
+    react: ">=18.0"
+    react-dom: ">=18.0"
+    three: ">=0.133"
+  checksum: 33934acfda196f02661466abf71df3be6b861820124b1a43d17ccb29d101443c56d129c8880afe256fc241124499eb75c49d7f8110af9734adbfef43f3628860
+  languageName: node
+  linkType: hard
+
+"framer-motion@npm:^11.3.2":
+  version: 11.3.2
+  resolution: "framer-motion@npm:11.3.2"
+  dependencies:
+    tslib: ^2.4.0
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: f0235c6e71438e26c7b23b55fbb74ce18d84736dfcfbefb01826f489afd9deb5a7f2e7cdd1316f62291ca261bea26ff8ae4db77caedcae859e09cbd77db68d6f
+  languageName: node
+  linkType: hard
+
 "fs-extra@npm:11.1.0":
   version: 11.1.0
   resolution: "fs-extra@npm:11.1.0"
@@ -8873,6 +8909,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-merge-refs@npm:^2.0.1":
+  version: 2.1.1
+  resolution: "react-merge-refs@npm:2.1.1"
+  checksum: 40564bc4c16520ef830d4fe7a2bd298c23a42d644a8fcb2353cdc6cf16aa82eac681c554df4c849397b25af9dbe728086566e1a01f65f95d2301dc8fc8f6809f
+  languageName: node
+  linkType: hard
+
 "react-native-webview@npm:^11.26.0":
   version: 11.26.1
   resolution: "react-native-webview@npm:11.26.1"
@@ -9309,6 +9352,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": ^6.5.2
     "@fortawesome/react-fontawesome": ^0.2.2
     "@heroicons/react": ^2.1.4
+    framer-motion-3d: ^11.3.2
     fs: ^0.0.1-security
     husky: ~8.0.3
     lint-staged: ~13.2.2
