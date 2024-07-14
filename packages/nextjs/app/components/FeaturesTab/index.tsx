@@ -20,7 +20,6 @@ const FeaturesTab = () => {
                 opacity: 0,
                 y: -20,
               },
-
               visible: {
                 opacity: 1,
                 y: 0,
@@ -30,55 +29,55 @@ const FeaturesTab = () => {
             whileInView="visible"
             transition={{ duration: 0.5, delay: 0.1 }}
             viewport={{ once: true }}
-            className="animate_top mb-15 flex flex-wrap justify-center rounded-[10px] border bg-base-300 shadow-solid-5 dark:border-strokedark dark:bg-neutral dark:shadow-solid-6 md:flex-nowrap md:items-center lg:gap-7.5 xl:mb-21.5 xl:gap-12.5"
+            className="animate_top mb-15 flex flex-wrap justify-center rounded-[10px] bg-base-200 shadow-solid-5 dark:border-strokedark dark:bg-base-300 dark:shadow-solid-6 md:flex-nowrap md:items-center lg:gap-7.5 xl:mb-21.5 xl:gap-12.5"
           >
             <div
               onClick={() => setCurrentTab("tabOne")}
-              className={`relative flex w-full cursor-pointer items-center gap-4 border border-stroke border-accent px-6 py-2 last:border-0 dark:border-accent  md:w-auto md:border-0 xl:px-13.5 xl:py-5 ${
+              className={`relative flex w-full cursor-pointer items-center gap-4 border border-stroke px-6 py-2 last:border-0 dark:border-strokedark md:w-auto md:border-0 xl:px-13.5 xl:py-5 ${
                 currentTab === "tabOne"
-                  ? "active before:absolute before:bottom-0 before:left-0 before:h-1 before:w-full before:rounded-tl-[4px] before:rounded-tr-[4px] before:bg-neutral-content"
+                  ? "border-4 border-accent bg-secondary dark:border-accent dark:bg-secondary rounded-full"
                   : ""
               }`}
             >
               <div className="flex h-12.5 w-12.5 text-3xl items-center justify-center dark:bg-blacksection">
-                <p className="text-metatitle3 font-medium text-neutral-content dark:text-accent">01</p>
+                <p className="text-metatitle3 font-medium text-primary dark:text-success">01</p>
               </div>
-              <div className=" text-3xl md:w-3/5 lg:w-auto">
-                <button className="font-medium text-neutral-content dark:text-accent xl:text-regular">
+              <div className="text-3xl md:w-3/5 lg:w-auto">
+                <button className="font-medium text-primary dark:text-success xl:text-regular">
                   Collateral-Debt Positions
                 </button>
               </div>
             </div>
             <div
               onClick={() => setCurrentTab("tabTwo")}
-              className={`relative flex w-full cursor-pointer items-center gap-4 border-b border-stroke px-6 py-2 last:border-0 dark:border-strokedark md:w-auto md:border-0 xl:px-13.5 xl:py-5 ${
+              className={`relative flex w-full cursor-pointer items-center gap-4 border border-stroke px-6 py-2 last:border-0 dark:border-strokedark md:w-auto md:border-0 xl:px-13.5 xl:py-5 ${
                 currentTab === "tabTwo"
-                  ? "active before:absolute before:bottom-0 before:left-0 before:h-1 before:w-full before:rounded-tl-[4px] before:rounded-tr-[4px] before:bg-neutral-content"
+                  ? "border-4 border-accent bg-secondary dark:border-accent dark:bg-secondary rounded-full"
                   : ""
               }`}
             >
-              <div className="flex h-12.5 w-12.5 text-3xl items-center justify-centerdark:bg-blacksection">
-                <p className="text-metatitle3 font-medium text-neutral-content dark:text-accent">02</p>
+              <div className="flex h-12.5 w-12.5 text-3xl items-center justify-center dark:bg-blacksection">
+                <p className="text-metatitle3 font-medium text-primary dark:text-success">02</p>
               </div>
-              <div className="md:w-3/5 lg:w-auto">
-                <button className="text-3xl font-medium text-neutral-content dark:text-accent xl:text-regular">
+              <div className="text-3xl md:w-3/5 lg:w-auto">
+                <button className="font-medium text-primary dark:text-success xl:text-regular">
                   Money Lending Markets
                 </button>
               </div>
             </div>
             <div
               onClick={() => setCurrentTab("tabThree")}
-              className={`relative flex w-full cursor-pointer items-center gap-4 border-b border-stroke px-6 py-2 last:border-0 dark:border-strokedark md:w-auto md:border-0 xl:px-13.5 xl:py-5 ${
+              className={`relative flex w-full cursor-pointer items-center gap-4 border border-stroke px-6 py-2 last:border-0 dark:border-strokedark md:w-auto md:border-0 xl:px-13.5 xl:py-5 ${
                 currentTab === "tabThree"
-                  ? "active before:absolute before:bottom-0 before:left-0 before:h-1 before:w-full before:rounded-tl-[4px] before:rounded-tr-[4px] before:bg-neutral-content"
+                  ? "border-4 border-accent bg-secondary dark:border-accent dark:bg-secondary rounded-full"
                   : ""
               }`}
             >
               <div className="flex h-12.5 w-12.5 text-3xl items-center justify-center dark:bg-blacksection">
-                <p className="text-metatitle3 font-medium text-neutral-content dark:text-accent">03</p>
+                <p className="text-metatitle3 font-medium text-primary dark:text-success">03</p>
               </div>
-              <div className="md:w-3/5 lg:w-auto">
-                <button className="text-3xl font-medium text-neutral-content dark:text-accent xl:text-regular">
+              <div className="text-3xl md:w-3/5 lg:w-auto">
+                <button className="font-medium text-primary dark:text-success xl:text-regular">
                   Fully Interopable Bridging
                 </button>
               </div>
@@ -93,7 +92,6 @@ const FeaturesTab = () => {
                 opacity: 0,
                 y: -20,
               },
-
               visible: {
                 opacity: 1,
                 y: 0,
