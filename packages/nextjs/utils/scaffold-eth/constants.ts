@@ -1,0 +1,59 @@
+export const XOC_ADDRESS = "0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf";
+
+export const ADDR_LIB = {
+  mainnet: {
+    weth: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  },
+  arbitrum: {
+    weth: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+  },
+  optimism: {
+    weth: "0x4200000000000000000000000000000000000006",
+  },
+  binance: {
+    weth: "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
+    wbnb: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+  },
+  polygon: {
+    houseOfCoin: "0x7ed1aCD46dE3a4E63f2D3b0f4fB5532e113a520B",
+    uniswapSwapRouter: "68b3465833fb72A70ecDF485E0e4C7bD8665Fc45",
+    uniswapQuoter: "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+    wsteth: "0x03b54A6e9a984069379fae1a4fC4dBAE93B3bCCD",
+    weth: {
+      address: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+      houseOfReserve: "0xd411BE9A105Ea7701FabBe58C2834b7033EBC203",
+    },
+    wmatic: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
+    maticx: "0xfa68FB4628DFF1028CFEc22b4162FCcd0d45efb6",
+    wbtc: "0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6",
+    usdce: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+    usdc: {
+      address: "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359",
+    },
+  },
+  polygonzkevm: {
+    weth: "0x4F9A0e7FD2Bf6067db6994CF12E4495Df938E6e9",
+  },
+  linea: {
+    weth: "0xe5D7C2a44FfDDf6b295A15c148167daaAf5Cf34f",
+  },
+  base: {
+    weth: "0x4200000000000000000000000000000000000006",
+  },
+  gnosis: {
+    weth: "0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1",
+  },
+  goerli: {
+    weth: "0xCCB14936C2E000ED8393A571D15A2672537838Ad",
+    wbtc: "0x45AC379F019E48ca5dAC02E54F406F99F5088099",
+  },
+  sepolia: {
+    weth: "0xD0dF82dE051244f04BfF3A8bB1f62E1cD39eED92",
+    wbtc: "0xf864F011C5A97fD8Da79baEd78ba77b47112935a",
+  },
+  mumbai: {
+    wmatic: "0xf237dE5664D3c2D2545684E76fef02A3A58A364c",
+    weth: "0xD087ff96281dcf722AEa82aCA57E8545EA9e6C96",
+    wbtc: "0x97e8dE167322a3bCA28E8A49BC46F6Ce128FEC68",
+  },
+};
