@@ -29,7 +29,7 @@ export const menuLinks: HeaderMenuLink[] = [
   },
   {
     label: "CDP",
-    href: "",
+    href: "/cdp",
     icon: <BuildingLibraryIcon className="h-4 w-4" />,
   },
   {
