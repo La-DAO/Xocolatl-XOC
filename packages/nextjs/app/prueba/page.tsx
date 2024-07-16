@@ -1,40 +1,20 @@
-// pages/reserve.js
 "use client";
 
 import React from "react";
-import App from "./components/App";
+import AssetsToSupply from "./components/AssetsToSupply";
 
-// pages/reserve.js
-
-// pages/reserve.js
-
-// pages/reserve.js
-
-// pages/reserve.js
-
-// pages/reserve.js
-
-// pages/reserve.js
-
-// pages/reserve.js
-
-// pages/reserve.js
-
-// pages/reserve.js
-
-// pages/reserve.js
-
-// pages/reserve.js
-
-// Asegúrate de ajustar la ruta de importación según la estructura de tu proyecto
-
-const ReservePage = () => {
+const Lending = () => {
   return (
-    <div>
-      <h1>Reserve Page</h1>
-      <App />
+    <div className="flex flex-col">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-white rounded-xl px-8 py-4 flex flex-col">
+          <h1 className="text-amber-950 font-bold text-2xl">Assets to supply</h1>
+          <p className="text-gray-500">Select the asset to deposit as collateral</p>
+          <AssetsToSupply />
+        </div>
+      </div>
     </div>
   );
 };
 
-export default ReservePage;
+export default Lending;

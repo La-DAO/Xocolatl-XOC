@@ -5728,6 +5728,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"framer-motion@npm:^11.3.4":
+  version: 11.3.4
+  resolution: "framer-motion@npm:11.3.4"
+  dependencies:
+    tslib: ^2.4.0
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 5b5e1b80c0230634e13a308f08cf73ad79a88726dbf47c4b283696dfacc3a7e65406b189d13037e6517dc8d837c1d574574246969531233de1caf54a1f093d6f
+  languageName: node
+  linkType: hard
+
 "fs-extra@npm:11.1.0":
   version: 11.1.0
   resolution: "fs-extra@npm:11.1.0"
@@ -9309,6 +9329,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": ^6.5.2
     "@fortawesome/react-fontawesome": ^0.2.2
     "@heroicons/react": ^2.1.4
+    framer-motion: ^11.3.4
     fs: ^0.0.1-security
     husky: ~8.0.3
     lint-staged: ~13.2.2
