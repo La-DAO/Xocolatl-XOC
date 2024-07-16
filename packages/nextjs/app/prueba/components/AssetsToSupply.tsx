@@ -35,7 +35,7 @@ const AssetsToSupply = () => {
       });
       setBalances(updatedBalances);
     }
-  }, [balance, reserveData, balances]);
+  }, [balance, reserveData]);
 
   return (
     <div className="mt-4">
