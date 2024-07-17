@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
+import WalletBalance from "./WalletBalance";
 import IsolatedStateComponent from "@/components/tags/IsolatedState";
-import useBalanceOf from "@/hooks/useBalanceOf";
+import useAccountAddress from "@/hooks/useAccount";
 import useReadContracts from "@/hooks/useReadContracts";
 
 /**
@@ -10,32 +11,19 @@ import useReadContracts from "@/hooks/useReadContracts";
 const AssetsToSupply = () => {
   // Hook to fetch reserve data
   const { data: reserveData, isLoading: isLoadingReserveData, isError: isErrorReserveData } = useReadContracts();
-
-  // Hook to fetch balance data for a given address
-  const { balance, fetchBalance } = useBalanceOf();
+  // Hook to fetch the account address
+  const { address: walletAddress } = useAccountAddress();
 
   // State to store balances of the assets
-  const [balances, setBalances] = useState<Record<string, string | null>>({});
+  const [balances, setBalances] = useState<Record<string, string>>({});
 
-  // Effect to fetch balances for each reserve asset when reserve data changes
-  useEffect(() => {
-    if (reserveData) {
-      reserveData.forEach(reserve => {
-        fetchBalance(reserve.underlyingAsset as `0x${string}`);
-      });
-    }
-  }, [reserveData, fetchBalance]);
-
-  // Effect to update balances state whenever a new balance is fetched
-  useEffect(() => {
-    if (reserveData && balance !== undefined) {
-      const updatedBalances = { ...balances };
-      reserveData.forEach(reserve => {
-        updatedBalances[reserve.underlyingAsset] = balance;
-      });
-      setBalances(updatedBalances);
-    }
-  }, [balance, reserveData]);
+  /**
+   * Callback function to handle balance change.
+   * Updates the state with new balances.
+   */
+  const handleBalanceChange = useCallback((tokenAddress: `0x${string}`, balance: string) => {
+    setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
+  }, []);
 
   return (
     <div className="mt-4">
@@ -44,7 +32,7 @@ const AssetsToSupply = () => {
       {isErrorReserveData && <p className="text-error">Error fetching data.</p>}
 
       {/* Display table if reserve data is available */}
-      {reserveData && (
+      {reserveData && walletAddress && (
         <div>
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
@@ -70,8 +58,6 @@ const AssetsToSupply = () => {
               {/* Iterate through reserve data to create table rows */}
               {reserveData.map((reserve, index) => {
                 const balance = balances[reserve.underlyingAsset as `0x${string}`];
-                const isLoadingBalance = balance === undefined;
-                const isErrorBalance = balance === null;
                 const isButtonDisabled = !balance || parseFloat(balance) === 0;
 
                 return (
@@ -80,14 +66,12 @@ const AssetsToSupply = () => {
                       <p className="text-sm font-medium text-gray-900">{reserve.symbol}</p>
                     </td>
                     <td className="px-6 py-4">
-                      {/* Display loading, error, or balance */}
-                      {isLoadingBalance ? (
-                        <p className="text-sm text-gray-900">Loading...</p>
-                      ) : isErrorBalance ? (
-                        <p className="text-sm text-gray-900">Error</p>
-                      ) : (
-                        <p className="text-sm text-gray-900">{balance}</p>
-                      )}
+                      {/* Use WalletBalance to display the balance */}
+                      <WalletBalance
+                        tokenAddress={reserve.underlyingAsset as `0x${string}`}
+                        walletAddress={walletAddress}
+                        onBalanceChange={handleBalanceChange}
+                      />
                     </td>
                     <td className="px-6 py-4">
                       <p className="text-sm text-gray-900">{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
@@ -105,7 +89,7 @@ const AssetsToSupply = () => {
                     <td className="py-4 whitespace-nowrap text-sm font-medium">
                       <button
                         className={`px-3 py-1 rounded-md ${
-                          isButtonDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-accent text-white"
+                          isButtonDisabled ? "bg-gray-100 text-gray-300 cursor-not-allowed" : "bg-accent text-white"
                         }`}
                         disabled={isButtonDisabled}
                       >
