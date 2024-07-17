@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import IsolatedStateComponent from "@/components/tags/IsolatedState";
 import useBalanceOf from "@/hooks/useBalanceOf";
-import useReserveData from "@/hooks/useReserveData";
+import useReadContracts from "@/hooks/useReadContracts";
 
 /**
  * Component for displaying assets that can be supplied.
@@ -9,7 +9,7 @@ import useReserveData from "@/hooks/useReserveData";
  */
 const AssetsToSupply = () => {
   // Hook to fetch reserve data
-  const { data: reserveData, isLoading: isLoadingReserveData, isError: isErrorReserveData } = useReserveData();
+  const { data: reserveData, isLoading: isLoadingReserveData, isError: isErrorReserveData } = useReadContracts();
 
   // Hook to fetch balance data for a given address
   const { balance, fetchBalance } = useBalanceOf();
