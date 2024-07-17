@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import CONFIG from "@/config";
 import externalContracts from "@/contracts/externalContracts";
 import { useReadContracts } from "wagmi";
 
@@ -59,7 +60,7 @@ const useReserveData = () => {
       {
         ...uiPoolDataProviderV3,
         functionName: "getReservesData",
-        args: ["0xe20fCBdBfFC4Dd138cE8b2E6FBb6CB49777ad64D"],
+        args: [CONFIG.POOL_ADDRESSES_PROVIDER],
         chainId: 8453,
       },
     ],
