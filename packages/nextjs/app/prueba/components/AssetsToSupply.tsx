@@ -42,17 +42,19 @@ const AssetsToSupply = () => {
       {isErrorReserveData && <p className="text-error">Error fetching data.</p>}
 
       {/* Checkbox to toggle showing all or filtered assets */}
-      <div className="mb-4">
-        <label className="cursor-pointer text-amber-950 flex items-center">
-          <input
-            type="checkbox"
-            checked={showAll}
-            onChange={() => setShowAll(prev => !prev)}
-            className="mr-2 bg-white form-checkbox h-5 w-5"
-          />
-          Show assets with 0 balance
-        </label>
-      </div>
+      {!isLoadingReserveData && !isErrorReserveData && (
+        <div className="mb-4">
+          <label className="cursor-pointer text-amber-950 flex items-center">
+            <input
+              type="checkbox"
+              checked={showAll}
+              onChange={() => setShowAll(prev => !prev)}
+              className="mr-2 bg-white form-checkbox h-5 w-5"
+            />
+            Show assets with 0 balance
+          </label>
+        </div>
+      )}
 
       {/* Display table if reserve data is available */}
       {filteredReserveData && walletAddress && (
