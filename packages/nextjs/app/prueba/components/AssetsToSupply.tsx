@@ -16,6 +16,8 @@ const AssetsToSupply = () => {
 
   // State to store balances of the assets
   const [balances, setBalances] = useState<Record<string, string>>({});
+  // State to manage the check for filtering
+  const [showAll, setShowAll] = useState(true);
 
   /**
    * Callback function to handle balance change.
@@ -25,14 +27,35 @@ const AssetsToSupply = () => {
     setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
   }, []);
 
+  /**
+   * Function to filter reserve data based on the balance and showAll state.
+   */
+  const filteredReserveData = reserveData?.filter(reserve => {
+    const balance = balances[reserve.underlyingAsset as `0x${string}`];
+    return showAll || (balance && parseFloat(balance) > 0);
+  });
+
   return (
     <div className="mt-4">
       {/* Display loading or error state for reserve data */}
       {isLoadingReserveData && <p className="text-amber-950">Loading...</p>}
       {isErrorReserveData && <p className="text-error">Error fetching data.</p>}
 
+      {/* Checkbox to toggle showing all or filtered assets */}
+      <div className="mb-4">
+        <label className="cursor-pointer text-amber-950 flex items-center">
+          <input
+            type="checkbox"
+            checked={showAll}
+            onChange={() => setShowAll(prev => !prev)}
+            className="mr-2 bg-white form-checkbox h-5 w-5"
+          />
+          Show assets with 0 balance
+        </label>
+      </div>
+
       {/* Display table if reserve data is available */}
-      {reserveData && walletAddress && (
+      {filteredReserveData && walletAddress && (
         <div>
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
@@ -56,7 +79,7 @@ const AssetsToSupply = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 text-center">
               {/* Iterate through reserve data to create table rows */}
-              {reserveData.map((reserve, index) => {
+              {filteredReserveData.map((reserve, index) => {
                 const balance = balances[reserve.underlyingAsset as `0x${string}`];
                 const isButtonDisabled = !balance || parseFloat(balance) === 0;
 
