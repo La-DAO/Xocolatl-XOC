@@ -69,6 +69,13 @@ const useReserveData = () => {
         args: [CONFIG.POOL_ADDRESSES_PROVIDER],
         chainId: 8453,
       },
+      {
+        address: uiPoolDataProviderV3.address,
+        abi: uiPoolDataProviderV3.abi,
+        functionName: "getUserReservesData",
+        args: [CONFIG.POOL_ADDRESSES_PROVIDER, "0x85F4BAEA0190095AadB5543D8311C17F22633CDC"],
+        chainId: 8453,
+      },
     ],
   });
 
@@ -83,6 +90,10 @@ const useReserveData = () => {
       setIsError(false);
       // Log all the elements in console
       console.log("Fetched reserve data:", reserves);
+
+      // Fetch and log user reserve data
+      const userReserves = (result as unknown as ContractResult[])[1]?.result[0] || [];
+      console.log("Fetched user reserve data:", userReserves);
     } else if (isFetchingError) {
       // Handling error state
       console.error("Error fetching data:", isFetchingError);
