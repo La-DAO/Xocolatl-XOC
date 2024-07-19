@@ -42,6 +42,11 @@ type ReserveData = {
   stableRateSlope2: bigint;
 };
 
+// Define the type for the result of the contract read
+type ContractResult = {
+  result: [ReserveData[]];
+};
+
 /**
  * Custom hook to fetch reserve data from the UiPoolDataProviderV3 contract.
  * Manages loading state, error state, and fetched data.
@@ -58,7 +63,8 @@ const useReserveData = () => {
   const { data: result, isError: isFetchingError } = useReadContracts({
     contracts: [
       {
-        ...uiPoolDataProviderV3,
+        address: uiPoolDataProviderV3.address,
+        abi: uiPoolDataProviderV3.abi,
         functionName: "getReservesData",
         args: [CONFIG.POOL_ADDRESSES_PROVIDER],
         chainId: 8453,
@@ -69,8 +75,8 @@ const useReserveData = () => {
   // Effect to handle the result of the contract read operation
   useEffect(() => {
     if (result) {
-      // Extracting reserve data from the result
-      const reserves = result[0]?.result?.[0] as ReserveData[];
+      // Type assertion to specify the expected structure of result
+      const reserves = (result as unknown as ContractResult[])[0]?.result[0] || [];
       // Updating state with fetched data
       setData(reserves);
       setIsLoading(false);
