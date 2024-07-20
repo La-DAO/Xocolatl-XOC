@@ -2,17 +2,9 @@
 
 import React from "react";
 import DepositTable from "./tables/DepositTable";
-import { Asset } from "@/types/assets/assets";
-
-// Define the interface for Supplies component props
-interface SuppliesProps {
-  assetsData: Asset[];
-  yourSupplyData: Asset[];
-  setBalance: (balance: number) => void;
-}
 
 // Supplies component for displaying user's supplied assets and available assets to supply
-const Deposits: React.FC<SuppliesProps> = () => {
+const Deposits: React.FC = () => {
   // Render the Supplies component
   return (
     <div className="rounded-md">

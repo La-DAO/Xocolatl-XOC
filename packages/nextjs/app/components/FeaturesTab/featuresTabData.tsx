@@ -9,6 +9,7 @@ const featuresTabData: FeatureTab[] = [
     image: "/Currency Crush - Profit.svg",
     imageDark: "/Currency Crush - Profit.svg",
     button: "Mint $XOC",
+    link: "/cdp",
   },
   {
     id: "tabTwo",
@@ -18,6 +19,7 @@ const featuresTabData: FeatureTab[] = [
     image: "/Currency Crush - Loan.svg",
     imageDark: "/Currency Crush - Loan.svg",
     button: "Lend $XOC",
+    link: "lending",
   },
   {
     id: "tabThree",
@@ -27,6 +29,7 @@ const featuresTabData: FeatureTab[] = [
     image: "/Currency Crush - Password.svg",
     imageDark: "/Currency Crush - Password.svg",
     button: "Bridge $XOC",
+    link: "/",
   },
 ];
 

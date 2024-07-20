@@ -4,17 +4,7 @@ import { XOCABI } from "../../../app/components/abis/xocabis";
 import { formatEther } from "viem";
 import { useChainId, useReadContract } from "wagmi";
 
-interface CDPStatsProps {
-  balance: number;
-}
-
-const CDPStats: React.FC<CDPStatsProps> = ({ balance }) => {
-  const data = {
-    netWorth: balance,
-    netAPY: "-3.73%",
-    healthFactor: 1.42,
-  };
-
+const CDPStats: React.FC = () => {
   const chainId = useChainId();
   const chainNames: { [key: number]: string } = {
     56: "Binance Smart Chain",
@@ -92,35 +82,16 @@ const CDPStats: React.FC<CDPStatsProps> = ({ balance }) => {
       <div className="pl-32">
         <div className="flex items-center space-x-2">
           <div className="dropdown dropdown-right">
-            <div tabIndex={0} role="button" className="btn m-1 text-2xl">
+            <div tabIndex={0} role="button" className="btn m-1 text-3xl">
               {chainName}
             </div>
-            <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-              {Object.entries(chainNames).map(([id, name]) => (
-                <li key={id}>
-                  <a>{name}</a>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
-        <div className="flex items-center space-x-8">
+        <div className="flex items-center space-x-8 pl-2 pt-4">
           <div className="text">
-            <div className="text-sm text-gray-400">Net worth</div>
-            <div className="text-lg text-accent font-semibold">${data.netWorth}</div>
-          </div>
-          <div className="text">
-            <div className="text-sm text-gray-400">Net APY</div>
-            <div className="text-lg text-accent font-semibold">{data.netAPY}</div>
-          </div>
-          <div className="text">
-            <div className="text-sm text-gray-400">Health factor</div>
-            <div className="text-lg text-accent font-semibold">{data.healthFactor}</div>
-          </div>
-          <div className="text">
-            <div className="text-sm text-gray-400">Total Supply</div>
+            <div className="text-sm text-gray-400">Total XOC Minted</div>
             <div className="text-lg text-accent font-semibold">
-              {latestMintedLoading ? "Loading..." : latestMintedError ? "Error" : latestMintedNumber?.toString()}
+              $ {latestMintedLoading ? "Loading..." : latestMintedError ? "Error" : latestMintedNumber?.toString()}
             </div>
           </div>
           <div className="text">
@@ -132,9 +103,6 @@ const CDPStats: React.FC<CDPStatsProps> = ({ balance }) => {
                 ? "Error"
                 : `WETH: ${formattedWETHDeposits} CBETH: ${formattedCBETHDeposits}`}
             </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <button className="bg-warning text-slate-800 px-2 py-1 rounded uppercase">risk details</button>
           </div>
         </div>
       </div>
