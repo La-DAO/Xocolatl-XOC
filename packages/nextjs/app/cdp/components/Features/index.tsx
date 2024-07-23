@@ -1,6 +1,6 @@
 import SingleFeature from "./SingleFeature";
 import featuresData from "./featuresData";
-import SectionTitle from "@/app/components/sectionTitle";
+import SectionTitle from "@/app/components/Common/SectionTitle";
 
 const Features = () => {
   return (
@@ -9,7 +9,7 @@ const Features = () => {
         <SectionTitle
           subtitle="Features"
           title="Collateralized-Debt Position"
-          paragraph="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form."
+          paragraph="There are many benefits as to why you should use our platform. Here are some of the features that we provide."
         />
 
         <div className="-mx-4 mt-12 flex flex-wrap lg:mt-20">

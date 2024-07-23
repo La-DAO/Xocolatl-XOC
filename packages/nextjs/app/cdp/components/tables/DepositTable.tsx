@@ -1,9 +1,11 @@
 import React, { useCallback, useState } from "react";
 import DepositModal from "../modals/DepositModal";
+import WithdrawModal from "../modals/WithdrawModal";
 import WalletBalance from "@/app/prueba/components/WalletBalance";
 import useAccountAddress from "@/hooks/useAccount";
 import { Address } from "viem";
 import { useChainId } from "wagmi";
+import { InformationCircleIcon } from "@heroicons/react/20/solid";
 
 // Define the assets for each chain
 const assets: {
@@ -89,9 +91,10 @@ const assets: {
 const DepositTable: React.FC = () => {
   const chainId = useChainId();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
   const [selectedContract, setSelectedContract] = useState<string | null>(null);
-  const [selectedAssetContract, setSelectedAssetContract] = useState<string | null>("");
+  const [selectedAssetContract, setSelectedAssetContract] = useState<string>(""); // Provide a default value for selectedAssetContract
 
   // Get the assets for the current chain
   const chainAssets = assets[chainId] || [];
@@ -120,6 +123,20 @@ const DepositTable: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const handleOpenWithdrawModal = (assetName: string, houseOfReserveContract: string, assetContract: string) => {
+    setSelectedAsset(assetName);
+    setSelectedContract(houseOfReserveContract);
+    setSelectedAssetContract(assetContract);
+    setIsWithdrawModalOpen(true);
+  };
+
+  const handleCloseWithdrawModal = () => {
+    setSelectedAsset(null);
+    setSelectedContract(null);
+    setSelectedAssetContract("");
+    setIsWithdrawModalOpen(false);
+  };
+
   return (
     <div>
       <table className="min-w-full divide-y divide-gray-200">
@@ -132,10 +149,22 @@ const DepositTable: React.FC = () => {
               Balance
             </th>
             <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Max LTV
+              Max LTV{" "}
+              <div
+                className="tooltip tooltip-primary"
+                data-tip="Maximum Loan-To-Value ratio, which tells you how much you can leverage your asset's worth."
+              >
+                <InformationCircleIcon className="h-5 w-5 inline" />
+              </div>
             </th>
             <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Liquidation Threshold
+              Liquidation Threshold{" "}
+              <div
+                className="tooltip tooltip-primary"
+                data-tip="When the value of an asset falls below the Liquidation Threshold, it indicates that the asset's value has decreased significantly and may no longer be sufficient to cover the borrowed funds. In such cases, the lending platform may initiate a liquidation process to sell the borrower's assets and recover the borrowed amount."
+              >
+                <InformationCircleIcon className="h-5 w-5 inline" />
+              </div>
             </th>
             <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
               Actions
@@ -165,10 +194,16 @@ const DepositTable: React.FC = () => {
               </td>
               <td className="px-6 py-4">
                 <button
-                  className="text-sm text-accent dark:text-white btn bg-base-100"
+                  className="text-sm text-accent dark:text-white btn bg-base-100 hover:bg-success hover:text-white"
                   onClick={() => handleOpenModal(asset.name, asset.houseOfReserveContract, asset.assetContract)}
                 >
                   Deposit
+                </button>
+                <button
+                  className="text-sm text-accent dark:text-white btn bg-base-100 ml-2 hover:bg-error hover:text-white"
+                  onClick={() => handleOpenWithdrawModal(asset.name, asset.houseOfReserveContract, asset.assetContract)}
+                >
+                  Withdraw
                 </button>
               </td>
             </tr>
@@ -186,6 +221,15 @@ const DepositTable: React.FC = () => {
             // handle deposit logic here
             console.log(`Depositing ${amount} ${selectedAsset}`);
           }}
+        />
+      )}
+      {isWithdrawModalOpen && selectedAsset && selectedContract && (
+        <WithdrawModal
+          isOpen={isWithdrawModalOpen}
+          onClose={handleCloseWithdrawModal}
+          assetName={selectedAsset}
+          houseOfReserveContract={selectedContract}
+          assetContract={selectedAssetContract}
         />
       )}
     </div>
