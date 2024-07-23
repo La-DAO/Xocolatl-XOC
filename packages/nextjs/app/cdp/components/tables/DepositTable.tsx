@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import DepositModal from "../modals/DepositModal";
+import WalletBalance from "@/app/prueba/components/WalletBalance";
+import useAccountAddress from "@/hooks/useAccount";
+import { Address } from "viem";
 import { useChainId } from "wagmi";
 
 // Define the assets for each chain
@@ -55,7 +58,7 @@ const assets: {
       maxLTV: "70%",
       liquidationThreshold: "85%",
       houseOfReserveContract: "0xdB9Dd25660240415d95144C6CE4f21f00Edf8168",
-      assetContract: "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
+      assetContract: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
     },
     {
       name: "WBTC",
@@ -92,6 +95,16 @@ const DepositTable: React.FC = () => {
 
   // Get the assets for the current chain
   const chainAssets = assets[chainId] || [];
+
+  const { address: walletAddress } = useAccountAddress();
+  const [balances, setBalances] = useState<Record<string, string>>({});
+
+  const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
+    setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
+  }, []);
+
+  console.log(balances);
+  console.log(walletAddress);
 
   const handleOpenModal = (assetName: string, houseOfReserveContract: string, assetContract: string) => {
     setSelectedAsset(assetName);
@@ -136,7 +149,11 @@ const DepositTable: React.FC = () => {
                 <p className="text-sm font-medium text-gray-900">{asset.name}</p>
               </td>
               <td className="px-6 py-4">
-                <p className="text-sm text-gray-900">Null</p>
+                <WalletBalance
+                  tokenAddress={asset.assetContract as Address}
+                  walletAddress={walletAddress as Address}
+                  onBalanceChange={handleBalanceChange}
+                />
               </td>
               <td className="px-6 py-4">
                 <p className="text-sm text-gray-900">{asset.maxLTV}</p>

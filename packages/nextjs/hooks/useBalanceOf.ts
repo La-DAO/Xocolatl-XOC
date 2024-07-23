@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Address } from "viem";
 import { useReadContract } from "wagmi";
 
 // Define the ERC-20 ABI (Application Binary Interface) for the balanceOf function
@@ -16,8 +17,8 @@ const ERC20ABI = [
 
 // Define the interface for TokenBalanceProps
 interface TokenBalanceProps {
-  tokenAddress: `0x${string}`;
-  walletAddress: `0x${string}`;
+  tokenAddress: Address;
+  walletAddress: Address;
 }
 
 /**

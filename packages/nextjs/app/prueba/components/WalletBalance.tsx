@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useBalanceOf } from "@/hooks/useBalanceOf";
+import { Address } from "viem";
 
 // Define interface for component props
 interface Props {
-  tokenAddress: `0x${string}`;
-  walletAddress: `0x${string}`;
-  onBalanceChange: (tokenAddress: `0x${string}`, balance: string) => void;
+  tokenAddress: Address;
+  walletAddress: Address;
+  onBalanceChange: (tokenAddress: Address, balance: string) => void;
 }
 
 /**

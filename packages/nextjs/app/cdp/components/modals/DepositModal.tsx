@@ -1,5 +1,10 @@
 // DepositModal.tsx
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
+import WalletBalance from "@/app/prueba/components/WalletBalance";
+import useAccountAddress from "@/hooks/useAccount";
+import { Address } from "viem";
+import { useApproval } from "~~/hooks/useApproval";
+import { useDeposit } from "~~/hooks/useDeposit";
 
 interface DepositModalProps {
   isOpen: boolean;
@@ -16,17 +21,48 @@ const DepositModal: React.FC<DepositModalProps> = ({
   assetName,
   houseOfReserveContract,
   assetContract,
-  deposit,
 }) => {
   const [amount, setAmount] = useState("");
+  const { address: walletAddress } = useAccountAddress();
+  const [balances, setBalances] = useState<Record<string, string>>({});
 
-  const handleDeposit = () => {
-    deposit(amount);
+  /**
+   * Callback function to handle balance change.
+   * Updates the state with new balances.
+   */
+  const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
+    setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
+  }, []);
+
+  console.log(balances);
+  console.log(walletAddress);
+
+  const {
+    approve,
+    isError: isApprovalError,
+    isSuccess: isApprovalSuccess,
+    isPending: isApprovalPending,
+  } = useApproval(houseOfReserveContract as Address, assetContract as Address);
+
+  const {
+    deposit: handleDeposit,
+    isPending: isDepositPending,
+    isSuccess: isDepositSuccess,
+    isError: isDepositError,
+  } = useDeposit(houseOfReserveContract as Address);
+
+  const onApproveClick = () => {
+    approve(amount);
+  };
+
+  const onDepositClick = () => {
+    handleDeposit(amount);
     setAmount("");
   };
 
   if (!isOpen) return null;
-  console.log("assetContract", assetContract);
+  console.log("assetContract", assetContract as Address);
+  console.log({ isApprovalError });
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
@@ -56,7 +92,14 @@ const DepositModal: React.FC<DepositModalProps> = ({
           placeholder={assetName}
           className="input input-bordered w-full dark:bg-neutral"
         />
-        <h6 className="text-sm text-gray-500 mb-4"> Balance: walletBalance</h6>
+        <div className="flex gap-2">
+          <h6 className="text-base text-gray-500 mb-4"> Balance:</h6>
+          <WalletBalance
+            tokenAddress={assetContract as Address}
+            walletAddress={walletAddress as Address}
+            onBalanceChange={handleBalanceChange}
+          />
+        </div>
         <h4 className="text-lg font-medium mb-1 dark:text-black">Transaction Overview</h4>
         <div className="overflow-x-auto mb-4">
           <table className="table border dark:text-black">
@@ -79,16 +122,31 @@ const DepositModal: React.FC<DepositModalProps> = ({
           </table>
         </div>
         <div className="flex justify-between">
-          <button
-            className="btn btn-success btn-lg bg-base-100 hover:text-white dark:bg-neutral"
-            onClick={handleDeposit}
-          >
-            Deposit
-          </button>
+          {!isApprovalSuccess ? (
+            <button
+              className="btn btn-success btn-lg bg-base-100 hover:text-white dark:bg-neutral"
+              onClick={onApproveClick}
+              disabled={isApprovalPending}
+            >
+              {isApprovalPending ? "Approving..." : "Approve"}
+            </button>
+          ) : (
+            <button
+              className="btn btn-success btn-lg bg-base-100 hover:text-white dark:bg-neutral"
+              onClick={onDepositClick}
+              disabled={isDepositPending}
+            >
+              {isDepositPending ? "Processing..." : "Deposit"}
+            </button>
+          )}
           <button className="btn btn-error btn-lg text-white" onClick={onClose}>
             Close
           </button>
         </div>
+        {isApprovalSuccess && <div className="text-green-500 mt-4">Approval successful! You can now deposit.</div>}
+        {isApprovalError && <div className="text-red-500 mt-4">Approval failed: {isApprovalError}</div>}
+        {isDepositSuccess && <div className="text-green-500 mt-4">Deposit successful!</div>}
+        {isDepositError && <div className="text-red-500 mt-4">Deposit failed: {isDepositError}</div>}
       </div>
     </div>
   );

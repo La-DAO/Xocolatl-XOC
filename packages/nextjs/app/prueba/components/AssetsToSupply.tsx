@@ -3,6 +3,7 @@ import WalletBalance from "./WalletBalance";
 import IsolatedStateComponent from "@/components/tags/IsolatedState";
 import useAccountAddress from "@/hooks/useAccount";
 import useReadContracts from "@/hooks/useReadContracts";
+import { Address } from "viem";
 
 /**
  * Component for displaying assets that can be supplied.
@@ -23,7 +24,7 @@ const AssetsToSupply = () => {
    * Callback function to handle balance change.
    * Updates the state with new balances.
    */
-  const handleBalanceChange = useCallback((tokenAddress: `0x${string}`, balance: string) => {
+  const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
     setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
   }, []);
 
@@ -31,7 +32,7 @@ const AssetsToSupply = () => {
    * Function to filter reserve data based on the balance and showAll state.
    */
   const filteredReserveData = reserveData?.filter(reserve => {
-    const balance = balances[reserve.underlyingAsset as `0x${string}`];
+    const balance = balances[reserve.underlyingAsset as Address];
     return showAll || (balance && parseFloat(balance) > 0);
   });
 
@@ -82,7 +83,7 @@ const AssetsToSupply = () => {
             <tbody className="bg-white divide-y divide-gray-200 text-center">
               {/* Iterate through reserve data to create table rows */}
               {filteredReserveData.map((reserve, index) => {
-                const balance = balances[reserve.underlyingAsset as `0x${string}`];
+                const balance = balances[reserve.underlyingAsset as Address];
                 const isButtonDisabled = !balance || parseFloat(balance) === 0;
 
                 return (
@@ -93,7 +94,7 @@ const AssetsToSupply = () => {
                     <td className="px-6 py-4">
                       {/* Use WalletBalance to display the balance */}
                       <WalletBalance
-                        tokenAddress={reserve.underlyingAsset as `0x${string}`}
+                        tokenAddress={reserve.underlyingAsset as Address}
                         walletAddress={walletAddress}
                         onBalanceChange={handleBalanceChange}
                       />
