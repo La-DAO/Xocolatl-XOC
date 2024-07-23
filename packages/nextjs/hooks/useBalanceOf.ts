@@ -45,7 +45,7 @@ export function useBalanceOf({ tokenAddress, walletAddress }: TokenBalanceProps)
       setBalance("0"); // Set balance to 0 on error
     } else if (!isLoading && data) {
       const balanceInEther = (Number(data) / 1e18).toFixed(7); // Convert balance to Ether
-      setBalance(balanceInEther === "0.0000000" ? "0" : balanceInEther); // Set formatted balance
+      setBalance(balanceInEther === "0.000000000000000000" ? "0" : balanceInEther); // Set formatted balance
     }
   }, [data, isError, isLoading]); // Dependencies: data, isError, isLoading
 
