@@ -40,6 +40,11 @@ type ReserveData = {
   variableRateSlope2: bigint;
   stableRateSlope1: bigint;
   stableRateSlope2: bigint;
+  scaledATokenBalance: bigint;
+  usageAsCollateralEnabledOnUser: boolean;
+  scaledVariableDebt: bigint;
+  principalStableDebt: bigint;
+  stableBorrowLastUpdateTimestamp: bigint;
 };
 
 // Define the type for the result of the contract read
@@ -54,6 +59,8 @@ type ContractResult = {
 const useReserveData = () => {
   // State to store fetched reserve data
   const [data, setData] = useState<ReserveData[] | null>(null);
+  // State to store fetched user reserve data
+  const [userData, setUserData] = useState<ReserveData[] | null>(null);
   // State to track loading status
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // State to track error status
@@ -84,15 +91,16 @@ const useReserveData = () => {
     if (result) {
       // Type assertion to specify the expected structure of result
       const reserves = (result as unknown as ContractResult[])[0]?.result[0] || [];
+      const userReserves = (result as unknown as ContractResult[])[1]?.result[0] || [];
+
       // Updating state with fetched data
       setData(reserves);
+      setUserData(userReserves);
       setIsLoading(false);
       setIsError(false);
+
       // Log all the elements in console
       console.log("Fetched reserve data:", reserves);
-
-      // Fetch and log user reserve data
-      const userReserves = (result as unknown as ContractResult[])[1]?.result[0] || [];
       console.log("Fetched user reserve data:", userReserves);
     } else if (isFetchingError) {
       // Handling error state
@@ -102,7 +110,7 @@ const useReserveData = () => {
     }
   }, [result, isFetchingError]);
 
-  return { data, isLoading, isError };
+  return { data, userData, isLoading, isError };
 };
 
 export default useReserveData;
