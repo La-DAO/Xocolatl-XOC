@@ -62,7 +62,7 @@ const YourSupplies = () => {
       {reservesWithAllowances.length > 0 && walletAddress ? (
         <div className="supplies-container">
           {/* Header for supplies table */}
-          <div className="supplies-header py-3 flex text-center justify-between text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-b-gray-200">
+          <div className="supplies-header py-3 flex text-center justify-between text-xs font-medium text-gray-500 uppercase tracking-wider">
             <div className="supplies-header-item w-24">Assets</div>
             <div className="supplies-header-item w-24">Balance</div>
             <div className="supplies-header-item w-24">APY</div>
@@ -80,7 +80,7 @@ const YourSupplies = () => {
             return (
               <div
                 key={index}
-                className={`supplies-row flex justify-between py-3 text-sm text-center ${
+                className={`supplies-row flex justify-between py-3 text-sm text-center border-t border-t-gray-200 ${
                   isButtonDisabled ? "hidden" : "block"
                 }`}
               >
