@@ -1,72 +1,39 @@
 import { useEffect, useState } from "react";
+import useAccountAddress from "./useAccount";
 import CONFIG from "@/config";
 import externalContracts from "@/contracts/externalContracts";
+import { ContractResult, ReserveData } from "@/types/types";
 import { useReadContracts } from "wagmi";
 
+// Define the contract address and ABI for UiPoolDataProviderV3
 const uiPoolDataProviderV3 = externalContracts[8453].UiPoolDataProviderV3;
 
-// Type definition for reserve data
-type ReserveData = {
-  underlyingAsset: `0x${string}`;
-  name: string;
-  symbol: string;
-  decimals: bigint;
-  baseLTVasCollateral: bigint;
-  reserveLiquidationThreshold: bigint;
-  reserveLiquidationBonus: bigint;
-  reserveFactor: bigint;
-  usageAsCollateralEnabled: boolean;
-  borrowingEnabled: boolean;
-  stableBorrowRateEnabled: boolean;
-  isActive: boolean;
-  isFrozen: boolean;
-  liquidityIndex: bigint;
-  variableBorrowIndex: bigint;
-  liquidityRate: bigint;
-  variableBorrowRate: bigint;
-  stableBorrowRate: bigint;
-  lastUpdateTimestamp: number;
-  aTokenAddress: string;
-  stableDebtTokenAddress: string;
-  variableDebtTokenAddress: string;
-  interestRateStrategyAddress: string;
-  availableLiquidity: bigint;
-  totalPrincipalStableDebt: bigint;
-  averageStableRate: bigint;
-  stableDebtLastUpdateTimestamp: bigint;
-  totalScaledVariableDebt: bigint;
-  priceInMarketReferenceCurrency: bigint;
-  variableRateSlope1: bigint;
-  variableRateSlope2: bigint;
-  stableRateSlope1: bigint;
-  stableRateSlope2: bigint;
-  scaledATokenBalance: bigint;
-  usageAsCollateralEnabledOnUser: boolean;
-  scaledVariableDebt: bigint;
-  principalStableDebt: bigint;
-  stableBorrowLastUpdateTimestamp: bigint;
-};
-
-// Define the type for the result of the contract read
-type ContractResult = {
-  result: [ReserveData[]];
+/**
+ * Utility function to check if an object has the same structure as a reference object.
+ * @param {any} obj - The object to check.
+ * @param {any} reference - The reference object for structure comparison.
+ * @returns {boolean} - Returns true if the object has the same structure as the reference.
+ */
+const hasSameStructure = (obj: any, reference: any) => {
+  const referenceKeys = Object.keys(reference);
+  return referenceKeys.every(key => obj.hasOwnProperty(key));
 };
 
 /**
- * Custom hook to fetch reserve data from the UiPoolDataProviderV3 contract.
- * Manages loading state, error state, and fetched data.
+ * Custom hook to fetch and manage reserve data from smart contracts.
+ * @returns {Object} - Contains reserve data, user reserve data, loading state, and error state.
  */
 const useReserveData = () => {
-  // State to store fetched reserve data
-  const [data, setData] = useState<ReserveData[] | null>(null);
-  // State to store fetched user reserve data
-  const [userData, setUserData] = useState<ReserveData[] | null>(null);
-  // State to track loading status
+  const [reservesData, setReservesData] = useState<ReserveData[] | null>(null);
+  const [userReservesData, setUserReservesData] = useState<ReserveData[] | null>(null);
+  const [combinedReservesData, setCombinedReservesData] = useState<any[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  // State to track error status
   const [isError, setIsError] = useState<boolean>(false);
 
-  // Hook to read contract data using wagmi
+  // Get the wallet address using custom hook
+  const { address } = useAccountAddress();
+
+  // Hook to read data from smart contracts
   const { data: result, isError: isFetchingError } = useReadContracts({
     contracts: [
       {
@@ -80,37 +47,77 @@ const useReserveData = () => {
         address: uiPoolDataProviderV3.address,
         abi: uiPoolDataProviderV3.abi,
         functionName: "getUserReservesData",
-        args: [CONFIG.POOL_ADDRESSES_PROVIDER, "0x85F4BAEA0190095AadB5543D8311C17F22633CDC"],
+        args: [CONFIG.POOL_ADDRESSES_PROVIDER, address],
         chainId: 8453,
       },
     ],
   });
 
-  // Effect to handle the result of the contract read operation
+  // Effect to handle the fetched data
   useEffect(() => {
     if (result) {
-      // Type assertion to specify the expected structure of result
-      const reserves = (result as unknown as ContractResult[])[0]?.result[0] || [];
-      const userReserves = (result as unknown as ContractResult[])[1]?.result[0] || [];
+      // Extract reserve data and user reserve data from the result
+      const reserves = (result[0] as unknown as ContractResult).result;
+      const userReserves = (result[1] as unknown as ContractResult).result;
 
-      // Updating state with fetched data
-      setData(reserves);
-      setUserData(userReserves);
-      setIsLoading(false);
-      setIsError(false);
+      if (Array.isArray(reserves) && reserves.length > 0) {
+        // Use the first reserve as reference to filter other reserves
+        const reference = reserves[0];
+        const filteredReserves = reserves.filter(reserve => hasSameStructure(reserve, reference));
 
-      // Log all the elements in console
-      console.log("Fetched reserve data:", reserves);
-      console.log("Fetched user reserve data:", userReserves);
+        if (Array.isArray(filteredReserves[0])) {
+          // Extract required fields from each reserve
+          const extractedReserves = filteredReserves[0].map(reserve => ({
+            underlyingAsset: reserve.underlyingAsset,
+            symbol: reserve.symbol,
+            liquidityRate: reserve.liquidityRate,
+          }));
+
+          // Extract required fields from each user reserve
+          const extractedUserReserves = userReserves.map(reserve => ({
+            underlyingAsset: reserve.underlyingAsset,
+            usageAsCollateralEnabledOnUser: reserve.usageAsCollateralEnabledOnUser,
+          }));
+
+          // Combine the two arrays based on underlyingAsset
+          const combinedReserves = extractedReserves.map(reserve => {
+            const userReserve = extractedUserReserves.find(
+              userRes => userRes.underlyingAsset === reserve.underlyingAsset,
+            );
+            return {
+              ...reserve,
+              ...userReserve,
+            };
+          });
+
+          // Update state with filtered reserves and reset loading/error state
+          setReservesData(filteredReserves);
+          setUserReservesData(userReserves);
+          setCombinedReservesData(combinedReserves);
+          setIsLoading(false);
+          setIsError(false);
+
+          // Log fetched data for debugging
+          // console.log("Fetched reserve data:", filteredReserves);
+          // console.log("Fetched user reserve data:", userReserves);
+
+          // Log extracted and combined reserves data for debugging
+          // console.log("Extracted reserve data:", extractedReserves);
+          // console.log("Extracted user reserve data:", extractedUserReserves);
+          // console.log("Combined reserves data:", combinedReserves);
+        } else {
+          console.error("Filtered reserves is not an array");
+        }
+      }
     } else if (isFetchingError) {
-      // Handling error state
+      // Handle and log error if data fetching fails
       console.error("Error fetching data:", isFetchingError);
       setIsError(true);
       setIsLoading(false);
     }
   }, [result, isFetchingError]);
 
-  return { data, userData, isLoading, isError };
+  return { reservesData, userReservesData, combinedReservesData, isLoading, isError };
 };
 
 export default useReserveData;

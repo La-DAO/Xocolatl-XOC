@@ -2,15 +2,17 @@ import React, { useCallback, useState } from "react";
 import WalletBalance from "./WalletBalance";
 import IsolatedStateComponent from "@/components/tags/IsolatedState";
 import useAccountAddress from "@/hooks/useAccount";
-import useReadContracts from "@/hooks/useReadContracts";
+import useReserveData from "@/hooks/useReadContracts";
+import { ReserveData } from "@/types/types";
+import { Address } from "viem";
 
 /**
  * Component for displaying assets that can be supplied.
  * Fetches reserve data and corresponding wallet balances to display them in a div-based layout.
  */
-const AssetsToSupply = () => {
+const AssetsToSupply: React.FC = () => {
   // Hook to fetch reserve data
-  const { data: reserveData, isLoading: isLoadingReserveData, isError: isErrorReserveData } = useReadContracts();
+  const { reservesData: reserveData, isLoading: isLoadingReserveData, isError: isErrorReserveData } = useReserveData();
   // Hook to fetch the account address
   const { address: walletAddress } = useAccountAddress();
 
@@ -23,16 +25,17 @@ const AssetsToSupply = () => {
    * Callback function to handle balance change.
    * Updates the state with new balances.
    */
-  const handleBalanceChange = useCallback((tokenAddress: `0x${string}`, balance: string) => {
+  const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
     setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
   }, []);
 
-  /**
-   * Function to filter reserve data based on the balance and showAll state.
-   */
-  const filteredReserveData = reserveData?.filter(reserve => {
-    const balance = balances[reserve.underlyingAsset as `0x${string}`];
-    return showAll || (balance && parseFloat(balance) > 0);
+  // Filtrar los datos de reserva si reserveData está disponible
+  const filteredReserveData: ReserveData[] = Array.isArray(reserveData) ? reserveData.flat() : [];
+
+  // Aplicar el filtro basado en el saldo y el estado de 'showAll'
+  const filteredAndDisplayedReserveData = filteredReserveData.filter(reserve => {
+    const balance = parseFloat(balances[reserve.underlyingAsset as Address] || "0");
+    return showAll || balance > 0;
   });
 
   return (
@@ -49,7 +52,7 @@ const AssetsToSupply = () => {
               type="checkbox"
               checked={showAll}
               onChange={() => setShowAll(prev => !prev)}
-              className="mr-2 bg-white form-checkbox h-5 w-5"
+              className="mr-2 bg-white form-checkbox h-4 w-4"
             />
             Show assets with 0 balance
           </label>
@@ -57,7 +60,7 @@ const AssetsToSupply = () => {
       )}
 
       {/* Display assets if reserve data is available */}
-      {filteredReserveData && walletAddress && (
+      {walletAddress && filteredAndDisplayedReserveData.length > 0 && (
         <div className="assets-container">
           {/* Header for assets */}
           <div className="assets-header py-3 flex text-center justify-between items-center text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -69,8 +72,8 @@ const AssetsToSupply = () => {
           </div>
 
           {/* Iterate through filtered reserve data to create rows */}
-          {filteredReserveData.map((reserve, index) => {
-            const balance = balances[reserve.underlyingAsset as `0x${string}`];
+          {filteredAndDisplayedReserveData.map((reserve, index) => {
+            const balance = balances[reserve.underlyingAsset as Address];
             const isButtonDisabled = !balance || parseFloat(balance) === 0;
 
             return (
@@ -84,7 +87,7 @@ const AssetsToSupply = () => {
                 <div className="asset-row-item w-24 h-fit">
                   {/* Use WalletBalance to display the balance */}
                   <WalletBalance
-                    tokenAddress={reserve.underlyingAsset as `0x${string}`}
+                    tokenAddress={reserve.underlyingAsset as Address}
                     walletAddress={walletAddress}
                     onBalanceChange={handleBalanceChange}
                   />
