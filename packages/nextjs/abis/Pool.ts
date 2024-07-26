@@ -1,4 +1,4 @@
-const pool = [
+const Pool = [
   {
     inputs: [
       {
@@ -1912,4 +1912,4 @@ const pool = [
   },
 ];
 
-export default pool;
+export default Pool;

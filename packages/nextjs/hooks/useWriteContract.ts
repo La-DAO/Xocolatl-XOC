@@ -10,9 +10,14 @@ const pool = externalContracts[8453].pool;
  */
 const useWriteContracts = () => {
   const { writeContract, error, data } = useWriteContract();
+  const pool = externalContracts[8453].Pool;
 
-  // Function to call the correct contract function
   const handleSetUserUseReserveAsCollateral = (asset: Address, useAsCollateral: boolean) => {
+    if (!pool || !pool.abi || !pool.address) {
+      console.error("Pool contract is not properly defined.");
+      return;
+    }
+
     try {
       writeContract({
         abi: pool.abi,

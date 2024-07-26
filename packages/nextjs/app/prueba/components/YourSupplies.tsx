@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Allowance from "./Allowance";
 import CollateralToggle from "./CollateralToggle";
-import IsolatedStateComponent from "@/components/tags/IsolatedState";
 import useAccountAddress from "@/hooks/useAccount";
 import useReadContracts from "@/hooks/useReadContracts";
 import { Address } from "viem";
@@ -100,7 +99,7 @@ const YourSupplies = () => {
           })}
         </div>
       ) : (
-      <p className="text-center text-gray-500">No sufficient data available.</p>
+        <p className="text-center text-gray-500">No sufficient data available.</p>
       )}
     </div>
   );
