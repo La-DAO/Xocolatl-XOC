@@ -2,7 +2,6 @@
 
 import React from "react";
 import About from "./components/About";
-import Features from "./components/Features";
 import { NextPage } from "next";
 import CDPStats from "~~/app/cdp/components/CDPStats";
 import Deposits from "~~/app/cdp/components/Deposits";
@@ -14,9 +13,7 @@ const CDP: NextPage = () => {
       <CDPStats />
       <div className="grid gap-4 w-4/5 m-auto mt-4">
         <Deposits />
-
         <About />
-        <Features />
       </div>
     </div>
   );

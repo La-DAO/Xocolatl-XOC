@@ -100,14 +100,11 @@ const DepositTable: React.FC = () => {
   const chainAssets = assets[chainId] || [];
 
   const { address: walletAddress } = useAccountAddress();
-  const [balances, setBalances] = useState<Record<string, string>>({});
+  const [, setBalances] = useState<Record<string, string>>({});
 
   const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
     setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
   }, []);
-
-  console.log(balances);
-  console.log(walletAddress);
 
   const handleOpenModal = (assetName: string, houseOfReserveContract: string, assetContract: string) => {
     setSelectedAsset(assetName);

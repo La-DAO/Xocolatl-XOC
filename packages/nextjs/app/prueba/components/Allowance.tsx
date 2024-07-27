@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { useAllowance } from "@/hooks/useAllowance";
+import { Address } from "viem";
 
 // Define the Props interface for the Allowance component
 interface Props {
-  tokenAddress: `0x${string}`;
-  ownerAddress: `0x${string}`;
-  spenderAddress: `0x${string}`;
-  onAllowanceChange: (tokenAddress: `0x${string}`, allowance: string) => void;
+  tokenAddress: Address;
+  ownerAddress: Address;
+  spenderAddress: Address;
+  onAllowanceChange: (tokenAddress: Address, allowance: string) => void;
 }
 
 /**
@@ -25,13 +26,13 @@ const Allowance: React.FC<Props> = ({ tokenAddress, ownerAddress, spenderAddress
       // Call the callback function with the new allowance value
       onAllowanceChange(tokenAddress, allowance);
     }
-  }, [tokenAddress, allowance, onAllowanceChange]); // Dependency array for the effect
+  }, [tokenAddress, allowance, onAllowanceChange]);
 
   return (
     <div>
-      <p className="text-black">{allowance}</p> {/* Display the allowance value */}
+      <p className="text-black">{allowance}</p>
     </div>
   );
 };
 
-export default Allowance; // Export the Allowance component as the default export
+export default Allowance;

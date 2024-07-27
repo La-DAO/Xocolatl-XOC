@@ -169,6 +169,85 @@ const About = () => {
                 </div>
               </div>
             </div>
+            <ul className="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical m-20">
+              <li>
+                <div className="timeline-middle">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div className="timeline-start mb-10 ml-10 md:text-end">
+                  <time className="font-mono italic">1st Step</time>
+                  <div className="text-lg font-black">Deposit your Reserve Asset into the House Of Reserve</div>
+                  The house of reserves is a smart contract much like a vault,holding your assets and telling the Assets
+                  Accountant contract how much reserves you have.
+                </div>
+                <hr />
+              </li>
+              <li>
+                <hr />
+                <div className="timeline-middle">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div className="timeline-end mb-10">
+                  <time className="font-mono italic">2nd Step</time>
+                  <div className="text-lg font-black">Assets Accountant Keeps Tabs on what is Deposited and Minted</div>
+                  The Assets Accountant contract keeps a record of all the assets deposited and how much $XOC was minted
+                  to your wallet. This contract is always in the middle of the House of Reserves and the House of Coin
+                  accounting for everything that is going on in the protocol.
+                </div>
+                <hr />
+              </li>
+              <li>
+                <hr />
+                <div className="timeline-middle">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div className="timeline-start mb-10 md:text-end ml-10">
+                  <time className="font-mono italic">3rd Step</time>
+                  <div className="text-lg font-black">House of Coin Allows You to Mint $XOC</div>
+                  The House of Coin contract consults with the Asset Accountant to see how much $XOC you can mint. It
+                  then mints $XOC to your wallet at the current MXN/USD rate.
+                </div>
+                <hr />
+              </li>
+              <li>
+                <hr />
+                <div className="timeline-middle">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div className="timeline-end mb-10">
+                  <time className="font-mono italic">4th Step</time>
+                  <div className="text-lg font-black">The Possibilities Are Endless</div>
+                  You can use $XOC as you please, to pay for goods and services, to lend, to borrow, to trade, to
+                  invest, to create, to build, to grow, to dream. You can provide liquidity on blue-chip protocols like
+                  Uniswap or Balancer, or you can use it as remittance to send money to your family in Mexico.
+                </div>
+                <hr />
+              </li>
+            </ul>
           </div>
         </div>
       </div>

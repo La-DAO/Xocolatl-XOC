@@ -11,7 +11,7 @@ const useAccountAddress = () => {
   // Effect hook to log the account address whenever it changes
   useEffect(() => {
     if (address) {
-      console.log("Address:", address);
+      // console.log("Address:", address);
     }
   }, [address]);
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Address } from "viem";
 import { useReadContract } from "wagmi";
 
 // Define the ABI for the ERC20 allowance function
@@ -19,9 +20,9 @@ const ERC20ABI = [
 
 // Define the interface for the AllowanceProps
 interface AllowanceProps {
-  tokenAddress: `0x${string}`; // Token address in string format
-  ownerAddress: `0x${string}`; // Owner address in string format
-  spenderAddress: `0x${string}`; // Spender address in string format
+  tokenAddress: Address; // Token address in string format
+  ownerAddress: Address; // Owner address in string format
+  spenderAddress: Address; // Spender address in string format
 }
 
 /**
@@ -48,9 +49,9 @@ export function useAllowance({ tokenAddress, ownerAddress, spenderAddress }: All
       setAllowance("0"); // Set allowance to 0 in case of error
     } else if (!isLoading && data) {
       const allowanceInEther = (Number(data) / 1e18).toFixed(7); // Convert allowance to ether and format
-      setAllowance(allowanceInEther === "0.000000000000000000" ? "0" : allowanceInEther); // Update state with allowance
+      setAllowance(allowanceInEther === "0.000000000000000000" ? "0" : allowanceInEther);
     }
-  }, [data, isError, isLoading]); // Dependency array for the effect
+  }, [data, isError, isLoading]);
 
-  return allowance; // Return the allowance value
+  return allowance;
 }

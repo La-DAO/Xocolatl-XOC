@@ -82,7 +82,9 @@ const DepositModal: React.FC<DepositModalProps> = ({
               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             ></path>
           </svg>
-          <span>You will need to approve the transaction before it goes through</span>
+          <span>
+            You will need to approve the transaction AND <br /> wait around 5-10 seconds before it goes through
+          </span>
         </div>
         <h4 className="text-lg font-medium mb-1 dark:text-black">Amount</h4>
         <input
