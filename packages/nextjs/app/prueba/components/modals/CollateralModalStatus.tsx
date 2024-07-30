@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useWriteContract from "@/hooks/useWriteContract";
+import useSetUserUseReserveAsCollateral from "@/hooks/useSetUserUseReserveAsCollateral";
 import { Address } from "viem";
 
 /**
@@ -25,7 +25,7 @@ const CollateralModal: React.FC<CollateralModalProps> = ({
   onClose,
   onConfirm,
 }) => {
-  const { handleSetUserUseReserveAsCollateral, isError, error, data } = useWriteContract();
+  const { handleSetUserUseReserveAsCollateral, isError, error, data } = useSetUserUseReserveAsCollateral();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const toggleCollateral = async () => {

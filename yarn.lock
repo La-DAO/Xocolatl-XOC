@@ -5621,9 +5621,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ethers@npm:^6.13.1":
-  version: 6.13.1
-  resolution: "ethers@npm:6.13.1"
+"ethers@npm:latest":
+  version: 6.13.2
+  resolution: "ethers@npm:6.13.2"
   dependencies:
     "@adraffy/ens-normalize": 1.10.1
     "@noble/curves": 1.2.0
@@ -5632,7 +5632,7 @@ __metadata:
     aes-js: 4.0.0-beta.5
     tslib: 2.4.0
     ws: 8.17.1
-  checksum: beef4b6d117f64c369f44be631e0f666b966374eac0cc0446fa7abe114b11d6b3019060022eec65c031f150711f4913d249de507ff3da3204e654635db80a07e
+  checksum: 981860c736c7ae121774ad38ea07e3611ce524a77d2fcb77db499b65afe0cbe8f344cd5204d94b68b316349ff770fd2a7d9c8b2039da41c072f98d9864099925
   languageName: node
   linkType: hard
 
@@ -9587,7 +9587,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": ^6.5.2
     "@fortawesome/react-fontawesome": ^0.2.2
     "@heroicons/react": ^2.1.4
-    ethers: ^6.13.1
+    ethers: latest
     framer-motion-3d: ^11.3.2
     fs: ^0.0.1-security
     husky: ~8.0.3
