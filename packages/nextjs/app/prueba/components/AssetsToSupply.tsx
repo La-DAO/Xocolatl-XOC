@@ -3,13 +3,17 @@ import WalletBalance from "./WalletBalance";
 import SupplyModal from "./modals/SupplyTransactionModal";
 import IsolatedStateComponent from "@/components/tags/IsolatedState";
 import useAccountAddress from "@/hooks/useAccount";
-import useReserveData from "@/hooks/useReadContracts";
+import useGetReservesData from "@/hooks/useGetReservesData";
 import { ReserveData } from "@/types/types";
 import { Address } from "viem";
 
 const AssetsToSupply: React.FC = () => {
   // Fetch reserve data and wallet address using custom hooks
-  const { reservesData: reserveData, isLoading: isLoadingReserveData, isError: isErrorReserveData } = useReserveData();
+  const {
+    reservesData: reserveData,
+    isLoading: isLoadingReserveData,
+    isError: isErrorReserveData,
+  } = useGetReservesData();
   const { address: walletAddress } = useAccountAddress();
 
   // State management for balances, showing all assets, modal visibility, and selected reserve/balance
@@ -19,33 +23,19 @@ const AssetsToSupply: React.FC = () => {
   const [selectedReserve, setSelectedReserve] = useState<ReserveData | null>(null);
   const [selectedBalance, setSelectedBalance] = useState("");
 
-  /**
-   * Callback function to handle balance changes.
-   * @param {Address} tokenAddress - The address of the token.
-   * @param {string} balance - The balance of the token.
-   */
+  // Callback for balance changes
   const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
     setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
   }, []);
 
-  // Filter and display reserves data
+  // Filter reserves data based on balance and visibility
   const filteredReserveData: ReserveData[] = Array.isArray(reserveData) ? reserveData.flat() : [];
-
-  /**
-   * Filters reserve data to include only those with a balance greater than 0 if `showAll` is false.
-   * @param {ReserveData} reserve - The reserve data to filter.
-   * @returns {boolean} - Returns true if the reserve should be displayed.
-   */
   const filteredAndDisplayedReserveData = filteredReserveData.filter(reserve => {
     const balance = parseFloat(balances[reserve.underlyingAsset as Address] || "0");
     return showAll || balance > 0;
   });
 
-  /**
-   * Handle click event for the supply button.
-   * @param {ReserveData} reserve - The selected reserve data.
-   * @param {string} balance - The selected balance.
-   */
+  // Handle supply button click
   const handleSupplyClick = (reserve: ReserveData, balance: string) => {
     setSelectedReserve(reserve);
     setSelectedBalance(balance);
