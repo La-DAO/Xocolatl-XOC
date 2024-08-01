@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import useAccountAddress from "@/hooks/useAccount";
 import useSupply from "@/hooks/useSupply";
 import { ReserveData } from "@/types/types";
+import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 
 interface ModalProps {
@@ -28,6 +30,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   const [errorMessage, setErrorMessage] = useState("");
   const [data, setData] = useState<any>(null); // Reset data state
   const [isError, setIsError] = useState(false); // Reset isError state
+  const [showSuccessIcon, setShowSuccessIcon] = useState(false);
 
   // Hook for handling supply transactions
   const { handleSupply, isError: supplyError, error, data: supplyData } = useSupply();
@@ -111,6 +114,10 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
         .writeText(error.message)
         .then(() => {
           console.log("Error copied to clipboard");
+          setShowSuccessIcon(true);
+          setTimeout(() => {
+            setShowSuccessIcon(false);
+          }, 1500);
         })
         .catch(err => {
           console.error("Failed to copy error to clipboard", err);
@@ -201,6 +208,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   <span onClick={handleCopyError} className="cursor-pointer underline">
                     Copy the error.
                   </span>
+                  {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
                 </p>
               </div>
               <button onClick={handleClose} className="primary-btn">

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import useSetUserUseReserveAsCollateral from "@/hooks/useSetUserUseReserveAsCollateral";
 import { Address } from "viem";
+import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 /**
  * Props for the CollateralModal component.
@@ -26,6 +28,7 @@ const CollateralModal: React.FC<CollateralModalProps> = ({
   onConfirm,
 }) => {
   const { handleSetUserUseReserveAsCollateral, isError, error, data } = useSetUserUseReserveAsCollateral();
+  const [showSuccessIcon, setShowSuccessIcon] = useState(false);
 
   const toggleCollateral = async () => {
     try {
@@ -41,6 +44,10 @@ const CollateralModal: React.FC<CollateralModalProps> = ({
         .writeText(error.message)
         .then(() => {
           console.log("Error copied to clipboard");
+          setShowSuccessIcon(true);
+          setTimeout(() => {
+            setShowSuccessIcon(false);
+          }, 1500);
         })
         .catch(err => {
           console.error("Failed to copy error to clipboard", err);
@@ -80,6 +87,7 @@ const CollateralModal: React.FC<CollateralModalProps> = ({
                   <span onClick={handleCopyError} className="cursor-pointer underline">
                     Copy the error.
                   </span>
+                  {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
                 </p>
               </div>
               <button onClick={onClose} className="primary-btn">
