@@ -4,13 +4,8 @@ import React from "react";
 import Image from "next/image";
 import grow from "../../public/grow.png";
 import Container from "./container";
-// import { darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
-import { useDarkMode } from "usehooks-ts";
 
 const Hero = () => {
-  const { isDarkMode } = useDarkMode();
-  console.log(isDarkMode);
-
   return (
     <>
       <Container className="flex flex-wrap bg-base-200">
@@ -68,38 +63,56 @@ const Hero = () => {
                 src={"/Base_Wordmark_White.svg"}
                 width={140}
                 height={100}
-                alt="Ethereuem"
+                alt="Base Light"
                 className="hidden dark:block"
               />
               <Image
                 src={"/Base_Wordmark_Black.svg"}
                 width={140}
                 height={100}
-                alt="Ethereuem"
+                alt="Base Dark"
                 className="dark:hidden"
               />
             </div>
             <div className="pt-1 text-inherit dark:text-inherit">
-              <Image src={"/PolygonWhite.png"} width={200} height={100} alt="Ethereuem" className="hidden dark:block" />
-              <Image src={"/Polygon.png"} width={200} height={100} alt="Ethereuem" className="dark:hidden" />
+              <Image
+                src={"/PolygonWhite.png"}
+                width={200}
+                height={100}
+                alt="Polygon Light"
+                className="hidden dark:block"
+              />
+              <Image src={"/Polygon.png"} width={200} height={100} alt="Polygon Dark" className="dark:hidden" />
             </div>
             <div className="pt-5 text-inherit dark:text-inherit">
-              <Image src={"/gnosiswhite.png"} width={210} height={120} alt="Ethereuem" className="hidden dark:block" />
-              <Image src={"/gnosisblack.png"} width={210} height={120} alt="Ethereuem" className="dark:hidden" />
+              <Image
+                src={"/gnosiswhite.png"}
+                width={210}
+                height={120}
+                alt="Gnosis Light"
+                className="hidden dark:block"
+              />
+              <Image src={"/gnosisblack.png"} width={210} height={120} alt="Gnosis Dark" className="dark:hidden" />
             </div>
             <div className="pt-4 text-inherit dark:text-inherit">
               <Image
                 src={"/optimismwhite.png"}
                 width={200}
                 height={100}
-                alt="Ethereuem"
+                alt="Optimism Light"
                 className="hidden dark:block"
               />
-              <Image src={"/optimism.png"} width={200} height={100} alt="Ethereuem" className="dark:hidden" />
+              <Image src={"/optimism.png"} width={200} height={100} alt="Optimism Dark" className="dark:hidden" />
             </div>
             <div className="pt-0.5 text-inherit dark:text-inherit">
-              <Image src={"/arbitrumdark.png"} width={200} height={100} alt="Ethereuem" className="hidden dark:block" />
-              <Image src={"/arbitrumlight.png"} width={200} height={100} alt="Ethereuem" className="dark:hidden" />
+              <Image
+                src={"/arbitrumdark.png"}
+                width={200}
+                height={100}
+                alt="Arbitrum Light"
+                className="hidden dark:block"
+              />
+              <Image src={"/arbitrumlight.png"} width={200} height={100} alt="Arbitrum Dark" className="dark:hidden" />
             </div>
           </div>
         </div>

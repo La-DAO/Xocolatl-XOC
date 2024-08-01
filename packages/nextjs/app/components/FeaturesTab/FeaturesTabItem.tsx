@@ -12,7 +12,7 @@ const FeaturesTabItem = ({ featureTab }: { featureTab: FeatureTab }) => {
           <h2 className="mb-7 text-3xl font-bold text-black dark:text-white xl:text-sectiontitle2">{title}</h2>
           <p className="mb-5 text-lg pr-24">{desc1}</p>
           <p className="w-11/12 text-lg pr-24 pb-12">{desc2}</p>
-          <button className="px-8 py-4 text-lg font-medium text-center text-white bg-base-300 rounded-btn">
+          <button className="px-8 py-4 text-lg font-medium text-center text-white bg-base-300 dark:bg-base-100 dark:text-success rounded-btn">
             {button}
           </button>
         </div>

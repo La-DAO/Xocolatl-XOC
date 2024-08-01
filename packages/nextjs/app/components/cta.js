@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { xocolatlABI } from "../components/abis/xocabis";
+import { XOCABI } from "../../app/components/abis/xocabis";
 import { xocPinABI } from "./abis/xocpin";
 import { parseEther } from "viem";
 import { useContractRead, useContractWrite } from "wagmi";
@@ -22,7 +22,7 @@ const Cta = () => {
 
   const { write: approve } = useContractWrite({
     address: "0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf",
-    abi: xocolatlABI,
+    abi: XOCABI,
     functionName: "approve",
     args: ["0x72fa57b14b83D165EACab4E2bB3B3B9D5B9C5A52", parseEther("100")],
   });
@@ -50,7 +50,6 @@ const Cta = () => {
     }
   }, [tokenID]);
 
-  console.log(tokenID);
 
   return (
     <div className="flex items-center justify-center pt-24">
