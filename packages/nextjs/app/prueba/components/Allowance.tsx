@@ -28,11 +28,7 @@ const Allowance: React.FC<Props> = ({ tokenAddress, ownerAddress, spenderAddress
     }
   }, [tokenAddress, allowance, onAllowanceChange]);
 
-  return (
-    <div>
-      <p className="text-black">{allowance}</p>
-    </div>
-  );
+  return <span>{allowance}</span>;
 };
 
 export default Allowance;

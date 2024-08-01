@@ -22,11 +22,7 @@ const WalletBalance: React.FC<Props> = ({ tokenAddress, walletAddress, onBalance
     onBalanceChange(tokenAddress, balance);
   }, [tokenAddress, balance, onBalanceChange]);
 
-  return (
-    <div>
-      <p className="text-black">{balance}</p>
-    </div>
-  );
+  return <span>{balance}</span>;
 };
 
 export default WalletBalance;

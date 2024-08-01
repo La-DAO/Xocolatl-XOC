@@ -31,15 +31,15 @@ const CollateralToggle: React.FC<CollateralToggleProps> = ({
   };
 
   return (
-    <div>
+    <div className="flex justify-center">
       <input
         type="checkbox"
-        className="toggle-checkbox rounded-lg bg-gray-200 checked:bg-blue-500 w-6 h-6"
+        className="toggle-checkbox"
         id={`collateralToggle-${assetAddress}`}
         checked={initialUseAsCollateral} // Reflect initial state
         onChange={handleToggle} // Open the modal on change
       />
-      <label className="toggle-label ml-2 text-gray-700" htmlFor={`collateralToggle-${assetAddress}`}></label>
+      <label className="toggle-label" htmlFor={`collateralToggle-${assetAddress}`}></label>
       {showModal && (
         <CollateralModal
           assetAddress={assetAddress}

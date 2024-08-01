@@ -61,7 +61,7 @@ const YourSupplies = () => {
     <div className="mt-4">
       {reservesWithAllowances.length > 0 && walletAddress ? (
         <div className="supplies-container">
-          <div className="supplies-header py-3 flex text-center justify-between text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <div className="table-header supplies-header py-3 flex justify-between tracking-wider">
             <div className="supplies-header-item w-24">Assets</div>
             <div className="supplies-header-item w-24">Balance</div>
             <div className="supplies-header-item w-24">APY</div>
@@ -79,26 +79,28 @@ const YourSupplies = () => {
             return (
               <div
                 key={index}
-                className={`supplies-row flex justify-between py-3 text-sm text-center border-t border-t-gray-200 ${
+                className={`table-content table-border-top supplies-row flex justify-between py-3 ${
                   isButtonDisabled ? "hidden" : "block"
                 }`}
               >
                 <div className="supplies-row-item w-24">
-                  <p className="text-sm font-medium text-gray-900">{reserve.symbol}</p>
+                  <p>{reserve.symbol}</p>
                 </div>
                 <div className="supplies-row-item w-24">
-                  <Allowance
-                    tokenAddress={reserve.underlyingAsset as Address}
-                    ownerAddress={walletAddress}
-                    spenderAddress={walletAddress}
-                    onAllowanceChange={handleAllowanceChange}
-                  />
+                  <p>
+                    <Allowance
+                      tokenAddress={reserve.underlyingAsset as Address}
+                      ownerAddress={walletAddress}
+                      spenderAddress={walletAddress}
+                      onAllowanceChange={handleAllowanceChange}
+                    />
+                  </p>
                 </div>
                 <div className="supplies-row-item w-24">
-                  <p className="text-sm text-gray-900">{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
+                  <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
                 </div>
                 <div className="supplies-row-item w-24">
-                  <div className="text-sm text-gray-900">
+                  <div>
                     <CollateralToggle
                       assetAddress={reserve.underlyingAsset}
                       initialUseAsCollateral={reserve.usageAsCollateralEnabledOnUser}
@@ -107,9 +109,7 @@ const YourSupplies = () => {
                 </div>
                 <div className="supplies-row-item w-24">
                   <button
-                    className={`px-3 py-1 rounded-md ${
-                      isButtonDisabled ? "bg-gray-100 text-gray-300 cursor-not-allowed" : "bg-accent text-white"
-                    }`}
+                    className={`${isButtonDisabled ? ".disabled-btn" : "primary-btn "}`}
                     disabled={isButtonDisabled}
                   >
                     Withdraw

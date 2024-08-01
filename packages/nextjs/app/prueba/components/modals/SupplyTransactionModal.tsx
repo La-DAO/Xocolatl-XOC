@@ -89,65 +89,109 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     }
   };
 
+  const handleCopyError = () => {
+    if (error?.message) {
+      navigator.clipboard
+        .writeText(error.message)
+        .then(() => {
+          console.log("Error copied to clipboard");
+        })
+        .catch(err => {
+          console.error("Failed to copy error to clipboard", err);
+        });
+    }
+  };
+
   // Return null if the modal is not open or if the reserve data is not available
   if (!isOpen || !reserve) {
     return null;
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-md shadow-md w-96 relative">
-        <button className="absolute top-2 right-2 text-gray-400 hover:text-gray-600" onClick={onClose}>
-          &times;
-        </button>
-        <h2 className="text-2xl font-bold mb-4">Supply {reserve.symbol}</h2>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Amount</label>
-          <div className="flex items-center mt-1">
-            <input
-              type="number"
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              placeholder="0.00"
-              value={amount}
-              onChange={handleChange}
-            />
-            <span className="ml-2 text-gray-500">{reserve.symbol}</span>
-          </div>
-          <div className="text-sm text-gray-500 mt-1">
-            Wallet balance: {balance}{" "}
-            <button className="text-indigo-600 hover:underline" onClick={handleMaxClick}>
-              MAX
-            </button>
-          </div>
-          {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
+    <div className="modal-blur-background">
+      <div className="modal-container general-text-color flex flex-col gap-6">
+        <h2>Supply {reserve.symbol}</h2>
+        <div className="table-border-top">
+          {!data && !isError && (
+            <div className="flex flex-col gap-6 mt-6">
+              <div className="container-gray-borders flex flex-col gap-2">
+                <label className="font-bold">Amount</label>
+                <div className="flex items-center">
+                  <input
+                    type="number"
+                    className="without-borders"
+                    placeholder="0.00"
+                    value={amount}
+                    onChange={handleChange}
+                  />
+                  <span className="font-bold">{reserve.symbol}</span>
+                </div>
+                <div className="text-xs">
+                  Wallet balance: {balance}{" "}
+                  <span className="font-bold hover:underline cursor-pointer" onClick={handleMaxClick}>
+                    MAX
+                  </span>
+                </div>
+                {/* {errorMessage && <p className="text-error text-xs">{errorMessage}</p>} */}
+              </div>
+              <div className="container-gray-borders flex flex-col gap-2">
+                <label className="font-bold">Transaction overview</label>
+                <div className="flex justify-between items-center text-sm">
+                  <span>Supply APY</span>
+                  <span className="font-bold">{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</span>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span>Collateralization</span>
+                  <span
+                    className={`text-sm font-medium ${
+                      reserve.usageAsCollateralEnabled ? "text-success" : "text-error"
+                    }`}
+                  >
+                    {reserve.usageAsCollateralEnabled ? "Enabled" : "Disabled"}
+                  </span>
+                </div>
+              </div>
+              <div className="flex justify-between gap-4">
+                <button
+                  className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                  onClick={handleSupplyClick}
+                  disabled={!isValid}
+                >
+                  Supply
+                </button>
+                <button onClick={onClose} className="secondary-btn flex-grow-1 basis-1/3">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+          {isError && (
+            <div className="flex flex-col gap-6 mt-6">
+              <div className="error-container text-center">
+                <p>
+                  You cancelled the transaction.{" "}
+                  <span onClick={handleCopyError} className="cursor-pointer underline">
+                    Copy the error.
+                  </span>
+                </p>
+              </div>
+              <button onClick={onClose} className="primary-btn">
+                Close
+              </button>
+            </div>
+          )}
+          {data && (
+            <div className="flex flex-col gap-6 mt-6">
+              <div className="success-container text-center">
+                <h2 className="">All done!</h2>
+                <p>Supply transaction successful</p>
+              </div>
+              <button onClick={onClose} className="primary-btn">
+                Ok, close
+              </button>
+            </div>
+          )}
         </div>
-        <div className="mb-4 border-2 border-gray-100 rounded-lg p-4">
-          <h3 className="text-lg font-medium text-gray-900">Transaction overview</h3>
-          <div className="flex justify-between items-center mt-2">
-            <span className="text-sm text-gray-500">Supply APY</span>
-            <span className="text-sm font-medium text-gray-900">
-              {(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%
-            </span>
-          </div>
-          <div className="flex justify-between items-center mt-2">
-            <span className="text-sm text-gray-500">Collateralization</span>
-            <span
-              className={`text-sm font-medium ${reserve.usageAsCollateralEnabled ? "text-green-600" : "text-red-600"}`}
-            >
-              {reserve.usageAsCollateralEnabled ? "Enabled" : "Disabled"}
-            </span>
-          </div>
-        </div>
-        <button
-          className={`w-full px-3 py-1 rounded-md ${
-            isValid ? "bg-accent text-white" : "bg-gray-100 text-gray-300 cursor-not-allowed"
-          }`}
-          onClick={handleSupplyClick}
-          disabled={!isValid}
-        >
-          Supply
-        </button>
-        {isError && <p className="text-red-500 mt-2">Error: {error?.message}</p>}
       </div>
     </div>
   );
