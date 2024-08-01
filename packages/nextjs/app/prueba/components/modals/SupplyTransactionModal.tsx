@@ -26,9 +26,11 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   const [amount, setAmount] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [data, setData] = useState<any>(null); // Reset data state
+  const [isError, setIsError] = useState(false); // Reset isError state
 
   // Hook for handling supply transactions
-  const { handleSupply, isError, error, data } = useSupply();
+  const { handleSupply, isError: supplyError, error, data: supplyData } = useSupply();
 
   // Fetch the user's wallet address
   const { address: walletAddress } = useAccountAddress();
@@ -36,6 +38,17 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   useEffect(() => {
     validateAmount(amount);
   }, [amount]);
+
+  useEffect(() => {
+    // Update state based on supply hook response
+    if (supplyError) {
+      setIsError(true);
+      setErrorMessage(error?.message || "An unknown error occurred.");
+    }
+    if (supplyData) {
+      setData(supplyData);
+    }
+  }, [supplyError, supplyData, error]);
 
   /**
    * Validates the input amount for supply.
@@ -89,6 +102,9 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     }
   };
 
+  /**
+   * Handles copying the error message to the clipboard.
+   */
   const handleCopyError = () => {
     if (error?.message) {
       navigator.clipboard
@@ -100,6 +116,18 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
           console.error("Failed to copy error to clipboard", err);
         });
     }
+  };
+
+  /**
+   * Handles closing the modal and resetting state.
+   */
+  const handleClose = () => {
+    setAmount("");
+    setIsValid(false);
+    setErrorMessage("");
+    setData(null);
+    setIsError(false);
+    onClose(); // Call the original onClose handler
   };
 
   // Return null if the modal is not open or if the reserve data is not available
@@ -132,7 +160,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                     MAX
                   </span>
                 </div>
-                {/* {errorMessage && <p className="text-error text-xs">{errorMessage}</p>} */}
+                {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
               </div>
               <div className="container-gray-borders flex flex-col gap-2">
                 <label className="font-bold">Transaction overview</label>
@@ -159,7 +187,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                 >
                   Supply
                 </button>
-                <button onClick={onClose} className="secondary-btn flex-grow-1 basis-1/3">
+                <button onClick={handleClose} className="secondary-btn flex-grow-1 basis-1/3">
                   Cancel
                 </button>
               </div>
@@ -175,7 +203,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   </span>
                 </p>
               </div>
-              <button onClick={onClose} className="primary-btn">
+              <button onClick={handleClose} className="primary-btn">
                 Close
               </button>
             </div>
@@ -186,7 +214,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                 <h2 className="">All done!</h2>
                 <p>Supply transaction successful</p>
               </div>
-              <button onClick={onClose} className="primary-btn">
+              <button onClick={handleClose} className="primary-btn">
                 Ok, close
               </button>
             </div>
