@@ -2,17 +2,20 @@ import externalContracts from "@/contracts/externalContracts";
 import { Address } from "viem";
 import { useWriteContract } from "wagmi";
 
-const pool = externalContracts[8453].pool;
-console.log(pool);
-
 /**
- * Custom hook to write data to the UiPoolDataProviderV3 contract.
- * Handles the correct function for setting collateral.
+ * Custom hook to handle setting user reserve as collateral.
+ * @returns {Object} - The handler function and contract interaction states.
  */
-const useWriteContracts = () => {
+const useSetUserUseReserveAsCollateral = () => {
+  // Hook for writing to a smart contract
   const { writeContract, error, data } = useWriteContract();
   const pool = externalContracts[8453].Pool;
 
+  /**
+   * Handles the action of setting a user's reserve as collateral.
+   * @param {Address} asset - The address of the asset to set as collateral.
+   * @param {boolean} useAsCollateral - A flag indicating whether to use the asset as collateral.
+   */
   const handleSetUserUseReserveAsCollateral = (asset: Address, useAsCollateral: boolean) => {
     if (!pool || !pool.abi || !pool.address) {
       console.error("Pool contract is not properly defined.");
@@ -34,4 +37,4 @@ const useWriteContracts = () => {
   return { handleSetUserUseReserveAsCollateral, isError: !!error, error, data };
 };
 
-export default useWriteContracts;
+export default useSetUserUseReserveAsCollateral;

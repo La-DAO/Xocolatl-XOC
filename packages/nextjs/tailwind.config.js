@@ -9,23 +9,22 @@ module.exports = {
     themes: [
       {
         light: {
-          primary: "#F6A690",
-          "primary-content": "#3F312D",
-          secondary: "#F8E5D6",
-          "secondary-content": "#3F312D",
-          accent: "#B5412D",
-          "accent-content": "#3F312D",
-          neutral: "#3F312D",
-          "neutral-content": "#ffffff",
-          "neutral-brown": "#3F312D",
-          "base-100": "#F9FBFF",
-          "base-200": "#f4f8ff",
-          "base-300": "#A34F2B",
-          "base-content": "#3F312D",
-          info: "#F6A690",
-          success: "#4caf50",
+          primary: "#b5412d",
+          "primary-content": "#763226",
+          secondary: "#f4b7ad",
+          "secondary-content": "#763226",
+          accent: "#b5412d",
+          "accent-content": "#763226",
+          neutral: "#763226",
+          "neutral-content": "#fdf4f3",
+          "base-100": "#fbe8e5",
+          "base-200": "#f9d5cf",
+          "base-300": "#f4b7ad",
+          "base-content": "#763226",
+          info: "#b5412d",
+          success: "#00d397",
           warning: "#FFCF72",
-          error: "#FF8863",
+          error: "#dc2323",
 
           "--rounded-btn": "9999rem",
 
@@ -42,23 +41,22 @@ module.exports = {
       },
       {
         dark: {
-          primary: "#693E34",
+          primary: "#763226",
           "primary-content": "#F9FBFF",
-          secondary: "#3F312D",
+          secondary: "#763226",
           "secondary-content": "#F9FBFF",
-          accent: "#B5412D",
+          accent: "#cb4d37",
           "accent-content": "#F9FBFF",
           neutral: "#F9FBFF",
-          "neutral-content": "#B5412D",
-          "neutral-brown": "#3F312D",
-          "base-100": "#3F312D",
-          "base-200": "#B5412D",
-          "base-300": "#693E34",
+          "neutral-content": "#b5412d",
+          "base-100": "#b5412d",
+          "base-200": "#8d3627",
+          "base-300": "#763226",
           "base-content": "#F9FBFF",
-          info: "#B5412D",
-          success: "#4caf50",
+          info: "#b5412d",
+          success: "#00d397",
           warning: "#FFCF72",
-          error: "#FF8863",
+          error: "#dc2323",
 
           "--rounded-btn": "9999rem",
 
@@ -75,15 +73,5 @@ module.exports = {
         },
       },
     ],
-  },
-  theme: {
-    extend: {
-      boxShadow: {
-        center: "0 0 12px -2px rgb(0 0 0 / 0.05)",
-      },
-      animation: {
-        "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-      },
-    },
   },
 };

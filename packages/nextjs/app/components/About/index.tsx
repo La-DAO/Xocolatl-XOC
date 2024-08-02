@@ -2,10 +2,7 @@ import Image from "next/image";
 
 const About = () => {
   return (
-    <section
-      id="about"
-      className="bg-gray-1 pb-8 pt-20 dark:bg-dark-2 lg:pb-[70px] lg:pt-[120px] bg-white p-6 rounded-2xl shadow-md"
-    >
+    <section id="about" className="bg-gray-1 pb-8 pt-20 dark:bg-dark-2 lg:pb-[70px] lg:pt-[120px] ml-32">
       <div className="container">
         <div className="wow fadeInUp" data-wow-delay=".2s">
           <div className="-mx-4 flex flex-wrap items-center">

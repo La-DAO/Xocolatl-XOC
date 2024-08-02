@@ -1,27 +1,49 @@
 import React, { useState } from "react";
-import useMint from "@/hooks/useMint";
+//import useMint from "@/hooks/useMint";
 import { Address } from "viem";
+
+//import { houseOfCoinABI } from "@/app/components/abis/houseofcoin";
+//import { useWriteContract } from "wagmi";
 
 interface MintModalProps {
   isOpen: boolean;
   onClose: () => void;
   assetName: string;
-  houseOfReserveContract: string;
-  assetContract: string;
+  houseOfReserveContract: Address;
+  assetContract: Address;
+  houseOfCoinContract: Address;
+  assetsAccountantContract: Address;
 }
 
-const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose, assetName, houseOfReserveContract, assetContract }) => {
+const MintModal: React.FC<MintModalProps> = ({
+  isOpen,
+  onClose,
+  assetName,
+  houseOfReserveContract,
+  assetContract,
+  houseOfCoinContract,
+  assetsAccountantContract,
+}) => {
   const [amount, setAmount] = useState("");
-  const { mint } = useMint(assetContract as Address, houseOfReserveContract as Address);
-
-  if (!isOpen) return null;
+  // const { writeContract, isError, isPending, isSuccess } = useMint(assetContract, houseOfReserveContract, amount);
 
   const handleMint = () => {
     // Logic to handle minting $XOC tokens
-    mint(amount);
+
     console.log(`Minting $XOC tokens for ${assetName}`);
-    console.log(mint(amount));
+    console.log(`House of Reserve Contract: ${houseOfReserveContract}`);
+    console.log(`Asset Contract: ${assetContract}`);
+    console.log(`Amount: ${amount}`);
   };
+
+  /*   useEffect(() => {
+    if (isError) {
+      console.error("Minting failed.#1");
+    } else if (isSuccess) {
+      console.log("Minting succeeded.");
+    }
+  }, [isError, isSuccess]); */
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -65,16 +87,26 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose, assetName, house
               </tr>
               {/* row 2 */}
               <tr>
+                <td>House Of Reserve Address:</td>
+                <td>{houseOfReserveContract}</td>
+              </tr>
+              {/* row 3 */}
+              <tr>
                 <td>House Of Coin Address:</td>
-                <td>0xB90996A70C957a1496e349434CF0E030A9f693A4</td>
+                <td>{houseOfCoinContract}</td>
+              </tr>
+              {/* row 4 */}
+              <tr>
+                <td>Assets Accountant Address:</td>
+                <td>{assetsAccountantContract}</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <button className="btn bg-success text-white" onClick={handleMint}>
+        <button className="btn bg-base-300 hover:bg-success btn-lg text-white" onClick={handleMint}>
           Mint
         </button>
-        <button className="btn bg-gray-500 text-white ml-2" onClick={onClose}>
+        <button className="btn btn-lg bg-gray-500 hover:bg-error hover:text-white text-white ml-2" onClick={onClose}>
           Cancel
         </button>
       </div>

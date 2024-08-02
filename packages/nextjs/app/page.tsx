@@ -1,9 +1,9 @@
 "use client";
 
 // import Image from "next/image";
+import About from "../app/components/About/index";
 import FeaturesTab from "../app/components/FeaturesTab";
 import Benefits from "../app/components/benefits";
-import Cta from "../app/components/cta";
 import { benefitOne, benefitTwo } from "../app/components/data";
 import Faq from "../app/components/faq";
 import Hero from "../app/components/hero";
@@ -23,6 +23,8 @@ const Home: NextPage = () => {
       <SectionTitle pretitle="Curious?" title="Explore what you can do with $XOC" />
       <FeaturesTab />
       <div className="divider"></div>
+      <About />
+      <div className="divider"></div>
       <SectionTitle pretitle="¡Inspiring testimonials!" title="Explore the voices of the $XOC community">
         Discover authentic testimonials from those who are part of the vibrant community building and using $XOC. From
         transformative experiences to success stories, here you&apos;ll find the inspiration you need to join this
@@ -35,8 +37,6 @@ const Home: NextPage = () => {
         jazz.
       </SectionTitle>
       <Faq />
-      <div className="divider mt-24"></div>
-      <Cta />
     </>
   );
 };
