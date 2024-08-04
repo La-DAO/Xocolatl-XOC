@@ -8,11 +8,11 @@ const About = () => {
           <div className="-mx-4 flex flex-wrap items-center">
             <div className="w-full px-4 lg:w-1/2">
               <div className="ml-8 mb-12 max-w-[540px] lg:mb-0">
-                <h2 className="mb-5 text-3xl font-bold leading-tight text-dark dark:text-base-300 sm:text-[40px] sm:leading-[1.2]">
+                <h2 className="mb-5 text-3xl font-bold leading-tight text-dark dark:text-neutral sm:text-[40px] sm:leading-[1.2]">
                   Xocolatl Smart Contracts Are The Entrance Into{" "}
-                  <span className="bg-accent rounded-lg text-base-100 dark:text-neutral">Mexican DeFi</span>
+                  <span className="bg-green-700 rounded-lg text-base-100 dark:text-neutral">Mexican DeFi</span>
                 </h2>
-                <p className="mb-10 text-base leading-relaxed text-body-color dark:text-base-300">
+                <p className="mb-10 text-base leading-relaxed text-body-color dark:text-neutral">
                   You deposit your asset into our House of Reserve contract, which then tells the Assets Accountant the
                   reserve amount of the asset. The Assets Accountant then allows you to mints up to ~80% of your
                   asset&rsquo;s value in $XOC to your wallet. $XOC is created (minted) at the current MXN/USD rate which
@@ -24,7 +24,7 @@ const About = () => {
 
                 <a
                   href="/#"
-                  className="inline-flex items-center justify-center rounded-md bg-primary px-7 py-3 text-center text-base font-medium text-white duration-300 hover:bg-primary/90"
+                  className="inline-flex items-center justify-center rounded-md bg-primary px-7 py-3 text-center text-base font-medium text-white duration-300 hover:bg-secondary dark:bg-neutral dark:text-primary dark:hover:bg-primary dark:hover:text-white"
                 >
                   Know More
                 </a>

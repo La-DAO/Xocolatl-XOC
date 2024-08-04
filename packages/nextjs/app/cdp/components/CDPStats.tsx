@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { houseOfReserveABI } from "../../../app/components/abis/houseofreserve";
+//import { houseOfReserveABI } from "../../../app/components/abis/houseofreserve";
 import { XOCABI } from "../../../app/components/abis/xocabis";
 import { formatEther } from "viem";
 import { useChainId, useReadContract } from "wagmi";
@@ -15,8 +15,8 @@ const CDPStats: React.FC = () => {
 
   const [latestMinted, setLatestMinted] = useState<any>(null);
   const [latestMintedNumber, setLatestMintedNumber] = useState<string | null>(null);
-  const [totalWETHDeposits, setTotalWETHDeposits] = useState<any>(null);
-  const [totalCBETHDeposits, setTotalCBETHDeposits] = useState<any>(null);
+  //const [totalWETHDeposits, setTotalWETHDeposits] = useState<any>(null);
+  //const [totalCBETHDeposits, setTotalCBETHDeposits] = useState<any>(null);
 
   const {
     data: latestMintedData,
@@ -42,7 +42,7 @@ const CDPStats: React.FC = () => {
     }
   }, [latestMinted]);
 
-  const {
+  /* const {
     data: wethDepositsData,
     isLoading: wethDepositsLoading,
     error: wethDepositsError,
@@ -76,7 +76,7 @@ const CDPStats: React.FC = () => {
 
   const formattedWETHDeposits = totalWETHDeposits ? formatEther(totalWETHDeposits) : "0.00";
   const formattedCBETHDeposits = totalCBETHDeposits ? parseFloat(formatEther(totalCBETHDeposits)).toFixed(4) : "0.00";
-
+ */
   return (
     <header className="bg-neutral text-white px-12 py-8 flex flex-col space-y-2 w-full m-auto">
       <div className="pl-32">
@@ -90,11 +90,11 @@ const CDPStats: React.FC = () => {
         <div className="flex items-center space-x-8 pl-2 pt-4">
           <div className="text">
             <div className="text-sm text-gray-400">Total XOC Minted</div>
-            <div className="text-lg text-accent font-semibold">
+            <div className=" text-2xl text-base-100 font-semibold">
               $ {latestMintedLoading ? "Loading..." : latestMintedError ? "Error" : latestMintedNumber?.toString()}
             </div>
           </div>
-          <div className="text">
+          {/* <div className="text">
             <div className="text-sm text-gray-400">Total Deposits</div>
             <div className="text-lg text-accent font-semibold">
               {wethDepositsLoading || cbethDepositsLoading
@@ -103,7 +103,7 @@ const CDPStats: React.FC = () => {
                 ? "Error"
                 : `WETH: ${formattedWETHDeposits} CBETH: ${formattedCBETHDeposits}`}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </header>

@@ -36,14 +36,14 @@ const FeaturesTab = () => {
               className={`relative flex w-full cursor-pointer items-center gap-4 border border-stroke px-6 py-2 last:border-0 dark:border-strokedark md:w-auto md:border-0 xl:px-13.5 xl:py-5 ${
                 currentTab === "tabOne"
                   ? "border-4 border-accent bg-secondary dark:border-accent dark:bg-secondary rounded-full"
-                  : ""
+                  : "hover:bg-secondary hover:rounded-full"
               }`}
             >
               <div className="flex h-12.5 w-12.5 text-3xl items-center justify-center dark:bg-blacksection">
-                <p className="text-metatitle3 font-medium text-base-300 dark:text-white">01</p>
+                <p className="text-metatitle3 font-medium text-primary dark:text-white">01</p>
               </div>
               <div className="text-3xl md:w-3/5 lg:w-auto">
-                <button className="font-medium text-base-300 dark:text-white xl:text-regular">
+                <button className="font-medium text-primary dark:text-white xl:text-regular">
                   Collateral-Debt Positions
                 </button>
               </div>
@@ -53,31 +53,31 @@ const FeaturesTab = () => {
               className={`relative flex w-full cursor-pointer items-center gap-4 border border-stroke px-6 py-2 last:border-0 dark:border-strokedark md:w-auto md:border-0 xl:px-13.5 xl:py-5 ${
                 currentTab === "tabTwo"
                   ? "border-4 border-accent bg-secondary dark:border-accent dark:bg-secondary rounded-full"
-                  : ""
+                  : "hover:bg-secondary hover:rounded-full"
               }`}
             >
               <div className="flex h-12.5 w-12.5 text-3xl items-center justify-center dark:bg-blacksection">
-                <p className="text-metatitle3 font-medium text-base-300 dark:text-white">02</p>
+                <p className="text-metatitle3 font-medium text-primary dark:text-white">02</p>
               </div>
               <div className="text-3xl md:w-3/5 lg:w-auto">
-                <button className="font-medium text-base-300 dark:text-white xl:text-regular">
+                <button className="font-medium text-primary dark:text-white xl:text-regular">
                   Money Lending Markets
                 </button>
               </div>
             </div>
             <div
               onClick={() => setCurrentTab("tabThree")}
-              className={`relative flex w-full cursor-pointer items-center gap-4 border border-stroke px-6 py-2 last:border-0  md:w-auto md:border-0 xl:px-13.5 xl:py-5 ${
+              className={`relative flex w-full cursor-pointer items-center gap-4 border border-stroke px-6 py-2 last:border-0 md:w-auto md:border-0 xl:px-13.5 xl:py-5 ${
                 currentTab === "tabThree"
                   ? "border-4 border-accent bg-secondary dark:border-accent dark:bg-secondary rounded-full"
-                  : ""
+                  : "hover:bg-secondary hover:rounded-full"
               }`}
             >
               <div className="flex h-12.5 w-12.5 text-3xl items-center justify-center dark:bg-blacksection">
-                <p className="text-metatitle3 font-medium text-base-300 dark:text-white">03</p>
+                <p className="text-metatitle3 font-medium text-primary dark:text-white">03</p>
               </div>
               <div className="text-3xl md:w-3/5 lg:w-auto">
-                <button className="font-medium text-base-300 dark:text-white xl:text-regular">
+                <button className="font-medium text-primary dark:text-white xl:text-regular">
                   Fully Interopable Bridging
                 </button>
               </div>

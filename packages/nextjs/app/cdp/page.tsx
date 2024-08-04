@@ -14,7 +14,9 @@ const CDP: NextPage = () => {
       <div className="grid gap-4 w-4/5 m-auto mt-4">
         <Deposits />
       </div>
-      <CDPInfo />
+      <div>
+        <CDPInfo />
+      </div>
     </div>
   );
 };
