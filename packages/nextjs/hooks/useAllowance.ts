@@ -49,7 +49,7 @@ export function useAllowance({ tokenAddress, ownerAddress, spenderAddress }: All
       setAllowance("0"); // Set allowance to 0 in case of error
     } else if (!isLoading && data) {
       const allowanceInEther = (Number(data) / 1e18).toFixed(7); // Convert allowance to ether and format
-      setAllowance(allowanceInEther === "0.000000000000000000" ? "0" : allowanceInEther);
+      setAllowance(allowanceInEther);
     }
   }, [data, isError, isLoading]);
 

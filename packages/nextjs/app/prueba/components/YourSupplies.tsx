@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Allowance from "./Allowance";
 import CollateralToggle from "./CollateralToggle";
+import WithdrawModal from "./modals/WithdrawTransactionModal";
 import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
 import useGetUserReservesData from "@/hooks/useGetUserReservesData";
@@ -22,6 +23,10 @@ const YourSupplies = () => {
   const [allowances, setAllowances] = useState<Record<string, string>>({});
   // State to manage reserves with allowances
   const [reservesWithAllowances, setReservesWithAllowances] = useState<any[]>([]);
+  // State to manage modal visibility and selected reserve/balance
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedReserve, setSelectedReserve] = useState<any>(null);
+  const [selectedAllowance, setSelectedAllowance] = useState("");
 
   /**
    * Callback to handle changes in allowance for a specific token.
@@ -57,13 +62,20 @@ const YourSupplies = () => {
     return <p className="text-error">Error fetching data.</p>;
   }
 
+  // Handle withdraw button click
+  const handleWithdrawClick = (reserve: any, allowance: string) => {
+    setSelectedReserve(reserve);
+    setSelectedAllowance(allowance);
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="mt-4">
       {reservesWithAllowances.length > 0 && walletAddress ? (
         <div className="supplies-container">
           <div className="table-header supplies-header py-3 flex justify-between tracking-wider">
             <div className="supplies-header-item w-24">Assets</div>
-            <div className="supplies-header-item w-24">Balance</div>
+            <div className="supplies-header-item w-24">Allowance</div>
             <div className="supplies-header-item w-24">APY</div>
             <div className="supplies-header-item w-24">Collateral</div>
             <div className="supplies-header-item w-24">Actions</div>
@@ -111,6 +123,7 @@ const YourSupplies = () => {
                   <button
                     className={`${isButtonDisabled ? ".disabled-btn" : "primary-btn "}`}
                     disabled={isButtonDisabled}
+                    onClick={() => handleWithdrawClick(reserve, reserve.allowance)}
                   >
                     Withdraw
                   </button>
@@ -122,6 +135,14 @@ const YourSupplies = () => {
       ) : (
         <p className="text-center text-gray-500">No sufficient data available.</p>
       )}
+
+      {/* Modal for withdraw transaction */}
+      <WithdrawModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        reserve={selectedReserve}
+        balance={selectedAllowance}
+      />
     </div>
   );
 };
