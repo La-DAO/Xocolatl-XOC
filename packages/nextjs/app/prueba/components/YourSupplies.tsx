@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import Allowance from "./Allowance";
 import CollateralToggle from "./CollateralToggle";
+import WalletBalance from "./WalletBalance";
 import WithdrawModal from "./modals/WithdrawTransactionModal";
 import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
@@ -19,38 +19,38 @@ const YourSupplies = () => {
   // Hook to get user account address
   const { address: walletAddress } = useAccountAddress();
 
-  // State to manage allowances for reserves
-  const [allowances, setAllowances] = useState<Record<string, string>>({});
-  // State to manage reserves with allowances
-  const [reservesWithAllowances, setReservesWithAllowances] = useState<any[]>([]);
+  // State to manage balances for reserves
+  const [balances, setBalances] = useState<Record<string, string>>({});
+  // State to manage reserves with balances
+  const [reservesWithBalances, setReservesWithBalances] = useState<any[]>([]);
   // State to manage modal visibility and selected reserve/balance
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReserve, setSelectedReserve] = useState<any>(null);
-  const [selectedAllowance, setSelectedAllowance] = useState("");
+  const [selectedBalance, setSelectedBalance] = useState("");
 
   /**
-   * Callback to handle changes in allowance for a specific token.
+   * Callback to handle changes in balance for a specific token.
    * @param {Address} tokenAddress - Address of the token.
-   * @param {string} allowance - Updated allowance amount.
+   * @param {string} balance - Updated balance amount.
    */
-  const handleAllowanceChange = useCallback((tokenAddress: Address, allowance: string) => {
-    setAllowances(prevAllowances => ({ ...prevAllowances, [tokenAddress]: allowance }));
+  const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
+    setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
   }, []);
 
   useEffect(() => {
     if (reservesData && userReservesData) {
-      // Combine reserves data with user reserves data and current allowances
+      // Combine reserves data with user reserves data and current balances
       const combinedReserves = reservesData.map(reserve => {
         const userReserve = userReservesData.find(userRes => userRes.underlyingAsset === reserve.underlyingAsset);
         return {
           ...reserve,
           ...userReserve,
-          allowance: allowances[reserve.underlyingAsset as Address] || "0",
+          balance: balances[reserve.underlyingAsset as Address] || "0",
         };
       });
-      setReservesWithAllowances(combinedReserves);
+      setReservesWithBalances(combinedReserves);
     }
-  }, [reservesData, userReservesData, allowances]);
+  }, [reservesData, userReservesData, balances]);
 
   // Loading state
   if (isLoadingReserves || isLoadingUserReserves) {
@@ -63,30 +63,26 @@ const YourSupplies = () => {
   }
 
   // Handle withdraw button click
-  const handleWithdrawClick = (reserve: any, allowance: string) => {
+  const handleWithdrawClick = (reserve: any, balance: string) => {
     setSelectedReserve(reserve);
-    setSelectedAllowance(allowance);
+    setSelectedBalance(balance);
     setIsModalOpen(true);
   };
 
   return (
     <div className="mt-4">
-      {reservesWithAllowances.length > 0 && walletAddress ? (
+      {reservesWithBalances.length > 0 && walletAddress ? (
         <div className="supplies-container">
           <div className="table-header supplies-header py-3 flex justify-between tracking-wider">
             <div className="supplies-header-item w-24">Assets</div>
-            <div className="supplies-header-item w-24">Allowance</div>
+            <div className="supplies-header-item w-24">Balance</div>
             <div className="supplies-header-item w-24">APY</div>
             <div className="supplies-header-item w-24">Collateral</div>
             <div className="supplies-header-item w-24">Actions</div>
           </div>
-          {reservesWithAllowances.map((reserve, index) => {
-            // Skip rendering if allowance is not valid
-            if (reserve.allowance === "NaN" || reserve.allowance === 0) {
-              return null;
-            }
-
-            const isButtonDisabled = parseFloat(reserve.allowance) === 0;
+          {reservesWithBalances.map((reserve, index) => {
+            const balance = reserve.balance;
+            const isButtonDisabled = parseFloat(balance) === 0;
 
             return (
               <div
@@ -100,11 +96,10 @@ const YourSupplies = () => {
                 </div>
                 <div className="supplies-row-item w-24">
                   <p>
-                    <Allowance
-                      tokenAddress={reserve.underlyingAsset as Address}
-                      ownerAddress={walletAddress}
-                      spenderAddress={walletAddress}
-                      onAllowanceChange={handleAllowanceChange}
+                    <WalletBalance
+                      tokenAddress={reserve.aTokenAddress as Address}
+                      walletAddress={walletAddress}
+                      onBalanceChange={handleBalanceChange}
                     />
                   </p>
                 </div>
@@ -121,9 +116,9 @@ const YourSupplies = () => {
                 </div>
                 <div className="supplies-row-item w-24">
                   <button
-                    className={`${isButtonDisabled ? ".disabled-btn" : "primary-btn "}`}
+                    className={`${isButtonDisabled ? "disabled-btn" : "primary-btn"}`}
                     disabled={isButtonDisabled}
-                    onClick={() => handleWithdrawClick(reserve, reserve.allowance)}
+                    onClick={() => handleWithdrawClick(reserve, balance)}
                   >
                     Withdraw
                   </button>
@@ -141,7 +136,7 @@ const YourSupplies = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         reserve={selectedReserve}
-        balance={selectedAllowance}
+        balance={selectedBalance}
       />
     </div>
   );
