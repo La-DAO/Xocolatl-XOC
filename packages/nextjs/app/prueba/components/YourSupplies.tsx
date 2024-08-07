@@ -45,7 +45,7 @@ const YourSupplies = () => {
         return {
           ...reserve,
           ...userReserve,
-          balance: balances[reserve.underlyingAsset as Address] || "0",
+          balance: balances[reserve.aTokenAddress as Address] || "0",
         };
       });
       setReservesWithBalances(combinedReserves);

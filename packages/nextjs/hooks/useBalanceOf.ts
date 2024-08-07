@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Address } from "viem";
 import { useReadContract } from "wagmi";
 
 // Define the ERC-20 ABI (Application Binary Interface) for the balanceOf function
@@ -16,8 +17,8 @@ const ERC20ABI = [
 
 // Define the interface for TokenBalanceProps
 interface TokenBalanceProps {
-  tokenAddress: `0x${string}`;
-  walletAddress: `0x${string}`;
+  tokenAddress: Address;
+  walletAddress: Address;
 }
 
 /**
@@ -44,9 +45,9 @@ export function useBalanceOf({ tokenAddress, walletAddress }: TokenBalanceProps)
       setBalance("0"); // Set balance to 0 on error
     } else if (!isLoading && data) {
       const balanceInEther = (Number(data) / 1e18).toFixed(7); // Convert balance to Ether
-      setBalance(balanceInEther === "0.000000000000000000" ? "0" : balanceInEther); // Set formatted balance
+      setBalance(balanceInEther === "0.0000000" ? "0" : balanceInEther); // Set formatted balance
     }
-  }, [data, isError, isLoading]); // Dependencies: data, isError, isLoading
+  }, [data, isError, isLoading]);
 
-  return balance; // Return the balance
+  return balance;
 }
