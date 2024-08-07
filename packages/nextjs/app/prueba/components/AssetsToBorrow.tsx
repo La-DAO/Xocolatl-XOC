@@ -56,12 +56,11 @@ const AssetsToBorrow: React.FC = () => {
                   <p>{reserve.symbol}</p>
                 </div>
                 <div className="asset-row-item w-24 h-fit">
-                  <p>{(Number(reserve.availableLiquidity) / 1e18).toFixed(5)}</p>
+                  <p>{(Number(reserve.availableLiquidity) / 10 ** Number(reserve.decimals)).toFixed(5)}</p>
                 </div>
                 <div className="asset-row-item w-24 h-fit">
                   <p>{(Number(reserve.variableBorrowRate) / 1e25).toFixed(2)}%</p>
                 </div>
-
                 <div className="asset-row-item w-24 h-fit">
                   <button
                     className={`${isButtonDisabled ? "disabled-btn" : "primary-btn"}`}
