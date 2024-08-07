@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import SupplyModal from "./modals/SupplyTransactionModal";
+import React, { useCallback, useState } from "react";
+import BorrowTransactionModal from "./modals/BorrowTransactionModal";
 import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
 import { ReserveData } from "@/types/types";
+import { Address } from "viem";
 
 const AssetsToBorrow: React.FC = () => {
   // Fetch reserve data and wallet address using custom hooks
@@ -13,16 +14,22 @@ const AssetsToBorrow: React.FC = () => {
   } = useGetReservesData();
   const { address: walletAddress } = useAccountAddress();
 
-  // State management for modal visibility and selected reserve/balance
+  // State management for balances, modal visibility, and selected reserve/balance
+  const [balances, setBalances] = useState<Record<string, string>>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReserve, setSelectedReserve] = useState<ReserveData | null>(null);
   const [selectedBalance, setSelectedBalance] = useState("");
 
+  // Callback for balance changes
+  const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
+    setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
+  }, []);
+
   // Filter reserves data to show all assets
   const filteredReserveData: ReserveData[] = Array.isArray(reserveData) ? reserveData.flat() : [];
 
-  // Handle supply button click
-  const handleSupplyClick = (reserve: ReserveData, balance: string) => {
+  // Handle borrow button click
+  const handleBorrowClick = (reserve: ReserveData, balance: string) => {
     setSelectedReserve(reserve);
     setSelectedBalance(balance);
     setIsModalOpen(true);
@@ -48,6 +55,7 @@ const AssetsToBorrow: React.FC = () => {
 
           {/* Table rows */}
           {filteredReserveData.map((reserve, index) => {
+            const availableLiquidity = (Number(reserve.availableLiquidity) / 10 ** Number(reserve.decimals)).toFixed(5);
             const isButtonDisabled = !walletAddress;
 
             return (
@@ -56,7 +64,7 @@ const AssetsToBorrow: React.FC = () => {
                   <p>{reserve.symbol}</p>
                 </div>
                 <div className="asset-row-item w-24 h-fit">
-                  <p>{(Number(reserve.availableLiquidity) / 10 ** Number(reserve.decimals)).toFixed(5)}</p>
+                  <p>{availableLiquidity}</p>
                 </div>
                 <div className="asset-row-item w-24 h-fit">
                   <p>{(Number(reserve.variableBorrowRate) / 1e25).toFixed(2)}%</p>
@@ -65,7 +73,7 @@ const AssetsToBorrow: React.FC = () => {
                   <button
                     className={`${isButtonDisabled ? "disabled-btn" : "primary-btn"}`}
                     disabled={isButtonDisabled}
-                    onClick={() => handleSupplyClick(reserve, "")}
+                    onClick={() => handleBorrowClick(reserve, availableLiquidity)}
                   >
                     Borrow
                   </button>
@@ -76,8 +84,8 @@ const AssetsToBorrow: React.FC = () => {
         </div>
       )}
 
-      {/* Modal for supply transaction */}
-      <SupplyModal
+      {/* Modal for borrow transaction */}
+      <BorrowTransactionModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         reserve={selectedReserve}
