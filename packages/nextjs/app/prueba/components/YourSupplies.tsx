@@ -34,6 +34,7 @@ const YourSupplies = () => {
    * @param {string} balance - Updated balance amount.
    */
   const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
+    // console.log(`Token Address: ${tokenAddress}, Balance: ${balance}`);
     setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
   }, []);
 
@@ -62,6 +63,9 @@ const YourSupplies = () => {
     return <p className="text-error">Error fetching data.</p>;
   }
 
+  // Check if all balances are zero
+  const allBalancesZero = reservesWithBalances.every(reserve => parseFloat(reserve.balance) === 0);
+
   // Handle withdraw button click
   const handleWithdrawClick = (reserve: any, balance: string) => {
     setSelectedReserve(reserve);
@@ -71,65 +75,63 @@ const YourSupplies = () => {
 
   return (
     <div className="mt-4">
-      {reservesWithBalances.length > 0 && walletAddress ? (
-        <div className="supplies-container">
-          <div className="table-header supplies-header py-3 flex justify-between tracking-wider">
-            <div className="supplies-header-item w-24">Assets</div>
-            <div className="supplies-header-item w-24">Balance</div>
-            <div className="supplies-header-item w-24">APY</div>
-            <div className="supplies-header-item w-24">Collateral</div>
-            <div className="supplies-header-item w-24">Actions</div>
-          </div>
-          {reservesWithBalances.map((reserve, index) => {
-            const balance = reserve.balance;
-            const isButtonDisabled = parseFloat(balance) === 0;
+      <div className={`supplies-container ${allBalancesZero ? "hidden" : ""}`}>
+        <div className="table-header supplies-header py-3 flex justify-between tracking-wider">
+          <div className="supplies-header-item w-24">Assets</div>
+          <div className="supplies-header-item w-24">Balance</div>
+          <div className="supplies-header-item w-24">APY</div>
+          <div className="supplies-header-item w-24">Collateral</div>
+          <div className="supplies-header-item w-24">Actions</div>
+        </div>
+        {reservesWithBalances.map((reserve, index) => {
+          const balance = reserve.balance;
+          const isButtonDisabled = parseFloat(balance) === 0;
 
-            return (
-              <div
-                key={index}
-                className={`table-content table-border-top supplies-row flex justify-between py-3 ${
-                  isButtonDisabled ? "hidden" : "block"
-                }`}
-              >
-                <div className="supplies-row-item w-24">
-                  <p>{reserve.symbol}</p>
-                </div>
-                <div className="supplies-row-item w-24">
-                  <p>
-                    <WalletBalance
-                      tokenAddress={reserve.aTokenAddress as Address}
-                      walletAddress={walletAddress}
-                      onBalanceChange={handleBalanceChange}
-                    />
-                  </p>
-                </div>
-                <div className="supplies-row-item w-24">
-                  <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
-                </div>
-                <div className="supplies-row-item w-24">
-                  <div>
-                    <CollateralToggle
-                      assetAddress={reserve.underlyingAsset}
-                      initialUseAsCollateral={reserve.usageAsCollateralEnabledOnUser}
-                    />
-                  </div>
-                </div>
-                <div className="supplies-row-item w-24">
-                  <button
-                    className={`${isButtonDisabled ? "disabled-btn" : "primary-btn"}`}
-                    disabled={isButtonDisabled}
-                    onClick={() => handleWithdrawClick(reserve, balance)}
-                  >
-                    Withdraw
-                  </button>
+          return (
+            <div
+              key={index}
+              className={`table-content table-border-top supplies-row flex justify-between py-3 ${
+                isButtonDisabled ? "hidden" : "block"
+              }`}
+            >
+              <div className="supplies-row-item w-24">
+                <p>{reserve.symbol}</p>
+              </div>
+              <div className="supplies-row-item w-24">
+                <p>
+                  <WalletBalance
+                    tokenAddress={reserve.aTokenAddress as Address}
+                    walletAddress={walletAddress as Address}
+                    onBalanceChange={handleBalanceChange}
+                  />
+                </p>
+              </div>
+              <div className="supplies-row-item w-24">
+                <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
+              </div>
+              <div className="supplies-row-item w-24">
+                <div>
+                  <CollateralToggle
+                    assetAddress={reserve.underlyingAsset}
+                    initialUseAsCollateral={reserve.usageAsCollateralEnabledOnUser}
+                  />
                 </div>
               </div>
-            );
-          })}
-        </div>
-      ) : (
-        <p className="text-center text-gray-500">No sufficient data available.</p>
-      )}
+              <div className="supplies-row-item w-24">
+                <button
+                  className={`${isButtonDisabled ? "disabled-btn" : "primary-btn"}`}
+                  disabled={isButtonDisabled}
+                  onClick={() => handleWithdrawClick(reserve, balance)}
+                >
+                  Withdraw
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <p className={`text-left text-gray-500 ${allBalancesZero ? "" : "hidden"}`}>Nothing supplied yet.</p>
 
       {/* Modal for withdraw transaction */}
       <WithdrawModal
