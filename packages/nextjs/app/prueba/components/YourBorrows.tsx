@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import WalletBalance from "./BalanceOf";
-import WithdrawModal from "./modals/WithdrawTransactionModal";
+import BalanceOf from "./BalanceOf";
+import RepayModal from "./modals/RepayTransactionModal.tsx";
 import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
 import useGetUserReservesData from "@/hooks/useGetUserReservesData";
@@ -30,9 +30,10 @@ const YourBorrows = () => {
   /**
    * Callback to handle changes in balance for a specific token.
    * @param {Address} tokenAddress - Address of the token.
-   * @param {string} balance - Updated balance amount.
+   * @param {Address} balance - Updated balance amount.
    */
   const handleVariableDebtChange = useCallback((tokenAddress: Address, balance: string) => {
+    // console.log(`Token Address: ${tokenAddress}, Balance: ${balance}`);
     setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
   }, []);
 
@@ -61,8 +62,11 @@ const YourBorrows = () => {
     return <p className="text-error">Error fetching data.</p>;
   }
 
+  // Check if all balances are zero
+  const allBalancesZero = reservesWithBalances.every(reserve => parseFloat(reserve.balance) === 0);
+
   // Handle withdraw button click
-  const handleWithdrawClick = (reserve: any, balance: string) => {
+  const handleRepayClick = (reserve: any, balance: string) => {
     setSelectedReserve(reserve);
     setSelectedBalance(balance);
     setIsModalOpen(true);
@@ -70,66 +74,63 @@ const YourBorrows = () => {
 
   return (
     <div className="mt-4">
-      {reservesWithBalances.length > 0 && walletAddress ? (
-        <div className="supplies-container">
-          <div className="table-header supplies-header py-3 flex justify-between tracking-wider">
-            <div className="supplies-header-item w-24">Assets</div>
-            <div className="supplies-header-item w-24">Debt</div>
-            <div className="supplies-header-item w-24">APY</div>
-            <div className="supplies-header-item w-24">APY Type</div>
-            <div className="supplies-header-item w-24">Actions</div>
-          </div>
-          {reservesWithBalances.map((reserve, index) => {
-            const balance = reserve.balance;
-            const isButtonDisabled = parseFloat(balance) === 0;
-
-            return (
-              <div
-                key={index}
-                className={`table-content table-border-top supplies-row flex justify-between py-3 ${
-                  isButtonDisabled ? "hidden" : "block"
-                }`}
-              >
-                <div className="supplies-row-item w-24">
-                  <p>{reserve.symbol}</p>
-                </div>
-                <div className="supplies-row-item w-24">
-                  <p>
-                    <WalletBalance
-                      tokenAddress={reserve.variableDebtTokenAddress as Address}
-                      walletAddress={walletAddress}
-                      onBalanceChange={handleVariableDebtChange}
-                    />
-                  </p>
-                </div>
-                <div className="supplies-row-item w-24">
-                  <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
-                </div>
-                <div className="supplies-row-item w-24">
-                  <span className="px-4 py-1 bg-gray-100 text-gray-400 rounded-md uppercase text-xs">
-                    {reserve.variableBorrowrate !== 0n && reserve.stableBorrowRateEnabled ? "stable" : "variable"}
-                  </span>
-                </div>
-
-                <div className="supplies-row-item w-24">
-                  <button
-                    className={`${isButtonDisabled ? "disabled-btn" : "primary-btn"}`}
-                    disabled={isButtonDisabled}
-                    onClick={() => handleWithdrawClick(reserve, balance)}
-                  >
-                    Withdraw
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+      <div className={`borrows-container ${allBalancesZero ? "hidden" : ""}`}>
+        <div className="table-header borrows-header py-3 flex justify-between tracking-wider">
+          <div className="borrows-header-item w-24">Assets</div>
+          <div className="borrows-header-item w-24">Debt</div>
+          <div className="borrows-header-item w-24">APY</div>
+          <div className="borrows-header-item w-24">APY Type</div>
+          <div className="borrows-header-item w-24">Actions</div>
         </div>
-      ) : (
-        <p className="text-center text-gray-500">No sufficient data available.</p>
-      )}
+        {reservesWithBalances.map((reserve, index) => {
+          const balance = reserve.balance;
+          const isButtonDisabled = parseFloat(balance) === 0;
 
-      {/* Modal for withdraw transaction */}
-      <WithdrawModal
+          return (
+            <div
+              key={index}
+              className={`table-content table-border-top borrows-row flex justify-between py-3 ${
+                isButtonDisabled ? "hidden" : "block"
+              }`}
+            >
+              <div className="borrows-row-item w-24">
+                <p>{reserve.symbol}</p>
+              </div>
+              <div className="borrows-row-item w-24">
+                <p>
+                  <BalanceOf
+                    tokenAddress={reserve.variableDebtTokenAddress as Address}
+                    walletAddress={walletAddress as Address}
+                    onBalanceChange={handleVariableDebtChange}
+                  />
+                </p>
+              </div>
+              <div className="borrows-row-item w-24">
+                <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
+              </div>
+              <div className="borrows-row-item w-24">
+                <span className="px-4 py-1 bg-gray-100 text-gray-400 rounded-md uppercase text-xs">
+                  {reserve.variableBorrowrate !== 0n && reserve.stableBorrowRateEnabled ? "stable" : "variable"}
+                </span>
+              </div>
+
+              <div className="borrows-row-item w-24">
+                <button
+                  className={`${isButtonDisabled ? "disabled-btn" : "primary-btn"}`}
+                  disabled={isButtonDisabled}
+                  onClick={() => handleRepayClick(reserve, balance)}
+                >
+                  Repay
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <p className={`text-left text-gray-500 ${allBalancesZero ? "" : "hidden"}`}>Nothing borrowed yet.</p>
+
+      {/* Modal for Repay transaction */}
+      <RepayModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         reserve={selectedReserve}
