@@ -15,7 +15,7 @@ interface Props {
  * @param walletAddress - Ethereum address of the wallet
  * @param onBalanceChange - Callback function to handle balance change
  */
-const WalletBalance: React.FC<Props> = ({ tokenAddress, walletAddress, onBalanceChange }) => {
+const BalanceOf: React.FC<Props> = ({ tokenAddress, walletAddress, onBalanceChange }) => {
   const balance = useBalanceOf({ tokenAddress, walletAddress }); // Fetch the token balance using custom hook
 
   // Effect to handle balance change and trigger the callback
@@ -26,4 +26,4 @@ const WalletBalance: React.FC<Props> = ({ tokenAddress, walletAddress, onBalance
   return <span>{balance}</span>;
 };
 
-export default WalletBalance;
+export default BalanceOf;

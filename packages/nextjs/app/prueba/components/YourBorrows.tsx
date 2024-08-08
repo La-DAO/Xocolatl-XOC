@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import WalletBalance from "./WalletBalance";
+import WalletBalance from "./BalanceOf";
 import WithdrawModal from "./modals/WithdrawTransactionModal";
 import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
