@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import AssetsToBorrow from "./components/AssetsToBorrow";
 import AssetsToSupply from "./components/AssetsToSupply";
+import YourBorrows from "./components/YourBorrows";
 import YourSupplies from "./components/YourSupplies";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -63,6 +64,26 @@ const Lending = () => {
       </div>
 
       <div className="flex flex-col gap-4">
+        {/* Your Borrows */}
+        <div className="table-background rounded-xl p-8 flex flex-col">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="general-text-color">Your borrows</h1>
+              {isYourBorrowsVissible}
+            </div>
+            <button
+              onClick={() => setIsYourBorrowsVissible(prev => !prev)}
+              className="general-text-color focus:outline-none"
+            >
+              {isYourBorrowsVissible ? (
+                <FontAwesomeIcon icon={faChevronUp} />
+              ) : (
+                <FontAwesomeIcon icon={faChevronDown} />
+              )}
+            </button>
+          </div>
+          {isYourBorrowsVissible && <YourBorrows />}
+        </div>
         {/* Assets to Borrow */}
         <div className="table-background rounded-xl p-8 flex flex-col">
           <div className="flex justify-between items-center">
