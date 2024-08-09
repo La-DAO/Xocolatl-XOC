@@ -33,7 +33,7 @@ const YourBorrows = () => {
    * @param {Address} balance - Updated balance amount.
    */
   const handleVariableDebtChange = useCallback((tokenAddress: Address, balance: string) => {
-    console.log(`Token Address: ${tokenAddress}, Balance: ${balance}`);
+    // console.log(`Token Address: ${tokenAddress}, Balance: ${balance}`);
     setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
   }, []);
 
