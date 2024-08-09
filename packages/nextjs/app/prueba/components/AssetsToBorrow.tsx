@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import BorrowTransactionModal from "./modals/BorrowTransactionModal";
 import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
 import { ReserveData } from "@/types/types";
-import { Address } from "viem";
+// import { Address } from "viem";
 
 const AssetsToBorrow: React.FC = () => {
   // Fetch reserve data and wallet address using custom hooks
@@ -15,15 +15,15 @@ const AssetsToBorrow: React.FC = () => {
   const { address: walletAddress } = useAccountAddress();
 
   // State management for balances, modal visibility, and selected reserve/balance
-  const [balances, setBalances] = useState<Record<string, string>>({});
+  // const [balances, setBalances] = useState<Record<string, string>>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReserve, setSelectedReserve] = useState<ReserveData | null>(null);
   const [selectedBalance, setSelectedBalance] = useState("");
 
   // Callback for balance changes
-  const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
+  /* const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
     setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
-  }, []);
+  }, []); */
 
   // Filter reserves data to show all assets
   const filteredReserveData: ReserveData[] = Array.isArray(reserveData) ? reserveData.flat() : [];

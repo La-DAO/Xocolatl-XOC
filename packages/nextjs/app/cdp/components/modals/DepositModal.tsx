@@ -1,6 +1,6 @@
 // DepositModal.tsx
 import React, { useCallback, useState } from "react";
-import WalletBalance from "@/app/prueba/components/WalletBalance";
+import BalanceOf from "@/app/prueba/components/BalanceOf";
 import useAccountAddress from "@/hooks/useAccount";
 import { Address } from "viem";
 import { useApproval } from "~~/hooks/useApproval";
@@ -97,7 +97,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
         />
         <div className="flex gap-2">
           <h6 className="text-base text-gray-500 mb-4"> Balance:</h6>
-          <WalletBalance
+          <BalanceOf
             tokenAddress={assetContract as Address}
             walletAddress={walletAddress as Address}
             onBalanceChange={handleBalanceChange}

@@ -4,7 +4,7 @@ import { ReserveData } from "@/types/types";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
-import useRepay from "~~/hooks/useRepayCDP";
+import useRepay from "~~/hooks/useRepay";
 
 interface ModalProps {
   isOpen: boolean;
@@ -19,7 +19,7 @@ interface ModalProps {
  * @param {number} [decimals=18] - The number of decimals used for conversion.
  * @returns {BigInt} - The equivalent value in wei.
  */
-function toWei(amount: number, decimals: number = 18): BigInt {
+function toWei(amount: number, decimals: number = 18): bigint {
   return BigInt(Math.round(amount * Math.pow(10, decimals)));
 }
 

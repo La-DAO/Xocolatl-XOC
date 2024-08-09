@@ -1,6 +1,6 @@
 // WithdrawModal.tsx
 import React, { useState } from "react";
-import WalletBalance from "@/app/prueba/components/WalletBalance";
+import BalanceOf from "@/app/prueba/components/BalanceOf";
 import useAccountAddress from "@/hooks/useAccount";
 import { Address } from "viem";
 import { useWithdraw } from "~~/hooks/useWithdrawCDP";
@@ -60,7 +60,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
         />
         <div className="flex gap-2">
           <h6 className="text-base text-gray-500 mb-4">Balance:</h6>
-          <WalletBalance
+          <BalanceOf
             tokenAddress={assetContract as Address}
             walletAddress={walletAddress as Address}
             onBalanceChange={handleBalanceChange}

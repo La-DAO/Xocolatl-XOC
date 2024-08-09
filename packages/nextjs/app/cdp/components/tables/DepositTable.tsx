@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import DepositModal from "../modals/DepositModal";
 import WithdrawModal from "../modals/WithdrawModal";
-import WalletBalance from "@/app/prueba/components/WalletBalance";
+import BalanceOf from "@/app/prueba/components/BalanceOf";
 import useAccountAddress from "@/hooks/useAccount";
 import { Address } from "viem";
 import { useChainId } from "wagmi";
@@ -175,7 +175,7 @@ const DepositTable: React.FC = () => {
                 <p className="text-sm font-medium text-gray-900">{asset.name}</p>
               </td>
               <td className="px-6 py-4">
-                <WalletBalance
+                <BalanceOf
                   tokenAddress={asset.assetContract as Address}
                   walletAddress={walletAddress as Address}
                   onBalanceChange={handleBalanceChange}
