@@ -7,40 +7,45 @@ import useGetReservesData from "@/hooks/useGetReservesData";
 import useGetUserReservesData from "@/hooks/useGetUserReservesData";
 import { Address } from "viem";
 
+// Defining types for the props that the component accepts
+interface YourSuppliesProps {
+  setAllBalancesZero: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 /**
- * Component for displaying user's supply data with allowances and collateral options.
- * @returns {JSX.Element} - Rendered component displaying supplies, balance, APY, collateral, and actions.
+ * Component to display the user's supply data with collateral and withdrawal options.
+ * @param {YourSuppliesProps} props - Props that include the setAllBalancesZero function to update state in the parent component.
+ * @returns {JSX.Element} - Rendered component showing supplies, balance, APY, collateral, and actions.
  */
-const YourSupplies = () => {
+const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero }) => {
   // Hook to get reserves data
   const { reservesData, isLoading: isLoadingReserves, isError: isErrorReserves } = useGetReservesData();
   // Hook to get user reserves data
   const { userReservesData, isLoading: isLoadingUserReserves, isError: isErrorUserReserves } = useGetUserReservesData();
-  // Hook to get user account address
+  // Hook to get the user's account address
   const { address: walletAddress } = useAccountAddress();
 
-  // State to manage balances for reserves
+  // State to manage the balances of the reserves
   const [balances, setBalances] = useState<Record<string, string>>({});
   // State to manage reserves with balances
   const [reservesWithBalances, setReservesWithBalances] = useState<any[]>([]);
-  // State to manage modal visibility and selected reserve/balance
+  // State to manage the visibility of the modal and the selected reserve/balance
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReserve, setSelectedReserve] = useState<any>(null);
   const [selectedBalance, setSelectedBalance] = useState("");
 
   /**
-   * Callback to handle changes in balance for a specific token.
+   * Callback to handle changes in the balance of a specific token.
    * @param {Address} tokenAddress - Address of the token.
    * @param {string} balance - Updated balance amount.
    */
   const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
-    // console.log(`Token Address: ${tokenAddress}, Balance: ${balance}`);
     setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
   }, []);
 
   useEffect(() => {
     if (reservesData && userReservesData) {
-      // Combine reserves data with user reserves data and current balances
+      // Combine the reserves data with the user reserves data and the current balances
       const combinedReserves = reservesData.map(reserve => {
         const userReserve = userReservesData.find(userRes => userRes.underlyingAsset === reserve.underlyingAsset);
         return {
@@ -50,8 +55,12 @@ const YourSupplies = () => {
         };
       });
       setReservesWithBalances(combinedReserves);
+
+      // Determine if all balances are zero
+      const allZero = combinedReserves.every(reserve => parseFloat(reserve.balance) === 0);
+      setAllBalancesZero(allZero);
     }
-  }, [reservesData, userReservesData, balances]);
+  }, [reservesData, userReservesData, balances, setAllBalancesZero]);
 
   // Loading state
   if (isLoadingReserves || isLoadingUserReserves) {
@@ -63,10 +72,7 @@ const YourSupplies = () => {
     return <p className="text-error">Error fetching data.</p>;
   }
 
-  // Check if all balances are zero
-  const allBalancesZero = reservesWithBalances.every(reserve => parseFloat(reserve.balance) === 0);
-
-  // Handle withdraw button click
+  // Handle click on the withdraw button
   const handleWithdrawClick = (reserve: any, balance: string) => {
     setSelectedReserve(reserve);
     setSelectedBalance(balance);
@@ -74,8 +80,12 @@ const YourSupplies = () => {
   };
 
   return (
-    <div className="mt-4">
-      <div className={`supplies-container ${allBalancesZero ? "hidden" : ""}`}>
+    <div>
+      <div
+        className={`supplies-container mt-4 ${
+          reservesWithBalances.every(reserve => parseFloat(reserve.balance) === 0) ? "hidden" : ""
+        }`}
+      >
         <div className="table-header supplies-header py-3 flex justify-between tracking-wider">
           <div className="supplies-header-item w-24">Assets</div>
           <div className="supplies-header-item w-24">Balance</div>
@@ -131,9 +141,15 @@ const YourSupplies = () => {
         })}
       </div>
 
-      <p className={`text-left text-gray-500 ${allBalancesZero ? "" : "hidden"}`}>Nothing supplied yet.</p>
+      <p
+        className={`text-left text-gray-500 ${
+          reservesWithBalances.every(reserve => parseFloat(reserve.balance) === 0) ? "" : "hidden"
+        }`}
+      >
+        Nothing supplied yet.
+      </p>
 
-      {/* Modal for withdraw transaction */}
+      {/* Modal for withdrawal transaction */}
       <WithdrawModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

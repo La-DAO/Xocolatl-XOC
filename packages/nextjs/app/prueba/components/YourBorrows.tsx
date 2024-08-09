@@ -33,7 +33,7 @@ const YourBorrows = () => {
    * @param {Address} balance - Updated balance amount.
    */
   const handleVariableDebtChange = useCallback((tokenAddress: Address, balance: string) => {
-    // console.log(`Token Address: ${tokenAddress}, Balance: ${balance}`);
+    console.log(`Token Address: ${tokenAddress}, Balance: ${balance}`);
     setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
   }, []);
 
@@ -73,8 +73,8 @@ const YourBorrows = () => {
   };
 
   return (
-    <div className="mt-4">
-      <div className={`borrows-container ${allBalancesZero ? "hidden" : ""}`}>
+    <div>
+      <div className={`borrows-container mt-4 ${allBalancesZero ? "hidden" : ""}`}>
         <div className="table-header borrows-header py-3 flex justify-between tracking-wider">
           <div className="borrows-header-item w-24">Assets</div>
           <div className="borrows-header-item w-24">Debt</div>

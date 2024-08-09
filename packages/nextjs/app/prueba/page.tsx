@@ -11,100 +11,115 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const Lending = () => {
   const [isYourSuppliesVisible, setIsYourSuppliesVisible] = useState(true);
   const [isAssetsToSupplyVisible, setIsAssetsToSupplyVisible] = useState(true);
-
   const [isYourBorrowsVissible, setIsYourBorrowsVissible] = useState(true);
   const [isAssetsToBorrowVisible, setIsAssetsToBorrowVisible] = useState(true);
 
+  const [allBalancesZero, setAllBalancesZero] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0); // Status to force re-render
+
+  const refreshComponents = () => {
+    setRefreshKey(prevKey => prevKey + 1); // Increase the key to refresh the components
+  };
+
   return (
-    <div className="grid grid-cols-2 gap-4">
-      <div className="flex flex-col gap-4">
-        {/* Your Supplies */}
-        <div className="table-background rounded-xl p-8 flex flex-col">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="general-text-color">Your supplies</h1>
-              {isYourSuppliesVisible}
-            </div>
-            <button
-              onClick={() => setIsYourSuppliesVisible(prev => !prev)}
-              className="general-text-color focus:outline-none"
-            >
-              {isYourSuppliesVisible ? (
-                <FontAwesomeIcon icon={faChevronUp} />
-              ) : (
-                <FontAwesomeIcon icon={faChevronDown} />
-              )}
-            </button>
-          </div>
-          {isYourSuppliesVisible && <YourSupplies />}
-        </div>
-
-        {/* Assets to Supply */}
-        <div className="table-background rounded-xl p-8 flex flex-col">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="general-text-color">Assets to supply</h1>
-              {isAssetsToSupplyVisible && (
-                <p className="subtitles-gray-color">Select the asset to deposit as collateral</p>
-              )}
-            </div>
-            <button
-              onClick={() => setIsAssetsToSupplyVisible(prev => !prev)}
-              className="general-text-color focus:outline-none"
-            >
-              {isAssetsToSupplyVisible ? (
-                <FontAwesomeIcon icon={faChevronUp} />
-              ) : (
-                <FontAwesomeIcon icon={faChevronDown} />
-              )}
-            </button>
-          </div>
-          {isAssetsToSupplyVisible && <AssetsToSupply />}
-        </div>
+    <div className="flex flex-col w-4/5 m-auto gap-4">
+      <div className="lending-header bg-white rounded-xl py-6 px-8">
+        <button onClick={refreshComponents} className="primary-btn">
+          Refresh all data
+        </button>
       </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-4">
+          {/* Your Supplies */}
+          <div className="table-background rounded-xl p-8 flex flex-col">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="general-text-color">Your supplies</h1>
+              </div>
+              <button
+                onClick={() => setIsYourSuppliesVisible(prev => !prev)}
+                className="general-text-color focus:outline-none"
+              >
+                {isYourSuppliesVisible ? (
+                  <FontAwesomeIcon icon={faChevronUp} />
+                ) : (
+                  <FontAwesomeIcon icon={faChevronDown} />
+                )}
+              </button>
+            </div>
+            {isYourSuppliesVisible && <YourSupplies setAllBalancesZero={setAllBalancesZero} key={refreshKey} />}
+          </div>
 
-      <div className="flex flex-col gap-4">
-        {/* Your Borrows */}
-        <div className="table-background rounded-xl p-8 flex flex-col">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="general-text-color">Your borrows</h1>
-              {isYourBorrowsVissible}
+          {/* Assets to Supply */}
+          <div className="table-background rounded-xl p-8 flex flex-col">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="general-text-color">Assets to supply</h1>
+                {isAssetsToSupplyVisible && <p className="subtitles-gray-color">Select the asset to supply.</p>}
+              </div>
+              <button
+                onClick={() => setIsAssetsToSupplyVisible(prev => !prev)}
+                className="general-text-color focus:outline-none"
+              >
+                {isAssetsToSupplyVisible ? (
+                  <FontAwesomeIcon icon={faChevronUp} />
+                ) : (
+                  <FontAwesomeIcon icon={faChevronDown} />
+                )}
+              </button>
             </div>
-            <button
-              onClick={() => setIsYourBorrowsVissible(prev => !prev)}
-              className="general-text-color focus:outline-none"
-            >
-              {isYourBorrowsVissible ? (
-                <FontAwesomeIcon icon={faChevronUp} />
-              ) : (
-                <FontAwesomeIcon icon={faChevronDown} />
-              )}
-            </button>
+            {isAssetsToSupplyVisible && <AssetsToSupply key={refreshKey} />}
           </div>
-          {isYourBorrowsVissible && <YourBorrows />}
         </div>
-        {/* Assets to Borrow */}
-        <div className="table-background rounded-xl p-8 flex flex-col">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="general-text-color">Assets to borrow</h1>
-              {isAssetsToBorrowVisible && (
-                <p className="subtitles-gray-color">Select the asset to borrow as collateral</p>
+
+        <div className="flex flex-col gap-4">
+          {/* Your Borrows */}
+          <div className="table-background rounded-xl p-8 flex flex-col">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="general-text-color">Your borrows</h1>
+              </div>
+              <button
+                onClick={() => setIsYourBorrowsVissible(prev => !prev)}
+                className="general-text-color focus:outline-none"
+              >
+                {isYourBorrowsVissible ? (
+                  <FontAwesomeIcon icon={faChevronUp} />
+                ) : (
+                  <FontAwesomeIcon icon={faChevronDown} />
+                )}
+              </button>
+            </div>
+            {isYourBorrowsVissible && <YourBorrows key={refreshKey} />}
+          </div>
+          {/* Assets to Borrow */}
+          <div className="table-background rounded-xl p-8 flex flex-col">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="general-text-color">Assets to borrow</h1>
+                {isAssetsToBorrowVisible && !allBalancesZero && (
+                  <p className="subtitles-gray-color">Select the asset to borrow.</p>
+                )}
+                {allBalancesZero && (
+                  <p className="subtitles-gray-color">You must to supply assets to make borrows trasanctions.</p>
+                )}
+              </div>
+              {!allBalancesZero && (
+                <button
+                  onClick={() => setIsAssetsToBorrowVisible(prev => !prev)}
+                  className="general-text-color focus:outline-none"
+                >
+                  {isAssetsToBorrowVisible ? (
+                    <FontAwesomeIcon icon={faChevronUp} />
+                  ) : (
+                    <FontAwesomeIcon icon={faChevronDown} />
+                  )}
+                </button>
               )}
             </div>
-            <button
-              onClick={() => setIsAssetsToBorrowVisible(prev => !prev)}
-              className="general-text-color focus:outline-none"
-            >
-              {isAssetsToBorrowVisible ? (
-                <FontAwesomeIcon icon={faChevronUp} />
-              ) : (
-                <FontAwesomeIcon icon={faChevronDown} />
-              )}
-            </button>
+            {/* Conditionally shows the component if the balances are not all zero */}
+            {isAssetsToBorrowVisible && !allBalancesZero && <AssetsToBorrow key={refreshKey} />}
           </div>
-          {isAssetsToBorrowVisible && <AssetsToBorrow />}
         </div>
       </div>
     </div>
