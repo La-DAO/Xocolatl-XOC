@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import AssetsToBorrow from "./components/AssetsToBorrow";
 import AssetsToSupply from "./components/AssetsToSupply";
+import ProfileStats from "./components/ProfileStats";
 import YourBorrows from "./components/YourBorrows";
 import YourSupplies from "./components/YourSupplies";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
@@ -23,8 +24,9 @@ const Lending = () => {
 
   return (
     <div className="flex flex-col w-4/5 m-auto gap-4">
-      <div className="lending-header bg-white rounded-xl py-6 px-8">
-        <button onClick={refreshComponents} className="primary-btn">
+      <div className="lending-header flex bg-white rounded-xl py-6 px-8 justify-between items-end">
+        <ProfileStats balance={1} />
+        <button onClick={refreshComponents} className="primary-btn h-fit w-fit">
           Refresh all data
         </button>
       </div>
