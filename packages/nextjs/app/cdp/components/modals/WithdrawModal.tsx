@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import WalletBalance from "@/app/prueba/components/WalletBalance";
 import useAccountAddress from "@/hooks/useAccount";
-import { useWithdraw } from "@/hooks/useWithdraw";
 import { Address } from "viem";
+import { useWithdraw } from "~~/hooks/useWithdrawCDP";
 
 interface WithdrawModalProps {
   isOpen: boolean;

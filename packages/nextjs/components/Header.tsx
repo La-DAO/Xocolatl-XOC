@@ -6,9 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Bars3Icon,
-  BugAntIcon,
   BuildingLibraryIcon,
-  CircleStackIcon,
   CurrencyDollarIcon,
   HomeIcon,
 } from "@heroicons/react/24/outline";
@@ -36,16 +34,6 @@ export const menuLinks: HeaderMenuLink[] = [
     label: "Lending",
     href: "/lending",
     icon: <CurrencyDollarIcon className="h-4 w-4" />,
-  },
-  {
-    label: "Bridge",
-    href: "",
-    icon: <CircleStackIcon className="h-4 w-4" />,
-  },
-  {
-    label: "Debug Contracts",
-    href: "/debug",
-    icon: <BugAntIcon className="h-4 w-4" />,
   },
 ];
 

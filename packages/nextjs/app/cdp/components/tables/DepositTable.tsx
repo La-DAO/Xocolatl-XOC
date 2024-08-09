@@ -13,8 +13,8 @@ const assets: {
     name: string;
     maxLTV: string;
     liquidationThreshold: string;
-    houseOfReserveContract: string;
-    assetContract: string;
+    houseOfReserveContract: Address;
+    assetContract: Address;
   }[];
 } = {
   56: [
@@ -82,7 +82,7 @@ const assets: {
       name: "cbETH",
       maxLTV: "80%",
       liquidationThreshold: "85%",
-      houseOfReserveContract: "0x070ccE6887E70b75015F948b12601D1E759D2024",
+      houseOfReserveContract: "0x5c4a154690AE52844F151bcF3aA44885db3c8A58",
       assetContract: "0x2Ae3F1Ec7F1F5012CFEab0185bfc7aa3cf0DEc22",
     },
   ],
@@ -191,13 +191,13 @@ const DepositTable: React.FC = () => {
               </td>
               <td className="px-6 py-4">
                 <button
-                  className="text-sm text-accent dark:text-white btn bg-base-100 hover:bg-success hover:text-white"
+                  className="text-sm text-accent dark:text-white btn bg-base-100 hover:bg-primary hover:text-white"
                   onClick={() => handleOpenModal(asset.name, asset.houseOfReserveContract, asset.assetContract)}
                 >
                   Deposit
                 </button>
                 <button
-                  className="text-sm text-accent dark:text-white btn bg-base-100 ml-2 hover:bg-error hover:text-white"
+                  className="text-sm text-accent dark:text-white btn bg-base-100 ml-2 hover:bg-primary hover:text-white"
                   onClick={() => handleOpenWithdrawModal(asset.name, asset.houseOfReserveContract, asset.assetContract)}
                 >
                   Withdraw

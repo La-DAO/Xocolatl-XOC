@@ -49,6 +49,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
     isPending: isDepositPending,
     isSuccess: isDepositSuccess,
     isError: isDepositError,
+    status: depositStatus,
   } = useDeposit(houseOfReserveContract as Address);
 
   const onApproveClick = () => {
@@ -149,6 +150,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
         {isApprovalError && <div className="text-red-500 mt-4">Approval failed: {isApprovalError}</div>}
         {isDepositSuccess && <div className="text-green-500 mt-4">Deposit successful!</div>}
         {isDepositError && <div className="text-red-500 mt-4">Deposit failed: {isDepositError}</div>}
+        {depositStatus && <div className="text-primary mt-4">{depositStatus}</div>}
       </div>
     </div>
   );

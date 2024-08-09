@@ -741,7 +741,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-svg-core@npm:^6.5.2":
+"@fortawesome/fontawesome-svg-core@npm:^6.5.2, @fortawesome/fontawesome-svg-core@npm:^6.6.0":
   version: 6.6.0
   resolution: "@fortawesome/fontawesome-svg-core@npm:6.6.0"
   dependencies:
@@ -750,7 +750,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/free-solid-svg-icons@npm:^6.5.2":
+"@fortawesome/free-solid-svg-icons@npm:^6.6.0":
   version: 6.6.0
   resolution: "@fortawesome/free-solid-svg-icons@npm:6.6.0"
   dependencies:
@@ -1818,6 +1818,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@se-2/nextjs@workspace:packages/nextjs"
   dependencies:
+    "@fortawesome/fontawesome-svg-core": ^6.6.0
+    "@fortawesome/free-solid-svg-icons": ^6.6.0
+    "@fortawesome/react-fontawesome": ^0.2.2
     "@heroicons/react": ~2.0.11
     "@rainbow-me/rainbowkit": 2.1.2
     "@tanstack/react-query": ~5.28.6
@@ -1838,6 +1841,7 @@ __metadata:
     eslint-config-next: ~14.0.4
     eslint-config-prettier: ~8.5.0
     eslint-plugin-prettier: ~4.2.1
+    framer-motion: ^11.3.24
     next: ~14.0.4
     next-themes: ~0.2.1
     nprogress: ~0.2.0
@@ -5935,6 +5939,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"font-awesome@npm:^4.7.0":
+  version: 4.7.0
+  resolution: "font-awesome@npm:4.7.0"
+  checksum: fa223f6e3b27e97d2d09cdbf0c1363e2ad18d2a685fc045f54e86394db59f7c113482a819de3b6489f42a630a8ec5911b8e65718e45f7cace1c0a1b05d7fce08
+  languageName: node
+  linkType: hard
+
 "for-each@npm:^0.3.3":
   version: 0.3.3
   resolution: "for-each@npm:0.3.3"
@@ -5973,6 +5984,26 @@ __metadata:
     react-dom: ">=18.0"
     three: ">=0.133"
   checksum: 9c925dcc870795700ec067f711b9b21ba7f516baaf8d2b2d6091af3594e1ddd620af62182809076eb1bc93bf2d0376c9d5fb5dc1650473c6c2a306dbf5c2e503
+  languageName: node
+  linkType: hard
+
+"framer-motion@npm:^11.3.24":
+  version: 11.3.24
+  resolution: "framer-motion@npm:11.3.24"
+  dependencies:
+    tslib: ^2.4.0
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: c036284f7adb0f8fa05624e0bfb5e0000c1a3cfdc349a01797c9f8be0fadb5b9ccdbea095abfe685cc52c94f7a69a79d98569c8f74aa1ba3bc1676624f614952
   languageName: node
   linkType: hard
 
@@ -9584,10 +9615,12 @@ __metadata:
   resolution: "se-2@workspace:."
   dependencies:
     "@fortawesome/fontawesome-svg-core": ^6.5.2
-    "@fortawesome/free-solid-svg-icons": ^6.5.2
+    "@fortawesome/free-solid-svg-icons": ^6.6.0
     "@fortawesome/react-fontawesome": ^0.2.2
     "@heroicons/react": ^2.1.4
     ethers: latest
+    font-awesome: ^4.7.0
+    framer-motion: ^11.3.24
     framer-motion-3d: ^11.3.2
     fs: ^0.0.1-security
     husky: ~8.0.3

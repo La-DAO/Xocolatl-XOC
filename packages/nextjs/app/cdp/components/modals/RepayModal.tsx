@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import useRepay from "@/hooks/useRepay";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
+import useRepay from "~~/hooks/useRepayCDP";
 
 interface RepayModalProps {
   isOpen: boolean;

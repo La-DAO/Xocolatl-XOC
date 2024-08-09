@@ -14,10 +14,7 @@ const FeaturesTabItem = ({ featureTab }: { featureTab: FeatureTab }) => {
         <p className="w-11/12 text-lg pr-24 pb-12">{desc2}</p>
         <Link href={link}>
           {" "}
-          {/* Use Link component */}
-          <a className="px-8 py-4 text-lg font-medium text-center text-base-200 bg-secondary dark:bg-white dark:text-base-200 rounded-btn">
-            {button}
-          </a>
+          {button}
         </Link>
       </div>
       <div className="relative mx-auto hidden aspect-[562/366] max-w-[550px] md:block md:w-1/2 mt-8">

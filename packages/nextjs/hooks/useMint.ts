@@ -8,7 +8,7 @@ import { useWriteContract } from "wagmi";
  */
 const useMint = () => {
   // Hook for writing to a smart contract
-  const { writeContract, error, data, isPending, isSuccess } = useWriteContract();
+  const { writeContract, error, data: hash, isPending, isSuccess } = useWriteContract();
 
   /**
    * Handles the mint transaction by writing to the smart contract.
@@ -16,7 +16,7 @@ const useMint = () => {
    * @param {Address} houseOfReserveContract - The address of the house of reserve contract.
    * @param {string} amount - The amount to mint in ether.
    */
-  const handleMint = (assetContract: Address, houseOfReserveContract: Address, amount: string) => {
+  const handleMint = (houseOfCoinContract: Address, assetContract: Address, houseOfReserveContract: Address, amount: string) => {
     if (!houseOfCoinABI || !assetContract || !houseOfReserveContract || !amount) {
       console.error("Required parameters are not properly defined.");
       return;
@@ -24,7 +24,7 @@ const useMint = () => {
 
     try {
       writeContract({
-        address: "0x7ed1aCD46dE3a4E63f2D3b0f4fB5532e113a520B",
+        address: houseOfCoinContract,
         abi: houseOfCoinABI,
         functionName: "mintCoin",
         args: [assetContract, houseOfReserveContract, parseEther(amount)],
@@ -34,7 +34,7 @@ const useMint = () => {
     }
   };
 
-  return { handleMint, isError: !!error, error, data, isPending, isSuccess };
+  return { handleMint, isError: !!error, error, hash, isPending, isSuccess };
 };
 
 export default useMint;

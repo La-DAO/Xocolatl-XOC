@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import useMint from "@/hooks/useMint";
-import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
+
 
 interface MintModalProps {
   isOpen: boolean;
@@ -30,7 +31,7 @@ const MintModal: React.FC<MintModalProps> = ({
   const [isError, setIsError] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
 
-  const { handleMint, isError: mintError, error, data: mintData } = useMint();
+  const { handleMint, isError: mintError, error, hash } = useMint();
 
   useEffect(() => {
     validateAmount(amount);
@@ -41,10 +42,10 @@ const MintModal: React.FC<MintModalProps> = ({
       setIsError(true);
       setErrorMessage(error?.message || "An unknown error occurred.");
     }
-    if (mintData) {
-      setData(mintData);
+    if (hash) {
+      setData(hash);
     }
-  }, [mintError, mintData, error]);
+  }, [mintError, hash, error]);
 
   const validateAmount = (value: string) => {
     const numValue = parseFloat(value);
@@ -64,7 +65,7 @@ const MintModal: React.FC<MintModalProps> = ({
   const handleMintClick = () => {
     if (amount) {
       try {
-        handleMint(assetContract, houseOfReserveContract, amount);
+        handleMint(houseOfCoinContract, assetContract, houseOfReserveContract, amount);
       } catch (err) {
         console.error("Error during handleMint execution:", err);
       }
@@ -192,6 +193,7 @@ const MintModal: React.FC<MintModalProps> = ({
             <div className="success-container text-center">
               <h2 className="">All done!</h2>
               <p>Minting transaction successful</p>
+              {hash && <div>Transaction Hash: {hash}</div>}
             </div>
             <button onClick={handleClose} className="primary-btn">
               Ok, close
