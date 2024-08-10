@@ -1,6 +1,6 @@
 // DepositModal.tsx
 import React, { useCallback, useState } from "react";
-import BalanceOf from "@/app/prueba/components/BalanceOf";
+import BalanceOf from "@/app/lending/components/BalanceOf";
 import useAccountAddress from "@/hooks/useAccount";
 import { Address } from "viem";
 import { useApproval } from "~~/hooks/useApproval";

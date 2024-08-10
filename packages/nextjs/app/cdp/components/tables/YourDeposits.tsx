@@ -4,9 +4,9 @@ import RepayModal from "../modals/RepayModal";
 import { Address } from "viem";
 import { useChainId, useReadContract, useReadContracts } from "wagmi";
 import { useAccount } from "wagmi";
+import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { houseOfCoinABI } from "~~/app/components/abis/houseofcoin";
 import { assetsAccountantABI } from "~~/app/components/abis/xocabis";
-import { InformationCircleIcon } from "@heroicons/react/20/solid";
 
 const YourDeposits = () => {
   const { address } = useAccount();
@@ -16,7 +16,7 @@ const YourDeposits = () => {
   type ContractAddresses = {
     [key: number]: Address;
   };
-  
+
   // Define the contract addresses for different chainIds
   const assetsAccountantContractAddresses: ContractAddresses = {
     56: "0xB90996A70C957a1496e349434CF0E030A9f693A4",
@@ -62,7 +62,6 @@ const YourDeposits = () => {
     functionName: "balanceOfBatch",
     args: balanceOfBatchArgs,
   });
-  
 
   let balanceOfBatchMintArgs: readonly any[] = [];
 

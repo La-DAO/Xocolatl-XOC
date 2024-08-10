@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import DepositModal from "../modals/DepositModal";
 import WithdrawModal from "../modals/WithdrawModal";
-import BalanceOf from "@/app/prueba/components/BalanceOf";
+import BalanceOf from "@/app/lending/components/BalanceOf";
 import useAccountAddress from "@/hooks/useAccount";
 import { Address } from "viem";
 import { useChainId } from "wagmi";

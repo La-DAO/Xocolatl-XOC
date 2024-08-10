@@ -1,62 +1,131 @@
 "use client";
 
 import React, { useState } from "react";
-import borrowsDataRaw from "@/data/assetsToBorrow.json";
-import assetsDataRaw from "@/data/assetsToSupply.json";
-import yourBorrowDataRaw from "@/data/yourBorrows.json";
-import yourSupplyDataRaw from "@/data/yourSupplies.json";
-import { Asset } from "@/types/assets/assets";
-import { NextPage } from "next";
-import Borrows from "~~/app/lending/components/Borrows";
-import ProfileStats from "~~/app/lending/components/ProfileStats";
-import Supplies from "~~/app/lending/components/Supplies";
+import AssetsToBorrow from "./components/AssetsToBorrow";
+import AssetsToSupply from "./components/AssetsToSupply";
+import ProfileStats from "./components/ProfileStats";
+import YourBorrows from "./components/YourBorrows";
+import YourSupplies from "./components/YourSupplies";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-// Dashboard component that shows the user's lending and borrowing data
-const Dashboard: NextPage = () => {
-  // State to manage supply and borrow balances
-  const [supplyBalance, setSupplyBalance] = useState(0);
-  const [borrowBalance, setBorrowBalance] = useState(0);
+const Lending = () => {
+  const [isYourSuppliesVisible, setIsYourSuppliesVisible] = useState(true);
+  const [isAssetsToSupplyVisible, setIsAssetsToSupplyVisible] = useState(true);
+  const [isYourBorrowsVissible, setIsYourBorrowsVissible] = useState(true);
+  const [isAssetsToBorrowVisible, setIsAssetsToBorrowVisible] = useState(true);
 
-  // Process raw supply data into typed Asset objects
-  const assetsData: Asset[] = assetsDataRaw.map((asset: any) => ({
-    ...asset,
-    walletBalance: Number(asset.walletBalance),
-    apy: Number(asset.apy),
-  }));
+  const [allBalancesZero, setAllBalancesZero] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0); // Status to force re-render
 
-  // Process raw supply data for the user's assets
-  const yourSupplyData: Asset[] = yourSupplyDataRaw.map((asset: any) => ({
-    ...asset,
-    amount: Number(asset.walletBalance),
-    apy: Number(asset.apy),
-  }));
-
-  // Process raw borrow data into typed Asset objects
-  const borrowsData: Asset[] = borrowsDataRaw.map((asset: any) => ({
-    ...asset,
-    amount: Number(asset.amount),
-    apy: Number(asset.apy),
-  }));
-
-  // Process raw borrow data for the user's assets
-  const yourBorrowData: Asset[] = yourBorrowDataRaw.map((asset: any) => ({
-    ...asset,
-    amount: Number(asset.amount),
-    apy: Number(asset.apy),
-  }));
-
-  // Calculate net balance as the difference between supply and borrow balances
-  const netBalance = supplyBalance - borrowBalance;
+  const refreshComponents = () => {
+    setRefreshKey(prevKey => prevKey + 1); // Increase the key to refresh the components
+  };
 
   return (
-    <div className="flex flex-col">
-      <ProfileStats balance={netBalance} />
-      <div className="grid grid-cols-2 gap-4 w-4/5 m-auto mt-4">
-        <Supplies assetsData={assetsData} yourSupplyData={yourSupplyData} setBalance={setSupplyBalance} />
-        <Borrows assetsData={borrowsData} yourBorrowData={yourBorrowData} setBalance={setBorrowBalance} />
+    <div className="flex flex-col w-4/5 m-auto gap-4">
+      <div className="lending-header flex bg-white rounded-xl py-6 px-8 justify-between items-end">
+        <ProfileStats balance={1} />
+        <button onClick={refreshComponents} className="primary-btn h-fit w-fit">
+          Refresh all data
+        </button>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-4">
+          {/* Your Supplies */}
+          <div className="table-background rounded-xl p-8 flex flex-col">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="general-text-color">Your supplies</h1>
+              </div>
+              <button
+                onClick={() => setIsYourSuppliesVisible(prev => !prev)}
+                className="general-text-color focus:outline-none"
+              >
+                {isYourSuppliesVisible ? (
+                  <FontAwesomeIcon icon={faChevronUp} />
+                ) : (
+                  <FontAwesomeIcon icon={faChevronDown} />
+                )}
+              </button>
+            </div>
+            {isYourSuppliesVisible && <YourSupplies setAllBalancesZero={setAllBalancesZero} key={refreshKey} />}
+          </div>
+
+          {/* Assets to Supply */}
+          <div className="table-background rounded-xl p-8 flex flex-col">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="general-text-color">Assets to supply</h1>
+                {isAssetsToSupplyVisible && <p className="subtitles-gray-color">Select the asset to supply.</p>}
+              </div>
+              <button
+                onClick={() => setIsAssetsToSupplyVisible(prev => !prev)}
+                className="general-text-color focus:outline-none"
+              >
+                {isAssetsToSupplyVisible ? (
+                  <FontAwesomeIcon icon={faChevronUp} />
+                ) : (
+                  <FontAwesomeIcon icon={faChevronDown} />
+                )}
+              </button>
+            </div>
+            {isAssetsToSupplyVisible && <AssetsToSupply key={refreshKey} />}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          {/* Your Borrows */}
+          <div className="table-background rounded-xl p-8 flex flex-col">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="general-text-color">Your borrows</h1>
+              </div>
+              <button
+                onClick={() => setIsYourBorrowsVissible(prev => !prev)}
+                className="general-text-color focus:outline-none"
+              >
+                {isYourBorrowsVissible ? (
+                  <FontAwesomeIcon icon={faChevronUp} />
+                ) : (
+                  <FontAwesomeIcon icon={faChevronDown} />
+                )}
+              </button>
+            </div>
+            {isYourBorrowsVissible && <YourBorrows key={refreshKey} />}
+          </div>
+          {/* Assets to Borrow */}
+          <div className="table-background rounded-xl p-8 flex flex-col">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="general-text-color">Assets to borrow</h1>
+                {isAssetsToBorrowVisible && !allBalancesZero && (
+                  <p className="subtitles-gray-color">Select the asset to borrow.</p>
+                )}
+                {allBalancesZero && (
+                  <p className="subtitles-gray-color">You must to supply assets to make borrows trasanctions.</p>
+                )}
+              </div>
+              {!allBalancesZero && (
+                <button
+                  onClick={() => setIsAssetsToBorrowVisible(prev => !prev)}
+                  className="general-text-color focus:outline-none"
+                >
+                  {isAssetsToBorrowVisible ? (
+                    <FontAwesomeIcon icon={faChevronUp} />
+                  ) : (
+                    <FontAwesomeIcon icon={faChevronDown} />
+                  )}
+                </button>
+              )}
+            </div>
+            {/* Conditionally shows the component if the balances are not all zero */}
+            {isAssetsToBorrowVisible && !allBalancesZero && <AssetsToBorrow key={refreshKey} />}
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Dashboard;
+export default Lending;
