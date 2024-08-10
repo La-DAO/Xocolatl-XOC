@@ -6,8 +6,13 @@ import AssetsToSupply from "./components/AssetsToSupply";
 import ProfileStats from "./components/ProfileStats";
 import YourBorrows from "./components/YourBorrows";
 import YourSupplies from "./components/YourSupplies";
+import useAccountAddress from "@/hooks/useAccount";
+// Importa el hook de la dirección
+import useGetUserAccountData from "@/hooks/useGetUserAccountData";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+// Importa el hook de datos del usuario
 
 const Lending = () => {
   const [isYourSuppliesVisible, setIsYourSuppliesVisible] = useState(true);
@@ -21,6 +26,9 @@ const Lending = () => {
   const [suppliesTotalBalance, setSuppliesTotalBalance] = useState(0);
   const [borrowsTotalBalance, setBorrowsTotalBalance] = useState(0);
 
+  const { address } = useAccountAddress(); // Obtén la dirección del usuario
+  const { userAccountData, isLoading, isError } = useGetUserAccountData(address || ""); // Obtén los datos del usuario
+
   const refreshComponents = () => {
     setRefreshKey(prevKey => prevKey + 1);
   };
@@ -31,7 +39,17 @@ const Lending = () => {
   return (
     <div className="flex flex-col w-4/5 m-auto gap-4">
       <div className="lending-header flex bg-white rounded-xl py-6 px-8 justify-between items-end">
-        <ProfileStats balance={netWorth} />
+        {isLoading ? (
+          <div>Loading...</div> // Mostrar un mensaje o componente de carga mientras se obtienen los datos
+        ) : isError ? (
+          <div>Error loading data</div> // Mostrar un mensaje de error si hay un problema al obtener los datos
+        ) : (
+          <ProfileStats
+            balance={netWorth}
+            netAPY={userAccountData?.ltv || 0} // Usa datos del hook de usuario para APY o cualquier otro campo relevante
+            healthFactor={userAccountData?.healthFactor || 0} // Usa datos del hook de usuario para el health factor
+          />
+        )}
         <button onClick={refreshComponents} className="primary-btn h-fit w-fit">
           Refresh all data
         </button>
@@ -115,7 +133,7 @@ const Lending = () => {
                   <p className="subtitles-gray-color">Select the asset to borrow.</p>
                 )}
                 {allBalancesZero && (
-                  <p className="subtitles-gray-color">You must to supply assets to make borrows transactions.</p>
+                  <p className="subtitles-gray-color">You must supply assets to make borrow transactions.</p>
                 )}
               </div>
               {!allBalancesZero && (
