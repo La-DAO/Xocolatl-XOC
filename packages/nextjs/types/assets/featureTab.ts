@@ -6,4 +6,5 @@ export type FeatureTab = {
   image: string;
   imageDark: string;
   button: string;
+  link: string;
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import BaseLogo from "../../../public/Base-Logo.jpg";
+import BaseLogo from "@/public/Base-Logo.jpg";
 
 interface ProfileStatsProps {
   balance: number;
@@ -14,8 +14,8 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ balance }) => {
   };
 
   return (
-    <header className="bg-neutral text-white px-12 py-8 flex flex-col space-y-2 w-full m-auto">
-      <div className="pl-32">
+    <header className="bg-neutral text-white flex flex-col space-y-2 w-fit">
+      <div>
         <div className="flex items-center space-x-2">
           <div className="text-2xl">
             <Image src={BaseLogo} alt="Base Logo" className="h-8 w-8" />

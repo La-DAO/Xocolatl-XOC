@@ -6,9 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Bars3Icon,
-  BugAntIcon,
   BuildingLibraryIcon,
-  CircleStackIcon,
   CurrencyDollarIcon,
   HomeIcon,
 } from "@heroicons/react/24/outline";
@@ -29,23 +27,13 @@ export const menuLinks: HeaderMenuLink[] = [
   },
   {
     label: "CDP",
-    href: "",
+    href: "/cdp",
     icon: <BuildingLibraryIcon className="h-4 w-4" />,
   },
   {
     label: "Lending",
     href: "/lending",
     icon: <CurrencyDollarIcon className="h-4 w-4" />,
-  },
-  {
-    label: "Bridge",
-    href: "",
-    icon: <CircleStackIcon className="h-4 w-4" />,
-  },
-  {
-    label: "Debug Contracts",
-    href: "/debug",
-    icon: <BugAntIcon className="h-4 w-4" />,
   },
 ];
 
@@ -87,8 +75,8 @@ export const Header = () => {
   );
 
   return (
-    <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-accent px-0 sm:px-2">
-      <div className="navbar-start w-auto lg:w-1/2">
+    <div className="sticky top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-accent px-0 sm:px-2">
+      <div className="navbar-start sticky w-auto lg:w-1/2">
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <label
             tabIndex={0}

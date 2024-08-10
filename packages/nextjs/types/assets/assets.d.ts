@@ -22,6 +22,10 @@ interface AssetTableProps {
   onCollateralToggle?: (asset: Asset) => void;
 }
 
+export interface DepositTableProps extends AssetTableProps {
+  isDeposited: boolean;
+}
+
 // Props for a component displaying a table of supplied assets.
 export interface SupplyTableProps extends AssetTableProps {
   isSupplied: boolean;
