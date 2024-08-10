@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
+import CONFIG from "@/config";
 import useAccountAddress from "@/hooks/useAccount";
+import { useApproval } from "@/hooks/useApproval";
 import { ReserveData } from "@/types/types";
+import { toWeiConverter } from "@/utils/toWeiConverter";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
@@ -14,30 +17,41 @@ interface ModalProps {
 }
 
 /**
- * Converts an amount to its equivalent value in wei.
- * @param {number} amount - The amount to convert.
- * @param {number} [decimals=18] - The number of decimals used for conversion.
- * @returns {BigInt} - The equivalent value in wei.
+ * Modal component for handling repay transactions.
+ * @param {boolean} isOpen - Whether the modal is open or not.
+ * @param {() => void} onClose - Function to call when the modal is closed.
+ * @param {ReserveData | null} reserve - The reserve data to repay.
+ * @param {string} balance - The user's debt balance as a string.
+ * @returns {JSX.Element | null} - The modal component or null if not open.
  */
-function toWei(amount: number, decimals: number = 18): bigint {
-  return BigInt(Math.round(amount * Math.pow(10, decimals)));
-}
-
 const RepayTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve, balance }) => {
   const [amount, setAmount] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [data, setData] = useState<any>(null); // Reset data state
-  const [isError, setIsError] = useState(false); // Reset isError state
+  const [data, setData] = useState<any>(null);
+  const [isError, setIsError] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
+  const [isApproved, setIsApproved] = useState(false); // State to handle approval
 
   const { handleRepay, isError: repayError, error, data: repayData } = useRepay();
-
   const { address: walletAddress } = useAccountAddress();
+
+  const {
+    approve,
+    isError: approveError,
+    isSuccess: approveSuccess,
+    isPending: approvePending,
+  } = useApproval(CONFIG.POOL, reserve?.underlyingAsset as Address); // Using the useApproval hook
 
   useEffect(() => {
     validateAmount(amount);
   }, [amount]);
+
+  useEffect(() => {
+    if (approveSuccess) {
+      setIsApproved(true); // Mark as approved if the transaction is successful
+    }
+  }, [approveSuccess]);
 
   useEffect(() => {
     if (repayError) {
@@ -49,6 +63,10 @@ const RepayTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve,
     }
   }, [repayError, repayData, error]);
 
+  /**
+   * Validates the entered amount for repayment.
+   * @param {string} value - The amount to validate.
+   */
   const validateAmount = (value: string) => {
     const numValue = parseFloat(value);
     if (isNaN(numValue) || numValue < 0) {
@@ -66,27 +84,60 @@ const RepayTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve,
     }
   };
 
+  /**
+   * Handles changes to the amount input field.
+   * @param {React.ChangeEvent<HTMLInputElement>} event - The change event.
+   */
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(event.target.value);
   };
 
+  /**
+   * Sets the amount to the maximum available balance.
+   */
   const handleMaxClick = () => {
     setAmount(balance);
   };
 
-  const handleRepayClick = () => {
+  /**
+   * Handles the click event for the approve button.
+   * @throws Will throw an error if there is an issue converting the amount to a compatible format.
+   */
+  const handleApproveClick = () => {
     if (walletAddress) {
+      const decimals = Number(reserve!.decimals);
+      let adjustedAmount = amount;
+
+      // Adjust the amount if decimals are less than 18
+      if (decimals < 18) {
+        const factor = Math.pow(10, 18 - decimals);
+        adjustedAmount = (parseFloat(amount) / factor).toFixed(18); // Convert to a format compatible with parseEther
+      }
+      approve(adjustedAmount); // Pass the adjusted value
+    }
+  };
+
+  /**
+   * Handles the click event for the repay button.
+   * @throws Will throw an error if there is an issue converting the amount to BigInt.
+   */
+  const handleRepayClick = () => {
+    if (walletAddress && isApproved) {
       try {
-        const amountInWei = toWei(parseFloat(amount));
+        const decimals = Number(reserve!.decimals); // Convert to number if it's `bigint`
+        const amountInWei = toWeiConverter(parseFloat(amount), decimals);
         handleRepay(reserve!.underlyingAsset as Address, amountInWei, 2, walletAddress as Address);
       } catch (err) {
         console.error("Error converting amount to BigInt:", err);
       }
     } else {
-      console.error("User wallet address is not available.");
+      console.error("Approval is required before repayment.");
     }
   };
 
+  /**
+   * Handles the click event to copy the error message to the clipboard.
+   */
   const handleCopyError = () => {
     if (error?.message) {
       navigator.clipboard
@@ -104,12 +155,16 @@ const RepayTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve,
     }
   };
 
+  /**
+   * Handles closing the modal and resets the form state.
+   */
   const handleClose = () => {
     setAmount("");
     setIsValid(false);
     setErrorMessage("");
     setData(null);
     setIsError(false);
+    setIsApproved(false); // Reset approval state on close
     onClose();
   };
 
@@ -147,9 +202,16 @@ const RepayTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve,
 
               <div className="flex justify-between gap-4">
                 <button
-                  className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                  className={`flex-grow-2 basis-2/3 ${isValid && !isApproved ? "primary-btn" : "disabled-btn"}`}
+                  onClick={handleApproveClick}
+                  disabled={!isValid || approvePending || isApproved} // Approve button disabled if already approved or pending
+                >
+                  Approve
+                </button>
+                <button
+                  className={`flex-grow-2 basis-2/3 ${isApproved && isValid ? "primary-btn" : "disabled-btn"}`}
                   onClick={handleRepayClick}
-                  disabled={!isValid}
+                  disabled={!isApproved || !isValid} // Repay button enabled only if approved
                 >
                   Repay
                 </button>
