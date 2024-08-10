@@ -4,7 +4,9 @@ import RepayModal from "./modals/RepayTransactionModal.tsx";
 import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
 import useGetUserReservesData from "@/hooks/useGetUserReservesData";
+import { useTotalBalance } from "@/hooks/useTotalBalance";
 import { Address } from "viem";
+import { useTotalAPY } from "~~/hooks/useTotalAPY";
 
 /**
  * Component for displaying user's borrow data.
@@ -52,6 +54,12 @@ const YourBorrows = () => {
     }
   }, [reservesData, userReservesData, balances]);
 
+  // Calculate the total balance
+  const totalBalance = useTotalBalance(reservesWithBalances);
+
+  // Calculate the total APY
+  const totalAPY = useTotalAPY(reservesWithBalances);
+
   // Loading state
   if (isLoadingReserves || isLoadingUserReserves) {
     return <p className="text-amber-950">Loading...</p>;
@@ -74,6 +82,10 @@ const YourBorrows = () => {
 
   return (
     <div>
+      <div className="flex mt-2 gap-2 text-xs">
+        <span className="gray-tag">Balance: ${totalBalance} USD</span>
+        <span className="gray-tag">APY: {totalAPY} %</span>
+      </div>
       <div className={`borrows-container mt-4 ${allBalancesZero ? "hidden" : ""}`}>
         <div className="table-header borrows-header py-3 flex justify-between tracking-wider">
           <div className="borrows-header-item w-24">Assets</div>
