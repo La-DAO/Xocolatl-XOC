@@ -12,9 +12,10 @@ import { useTotalAPY } from "~~/hooks/useTotalAPY";
 
 interface YourSuppliesProps {
   setAllBalancesZero: React.Dispatch<React.SetStateAction<boolean>>;
+  setSuppliesTotalBalance: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero }) => {
+const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSuppliesTotalBalance }) => {
   const { reservesData, isLoading: isLoadingReserves, isError: isErrorReserves } = useGetReservesData();
   const { userReservesData, isLoading: isLoadingUserReserves, isError: isErrorUserReserves } = useGetUserReservesData();
   const { address: walletAddress } = useAccountAddress();
@@ -37,22 +38,28 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero }) => {
           ...reserve,
           ...userReserve,
           balance: balances[reserve.aTokenAddress as Address] || "0",
+          underlyingAsset: reserve.underlyingAsset as Address,
         };
       });
       setReservesWithBalances(combinedReserves);
 
       const allZero = combinedReserves.every(reserve => parseFloat(reserve.balance) === 0);
       setAllBalancesZero(allZero);
+
+      // Calculate the total balance and set it to the parent component
+      const totalBalance = combinedReserves.reduce((sum, reserve) => {
+        const balance = parseFloat(reserve.balance || "0");
+        const priceInMarketReferenceCurrency = Number(reserve.priceInMarketReferenceCurrency) || 0;
+        const adjustedBalance = balance * (priceInMarketReferenceCurrency / 1e8);
+        return sum + adjustedBalance;
+      }, 0);
+
+      setSuppliesTotalBalance(totalBalance);
     }
-  }, [reservesData, userReservesData, balances, setAllBalancesZero]);
+  }, [reservesData, userReservesData, balances, setAllBalancesZero, setSuppliesTotalBalance]);
 
-  // Calculate the total balance
   const totalBalance = useTotalBalance(reservesWithBalances);
-
-  // Calculate the total APY
   const totalAPY = useTotalAPY(reservesWithBalances);
-
-  // Calculate the collateral total balance
   const collateralTotalBalance = useCollateralTotalBalance(reservesWithBalances);
 
   if (isLoadingReserves || isLoadingUserReserves) {
@@ -72,7 +79,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero }) => {
   return (
     <div>
       <div className="flex mt-2 gap-2 text-xs">
-        <span className="gray-tag">Balance: ${totalBalance} USD</span>
+        <span className="gray-tag">Balance: {totalBalance} USD</span>
         <span className="gray-tag">APY: {totalAPY}%</span>
         <span className="gray-tag">Collateral: ${collateralTotalBalance} USD</span>
       </div>

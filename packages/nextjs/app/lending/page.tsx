@@ -16,16 +16,22 @@ const Lending = () => {
   const [isAssetsToBorrowVisible, setIsAssetsToBorrowVisible] = useState(true);
 
   const [allBalancesZero, setAllBalancesZero] = useState(true);
-  const [refreshKey, setRefreshKey] = useState(0); // Status to force re-render
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const [suppliesTotalBalance, setSuppliesTotalBalance] = useState(0);
+  const [borrowsTotalBalance, setBorrowsTotalBalance] = useState(0);
 
   const refreshComponents = () => {
-    setRefreshKey(prevKey => prevKey + 1); // Increase the key to refresh the components
+    setRefreshKey(prevKey => prevKey + 1);
   };
+
+  // Calculate Net Worth balance
+  const netWorth = suppliesTotalBalance - borrowsTotalBalance;
 
   return (
     <div className="flex flex-col w-4/5 m-auto gap-4">
       <div className="lending-header flex bg-white rounded-xl py-6 px-8 justify-between items-end">
-        <ProfileStats balance={1} />
+        <ProfileStats balance={netWorth} />
         <button onClick={refreshComponents} className="primary-btn h-fit w-fit">
           Refresh all data
         </button>
@@ -49,7 +55,13 @@ const Lending = () => {
                 )}
               </button>
             </div>
-            {isYourSuppliesVisible && <YourSupplies setAllBalancesZero={setAllBalancesZero} key={refreshKey} />}
+            {isYourSuppliesVisible && (
+              <YourSupplies
+                setAllBalancesZero={setAllBalancesZero}
+                setSuppliesTotalBalance={setSuppliesTotalBalance}
+                key={refreshKey}
+              />
+            )}
           </div>
 
           {/* Assets to Supply */}
@@ -92,7 +104,7 @@ const Lending = () => {
                 )}
               </button>
             </div>
-            {isYourBorrowsVissible && <YourBorrows key={refreshKey} />}
+            {isYourBorrowsVissible && <YourBorrows setBorrowsTotalBalance={setBorrowsTotalBalance} key={refreshKey} />}
           </div>
           {/* Assets to Borrow */}
           <div className="table-background rounded-xl p-8 flex flex-col">
@@ -103,7 +115,7 @@ const Lending = () => {
                   <p className="subtitles-gray-color">Select the asset to borrow.</p>
                 )}
                 {allBalancesZero && (
-                  <p className="subtitles-gray-color">You must to supply assets to make borrows trasanctions.</p>
+                  <p className="subtitles-gray-color">You must to supply assets to make borrows transactions.</p>
                 )}
               </div>
               {!allBalancesZero && (
@@ -119,7 +131,6 @@ const Lending = () => {
                 </button>
               )}
             </div>
-            {/* Conditionally shows the component if the balances are not all zero */}
             {isAssetsToBorrowVisible && !allBalancesZero && <AssetsToBorrow key={refreshKey} />}
           </div>
         </div>

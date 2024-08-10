@@ -8,7 +8,7 @@ interface ProfileStatsProps {
 
 const ProfileStats: React.FC<ProfileStatsProps> = ({ balance }) => {
   const data = {
-    netWorth: balance,
+    netWorth: balance.toFixed(2),
     netAPY: "-3.73%",
     healthFactor: 1.42,
   };
@@ -36,9 +36,6 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ balance }) => {
           <div className="text">
             <div className="text-sm text-gray-400">Health factor</div>
             <div className="text-lg text-accent font-semibold">{data.healthFactor}</div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <button className="bg-warning text-slate-800 px-2 py-1 rounded uppercase">risk details</button>
           </div>
         </div>
       </div>
