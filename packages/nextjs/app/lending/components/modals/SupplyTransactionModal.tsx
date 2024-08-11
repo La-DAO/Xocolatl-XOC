@@ -104,7 +104,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
    */
   const handleApproveClick = () => {
     if (walletAddress) {
-      const decimals = Number(reserve!.decimals);
+      const decimals = Number(reserve?.decimals);
       let adjustedAmount = amount;
 
       // Adjust the amount if decimals are less than 18
@@ -123,9 +123,9 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   const handleSupplyClick = () => {
     if (walletAddress && isApproved) {
       try {
-        const decimals = Number(reserve!.decimals); // Convert to number if it's `bigint`
+        const decimals = Number(reserve?.decimals); // Convert to number if it's `bigint`
         const amountInWei = toWeiConverter(parseFloat(amount), decimals);
-        handleSupply(reserve!.underlyingAsset as Address, amountInWei, walletAddress as Address);
+        handleSupply(reserve?.underlyingAsset as Address, amountInWei, walletAddress as Address);
       } catch (err) {
         console.error("Error converting amount to BigInt:", err);
       }

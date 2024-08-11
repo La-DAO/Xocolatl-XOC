@@ -127,7 +127,7 @@ const RepayTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve,
       try {
         const decimals = Number(reserve?.decimals); // Convert to number if it's `bigint`
         const amountInWei = toWeiConverter(parseFloat(amount), decimals);
-        handleRepay(reserve!.underlyingAsset as Address, amountInWei, 2, walletAddress as Address);
+        handleRepay(reserve?.underlyingAsset as Address, amountInWei, 2, walletAddress as Address);
       } catch (err) {
         console.error("Error converting amount to BigInt:", err);
       }
