@@ -19,7 +19,7 @@ interface ModalProps {
  * @param {number} [decimals=18] - The number of decimals used for conversion.
  * @returns {BigInt} - The equivalent value in wei.
  */
-function toWei(amount: number, decimals: number = 18): bigint {
+function toWei(amount: number, decimals = 18): bigint {
   return BigInt(Math.round(amount * Math.pow(10, decimals)));
 }
 

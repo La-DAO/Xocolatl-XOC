@@ -1,8 +1,8 @@
 import React from "react";
 import Image from "next/image";
-import Jorge from "../../public/jorge.png";
-import Chuy from "../../public/chuypunk.png";
 import Acid from "../../public/acidlazzer.png";
+import Chuy from "../../public/chuypunk.png";
+import Jorge from "../../public/jorge.png";
 import Container from "./container";
 
 const Testimonials = () => {
@@ -20,7 +20,10 @@ const Testimonials = () => {
         <div className="">
           <div className="flex flex-col justify-between w-full h-full bg-neutral px-14 rounded-2xl py-14 dark:bg-neutral dark:text-secondary">
             <p className=" leading-normal text-base-100 dark:text-inherit">
-            The Mexican peso has been a global example of strength and resilience against the US Dollar. $XOC <Mark>unleashes this power in the DeFi ecosystem</Mark>, giving the rest of the world access to our economy, but more importantly creating a relationship between ETH and MXN, a vision that belongs to only those who are able to see the future that awaits.
+              The Mexican peso has been a global example of strength and resilience against the US Dollar. $XOC{" "}
+              <Mark>unleashes this power in the DeFi ecosystem</Mark>, giving the rest of the world access to our
+              economy, but more importantly creating a relationship between ETH and MXN, a vision that belongs to only
+              those who are able to see the future that awaits.
             </p>
             <Avatar image={Chuy} name="Chuy Garcia" title="DappNode" />
           </div>

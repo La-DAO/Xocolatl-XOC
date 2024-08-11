@@ -1,10 +1,10 @@
-import benefitTwoImg from "../../public/Currency Crush - Value.svg";
 import benefitOneImg from "../../public/Currency Crush - Payment.svg";
+import benefitTwoImg from "../../public/Currency Crush - Value.svg";
 import {
-  FaceFrownIcon,
   CogIcon,
-  EyeDropperIcon,
   CubeTransparentIcon,
+  EyeDropperIcon,
+  FaceFrownIcon,
   HandThumbUpIcon,
   LinkIcon
 } from "@heroicons/react/24/solid";

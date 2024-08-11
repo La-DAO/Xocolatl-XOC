@@ -19,7 +19,7 @@ interface ModalProps {
  * @param {number} [decimals=18] - The number of decimals used for conversion.
  * @returns {BigInt} - The equivalent value in wei.
  */
-function toWei(amount: number, decimals: number = 18): BigInt {
+function toWei(amount: number, decimals = 18): bigint {
   return BigInt(Math.round(amount * Math.pow(10, decimals)));
 }
 
@@ -94,10 +94,9 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
    * Handles changes to the interest rate mode.
    * @param {React.ChangeEvent<HTMLInputElement>} event - The input change event.
    */
-  const handleInterestRateModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  /* const handleInterestRateModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInterestRateMode(parseInt(event.target.value));
-  };
-
+  }; */
   /**
    * Handles the borrow button click event.
    */

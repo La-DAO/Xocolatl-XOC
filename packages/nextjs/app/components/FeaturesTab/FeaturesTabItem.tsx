@@ -12,10 +12,7 @@ const FeaturesTabItem = ({ featureTab }: { featureTab: FeatureTab }) => {
         <h2 className="mb-7 text-3xl font-bold text-primary dark:text-white xl:text-sectiontitle2">{title}</h2>
         <p className="mb-5 text-lg pr-24">{desc1}</p>
         <p className="w-11/12 text-lg pr-24 pb-12">{desc2}</p>
-        <Link href={link}>
-          {" "}
-          {button}
-        </Link>
+        <Link href={link}> {button}</Link>
       </div>
       <div className="relative mx-auto hidden aspect-[562/366] max-w-[550px] md:block md:w-1/2 mt-8">
         <Image src={image} alt={title} fill className="dark:hidden" />
