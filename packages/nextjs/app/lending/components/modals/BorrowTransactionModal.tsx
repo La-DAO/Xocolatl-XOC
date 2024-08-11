@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import useAccountAddress from "@/hooks/useAccount";
 import useBorrow from "@/hooks/useBorrow";
 import { ReserveData } from "@/types/types";
+import { toWeiConverter } from "@/utils/toWeiConverter";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
@@ -14,15 +15,13 @@ interface ModalProps {
 }
 
 /**
- * Converts an amount to its equivalent value in wei.
- * @param {number} amount - The amount to convert.
- * @param {number} [decimals=18] - The number of decimals used for conversion.
- * @returns {BigInt} - The equivalent value in wei.
+ * Modal component for handling borrow transactions.
+ * @param {boolean} isOpen - Whether the modal is open or not.
+ * @param {() => void} onClose - Function to call when the modal is closed.
+ * @param {ReserveData | null} reserve - The reserve data to borrow from.
+ * @param {string} balance - The available liquidity as a string.
+ * @returns {JSX.Element | null} - The modal component or null if not open.
  */
-function toWei(amount: number, decimals = 18): bigint {
-  return BigInt(Math.round(amount * Math.pow(10, decimals)));
-}
-
 const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve, balance }) => {
   // State management for the amount to be borrowed, interest rate mode, validity check, and error messages
   const [amount, setAmount] = useState("");
@@ -105,7 +104,7 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     if (walletAddress && reserve) {
       try {
         const decimals = reserve.decimals ? Number(reserve.decimals) : 18; // Convert decimals to number
-        const amountInWei = toWei(parseFloat(amount), decimals); // Adjust if different
+        const amountInWei = toWeiConverter(parseFloat(amount), decimals); // Adjust if different
         handleBorrow(reserve.underlyingAsset as Address, amountInWei, interestRateMode, walletAddress as Address);
       } catch (err) {
         console.error("Error converting amount to BigInt:", err);
@@ -142,7 +141,7 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
    */
   const handleClose = () => {
     setAmount("");
-    setInterestRateMode(1); // Reset to default Stable
+    setInterestRateMode(2); // Reset to default Stable
     setIsValid(false);
     setErrorMessage("");
     setData(null);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useAccountAddress from "@/hooks/useAccount";
 import { ReserveData } from "@/types/types";
+import { toWeiConverter } from "@/utils/toWeiConverter";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
@@ -14,36 +15,30 @@ interface ModalProps {
 }
 
 /**
- * Converts an amount to its equivalent value in wei.
- * @param {number} amount - The amount to convert.
- * @param {number} [decimals=18] - The number of decimals used for conversion.
- * @returns {BigInt} - The equivalent value in wei.
+ * Modal component for handling withdraw transactions.
+ * @param {boolean} isOpen - Whether the modal is open or not.
+ * @param {() => void} onClose - Function to call when the modal is closed.
+ * @param {ReserveData | null} reserve - The reserve data to withdraw from.
+ * @param {string} balance - The available balance as a string.
+ * @returns {JSX.Element | null} - The modal component or null if not open.
  */
-function toWei(amount: number, decimals = 18): bigint {
-  return BigInt(Math.round(amount * Math.pow(10, decimals)));
-}
-
 const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve, balance }) => {
-  // State management for the amount to be withdrawn, validity check, and error messages
   const [amount, setAmount] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [data, setData] = useState<any>(null); // Reset data state
-  const [isError, setIsError] = useState(false); // Reset isError state
+  const [data, setData] = useState<any>(null);
+  const [isError, setIsError] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
 
-  // Hook for handling withdraw transactions
   const { handleWithdraw, isError: withdrawError, error, data: withdrawData } = useWithdraw();
-
-  // Fetch the user's wallet address
   const { address: walletAddress } = useAccountAddress();
 
   useEffect(() => {
     validateAmount(amount);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount]);
 
   useEffect(() => {
-    // Update state based on withdraw hook response
     if (withdrawError) {
       setIsError(true);
       setErrorMessage(error?.message || "An unknown error occurred.");
@@ -53,10 +48,6 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
     }
   }, [withdrawError, withdrawData, error]);
 
-  /**
-   * Validates the input amount for withdraw.
-   * @param {string} value - The amount input value.
-   */
   const validateAmount = (value: string) => {
     const numValue = parseFloat(value);
     if (isNaN(numValue) || numValue < 0) {
@@ -74,29 +65,20 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
     }
   };
 
-  /**
-   * Handles changes to the input amount.
-   * @param {React.ChangeEvent<HTMLInputElement>} event - The input change event.
-   */
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(event.target.value);
   };
 
-  /**
-   * Sets the input amount to the maximum available balance.
-   */
   const handleMaxClick = () => {
     setAmount(balance);
   };
 
-  /**
-   * Handles the withdraw button click event.
-   */
   const handleWithdrawClick = () => {
     if (walletAddress) {
       try {
-        const amountInWei = toWei(parseFloat(amount)); // Assuming 18 decimals, adjust if different
-        handleWithdraw(reserve!.underlyingAsset as Address, amountInWei, walletAddress as Address);
+        const decimals = Number(reserve?.decimals);
+        const amountInWei = toWeiConverter(parseFloat(amount), decimals); // Conversion to wei considering the decimals
+        handleWithdraw(reserve?.underlyingAsset as Address, amountInWei, walletAddress as Address);
       } catch (err) {
         console.error("Error converting amount to BigInt:", err);
       }
@@ -105,9 +87,6 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
     }
   };
 
-  /**
-   * Handles copying the error message to the clipboard.
-   */
   const handleCopyError = () => {
     if (error?.message) {
       navigator.clipboard
@@ -125,19 +104,15 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
     }
   };
 
-  /**
-   * Handles closing the modal and resetting state.
-   */
   const handleClose = () => {
     setAmount("");
     setIsValid(false);
     setErrorMessage("");
     setData(null);
     setIsError(false);
-    onClose(); // Call the original onClose handler
+    onClose();
   };
 
-  // Return null if the modal is not open or if the reserve data is not available
   if (!isOpen || !reserve) {
     return null;
   }

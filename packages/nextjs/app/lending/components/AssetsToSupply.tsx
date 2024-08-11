@@ -90,7 +90,7 @@ const AssetsToSupply: React.FC = () => {
                   <p>
                     <WalletBalance
                       tokenAddress={reserve.underlyingAsset as Address}
-                      walletAddress={walletAddress}
+                      walletAddress={walletAddress as Address}
                       onBalanceChange={handleBalanceChange}
                     />
                   </p>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
+import CONFIG from "@/config";
 import useAccountAddress from "@/hooks/useAccount";
+import { useApproval } from "@/hooks/useApproval";
 import useSupply from "@/hooks/useSupply";
 import { ReserveData } from "@/types/types";
-import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { toWeiConverter } from "@/utils/toWeiConverter";
 import { Address } from "viem";
 
 interface ModalProps {
@@ -14,36 +15,44 @@ interface ModalProps {
 }
 
 /**
- * Converts an amount to its equivalent value in wei.
- * @param {number} amount - The amount to convert.
- * @param {number} [decimals=18] - The number of decimals used for conversion.
- * @returns {BigInt} - The equivalent value in wei.
+ * Modal component for handling supply transactions.
+ * @param {boolean} isOpen - Whether the modal is open or not.
+ * @param {() => void} onClose - Function to call when the modal is closed.
+ * @param {ReserveData | null} reserve - The reserve data to supply to.
+ * @param {string} balance - The wallet balance as a string.
+ * @returns {JSX.Element | null} - The modal component or null if not open.
  */
-function toWei(amount: number, decimals = 18): bigint {
-  return BigInt(Math.round(amount * Math.pow(10, decimals)));
-}
-
 const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve, balance }) => {
-  // State management for the amount to be supplied, validity check, and error messages
   const [amount, setAmount] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [data, setData] = useState<any>(null); // Reset data state
-  const [isError, setIsError] = useState(false); // Reset isError state
+  const [data, setData] = useState<any>(null);
+  const [isError, setIsError] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
+  const [isApproved, setIsApproved] = useState(false); // State to handle approval
 
-  // Hook for handling supply transactions
   const { handleSupply, isError: supplyError, error, data: supplyData } = useSupply();
-
-  // Fetch the user's wallet address
   const { address: walletAddress } = useAccountAddress();
+
+  const {
+    approve,
+    isError: approveError,
+    isSuccess: approveSuccess,
+    isPending: approvePending,
+  } = useApproval(CONFIG.POOL, reserve?.underlyingAsset as Address); // Using the useApproval hook
 
   useEffect(() => {
     validateAmount(amount);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount]);
 
   useEffect(() => {
-    // Update state based on supply hook response
+    if (approveSuccess) {
+      setIsApproved(true); // Mark as approved if the transaction is successful
+    }
+  }, [approveSuccess]);
+
+  useEffect(() => {
     if (supplyError) {
       setIsError(true);
       setErrorMessage(error?.message || "An unknown error occurred.");
@@ -54,8 +63,8 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   }, [supplyError, supplyData, error]);
 
   /**
-   * Validates the input amount for supply.
-   * @param {string} value - The amount input value.
+   * Validates the entered amount for supply.
+   * @param {string} value - The amount to validate.
    */
   const validateAmount = (value: string) => {
     const numValue = parseFloat(value);
@@ -75,38 +84,58 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   };
 
   /**
-   * Handles changes to the input amount.
-   * @param {React.ChangeEvent<HTMLInputElement>} event - The input change event.
+   * Handles changes to the amount input field.
+   * @param {React.ChangeEvent<HTMLInputElement>} event - The change event.
    */
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(event.target.value);
   };
 
   /**
-   * Sets the input amount to the maximum available balance.
+   * Sets the amount to the maximum available balance.
    */
   const handleMaxClick = () => {
     setAmount(balance);
   };
 
   /**
-   * Handles the supply button click event.
+   * Handles the click event for the approve button.
+   * @throws Will throw an error if there is an issue converting the amount to a compatible format.
+   */
+  const handleApproveClick = () => {
+    if (walletAddress) {
+      const decimals = Number(reserve!.decimals);
+      let adjustedAmount = amount;
+
+      // Adjust the amount if decimals are less than 18
+      if (decimals < 18) {
+        const factor = Math.pow(10, 18 - decimals);
+        adjustedAmount = (parseFloat(amount) / factor).toFixed(18); // Convert to a format compatible with parseEther
+      }
+      approve(adjustedAmount); // Pass the adjusted value
+    }
+  };
+
+  /**
+   * Handles the click event for the supply button.
+   * @throws Will throw an error if there is an issue converting the amount to BigInt.
    */
   const handleSupplyClick = () => {
-    if (walletAddress) {
+    if (walletAddress && isApproved) {
       try {
-        const amountInWei = toWei(parseFloat(amount)); // Assuming 18 decimals, adjust if different
+        const decimals = Number(reserve!.decimals); // Convert to number if it's `bigint`
+        const amountInWei = toWeiConverter(parseFloat(amount), decimals);
         handleSupply(reserve!.underlyingAsset as Address, amountInWei, walletAddress as Address);
       } catch (err) {
         console.error("Error converting amount to BigInt:", err);
       }
     } else {
-      console.error("User wallet address is not available.");
+      console.error("Approval is required before supply.");
     }
   };
 
   /**
-   * Handles copying the error message to the clipboard.
+   * Handles the click event to copy the error message to the clipboard.
    */
   const handleCopyError = () => {
     if (error?.message) {
@@ -126,7 +155,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   };
 
   /**
-   * Handles closing the modal and resetting state.
+   * Handles closing the modal and resets the form state.
    */
   const handleClose = () => {
     setAmount("");
@@ -134,10 +163,10 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     setErrorMessage("");
     setData(null);
     setIsError(false);
-    onClose(); // Call the original onClose handler
+    setIsApproved(false); // Reset approval state on close
+    onClose();
   };
 
-  // Return null if the modal is not open or if the reserve data is not available
   if (!isOpen || !reserve) {
     return null;
   }
@@ -188,9 +217,16 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
               </div>
               <div className="flex justify-between gap-4">
                 <button
-                  className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                  className={`flex-grow-2 basis-2/3 ${isValid && !isApproved ? "primary-btn" : "disabled-btn"}`}
+                  onClick={handleApproveClick}
+                  disabled={!isValid || approvePending || isApproved} // Approve button disabled if already approved or pending
+                >
+                  Approve
+                </button>
+                <button
+                  className={`flex-grow-2 basis-2/3 ${isApproved && isValid ? "primary-btn" : "disabled-btn"}`}
                   onClick={handleSupplyClick}
-                  disabled={!isValid}
+                  disabled={!isApproved || !isValid} // Supply button enabled only if approved
                 >
                   Supply
                 </button>
@@ -198,22 +234,6 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   Cancel
                 </button>
               </div>
-            </div>
-          )}
-          {isError && (
-            <div className="flex flex-col gap-6 mt-6">
-              <div className="error-container text-center">
-                <p>
-                  You cancelled the transaction.{" "}
-                  <span onClick={handleCopyError} className="cursor-pointer underline">
-                    Copy the error.
-                  </span>
-                  {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
-                </p>
-              </div>
-              <button onClick={handleClose} className="primary-btn">
-                Close
-              </button>
             </div>
           )}
           {data && (
@@ -225,6 +245,19 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
               <button onClick={handleClose} className="primary-btn">
                 Ok, close
               </button>
+            </div>
+          )}
+          {approveError && (
+            <div className="flex flex-col gap-4">
+              <h2 className="text-error font-bold text-2xl">Error</h2>
+              <p className="text-sm">{error?.message}</p>
+              <button onClick={handleCopyError} className="primary-btn">
+                Copy Error
+              </button>
+              <button onClick={handleClose} className="secondary-btn">
+                Close
+              </button>
+              {showSuccessIcon && <p className="text-success text-sm">Error message copied to clipboard.</p>}
             </div>
           )}
         </div>

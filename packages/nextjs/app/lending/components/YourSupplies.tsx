@@ -3,76 +3,73 @@ import WalletBalance from "./BalanceOf";
 import CollateralToggle from "./CollateralToggle";
 import WithdrawModal from "./modals/WithdrawTransactionModal";
 import useAccountAddress from "@/hooks/useAccount";
+import { useCollateralTotalBalance } from "@/hooks/useCollateralTotalBalance";
 import useGetReservesData from "@/hooks/useGetReservesData";
 import useGetUserReservesData from "@/hooks/useGetUserReservesData";
+import { useTotalBalance } from "@/hooks/useTotalBalance";
 import { Address } from "viem";
+import { useTotalAPY } from "~~/hooks/useTotalAPY";
 
-// Defining types for the props that the component accepts
 interface YourSuppliesProps {
   setAllBalancesZero: React.Dispatch<React.SetStateAction<boolean>>;
+  setSuppliesTotalBalance: React.Dispatch<React.SetStateAction<number>>;
 }
 
-/**
- * Component to display the user's supply data with collateral and withdrawal options.
- * @param {YourSuppliesProps} props - Props that include the setAllBalancesZero function to update state in the parent component.
- * @returns {JSX.Element} - Rendered component showing supplies, balance, APY, collateral, and actions.
- */
-const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero }) => {
-  // Hook to get reserves data
+const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSuppliesTotalBalance }) => {
   const { reservesData, isLoading: isLoadingReserves, isError: isErrorReserves } = useGetReservesData();
-  // Hook to get user reserves data
   const { userReservesData, isLoading: isLoadingUserReserves, isError: isErrorUserReserves } = useGetUserReservesData();
-  // Hook to get the user's account address
   const { address: walletAddress } = useAccountAddress();
 
-  // State to manage the balances of the reserves
   const [balances, setBalances] = useState<Record<string, string>>({});
-  // State to manage reserves with balances
   const [reservesWithBalances, setReservesWithBalances] = useState<any[]>([]);
-  // State to manage the visibility of the modal and the selected reserve/balance
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReserve, setSelectedReserve] = useState<any>(null);
   const [selectedBalance, setSelectedBalance] = useState("");
 
-  /**
-   * Callback to handle changes in the balance of a specific token.
-   * @param {Address} tokenAddress - Address of the token.
-   * @param {string} balance - Updated balance amount.
-   */
   const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
     setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
   }, []);
 
   useEffect(() => {
     if (reservesData && userReservesData) {
-      // Combine the reserves data with the user reserves data and the current balances
       const combinedReserves = reservesData.map(reserve => {
         const userReserve = userReservesData.find(userRes => userRes.underlyingAsset === reserve.underlyingAsset);
         return {
           ...reserve,
           ...userReserve,
           balance: balances[reserve.aTokenAddress as Address] || "0",
+          underlyingAsset: reserve.underlyingAsset as Address,
         };
       });
       setReservesWithBalances(combinedReserves);
 
-      // Determine if all balances are zero
       const allZero = combinedReserves.every(reserve => parseFloat(reserve.balance) === 0);
       setAllBalancesZero(allZero);
-    }
-  }, [reservesData, userReservesData, balances, setAllBalancesZero]);
 
-  // Loading state
+      // Calculate the total balance and set it to the parent component
+      const totalBalance = combinedReserves.reduce((sum, reserve) => {
+        const balance = parseFloat(reserve.balance || "0");
+        const priceInMarketReferenceCurrency = Number(reserve.priceInMarketReferenceCurrency) || 0;
+        const adjustedBalance = balance * (priceInMarketReferenceCurrency / 1e8);
+        return sum + adjustedBalance;
+      }, 0);
+
+      setSuppliesTotalBalance(totalBalance);
+    }
+  }, [reservesData, userReservesData, balances, setAllBalancesZero, setSuppliesTotalBalance]);
+
+  const totalBalance = useTotalBalance(reservesWithBalances);
+  const totalAPY = useTotalAPY(reservesWithBalances);
+  const collateralTotalBalance = useCollateralTotalBalance(reservesWithBalances);
+
   if (isLoadingReserves || isLoadingUserReserves) {
     return <p className="text-amber-950">Loading...</p>;
   }
 
-  // Error state
   if (isErrorReserves || isErrorUserReserves) {
     return <p className="text-error">Error fetching data.</p>;
   }
 
-  // Handle click on the withdraw button
   const handleWithdrawClick = (reserve: any, balance: string) => {
     setSelectedReserve(reserve);
     setSelectedBalance(balance);
@@ -81,6 +78,12 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero }) => {
 
   return (
     <div>
+      <div className="flex mt-2 gap-2 text-xs">
+        <span className="gray-tag">Balance: {totalBalance} USD</span>
+        <span className="gray-tag">APY: {totalAPY}%</span>
+        <span className="gray-tag">Collateral: ${collateralTotalBalance} USD</span>
+      </div>
+
       <div
         className={`supplies-container mt-4 ${
           reservesWithBalances.every(reserve => parseFloat(reserve.balance) === 0) ? "hidden" : ""
@@ -149,7 +152,6 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero }) => {
         Nothing supplied yet.
       </p>
 
-      {/* Modal for withdrawal transaction */}
       <WithdrawModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
