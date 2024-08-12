@@ -40,6 +40,7 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
 
   useEffect(() => {
     validateAmount(amount);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount]);
 
   useEffect(() => {
@@ -93,10 +94,9 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
    * Handles changes to the interest rate mode.
    * @param {React.ChangeEvent<HTMLInputElement>} event - The input change event.
    */
-  const handleInterestRateModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  /* const handleInterestRateModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInterestRateMode(parseInt(event.target.value));
-  };
-
+  }; */
   /**
    * Handles the borrow button click event.
    */

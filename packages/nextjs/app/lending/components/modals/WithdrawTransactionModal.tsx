@@ -35,6 +35,7 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
 
   useEffect(() => {
     validateAmount(amount);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount]);
 
   useEffect(() => {
@@ -75,9 +76,9 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
   const handleWithdrawClick = () => {
     if (walletAddress) {
       try {
-        const decimals = Number(reserve!.decimals);
+        const decimals = Number(reserve?.decimals);
         const amountInWei = toWeiConverter(parseFloat(amount), decimals); // Conversion to wei considering the decimals
-        handleWithdraw(reserve!.underlyingAsset as Address, amountInWei, walletAddress as Address);
+        handleWithdraw(reserve?.underlyingAsset as Address, amountInWei, walletAddress as Address);
       } catch (err) {
         console.error("Error converting amount to BigInt:", err);
       }

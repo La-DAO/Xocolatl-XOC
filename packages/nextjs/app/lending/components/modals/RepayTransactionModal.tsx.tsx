@@ -45,6 +45,7 @@ const RepayTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve,
 
   useEffect(() => {
     validateAmount(amount);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount]);
 
   useEffect(() => {
@@ -105,7 +106,7 @@ const RepayTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve,
    */
   const handleApproveClick = () => {
     if (walletAddress) {
-      const decimals = Number(reserve!.decimals);
+      const decimals = Number(reserve?.decimals);
       let adjustedAmount = amount;
 
       // Adjust the amount if decimals are less than 18
@@ -124,9 +125,9 @@ const RepayTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve,
   const handleRepayClick = () => {
     if (walletAddress && isApproved) {
       try {
-        const decimals = Number(reserve!.decimals); // Convert to number if it's `bigint`
+        const decimals = Number(reserve?.decimals); // Convert to number if it's `bigint`
         const amountInWei = toWeiConverter(parseFloat(amount), decimals);
-        handleRepay(reserve!.underlyingAsset as Address, amountInWei, 2, walletAddress as Address);
+        handleRepay(reserve?.underlyingAsset as Address, amountInWei, 2, walletAddress as Address);
       } catch (err) {
         console.error("Error converting amount to BigInt:", err);
       }
@@ -221,7 +222,7 @@ const RepayTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve,
               </div>
             </div>
           )}
-          {isError && (
+          {approveError && (
             <div className="flex flex-col gap-6 mt-6">
               <div className="error-container text-center">
                 <p>

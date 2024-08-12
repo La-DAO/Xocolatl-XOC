@@ -16,7 +16,7 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ balance, netAPY, healthFact
   };
 
   return (
-    <header className="bg-neutral text-white flex flex-col space-y-2 w-fit">
+    <header className="bg-inherit dark:bg-inherit flex flex-col space-y-2 w-fit">
       <div>
         <div className="flex items-center space-x-2 mb-2">
           <div className="text-2xl">

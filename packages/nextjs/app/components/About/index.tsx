@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const About = () => {
   return (
@@ -178,10 +179,21 @@ const About = () => {
                   </svg>
                 </div>
                 <div className="timeline-start mb-10 ml-10 md:text-end">
-                  <time className="font-mono italic">1st Step</time>
-                  <div className="text-lg font-black">Deposit your Reserve Asset into the House Of Reserve</div>
-                  The house of reserves is a smart contract much like a vault,holding your assets and telling the Assets
-                  Accountant contract how much reserves you have.
+                  <time className="font-mono italic">August 21st, 2022</time>
+                  <div className="text-lg font-black">
+                    Xocolatl was born at{" "}
+                    <Link href="https://ethglobal.com/events/ethmexico" className="underline">
+                      ETHGlobal Mexico
+                    </Link>{" "}
+                    at{" "}
+                    <Link href="https://www.proyectospublicos.com/" className="underline">
+                      Proyecto Publico Prim
+                    </Link>
+                  </div>
+                  During this hackathon, the Ethereum community decended in Mexico City to build the future of finance
+                  and during a gruesome 48 hours of hacking, the Xocolatl team deployed the first version of the
+                  Xocolatl protocol. Initially the stablecoin was deployed with the same address to Polygon, Optimism,
+                  Gnosis Chain and Arbitrum, although only Polygon was the focus at the start.
                 </div>
                 <hr />
               </li>
@@ -197,11 +209,21 @@ const About = () => {
                   </svg>
                 </div>
                 <div className="timeline-end mb-10">
-                  <time className="font-mono italic">2nd Step</time>
-                  <div className="text-lg font-black">Assets Accountant Keeps Tabs on what is Deposited and Minted</div>
-                  The Assets Accountant contract keeps a record of all the assets deposited and how much $XOC was minted
-                  to your wallet. This contract is always in the middle of the House of Reserves and the House of Coin
-                  accounting for everything that is going on in the protocol.
+                  <time className="font-mono italic">May 19th, 2023</time>
+                  <div className="text-lg font-black">
+                    Cross-XOC is deployed using the Connext (now{" "}
+                    <Link href="https://www.everclear.org/" className="underline">
+                      Everclear
+                    </Link>
+                    ) tool-kit
+                  </div>
+                  Everclear is an innovative public good mechanism designed for cross-chain intent settlement. Everclear
+                  supports permissionless expansion to new chains and rollups, enabling any application to onboard users
+                  from other chains. The architecture involves three key messages— Intent, Fill, and
+                  Settlement—processed across chains by offchain agents, ensuring liquidity and efficient settlement.
+                  through Hub and Spoke contracts, with solvers executing and settling intents. The system leverages
+                  system leverages Hyperlane for transport, providing a flexible and secure cross-chain settlement
+                  framework.
                 </div>
                 <hr />
               </li>
@@ -217,10 +239,13 @@ const About = () => {
                   </svg>
                 </div>
                 <div className="timeline-start mb-10 md:text-end ml-10">
-                  <time className="font-mono italic">3rd Step</time>
-                  <div className="text-lg font-black">House of Coin Allows You to Mint $XOC</div>
-                  The House of Coin contract consults with the Asset Accountant to see how much $XOC you can mint. It
-                  then mints $XOC to your wallet at the current MXN/USD rate.
+                  <time className="font-mono italic">July 29th 2024</time>
+                  <div className="text-lg font-black">Alux Money Markets Come Alive!</div>
+                  The Alux Money Market is a decentralized money market protocol that enables users to lend and borrow
+                  XOC and other blue-chip tokens in order to leverage their assets. The protocol is designed to be a
+                  secure, transparent, and efficient way to lend and borrow assets, with a focus on user experience and
+                  ease of use. The Alux Money Market is built on the Xocolatl protocol, which is Mexico&rsquo;s first
+                  decentralized stablecoin, aimed at building the new financial system for Mexico.
                 </div>
                 <hr />
               </li>
@@ -236,7 +261,7 @@ const About = () => {
                   </svg>
                 </div>
                 <div className="timeline-end mb-10">
-                  <time className="font-mono italic">4th Step</time>
+                  <time className="font-mono italic">Next Step</time>
                   <div className="text-lg font-black">The Possibilities Are Endless</div>
                   You can use $XOC as you please, to pay for goods and services, to lend, to borrow, to trade, to
                   invest, to create, to build, to grow, to dream. You can provide liquidity on blue-chip protocols like

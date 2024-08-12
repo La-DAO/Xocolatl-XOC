@@ -5,8 +5,6 @@ import { useApproval } from "@/hooks/useApproval";
 import useSupply from "@/hooks/useSupply";
 import { ReserveData } from "@/types/types";
 import { toWeiConverter } from "@/utils/toWeiConverter";
-import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 
 interface ModalProps {
@@ -45,6 +43,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
 
   useEffect(() => {
     validateAmount(amount);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount]);
 
   useEffect(() => {
@@ -105,7 +104,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
    */
   const handleApproveClick = () => {
     if (walletAddress) {
-      const decimals = Number(reserve!.decimals);
+      const decimals = Number(reserve?.decimals);
       let adjustedAmount = amount;
 
       // Adjust the amount if decimals are less than 18
@@ -124,9 +123,9 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   const handleSupplyClick = () => {
     if (walletAddress && isApproved) {
       try {
-        const decimals = Number(reserve!.decimals); // Convert to number if it's `bigint`
+        const decimals = Number(reserve?.decimals); // Convert to number if it's `bigint`
         const amountInWei = toWeiConverter(parseFloat(amount), decimals);
-        handleSupply(reserve!.underlyingAsset as Address, amountInWei, walletAddress as Address);
+        handleSupply(reserve?.underlyingAsset as Address, amountInWei, walletAddress as Address);
       } catch (err) {
         console.error("Error converting amount to BigInt:", err);
       }
@@ -248,7 +247,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
               </button>
             </div>
           )}
-          {isError && (
+          {approveError && (
             <div className="flex flex-col gap-4">
               <h2 className="text-error font-bold text-2xl">Error</h2>
               <p className="text-sm">{error?.message}</p>

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import CONFIG from "@/config";
 import externalContracts from "@/contracts/externalContracts";
 import { Abi } from "abitype";
 import { useReadContracts } from "wagmi";
