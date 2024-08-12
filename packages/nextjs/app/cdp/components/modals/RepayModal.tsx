@@ -92,9 +92,9 @@ const RepayModal: React.FC<RepayModalProps> = ({ isOpen, onClose, backedTokenID,
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white rounded-lg shadow-lg p-6 dark:text-primary">
         <h2 className="text-xl font-bold mb-4">Repay $XOC</h2>
-        <p className="mb-4">Backed Token ID: {backedTokenID}</p>
+        <p className="mb-4">Burn your debt 🔥</p>
         <div role="alert" className="alert mb-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -3,7 +3,7 @@ import { Address } from "viem";
 import { useWriteContract } from "wagmi";
 
 export const useDeposit = (houseOfReserveContract: Address) => {
-  const { writeContract, isPending, isSuccess, isError, status } = useWriteContract();
+  const { writeContract, isPending, isSuccess, isError, status, error, data: hash } = useWriteContract();
 
   const deposit = async (amount: string) => {
     try {
@@ -25,5 +25,7 @@ export const useDeposit = (houseOfReserveContract: Address) => {
     isSuccess,
     isError,
     status,
+    error,
+    hash,
   };
 };

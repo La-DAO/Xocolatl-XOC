@@ -174,7 +174,7 @@ const DepositTable: React.FC = () => {
               <td className="px-6 py-4">
                 <p className="text-sm font-medium text-gray-900">{asset.name}</p>
               </td>
-              <td className="px-6 py-4">
+              <td className="dark:text-primary px-6 py-4">
                 <BalanceOf
                   tokenAddress={asset.assetContract as Address}
                   walletAddress={walletAddress as Address}
