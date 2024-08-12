@@ -1,7 +1,9 @@
 // DepositModal.tsx
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import BalanceOf from "@/app/lending/components/BalanceOf";
 import useAccountAddress from "@/hooks/useAccount";
+import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 import { useApproval } from "~~/hooks/useApproval";
 import { useDeposit } from "~~/hooks/useDeposit";
@@ -25,17 +27,11 @@ const DepositModal: React.FC<DepositModalProps> = ({
   const [amount, setAmount] = useState("");
   const { address: walletAddress } = useAccountAddress();
   const [balances, setBalances] = useState<Record<string, string>>({});
-
-  /**
-   * Callback function to handle balance change.
-   * Updates the state with new balances.
-   */
-  const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
-    setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
-  }, []);
-
-  console.log(balances);
-  console.log(walletAddress);
+  const [isValid, setIsValid] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [data, setData] = useState<any>(null);
+  const [isError, setIsError] = useState(false);
+  const [showSuccessIcon, setShowSuccessIcon] = useState(false);
 
   const {
     approve,
@@ -47,10 +43,51 @@ const DepositModal: React.FC<DepositModalProps> = ({
   const {
     deposit: handleDeposit,
     isPending: isDepositPending,
-    isSuccess: isDepositSuccess,
     isError: isDepositError,
     status: depositStatus,
+    error,
+    hash,
   } = useDeposit(houseOfReserveContract as Address);
+
+  useEffect(() => {
+    validateAmount(amount);
+  }, [amount]);
+
+  useEffect(() => {
+    if (isDepositError) {
+      setIsError(true);
+      setErrorMessage(error?.message || "An unknown error occurred.");
+    }
+    if (hash) {
+      setData(hash);
+    }
+  }, [isDepositError, hash, error]);
+
+  const validateAmount = (value: string) => {
+    const numValue = parseFloat(value);
+    if (isNaN(numValue) || numValue <= 0) {
+      setIsValid(false);
+      setErrorMessage("Amount must be a positive number.");
+    } else {
+      setIsValid(true);
+      setErrorMessage("");
+    }
+  };
+
+  /**
+   * Callback function to handle balance change.
+   * Updates the state with new balances.
+   */
+  const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
+    setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
+  }, []);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(event.target.value);
+  };
+
+  console.log(balances);
+  console.log(walletAddress);
 
   const onApproveClick = () => {
     approve(amount);
@@ -61,14 +98,42 @@ const DepositModal: React.FC<DepositModalProps> = ({
     setAmount("");
   };
 
+  const handleCopyError = () => {
+    if (error?.message) {
+      navigator.clipboard
+        .writeText(error.message)
+        .then(() => {
+          console.log("Error copied to clipboard");
+          setShowSuccessIcon(true);
+          setTimeout(() => {
+            setShowSuccessIcon(false);
+          }, 1500);
+        })
+        .catch(err => {
+          console.error("Failed to copy error to clipboard", err);
+        });
+    }
+  };
+
+  const handleClose = () => {
+    setAmount("");
+    setIsValid(false);
+    setErrorMessage("");
+    setData(null);
+    setIsError(false);
+    onClose();
+  };
+
   if (!isOpen) return null;
   console.log("assetContract", assetContract as Address);
   console.log({ isApprovalError });
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg">
-        <h2 className="text-2xl font-bold mb-4 dark: text-black">Deposit {assetName}</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white rounded-lg shadow-lg p-6 dark:text-primary">
+        <h2 className="text-xl font-bold mb-4 ml-1">Deposit {assetName}</h2>
+        <p className="mb-4 ml-1">Deposit {assetName} to House Of Reserve</p>
+
         <div role="alert" className="alert mb-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -87,70 +152,101 @@ const DepositModal: React.FC<DepositModalProps> = ({
             You will need to approve the transaction AND <br /> wait around 5-10 seconds before it goes through
           </span>
         </div>
-        <h4 className="text-lg font-medium mb-1 dark:text-black">Amount</h4>
-        <input
-          type="text"
-          value={amount}
-          onChange={e => setAmount(e.target.value)}
-          placeholder={assetName}
-          className="input input-bordered w-full dark:bg-neutral"
-        />
-        <div className="flex gap-2">
-          <h6 className="text-base text-gray-500 mb-4"> Balance:</h6>
-          <BalanceOf
-            tokenAddress={assetContract as Address}
-            walletAddress={walletAddress as Address}
-            onBalanceChange={handleBalanceChange}
-          />
-        </div>
-        <h4 className="text-lg font-medium mb-1 dark:text-black">Transaction Overview</h4>
-        <div className="overflow-x-auto mb-4">
-          <table className="table border dark:text-black">
-            {/* head */}
-            <thead></thead>
-            <tbody>
-              {/* row 1 */}
-              <tr>
-                <td>You will deposit:</td>
-                <td>
-                  {amount ? amount : 0} {assetName}
-                </td>
-              </tr>
-              {/* row 2 */}
-              <tr>
-                <td>House Of Reserve Address:</td>
-                <td>{houseOfReserveContract}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div className="flex justify-between">
-          {!isApprovalSuccess ? (
-            <button
-              className="btn btn-success btn-lg bg-base-100 hover:text-white dark:bg-neutral"
-              onClick={onApproveClick}
-              disabled={isApprovalPending}
-            >
-              {isApprovalPending ? "Approving..." : "Approve"}
+
+        {!data && !isError && (
+          <div className="flex flex-col gap-6 mt-6">
+            <div className="container-gray-borders flex flex-col gap-2">
+              <label className="font-bold">Amount</label>
+              <div className="flex items-center">
+                <input
+                  type="number"
+                  className="without-borders"
+                  placeholder="0.00"
+                  value={amount}
+                  onChange={handleChange}
+                />
+                <span className="font-bold">{assetName}</span>
+              </div>
+              {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
+            </div>
+
+            <div className="container-gray-borders flex flex-col gap-2">
+              <label className="font-bold">Transaction Overview</label>
+              <div className="flex justify-between items-center text-sm">
+                <span>You will deposit:</span>
+                <div className="flex items-center gap-1">
+                  <span>{amount ? amount : 0}</span>
+                  <span className=" font-bold">{assetName}</span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center text-sm">
+                <p className="text-xs text-gray-500">Wallet Balance:</p>
+                <div className="flex items-center gap-1">
+                  <BalanceOf
+                    tokenAddress={assetContract as Address}
+                    walletAddress={walletAddress as Address}
+                    onBalanceChange={handleBalanceChange}
+                  />
+                  <span className=" font-bold">{assetName}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-between gap-4">
+              {!isApprovalSuccess ? (
+                <button
+                  className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                  onClick={onApproveClick}
+                  disabled={isApprovalPending}
+                >
+                  {isApprovalPending ? "Approving..." : "Approve"}
+                </button>
+              ) : (
+                <button
+                  className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                  onClick={onDepositClick}
+                  disabled={isDepositPending}
+                >
+                  {isDepositPending ? "Processing..." : "Deposit"}
+                </button>
+              )}
+              <button onClick={handleClose} className="secondary-btn flex-grow-1 basis-1/3">
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
+        {isDepositError && (
+          <div className="flex flex-col gap-6 mt-6">
+            <div className="error-container text-center">
+              <p>
+                Something went wrong.{" "}
+                <span onClick={handleCopyError} className="cursor-pointer underline">
+                  Copy the error.
+                </span>
+                {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
+              </p>
+            </div>
+            <button onClick={handleClose} className="primary-btn">
+              Close
             </button>
-          ) : (
-            <button
-              className="btn btn-success btn-lg bg-base-100 hover:text-white dark:bg-neutral"
-              onClick={onDepositClick}
-              disabled={isDepositPending}
-            >
-              {isDepositPending ? "Processing..." : "Deposit"}
+          </div>
+        )}
+
+        {data && (
+          <div className="flex flex-col gap-6 mt-6">
+            <div className="success-container text-center">
+              <h2>All done!</h2>
+              <p>Deposit transaction successful</p>
+              {hash && <div>Transaction Hash: {hash}</div>}
+              {depositStatus && <div>Deposit Status: {depositStatus}</div>}
+            </div>
+            <button onClick={handleClose} className="primary-btn">
+              Ok, close
             </button>
-          )}
-          <button className="btn btn-error btn-lg text-white" onClick={onClose}>
-            Close
-          </button>
-        </div>
-        {isApprovalSuccess && <div className="text-green-500 mt-4">Approval successful! You can now deposit.</div>}
-        {isApprovalError && <div className="text-red-500 mt-4">Approval failed: {isApprovalError}</div>}
-        {isDepositSuccess && <div className="text-green-500 mt-4">Deposit successful!</div>}
-        {isDepositError && <div className="text-red-500 mt-4">Deposit failed: {isDepositError}</div>}
-        {depositStatus && <div className="text-primary mt-4">{depositStatus}</div>}
+          </div>
+        )}
       </div>
     </div>
   );
