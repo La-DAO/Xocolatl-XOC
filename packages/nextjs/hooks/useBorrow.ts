@@ -20,10 +20,10 @@ const useBorrow = () => {
    */
   const handleBorrow = async (
     asset: Address,
-    amount: BigInt,
+    amount: bigint,
     interestRateMode: number,
     onBehalfOf: Address,
-    referralCode: number = 0,
+    referralCode = 0,
   ) => {
     if (!pool || !pool.abi || !pool.address) {
       console.error("Pool contract is not properly defined.");

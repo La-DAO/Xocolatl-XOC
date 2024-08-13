@@ -506,7 +506,7 @@ const YourDeposits = () => {
                   </td>
                   <td className="py-4 whitespace-nowrap text-sm font-medium">
                     <button
-                      className="text-sm text-accent dark:text-white btn bg-base-100 hover:bg-primary hover:text-white"
+                      className="px-6 text-sm text-accent dark:text-white btn bg-base-100 hover:bg-primary hover:text-white"
                       onClick={() =>
                         openMintModal(
                           deposit.symbol,
@@ -517,10 +517,10 @@ const YourDeposits = () => {
                         )
                       }
                     >
-                      Mint $XOC
+                      Mint
                     </button>
                     <button
-                      className="text-sm text-accent dark:text-white btn bg-base-100 ml-2 hover:bg-primary hover:text-white"
+                      className="px-6 text-sm text-accent dark:text-white btn bg-base-100 ml-2 hover:bg-primary hover:text-white"
                       onClick={() =>
                         openRepayModal(
                           deposit.symbol,
@@ -532,7 +532,7 @@ const YourDeposits = () => {
                         )
                       }
                     >
-                      Repay $XOC
+                      Repay
                     </button>
                   </td>
                 </tr>

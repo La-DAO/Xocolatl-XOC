@@ -3,7 +3,7 @@ import { Address } from "viem";
 import { useWriteContract } from "wagmi";
 
 export const useWithdraw = (houseOfReserveContract: Address) => {
-  const { writeContract, isPending, isSuccess, isError } = useWriteContract();
+  const { writeContract, isPending, isSuccess, isError, data: hash, error, status } = useWriteContract();
 
   const withdraw = async (amount: string) => {
     try {
@@ -24,5 +24,8 @@ export const useWithdraw = (houseOfReserveContract: Address) => {
     isPending,
     isSuccess,
     isError,
+    error,
+    hash,
+    status,
   };
 };
