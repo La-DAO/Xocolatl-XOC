@@ -163,7 +163,8 @@ const DepositTable: React.FC = () => {
                 <InformationCircleIcon className="h-5 w-5 inline" />
               </div>
             </th>
-            <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+
+            <th scope="col" className="pl-32 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
               Actions
             </th>
           </tr>
@@ -189,7 +190,7 @@ const DepositTable: React.FC = () => {
                   <p className="text-sm text-gray-900">{asset.liquidationThreshold}</p>
                 </div>
               </td>
-              <td className="px-6 py-4">
+              <td className="px-6 py-4 text-right">
                 <button
                   className="text-sm text-accent dark:text-white btn bg-base-100 hover:bg-primary hover:text-white"
                   onClick={() => handleOpenModal(asset.name, asset.houseOfReserveContract, asset.assetContract)}
