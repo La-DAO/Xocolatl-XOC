@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import grow from "../../public/grow.png";
 import Container from "./container";
 
@@ -29,9 +30,11 @@ const Hero = () => {
             </div>
 
             <div className="flex flex-col items-start space-y-3 sm:space-x-4 sm:space-y-0 sm:items-center sm:flex-row">
-              <button className="px-8 py-4 text-lg font-medium text-center text-white bg-primary rounded-btn hover:bg-base-100 hover:text-neutral">
-                Try $XOC
-              </button>
+              <Link href="/lending">
+                <button className="px-8 py-4 text-lg font-medium text-center text-white bg-primary rounded-btn hover:bg-base-100 hover:text-neutral">
+                  Try $XOC
+                </button>
+              </Link>
             </div>
           </div>
         </div>
