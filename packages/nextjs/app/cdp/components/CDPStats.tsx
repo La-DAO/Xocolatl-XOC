@@ -6,6 +6,7 @@ import BinanceLogo from "@/public/BinanceLogo.png";
 import PolygonLogo from "@/public/PolygonLogo.png";
 import { formatEther } from "viem";
 import { useChainId, useReadContract } from "wagmi";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
 
 const CDPStats: React.FC = () => {
   const chainId = useChainId();
@@ -87,6 +88,19 @@ const CDPStats: React.FC = () => {
   } else if (chainId === 56) {
     logoSrc = BinanceLogo;
   }
+
+  const handleProofClick = () => {
+    let explorerUrl = "";
+    if (chainId === 137) {
+      explorerUrl = "https://polygonscan.com/token/0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf";
+    } else if (chainId === 56) {
+      explorerUrl = "https://bscscan.com/token/0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf";
+    } else if (chainId === 8453) {
+      explorerUrl = "https://basescan.org/token/0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf";
+    }
+    window.open(explorerUrl, "_blank");
+  };
+
   return (
     <header className="bg-white text-white px-12 py-8 flex flex-col space-y-2 w-4/5 m-auto rounded-2xl shadow-md">
       <div>
@@ -103,8 +117,9 @@ const CDPStats: React.FC = () => {
         <div className="flex items-center space-x-8">
           <div className="text">
             <div className="text-sm text-gray-400">Total XOC Minted</div>
-            <div className="text-lg text-accent font-semibold">
+            <div className="text-lg text-accent font-semibold flex items-end">
               {latestMintedLoading ? "Loading..." : latestMintedError ? "Error" : `$ ${latestMintedNumber?.toString()}`}
+              <ArrowTopRightOnSquareIcon className="h-6 w-6 text-accent cursor-pointer" onClick={handleProofClick} />
             </div>
           </div>
           {/* You can add more data points here if needed */}

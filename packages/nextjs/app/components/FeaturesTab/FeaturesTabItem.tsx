@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { FeatureTab } from "../../../types/assets/featureTab";
 
 const FeaturesTabItem = ({ featureTab }: { featureTab: FeatureTab }) => {
@@ -12,9 +11,9 @@ const FeaturesTabItem = ({ featureTab }: { featureTab: FeatureTab }) => {
         <h2 className="mb-7 text-3xl font-bold text-primary dark:text-white xl:text-sectiontitle2">{title}</h2>
         <p className="mb-5 text-lg pr-24">{desc1}</p>
         <p className="w-11/12 text-lg pr-24 pb-12">{desc2}</p>
-        <Link href={link} className="bg-primary text-white px-4 py-2 rounded-full">
+        <button onClick={() => window.open(link, "_blank")} className="bg-primary text-white px-4 py-2 rounded-full">
           {button}
-        </Link>
+        </button>
       </div>
       <div className="relative mx-auto hidden aspect-[562/366] max-w-[550px] md:block md:w-1/2 mt-8">
         <Image src={image} alt={title} fill className="dark:hidden" />

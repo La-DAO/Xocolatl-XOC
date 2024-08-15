@@ -29,7 +29,7 @@ const featuresTabData: FeatureTab[] = [
     image: "/Currency Crush - Password.svg",
     imageDark: "/Currency Crush - Password.svg",
     button: "Bridge $XOC",
-    link: "/",
+    link: "https://bridge.connext.network/XOC-from-polygon-to-ethereum?symbol=XOC",
   },
 ];
 

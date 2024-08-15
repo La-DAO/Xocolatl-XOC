@@ -4,12 +4,9 @@ import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Bars3Icon,
-  BuildingLibraryIcon,
-  CurrencyDollarIcon,
-  HomeIcon,
-} from "@heroicons/react/24/outline";
+import { faBridge } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { BanknotesIcon, Bars3Icon, BuildingLibraryIcon, HomeIcon } from "@heroicons/react/24/solid";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
@@ -33,7 +30,12 @@ export const menuLinks: HeaderMenuLink[] = [
   {
     label: "Lending",
     href: "/lending",
-    icon: <CurrencyDollarIcon className="h-4 w-4" />,
+    icon: <BanknotesIcon className="h-4 w-4" />,
+  },
+  {
+    label: "Bridge",
+    href: "https://bridge.connext.network/XOC-from-polygon-to-ethereum?symbol=XOC",
+    icon: <FontAwesomeIcon icon={faBridge} />,
   },
 ];
 
