@@ -12,7 +12,7 @@ const Testimonials = () => {
         <div className="lg:col-span-2 xl:col-auto">
           <div className="flex flex-col justify-between w-full h-full bg-neutral px-14 rounded-2xl py-14 dark:bg-neutral dark:text-secondary">
             <p className="text-2xl leading-normal text-base-100 dark:text-inherit">
-            $XOC is one of the first proposals to <Mark>revolutionize DeFi in Mexico.</Mark> Integrating a stable Mexican peso currency into the web ecosystem3.
+            $XOC is one of the first proposals to <Mark>revolutionize DeFi in Mexico.</Mark> Integrating a stable Mexican peso currency into the web3 ecosystem.
             </p>
             <Avatar image={Jorge} name="Jorge Magni" title="Kairos Research" />
           </div>
