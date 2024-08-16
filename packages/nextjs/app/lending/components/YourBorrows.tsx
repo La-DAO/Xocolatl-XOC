@@ -113,7 +113,7 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
                 </p>
               </div>
               <div className="borrows-row-item w-24">
-                <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
+                <p>{(Number(reserve.variableBorrowRate) / 1e25).toFixed(2)}%</p>
               </div>
               <div className="borrows-row-item w-24">
                 <span className="px-4 py-1 bg-gray-100 text-gray-400 rounded-md uppercase text-xs">
