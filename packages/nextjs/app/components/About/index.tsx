@@ -24,8 +24,10 @@ const About = () => {
                 </p>
 
                 <a
-                  href="/#"
+                  href="https://github.com/La-DAO/xocolatl-contracts/blob/main/whitepaper/xocolatl_whitepaper.md"
+                  target="_blank"
                   className="inline-flex items-center justify-center rounded-md bg-primary px-7 py-3 text-center text-base font-medium text-white duration-300 hover:bg-secondary dark:bg-neutral dark:text-primary dark:hover:bg-primary dark:hover:text-white"
+                  rel="noopener noreferrer"
                 >
                   Know More
                 </a>

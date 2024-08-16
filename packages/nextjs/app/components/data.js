@@ -16,7 +16,7 @@ const benefitOne = {
   bullets: [
     {
       title: "Government Corruption",
-      desc: "Mexico is ranked 124 out of 180 countries in the Corruption Perceptions Index. Corruption is a major issue that affects the country's economic growth and development.",
+      desc: "Mexico is ranked 126 out of 180 countries in the Corruption Perceptions Index. Corruption is a major issue that affects the country's economic growth and development.",
       icon: <FaceFrownIcon />,
     },
     {
