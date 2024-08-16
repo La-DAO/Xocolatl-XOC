@@ -33,17 +33,17 @@ const faqdata = [
   {
     question: "How is the value of each $XOC backed?",
     answer:
-      "Each $XOC is backed by an ERC20 token on the Polygon, Gnosis Chain, and Optimism networks. This backing ensures that each $XOC can be liquidated for its equivalent value in $XOC-denominated debt and settle the account in the process, all backed by the network of validators.",
+      "Each $XOC is backed by an ERC20 token on the EVM-compatible chain of your choosing. This backing ensures that each $XOC can be liquidated for its equivalent value in $XOC-denominated debt and settle the account in the process, all backed by the network of validators. Minting contracts are currently live in Arbitrum, Base, Binance Smart Chain, Gnosis Chain, Optimism and Polygon.",
   },
   {
     question: "What can I do with $XOC?",
     answer:
-      "You can use $XOC to pay off debts, acquire goods and services, or simply hold it as a store of value, much like any other Mexican peso. Additionally, you can support the La DAO community by building the next open and decentralized financial system.",
+      "You can use $XOC to pay off debts, acquire goods and services, or simply hold it as a store of value, much like any other Mexican peso. Additionally, you can support La DAO community by building the next open and decentralized financial system. Ask us how to get started on Discord or Telegram.",
   },
   {
     question: "Who maintains all this?",
     answer:
-      "We utilize a business model based on a DAO, currently known as 'La DAO.' This decentralized autonomous organization is responsible for managing all the work needed to build in DeFi.",
+      "We utilize a business model based on a DAO, currently known as 'La DAO.' This decentralized autonomous organization is responsible for managing all the work needed to build in DeFi. We are in the process of establishing a DAO LLC to manage the legal and local financial aspects of the project.",
   },
   {
     question: "How can I get involved?",
