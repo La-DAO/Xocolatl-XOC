@@ -24,8 +24,16 @@ const Hero = () => {
               <h2 className="text-2xl text-primary font-bold dark:text-inherit">About the name</h2>
               <p className="text-lg leading-normal dark:text-inherit">
                 The word &rsquo;Xocolatl&rsquo; comes from the Nahuatl, a Pre-Hispanic word, refers to cacao beans. It
-                is well documented that cocoa beans were used by Mayans, Olmecs and primarily Aztecs as a form of
-                currency.
+                is well documented that cocoa beans were used by Mayans and Aztecs as a{" "}
+                <Link
+                  href="https://chocolateclass.wordpress.com/2020/03/24/cacao-currency-ancient-civilizations-used-chocolate-as-cash/#:~:text=The%20civilizations%20at%20the%20time,from%20the%20Codex%20Mendoza%20(c."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary dark:text-warning underline"
+                >
+                  form of currency
+                </Link>
+                .
               </p>
             </div>
 
