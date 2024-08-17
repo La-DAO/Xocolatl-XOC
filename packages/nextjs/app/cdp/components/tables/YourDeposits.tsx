@@ -475,7 +475,7 @@ const YourDeposits = () => {
                   Health Factor
                   <div
                     className="tooltip tooltip-primary"
-                    data-tip="The Health of your position, which tells you how much you still can leverage your asset's worth."
+                    data-tip="The Health of your position, which tells you how much you still can leverage your asset's worth. The closer to 1 it gets, the riskier your position becomes, when it gets under 1 the position can get liquidated."
                   >
                     <InformationCircleIcon className="h-5 w-5 inline" />
                   </div>
