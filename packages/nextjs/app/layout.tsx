@@ -5,7 +5,7 @@ import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
 export const metadata = getMetadata({
-  title: "Xocolatl CDP & Lending App",
+  title: "Xocolatl Finance",
   description: "Construyendo el DeFi Mexicano.",
 });
 
