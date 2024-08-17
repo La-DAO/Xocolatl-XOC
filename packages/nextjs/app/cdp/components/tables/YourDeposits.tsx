@@ -398,7 +398,7 @@ const YourDeposits = () => {
         assetContract: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
         houseOfCoinContract: "0x7ed1acd46de3a4e63f2d3b0f4fb5532e113a520b",
         assetsAccountantContract: "0xB90996A70C957a1496e349434CF0E030A9f693A4",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[5]),
+        userHealthRatio: parseFloat(formattedUserHealthRatio[5].toFixed(2)),
         backedTokenID: "91100958396429013258976897630183527246789787972219101872512970882812448345098",
       },
       {
@@ -410,7 +410,7 @@ const YourDeposits = () => {
         assetContract: "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
         houseOfCoinContract: "0x7ed1acd46de3a4e63f2d3b0f4fb5532e113a520b",
         assetsAccountantContract: "0xB90996A70C957a1496e349434CF0E030A9f693A4",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[6]),
+        userHealthRatio: parseFloat(formattedUserHealthRatio[6].toFixed(2)),
         backedTokenID: "57342654198272734872890350495888597817619885438410899681268349930674170869034",
       },
     ],
@@ -419,24 +419,24 @@ const YourDeposits = () => {
         symbol: "WETH",
         amount: parseFloat(formattedBalances[0].toFixed(6)),
         minted: parseFloat(formattedMints[0].toFixed(6)),
-        mintingPower: parseFloat(formattedMintingPower[7]),
+        mintingPower: parseFloat(formattedMintingPower[7].toFixed(2)),
         houseofReserveContract: "0xfF69E183A863151B4152055974aa648b3165014D",
         assetContract: "0x4200000000000000000000000000000000000006",
         houseOfCoinContract: "0x02c531Cd9791dD3A31428B2987A82361D72F9b13",
         assetsAccountantContract: "0xB93EcD005B6053c6F8428645aAA879e7028408C7",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[7]),
+        userHealthRatio: parseFloat(formattedUserHealthRatio[7].toFixed(2)),
         backedTokenID: "8845051240560412557863425425586194836306989955683227883233854819693793989434",
       },
       {
         symbol: "cbETH",
         amount: parseFloat(formattedBalances[1].toFixed(6)),
         minted: parseFloat(formattedMints[1].toFixed(6)),
-        mintingPower: parseFloat(formattedMintingPower[8]),
+        mintingPower: parseFloat(formattedMintingPower[8].toFixed(2)),
         houseofReserveContract: "0x070ccE6887E70b75015F948b12601D1E759D2024",
         assetContract: "0x2Ae3F1Ec7F1F5012CFEab0185bfc7aa3cf0DEc22",
         houseOfCoinContract: "0x02c531Cd9791dD3A31428B2987A82361D72F9b13",
         assetsAccountantContract: "0xB93EcD005B6053c6F8428645aAA879e7028408C7",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[8]),
+        userHealthRatio: parseFloat(formattedUserHealthRatio[8].toFixed(2)),
         backedTokenID: "8845051240560412557863425425586194836306989955683227883233854819693793989434",
       },
     ],
@@ -475,7 +475,7 @@ const YourDeposits = () => {
                   Health Factor
                   <div
                     className="tooltip tooltip-primary"
-                    data-tip="The Health of your position, which tells you how much you still can leverage your asset's worth."
+                    data-tip="The Health of your position, which tells you how much you still can leverage your asset's worth. The closer to 1 it gets, the riskier your position becomes, when it gets under 1 the position can get liquidated."
                   >
                     <InformationCircleIcon className="h-5 w-5 inline" />
                   </div>

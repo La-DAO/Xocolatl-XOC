@@ -51,6 +51,8 @@ export const HeaderMenuLinks = () => {
             <Link
               href={href}
               passHref
+              target="_blank" // Add target="_blank" to open link in a new tab
+              rel="noopener noreferrer" // Add rel="noopener noreferrer" for security reasons
               className={`${
                 isActive ? "bg-inherit shadow-md" : ""
               } hover:bg-neutral hover:text-base-100 hover:shadow-md focus:!bg-base-200 active:!text-neutral-content py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
@@ -107,7 +109,7 @@ export const Header = () => {
           </div>
           <div className="flex flex-col">
             <span className="font-bold leading-tight">Xocolatl-XOC</span>
-            <span className="text-xs">Decentralized app for Mexico</span>
+            <span className="text-xs">Decentralized Finances for Mexico</span>
           </div>
         </Link>
         <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
