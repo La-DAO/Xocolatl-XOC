@@ -6,12 +6,17 @@ const FeaturesTabItem = ({ featureTab }: { featureTab: FeatureTab }) => {
   const { title, desc1, desc2, button, image, imageDark, link } = featureTab; // Destructure link property
 
   return (
-    <div className="flex items-center gap-8 lg:gap-19">
-      <div className="md:w-1/2 p-12 tracking-tighter leading-snug">
-        <h2 className="mb-7 text-3xl font-bold text-primary dark:text-white xl:text-sectiontitle2">{title}</h2>
-        <p className="mb-5 text-lg pr-24">{desc1}</p>
-        <p className="w-11/12 text-lg pr-24 pb-12">{desc2}</p>
-        <button onClick={() => window.open(link, "_blank")} className="bg-primary text-white px-4 py-2 rounded-full">
+    <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-19">
+      <div className="md:w-1/2 p-6 lg:p-12 tracking-tighter leading-snug">
+        <h2 className="mb- text-2xl lg:text-3xl font-bold text-primary dark:text-white xl:text-sectiontitle2">
+          {title}
+        </h2>
+        <p className="mb-4 text-base lg:text-lg pr-8 lg:pr-16">{desc1}</p>
+        <p className="text-base lg:text-lg pr-8 lg:pr-16 mb-6">{desc2}</p>
+        <button
+          onClick={() => window.open(link, "_blank")}
+          className="bg-primary text-white px-6 py-3 rounded-full hover:bg-secondary transition-colors"
+        >
           {button}
         </button>
       </div>

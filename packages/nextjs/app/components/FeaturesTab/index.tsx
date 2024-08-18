@@ -33,10 +33,10 @@ const FeaturesTab = () => {
           >
             <div
               onClick={() => setCurrentTab("tabOne")}
-              className={`relative flex w-full cursor-pointer items-center gap-4 border border-stroke px-4 py-2 md:w-auto md:border-0 xl:px-10 xl:py-4 ${
+              className={`relative flex w-full cursor-pointer items-center gap-4 border border-stroke px-4 py-2 md:w-auto md:border-0 xl:px-10 xl:py-4 m-1 ${
                 currentTab === "tabOne"
                   ? "border-4 border-accent bg-secondary dark:border-accent dark:bg-secondary rounded-full"
-                  : "hover:bg-secondary hover:rounded-full"
+                  : "hover:bg-secondary rounded-full hover:rounded-full"
               }`}
             >
               <div className="flex h-10 w-10 text-2xl items-center justify-center dark:bg-blacksection">
@@ -50,10 +50,10 @@ const FeaturesTab = () => {
             </div>
             <div
               onClick={() => setCurrentTab("tabTwo")}
-              className={`relative flex w-full cursor-pointer items-center gap-4 border border-stroke px-4 py-2 md:w-auto md:border-0 xl:px-10 xl:py-4 ${
+              className={`relative flex w-full cursor-pointer items-center gap-4 border border-stroke px-4 py-2 md:w-auto md:border-0 xl:px-10 xl:py-4 m-1 ${
                 currentTab === "tabTwo"
                   ? "border-4 border-accent bg-secondary dark:border-accent dark:bg-secondary rounded-full"
-                  : "hover:bg-secondary hover:rounded-full"
+                  : "hover:bg-secondary rounded-full hover:rounded-full"
               }`}
             >
               <div className="flex h-10 w-10 text-2xl items-center justify-center dark:bg-blacksection">
@@ -67,10 +67,10 @@ const FeaturesTab = () => {
             </div>
             <div
               onClick={() => setCurrentTab("tabThree")}
-              className={`relative flex w-full cursor-pointer items-center gap-4 border border-stroke px-4 py-2 md:w-auto md:border-0 xl:px-10 xl:py-4 ${
+              className={`relative flex w-full cursor-pointer items-center gap-4 border border-stroke px-4 py-2 md:w-auto md:border-0 xl:px-10 xl:py-4 m-1 ${
                 currentTab === "tabThree"
                   ? "border-4 border-accent bg-secondary dark:border-accent dark:bg-secondary rounded-full"
-                  : "hover:bg-secondary hover:rounded-full"
+                  : "hover:bg-secondary rounded-full hover:rounded-full"
               }`}
             >
               <div className="flex h-10 w-10 text-2xl items-center justify-center dark:bg-blacksection">
@@ -78,7 +78,7 @@ const FeaturesTab = () => {
               </div>
               <div className="text-xl md:w-3/5 lg:w-auto">
                 <button className="font-medium text-primary dark:text-white xl:text-regular">
-                  Fully Interopable Bridging
+                  Fully-Interopable Bridging
                 </button>
               </div>
             </div>
