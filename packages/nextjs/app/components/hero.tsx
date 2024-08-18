@@ -12,6 +12,15 @@ const Hero = () => {
       <Container className="flex flex-wrap bg-base-200">
         <div className="flex items-center w-full lg:w-1/2">
           <div className="max-w-2xl m-12 text-justify leading-snug tracking-tighter">
+            <Image
+              src={grow}
+              width={950}
+              height={950}
+              className={"object-cover block lg:hidden"}
+              alt="Hero Illustration"
+              loading="eager"
+              placeholder="blur"
+            />
             <h1 className="text-4xl text-primary font-bold leading-snug tracking-tight lg:text-4xl lg:leading-tight xl:text-6xl xl:leading-tight dark:text-inherit">
               Mexico&rsquo;s MXN
               <br /> Stablecoin: XOC
@@ -52,7 +61,7 @@ const Hero = () => {
               src={grow}
               width={950}
               height={950}
-              className={"object-cover"}
+              className={"object-cover hidden lg:block"}
               alt="Hero Illustration"
               loading="eager"
               placeholder="blur"
