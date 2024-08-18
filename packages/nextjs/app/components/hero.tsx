@@ -21,7 +21,7 @@ const Hero = () => {
               loading="eager"
               placeholder="blur"
             />
-            <h1 className="text-4xl text-primary font-bold leading-snug tracking-tight lg:text-4xl lg:leading-tight xl:text-6xl xl:leading-tight dark:text-inherit">
+            <h1 className=" justify-items-end text-4xl text-primary font-bold leading-snug tracking-tight lg:text-4xl lg:leading-tight xl:text-6xl xl:leading-tight dark:text-inherit ">
               Mexico&rsquo;s MXN
               <br /> Stablecoin: XOC
             </h1>
