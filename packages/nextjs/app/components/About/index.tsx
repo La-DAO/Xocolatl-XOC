@@ -3,17 +3,26 @@ import Link from "next/link";
 
 const About = () => {
   return (
-    <section id="about" className="bg-gray-1 pb-8 pt-20 dark:bg-dark-2 lg:pb-[70px] lg:pt-[120px] ml-32">
-      <div className="container">
+    <section id="about" className="bg-gray-1 pb-8 pt-20 dark:bg-dark-2 lg:pb-[70px] lg:pt-[120px]">
+      <div className="container mx-auto px-4">
         <div className="wow fadeInUp" data-wow-delay=".2s">
-          <div className="-mx-4 flex flex-wrap items-center">
-            <div className="w-full px-4 lg:w-1/2">
-              <div className="ml-8 mb-12 max-w-[540px] lg:mb-0">
-                <h2 className="mb-5 text-3xl font-bold leading-tight text-dark dark:text-neutral sm:text-[40px] sm:leading-[1.2]">
+          <div className="flex flex-wrap items-center">
+            <div className="w-full lg:w-1/2">
+              <div className="mb-8 max-w-full text-center lg:text-left lg:mb-12 lg:max-w-none">
+                <div className="w-full h-auto sm:hidden mb-4">
+                  <Image
+                    src="/eth-mex-min.jpg"
+                    alt="about image"
+                    width={600} // Adjust according to the image dimensions
+                    height={400} // Adjust according to the image dimensions
+                    className="object-cover object-left mx-auto"
+                  />
+                </div>
+                <h2 className="mb-4 text-2xl font-bold leading-snug text-dark dark:text-neutral sm:text-3xl sm:leading-tight">
                   Xocolatl Smart Contracts Are The Entrance Into{" "}
                   <span className="bg-green-700 rounded-lg text-base-100 dark:text-neutral">Mexican DeFi</span>
                 </h2>
-                <p className="mb-10 text-base leading-relaxed text-body-color dark:text-neutral">
+                <p className="mb-6 text-sm leading-relaxed text-body-color dark:text-neutral sm:text-base sm:leading-normal">
                   You deposit your asset into our House of Reserve contract, which then tells the Assets Accountant the
                   reserve amount of the asset. The Assets Accountant then allows you to mints up to ~80% of your
                   asset&rsquo;s value in $XOC to your wallet. $XOC is created (minted) at the current MXN/USD rate which
@@ -57,7 +66,7 @@ const About = () => {
                     />
                   </div>
 
-                  <div className="relative z-10 mb-4 flex items-center justify-center overflow-hidden bg-primary px-6 py-12 sm:mb-8 sm:h-[160px] sm:p-5 lg:mb-4 xl:mb-8">
+                  <div className="relative z-10 mb-4 flex items-center justify-center overflow-hidden bg-primary px-6 py-12 sm:mb-8 sm:h-[160px] sm:p-5 lg:mb-4 xl:mb-8 hidden md:flex">
                     <div>
                       <span className="block text-5xl font-extrabold text-white">Aug.21.2022</span>
                       <span className="block text-base font-semibold text-white mt-2">
