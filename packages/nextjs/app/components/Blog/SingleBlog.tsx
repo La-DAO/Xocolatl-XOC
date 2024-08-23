@@ -11,7 +11,7 @@ const SingleBlog = ({ blog }: { blog: Blog }) => {
       <div className="mb-8 overflow-hidden rounded">
         <Link href={`/blogs/${slug}`} aria-label="blog cover" className="block">
           <Image
-            src={coverImage!}
+            src={coverImage || "defaultImage.jpg"}
             alt="image"
             className="w-full transition group-hover:rotate-6 group-hover:scale-125"
             width={408}

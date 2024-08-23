@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { XOCABI } from "../../app/components/abis/xocabis";
+import Familia from "../../public/Familia.png";
 import { xocPinABI } from "./abis/xocpin";
 import { parseEther } from "viem";
 import { useContractRead, useContractWrite } from "wagmi";
 import { useAccount } from "wagmi";
-import Familia  from "../../public/Familia.png";
-import Image from "next/image";
-
 
 const Cta = () => {
   const [showCard, setShowCard] = useState(false);
@@ -49,7 +48,6 @@ const Cta = () => {
       setLatestTokenID(ID);
     }
   }, [tokenID]);
-
 
   return (
     <div className="flex items-center justify-center pt-24">
