@@ -16,7 +16,12 @@ const useMint = () => {
    * @param {Address} houseOfReserveContract - The address of the house of reserve contract.
    * @param {string} amount - The amount to mint in ether.
    */
-  const handleMint = (houseOfCoinContract: Address, assetContract: Address, houseOfReserveContract: Address, amount: string) => {
+  const handleMint = (
+    houseOfCoinContract: Address,
+    assetContract: Address,
+    houseOfReserveContract: Address,
+    amount: string,
+  ) => {
     if (!houseOfCoinABI || !assetContract || !houseOfReserveContract || !amount) {
       console.error("Required parameters are not properly defined.");
       return;
