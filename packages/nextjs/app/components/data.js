@@ -6,7 +6,7 @@ import {
   EyeDropperIcon,
   FaceFrownIcon,
   HandThumbUpIcon,
-  LinkIcon
+  LinkIcon,
 } from "@heroicons/react/24/solid";
 
 const benefitOne = {
