@@ -37,6 +37,11 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "https://bridge.connext.network/XOC-from-polygon-to-ethereum?symbol=XOC",
     icon: <FontAwesomeIcon icon={faBridge} />,
   },
+  /* {
+    label: "Vault",
+    href: "/vault",
+    icon: <FontAwesomeIcon icon={faVault} className="h-4 w-4" />,
+  } */
 ];
 
 export const HeaderMenuLinks = () => {
@@ -46,15 +51,16 @@ export const HeaderMenuLinks = () => {
     <>
       {menuLinks.map(({ label, href, icon }) => {
         const isActive = pathname === href;
+        const isExternal = href.startsWith("http"); // Check if the href starts with "http" to determine if it's an external link
+
         return (
           <li key={href}>
             <Link
               href={href}
               passHref
-              target="_blank" // Add target="_blank" to open link in a new tab
-              rel="noopener noreferrer" // Add rel="noopener noreferrer" for security reasons
+              {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })} // Add target and rel only for external links
               className={`${
-                isActive ? "bg-inherit shadow-md" : ""
+                isActive ? "bg-base-300 shadow-md" : ""
               } hover:bg-neutral hover:text-base-100 hover:shadow-md focus:!bg-base-200 active:!text-neutral-content py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
             >
               {icon}
