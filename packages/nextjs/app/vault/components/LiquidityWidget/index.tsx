@@ -25,23 +25,25 @@ const LiquidityWidget: React.FC = () => {
       </div>
 
       {/* Action Switcher */}
-      <div className="mb-6 flex justify-center space-x-4">
-        <button
-          onClick={() => handleActionChange("Deposit")}
-          className={`px-4 py-2 rounded-lg ${
-            action === "Deposit" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"
-          }`}
-        >
-          Deposit
-        </button>
-        <button
-          onClick={() => handleActionChange("Withdraw")}
-          className={`px-4 py-2 rounded-lg ${
-            action === "Withdraw" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"
-          }`}
-        >
-          Withdraw
-        </button>
+      <div className="mb-6 flex justify-center">
+        <div className="flex">
+          <button
+            onClick={() => handleActionChange("Deposit")}
+            className={`px-6 py-2 rounded-l-full ${
+              action === "Deposit" ? "bg-base-300 text-xl text-white" : "bg-gray-200 text-gray-800"
+            }`}
+          >
+            Deposit
+          </button>
+          <button
+            onClick={() => handleActionChange("Withdraw")}
+            className={`px-6 py-2 rounded-r-full ${
+              action === "Withdraw" ? "bg-base-300 text-xl text-white" : "bg-gray-200 text-gray-800"
+            }`}
+          >
+            Withdraw
+          </button>
+        </div>
       </div>
 
       {/* Inputs for Token A, Token B, and Calculation */}
@@ -81,7 +83,7 @@ const LiquidityWidget: React.FC = () => {
       </div>
 
       {/* Action Button */}
-      <button className="w-full py-3 bg-blue-500 text-white font-semibold rounded-lg">{action}</button>
+      <button className="w-full py-3 bg-base-300 text-2xl text-white font-semibold rounded-lg">{action}</button>
     </div>
   );
 };
