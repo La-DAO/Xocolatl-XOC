@@ -12,7 +12,7 @@ const VaultPage: NextPage = () => {
       {/* Container for Widgets */}
       <div className="w-4/5 mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
         <LiquidityWidget />
-        <OverviewWidget tokenA={100} tokenB={200} />
+        <OverviewWidget />
       </div>
     </div>
   );
