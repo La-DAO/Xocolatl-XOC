@@ -2,6 +2,7 @@
 
 // import Image from "next/image";
 import About from "./components/About/index";
+import FAQTitle from "./components/FAQTitle";
 import FeaturesTab from "./components/FeaturesTab";
 import TestimonialTitle from "./components/TestimonialTitle";
 import Benefits from "./components/benefits";
@@ -29,10 +30,7 @@ const Home: NextPage = () => {
       <TestimonialTitle />
       <Testimonials />
       <div className="divider"></div>
-      <SectionTitle pretitle="FAQ" title="Frequently Asked Questions">
-        This section is for answering frequently asked questions from the emerging community around $XOC and all that
-        jazz.
-      </SectionTitle>
+      <FAQTitle />
       <Faq />
     </>
   );
