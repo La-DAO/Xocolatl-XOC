@@ -57,6 +57,7 @@
     "framer-motion": "^11.3.24",
     "framer-motion-3d": "^11.3.2",
     "fs": "^0.0.1-security",
+    "next-i18n-router": "^5.5.1",
     "wagmi": "^2.11.0"
   }
 }

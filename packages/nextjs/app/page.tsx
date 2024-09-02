@@ -1,14 +1,14 @@
 "use client";
 
 // import Image from "next/image";
-import About from "../app/components/About/index";
-import FeaturesTab from "../app/components/FeaturesTab";
-import Benefits from "../app/components/benefits";
-import { benefitOne, benefitTwo } from "../app/components/data";
-import Faq from "../app/components/faq";
-import Hero from "../app/components/hero";
-import SectionTitle from "../app/components/sectionTitle";
-import Testimonials from "../app/components/testimonials";
+import About from "./components/About/index";
+import FeaturesTab from "./components/FeaturesTab";
+import Benefits from "./components/benefits";
+import { benefitOne, benefitTwo } from "./components/data";
+import Faq from "./components/faq";
+import Hero from "./components/hero";
+import SectionTitle from "./components/sectionTitle";
+import Testimonials from "./components/testimonials";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {

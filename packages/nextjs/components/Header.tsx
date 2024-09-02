@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { faBridge } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { BanknotesIcon, Bars3Icon, BuildingLibraryIcon, HomeIcon } from "@heroicons/react/24/solid";
+import { useTranslation } from "~~/app/context/LanguageContext";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
@@ -83,6 +84,7 @@ export const Header = () => {
     burgerMenuRef,
     useCallback(() => setIsDrawerOpen(false), []),
   );
+  const { setLocale, locale } = useTranslation();
 
   return (
     <div className="sticky top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-accent px-0 sm:px-2">
@@ -125,6 +127,10 @@ export const Header = () => {
       <div className="navbar-end flex-grow mr-4">
         <RainbowKitCustomConnectButton />
         <FaucetButton />
+        <select value={locale} onChange={e => setLocale(e.target.value)} className="select select-ghost mx-2">
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+        </select>
       </div>
     </div>
   );

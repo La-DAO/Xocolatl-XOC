@@ -4,14 +4,17 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import grow from "../../public/grow.png";
+import { useTranslation } from "../context/LanguageContext";
 import Container from "./container";
 
 const Hero = () => {
+  const { t } = useTranslation();
+
   return (
     <>
       <Container className="flex flex-wrap bg-base-200">
         <div className="flex items-center w-full lg:w-1/2">
-          <div className="max-w-2xl m-12 text-justify leading-snug tracking-tighter">
+          <div className="max-w-2xl m-12 leading-snug tracking-tighter">
             <Image
               src={grow}
               width={950}
@@ -21,35 +24,29 @@ const Hero = () => {
               loading="eager"
               placeholder="blur"
             />
-            <h1 className=" justify-items-end text-4xl text-primary font-bold leading-snug tracking-tight lg:text-4xl lg:leading-tight xl:text-6xl xl:leading-tight dark:text-inherit ">
-              Mexico&rsquo;s MXN
-              <br /> Stablecoin: XOC
+            <h1 className="text-4xl text-primary font-bold leading-snug tracking-tight lg:text-4xl lg:leading-tight xl:text-6xl xl:leading-tight dark:text-inherit">
+              {t("title")}
             </h1>
-            <p className="py-5 text-xl leading-normal lg:text-xl dark:text-inherit">
-              As a programmable digital currency equivalent to the Mexican peso, $XOC ensures traceable and transparent
-              transactions, making corruption harder.
-            </p>
-            <div className="my-8">
-              <h2 className="text-2xl text-primary font-bold dark:text-inherit">About the name</h2>
+            <p className="text-justify py-5 text-xl leading-normal lg:text-xl dark:text-inherit">{t("description")}</p>
+            <div className="my-8 text-justify">
+              <h2 className="text-2xl text-primary font-bold dark:text-inherit">{t("aboutName")}</h2>
               <p className="text-lg leading-normal dark:text-inherit">
-                The word &rsquo;Xocolatl&rsquo; comes from the Nahuatl, a Pre-Hispanic word, refers to cacao beans. It
-                is well documented that cocoa beans were used by Mayans and Aztecs as a{" "}
+                {t("aboutDescription")}{" "}
                 <Link
                   href="https://chocolateclass.wordpress.com/2020/03/24/cacao-currency-ancient-civilizations-used-chocolate-as-cash/#:~:text=The%20civilizations%20at%20the%20time,from%20the%20Codex%20Mendoza%20(c."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary dark:text-warning underline"
                 >
-                  form of currency
+                  {t("aboutLinkText")}
                 </Link>
-                .
               </p>
             </div>
 
             <div className="flex flex-col items-start space-y-3 sm:space-x-4 sm:space-y-0 sm:items-center sm:flex-row">
               <Link href="/lending">
                 <button className="px-8 py-4 text-lg font-medium text-center text-white bg-primary rounded-btn hover:bg-base-100 hover:text-neutral">
-                  Try $XOC
+                  {t("tryXocButton")}
                 </button>
               </Link>
             </div>
@@ -73,7 +70,7 @@ const Hero = () => {
         <div className="flex flex-col justify-center mt-24 mb-14">
           <div className=" text-3xl text-center text-inherit dark:text-inherit mb-12">
             <h2>
-              $XOC is the <span className="">most liquid stablecoin</span> for the MXN currency.
+              {t("mostLiquidStablecoin")} <span className="">.</span>
             </h2>
           </div>
 
