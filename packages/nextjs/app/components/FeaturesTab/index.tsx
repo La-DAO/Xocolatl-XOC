@@ -4,9 +4,11 @@ import { useState } from "react";
 import FeaturesTabItem from "./FeaturesTabItem";
 import featuresTabData from "./featuresTabData";
 import { motion } from "framer-motion";
+import { useTranslation } from "~~/app/context/LanguageContext";
 
 const FeaturesTab = () => {
   const [currentTab, setCurrentTab] = useState("tabOne");
+  const { t } = useTranslation();
 
   return (
     <>
@@ -44,7 +46,7 @@ const FeaturesTab = () => {
               </div>
               <div className="text-xl md:w-3/5 lg:w-auto">
                 <button className="font-medium text-primary dark:text-white xl:text-regular">
-                  Collateral-Debt Positions
+                  {t("featuresTab1")}
                 </button>
               </div>
             </div>
@@ -61,7 +63,7 @@ const FeaturesTab = () => {
               </div>
               <div className="text-xl md:w-3/5 lg:w-auto">
                 <button className="font-medium text-primary dark:text-white xl:text-regular">
-                  Money Lending Markets
+                  {t("featuresTab2")}
                 </button>
               </div>
             </div>
@@ -78,7 +80,7 @@ const FeaturesTab = () => {
               </div>
               <div className="text-xl md:w-3/5 lg:w-auto">
                 <button className="font-medium text-primary dark:text-white xl:text-regular">
-                  Fully-Interopable Bridging
+                  {t("featuresTab3")}
                 </button>
               </div>
             </div>

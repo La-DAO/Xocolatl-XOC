@@ -129,7 +129,7 @@ export const Header = () => {
         <FaucetButton />
         <select value={locale} onChange={e => setLocale(e.target.value)} className="select select-ghost mx-2">
           <option value="en">English</option>
-          <option value="es">Spanish</option>
+          <option value="es">Español</option>
         </select>
       </div>
     </div>

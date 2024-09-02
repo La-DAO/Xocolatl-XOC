@@ -1,9 +1,103 @@
 {
-    "title": "Mexico’s MXN Stablecoin: XOC",
-    "description": "As a programmable digital currency equivalent to the Mexican peso, $XOC ensures traceable and transparent transactions, making corruption harder.",
-    "aboutName": "About the name",
-    "aboutDescription": "The word 'Xocolatl' comes from the Nahuatl, a Pre-Hispanic word, refers to cacao beans. It is well documented that cocoa beans were used by Mayans and Aztecs as a",
-    "aboutLinkText": "form of currency.",
-    "tryXocButton": "Try $XOC",
-    "mostLiquidStablecoin": "$XOC is the most liquid stablecoin for the MXN currency."
+  "title": "Mexico’s MXN Stablecoin: XOC",
+  "description": "As a programmable digital currency equivalent to the Mexican peso, $XOC ensures traceable and transparent transactions, making corruption harder.",
+  "aboutName": "About the name",
+  "aboutDescription": "The word 'Xocolatl' comes from the Nahuatl, a Pre-Hispanic word, refers to cacao beans. It is well documented that cocoa beans were used by Mayans and Aztecs as a",
+  "aboutLinkText": "form of currency.",
+  "tryXocButton": "Try $XOC",
+  "mostLiquidStablecoin": "$XOC is the most liquid stablecoin for the MXN currency.",
+  
+  "featuresTab1": "CPD Management",
+  "featuresTab2": "Money Lending Markets",
+  "featuresTab3": "Fully Interoperable with most popular L2s",
+  
+  "featuresTabs": [
+    {
+      "id": "tabOne",
+      "title": "CPD Management",
+      "desc1": "A CDP allows you to leverage your most precious assets to borrow stablecoins, in our case $XOC. You can use XOC to buy more assets, pay off debt, or whatever you want.",
+      "desc2": "$XOC is ERC20 so it is also compatible with the DeFi ecosystem. You can use it to create Liquidity Pools, farm yield or even use it as collateral for other loans.",
+      "image": "/Currency Crush - Profit.svg",
+      "imageDark": "/Currency Crush - Profit.svg",
+      "button": "Mint $XOC",
+      "link": "/cdp"
+    },
+    {
+      "id": "tabTwo",
+      "title": "Money Lending Markets",
+      "desc1": "Our money markets are a fork of the Aave contracts, which are the most battle-tested and resilient smart contracts in DeFi.",
+      "desc2": "You can lend your $XOC to earn interest or borrow $XOC by providing collateral. The interest rates are determined by the supply and demand of the market.",
+      "image": "/Currency Crush - Loan.svg",
+      "imageDark": "/Currency Crush - Loan.svg",
+      "button": "Lend $XOC",
+      "link": "lending"
+    },
+    {
+      "id": "tabThree",
+      "title": "Fully Interoperable with most popular L2s",
+      "desc1": "Our contracts are deployed on the Arbitrum, Base, Ethereum Mainnet, Polygon, Gnosis Chain, and Optimism networks. This allows you to use $XOC on any of these networks.",
+      "desc2": "You can move your $XOC between networks using our bridge contracts built on top of Connext.",
+      "image": "/Currency Crush - Password.svg",
+      "imageDark": "/Currency Crush - Password.svg",
+      "button": "Bridge $XOC",
+      "link": "https://bridge.connext.network/XOC-from-polygon-to-ethereum?symbol=XOC"
+    }
+  ],
+
+  "benefitOne": {
+    "title": "Problem Statement: Corruption, Bureaucracy, and Crime",
+    "desc": "Mexico's economic growth is hindered by three major issues:",
+    "bullet1": {
+      "title": "Government Corruption",
+      "desc": "Mexico is ranked 126 out of 180 countries in the Corruption Perceptions Index. Corruption is a major issue that affects the country's economic growth and development."
+    },
+    "bullet2": {
+      "title": "Slow Bureaucracy",
+      "desc": "Mexico is ranked 60 out of 190 countries in the World Bank's Ease of Doing Business Index. Slow bureaucracy is a major issue that affects the country's economic growth and development."
+    },
+    "bullet3": {
+      "title": "Organized Crime",
+      "desc": "Mexico is ranked 140 out of 163 countries in the Global Peace Index. Organized crime is a major issue that affects the country's economic growth and development."
+    }
+  },
+  
+  "benefitTwo": {
+    "title": "Solution: Programmable Money",
+    "desc": "New problems require new technology solutions. At La DAO, we are building a decentralized financial system that is more inclusive, transparent, and accessible to everyone.",
+    "bullet1": {
+      "title": "Transparency and Security",
+      "desc": "Our platform is built on blockchain technology, which ensures that all transactions are secure, transparent, and immutable. We use smart contracts to automate processes and eliminate the need for intermediaries, reducing the risk of fraud and corruption."
+    },
+    "bullet2": {
+      "title": "Fostering Innovation",
+      "desc": "We are creating a community of developers, entrepreneurs, and investors who are passionate about building a better financial future. Our platform provides tools and resources to help them develop and launch new projects, products, and services that will benefit society as a whole."
+    },
+    "bullet3": {
+      "title": "Community Owned and Governed",
+      "desc": "Our platform is governed by a decentralized autonomous organization (DAO) that is owned and controlled by its members. This ensures that all decisions are made in the best interest of the community and that everyone has a say in how the platform is run."
+    }
+  },
+    "imageAlt1": "about image 1",
+    "imageAlt2": "about image 2",
+    "aboutTitle": "Xocolatl Smart Contracts Are The Entrance Into",
+    "aboutHighlight": "Mexican DeFi",
+    "aboutDesc": "You deposit your asset into our House of Reserve contract, which then tells the Assets Accountant the reserve amount of the asset. The Assets Accountant then allows you to mint up to ~80% of your asset’s value in $XOC to your wallet. $XOC is created (minted) at the current MXN/USD rate which can then be used in the DeFi ecosystem.\n\nThis allows builders, creators, and entrepreneurs to leverage their assets to create new value and opportunities.",
+    "knowMore": "Know More",
+    "eventDate1": "Aug.21.2022",
+    "eventTitle1": "Xocolatl Contracts were deployed",
+    "eventDesc1": "During ETH Global Mexico",
+    "timelineDate1": "August 21st, 2022",
+    "timelineTitle1": "Xocolatl was born at",
+    "at": "at",
+    "timelineDesc1": "During this hackathon, the Ethereum community descended in Mexico City to build the future of finance and during a gruesome 48 hours of hacking, the Xocolatl team deployed the first version of the Xocolatl protocol. Initially, the stablecoin was deployed with the same address to Polygon, Optimism, Gnosis Chain, and Arbitrum, although only Polygon was the focus at the start.",
+    "timelineDate2": "May 19th, 2023",
+    "timelineTitle2": "Cross-XOC is deployed using the Connext (now Everclear) toolkit",
+    "timelineDesc2": "Everclear is an innovative public good mechanism designed for cross-chain intent settlement. Everclear supports permissionless expansion to new chains and rollups, enabling any application to onboard users from other chains. The architecture involves three key messages— Intent, Fill, and Settlement—processed across chains by offchain agents, ensuring liquidity and efficient settlement through Hub and Spoke contracts, with solvers executing and settling intents for cross-chain actions. The initial supported actions include token bridging, flash loans, debt recovery, and XOC bridging, with plans to extend to other services in the future.",
+    "timelineDate3": "March 21st, 2024",
+    "timelineTitle3": "Xocolatl is released on Base",
+    "timelineDesc3": "Thanks to the hard work from the community, and funding from the Optimism Foundation, Xocolatl is released on Coinbase’s Base Layer 2 network with complete support for the Base native assets, along with a new innovative dual peg system to enable liquid staking of the ETH that is held in reserve by the network.",
+    "timelineDate4": "August 21st, 2024",
+    "timelineTitle4": "First MIP-12 Passed",
+    "timelineDesc4": "The first-ever Xocolatl improvement proposal is passed by the DAO. A major milestone on the decentralization of Xocolatl and DeFi in Mexico."
+
 }
