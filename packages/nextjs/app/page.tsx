@@ -3,6 +3,7 @@
 // import Image from "next/image";
 import About from "./components/About/index";
 import FeaturesTab from "./components/FeaturesTab";
+import TestimonialTitle from "./components/TestimonialTitle";
 import Benefits from "./components/benefits";
 import { benefitOne, benefitTwo } from "./components/data";
 import Faq from "./components/faq";
@@ -25,11 +26,7 @@ const Home: NextPage = () => {
       <div className="divider"></div>
       <About />
       <div className="divider"></div>
-      <SectionTitle pretitle="¡Inspiring testimonials!" title="Explore the voices of the $XOC community">
-        Discover authentic testimonials from those who are part of the vibrant community building and using $XOC. From
-        transformative experiences to success stories, here you&apos;ll find the inspiration you need to join this
-        exciting financial revolution.
-      </SectionTitle>
+      <TestimonialTitle />
       <Testimonials />
       <div className="divider"></div>
       <SectionTitle pretitle="FAQ" title="Frequently Asked Questions">
