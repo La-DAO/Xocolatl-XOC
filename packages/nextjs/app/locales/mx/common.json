@@ -2,10 +2,10 @@
   "title": "La Stablecoin MXN de México: XOC",
   "description": "Como una moneda digital programable equivalente al peso mexicano, $XOC garantiza transacciones rastreables y transparentes, dificultando la corrupción.",
   "aboutName": "Sobre el nombre",
-  "aboutDescription": "La palabra 'Xocolatl' proviene del náhuatl, una palabra prehispánica que se refiere a los granos de cacao. Está bien documentado que los mayas y aztecas usaban granos de cacao como forma de moneda.",
-  "aboutLinkText": "como forma de moneda.",
+  "aboutDescription": "La palabra 'Xocolatl' proviene del náhuatl, una palabra prehispánica que se refiere a los granos de cacao. Está bien documentado que los mayas y aztecas usaban granos de cacao como",
+  "aboutLinkText": "forma de moneda.",
   "tryXocButton": "Prueba $XOC",
-  "mostLiquidStablecoin": "$XOC es la stablecoin más líquida para la moneda MXN.",
+  "mostLiquidStablecoin": "$XOC es la stablecoin más líquida para el peso $MXN.",
 
   "featuresTab1": "Gestión de CDP",
   "featuresTab2": "Mercados de Préstamos de Dinero",
@@ -68,7 +68,12 @@
 
   "faqPreTitle": "FAQ",
   "faqTitle": "Preguntas Frecuentes",
-  "faqDescription": "Esta sección es para responder preguntas frecuentes de la comunidad emergente en torno a $XOC y todo eso."
+  "faqDescription": "Esta sección es para responder preguntas frecuentes de la comunidad emergente en torno a $XOC y todo eso.",
+
+  "Base": "Base",
+  "Market": "Mercado",
+  "TotalXOCMinted": "Total $XOC Acuñado",
+  "Deposits": "Depósitos"
 
 
 }

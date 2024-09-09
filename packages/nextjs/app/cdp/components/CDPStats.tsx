@@ -8,13 +8,15 @@ import PolygonLogo from "@/public/PolygonLogo.png";
 import { Address, formatEther } from "viem";
 import { useChainId, useReadContract, useReadContracts } from "wagmi";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
+import { useTranslation } from "~~/app/context/LanguageContext";
 
 const CDPStats: React.FC = () => {
+  const { t } = useTranslation();
   const chainId = useChainId();
   const chainNames: { [key: number]: string } = {
     56: "Binance Smart Chain",
     137: "Polygon",
-    8453: "Base",
+    8453: t("Base"),
   };
   const chainName = chainNames[chainId] || "Unknown Chain";
 
@@ -157,13 +159,15 @@ const CDPStats: React.FC = () => {
             <Image src={logoSrc} alt={`${chainName} Logo`} className="h-8 w-8" />
           </div>
           <div>
-            <div className="text-2xl text-primary font-semibold">{chainName} Market</div>
+            <div className="text-2xl text-primary font-semibold">
+              {chainName} {t("Market")}
+            </div>
           </div>
         </div>
         {/* Data Display */}
         <div className="flex items-center space-x-8">
           <div className="text">
-            <div className="text-sm text-gray-400">Total XOC Minted</div>
+            <div className="text-sm text-gray-400">{t("TotalXOCMinted")}</div>
             <div className="text-lg text-accent font-semibold flex items-end">
               {latestMintedLoading ? "Loading..." : latestMintedError ? "Error" : `$ ${latestMintedNumber?.toString()}`}
               <ArrowTopRightOnSquareIcon className="h-6 w-6 text-accent cursor-pointer" onClick={handleProofClick} />
@@ -173,7 +177,7 @@ const CDPStats: React.FC = () => {
           <div className="flex flex-wrap space-x-8">
             {formattedHouseOfReserveData.map((data, index) => (
               <div key={index} className="text">
-                <div className="text-sm text-gray-400">{`${assetNames[index]} Deposits`}</div>
+                <div className="text-sm text-gray-400">{`${assetNames[index]}  ${t("Deposits")}`}</div>
                 <div className="text-lg text-accent font-semibold">
                   {data !== 0 ? ` ${data.toFixed(4)}` : "Loading..."}
                 </div>
