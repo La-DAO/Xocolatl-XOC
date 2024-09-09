@@ -78,6 +78,7 @@ export const HeaderMenuLinks = () => {
  * Site header
  */
 export const Header = () => {
+  const { t } = useTranslation();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
   useOutsideClick(
@@ -117,7 +118,7 @@ export const Header = () => {
           </div>
           <div className="flex flex-col">
             <span className="font-bold leading-tight">Xocolatl-XOC</span>
-            <span className="text-xs">Decentralized Finances for Mexico</span>
+            <span className="text-xs">{t("navDescription")}</span>
           </div>
         </Link>
         <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
