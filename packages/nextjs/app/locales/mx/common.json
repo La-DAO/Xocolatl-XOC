@@ -85,7 +85,25 @@
   "AssetsColumn4": "Umbral de liquidación",
   "AssetsColumn5": "Acciones",
   "AssetsDepositButton": "Depositar",
-  "AssetsWithdrawButton": "Retirar"
+  "AssetsWithdrawButton": "Retirar",
+
+  "CDPInfoTitle": "Comprendiendo el Mecanismo CDP",
+  "CDPInfoSubtitle": "Como funcionan los contratos",
+  "CDPParagraph1": "Nuestra plataforma utiliza un conjunto de contratos inteligentes para gestionar los procesos de depósito, acuñación y retirada. Cuando deposita activos en nuestro contrato inteligente, estos activos se guardan de forma segura y sirven como garantía para la acuñación de nuevas stablecoins. Los contratos inteligentes garantizan la seguridad e integridad de sus activos aplicando reglas y condiciones estrictas.",
+  "CDPInfoSubtitle2": "El mecanismo de depósito y acuñación",
+  "CDPParagraph2": "Cuando se depositan activos en el contrato inteligente, básicamente se está bloqueando una garantía. En función del valor de esta garantía, puede acuñar una cantidad correspondiente de stablecoins. Por ejemplo, si deposita 1 ETH por valor de 2000 $, y el ratio de colateralización es del 150%, puede acuñar hasta 1333 $ en stablecoins. El sistema supervisa constantemente el valor de la garantía para garantizar que sigue siendo suficiente para respaldar las stablecoins acuñadas.",
+  "CDPInfoStepsTitle": "Así es como funciona paso a paso:",
+  "CDPInfoStep1": "Depositas activos en el contrato de Casa de Reserva",
+  "CDPInfoStep2": "El contrato inteligente calcula la cantidad máxima de stablecoins que puedes acuñar en función del valor de la garantía y la relación de colateralización requerida.",
+  "CDPInfoStep3": "Acuñas $XOC y los utilizas en el ecosistema DeFi",
+  "CDPInfoUseTitle": "Usos de Monedas Estables",
+  "CDPInfoUseSubTitle": "Una vez que hayas acuñado tus stablecoins, puedes usarlas de varias formas:",
+  "CDPInfoPoint1": "Comerciar con ellas en bolsas compatibles para comprar otras criptomonedas o activos.",
+  "CDPInfoPoint2": "Utilízalos en protocolos DeFi para prestar, pedir prestado o ganar intereses.",
+  "CDPInfoPoint3": "Gastarlos directamente si se aceptan como método de pago.",
+  "CDPClosing": "La flexibilidad de las stablecoins le permite gestionar sus activos con mayor eficacia, proporcionándole liquidez y estabilidad en mercados volátiles."
+
+
 
 
 }

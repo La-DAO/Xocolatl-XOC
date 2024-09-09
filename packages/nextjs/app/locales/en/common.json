@@ -73,5 +73,21 @@
   "AssetsColumn4": "Liquidation Threshold",
   "AssetsColumn5": "Actions",
   "AssetsDepositButton": "Deposit",
-  "AssetsWithdrawButton": "Withdraw"
+  "AssetsWithdrawButton": "Withdraw",
+
+  "CDPInfoTitle": "Understanding the CDP Mechanism",
+  "CDPInfoSubtitle": "How the Contracts Work",
+  "CDPParagraph1": "Our platform leverages a set of smart contracts to manage the deposit, minting, and withdrawal processes. When you deposit assets into our smart contract, these assets are securely held and serve as collateral for minting new stablecoins. The smart contracts ensure the safety and integrity of your assets by enforcing strict rules and conditions.",
+  "CDPInfoSubtitle2": "The Mechanism of Depositing and Minting",
+  "CDPParagraph2": "When you deposit assets into the smart contract, you are essentially locking up collateral. Based on the value of this collateral, you can mint a corresponding amount of stablecoins. For example, if you deposit 1 ETH worth $2000, and the collateralization ratio is 150%, you can mint up to $1333 worth of stablecoins. The system constantly monitors the value of the collateral to ensure it remains sufficient to back the minted stablecoins.",
+  "CDPInfoStepsTitle": "Here’s how it works step-by-step:",
+  "CDPInfoStep1": "You deposit your assets into the smart contract.",
+  "CDPInfoStep2": "The smart contract calculates the maximum amount of stablecoins you can mint based on the collateral value and the required collateralization ratio.",
+  "CDPInfoStep3": "You mint the stablecoins and they are credited to your account.",
+  "CDPInfoUseTitle": "Using of Stablecoins",
+  "CDPInfoUseSubTitle": " Once you have minted your stablecoins, you can use them in various ways:",
+  "CDPInfoPoint1": "Trade them on supported exchanges to buy other cryptocurrencies or assets.",
+  "CDPInfoPoint2": "Use them in DeFi protocols for lending, borrowing, or earning interest.",
+  "CDPInfoPoint3": "Spend them directly if they are accepted as a payment method.",
+  "CDPClosing": "The flexibility of stablecoins allows you to manage your assets more effectively, providing liquidity and stability in volatile markets."
   }
