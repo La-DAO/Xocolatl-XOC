@@ -64,5 +64,14 @@
   "Deposits": "Deposits",
   "YourDepositTableTitle": "Your Deposits",
   "YourDepositsDescription":"Your open positions in the Xocolatl contracts",
-  "YourDepositsEmpty": "Nothing deposited yet - No open positions found"
+  "YourDepositsEmpty": "Nothing deposited yet - No open positions found",
+  "AssetTableTitle": "Assets to Deposit",
+  "AssetTableDescription": "Select the asset to deposit as collateral, only then can you mint $XOC",
+  "AssetsColumn1": "Assets",
+  "AssetsColumn2": "Balance",
+  "AssetsColumn3": "Max LTV",
+  "AssetsColumn4": "Liquidation Threshold",
+  "AssetsColumn5": "Actions",
+  "AssetsDepositButton": "Deposit",
+  "AssetsWithdrawButton": "Withdraw"
   }

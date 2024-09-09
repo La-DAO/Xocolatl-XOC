@@ -6,6 +6,7 @@ import useAccountAddress from "@/hooks/useAccount";
 import { Address } from "viem";
 import { useChainId } from "wagmi";
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
+import { useTranslation } from "~~/app/context/LanguageContext";
 
 // Define the assets for each chain
 const assets: {
@@ -89,7 +90,11 @@ const assets: {
 };
 
 const DepositTable: React.FC = () => {
+  // Get the translation object
+  const { t } = useTranslation();
+  // Get the chain ID
   const chainId = useChainId();
+  // Define the state variables
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
@@ -140,13 +145,13 @@ const DepositTable: React.FC = () => {
         <thead>
           <tr className="text-center">
             <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Assets
+              {t("AssetsColumn1")}
             </th>
             <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Balance
+              {t("AssetsColumn2")}
             </th>
             <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Max LTV{" "}
+              {t("AssetsColumn3")}{" "}
               <div
                 className="tooltip tooltip-primary"
                 data-tip="Maximum Loan-To-Value ratio, which tells you how much you can leverage your asset's worth."
@@ -155,7 +160,7 @@ const DepositTable: React.FC = () => {
               </div>
             </th>
             <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Liquidation Threshold{" "}
+              {t("AssetsColumn4")}{" "}
               <div
                 className="tooltip tooltip-primary"
                 data-tip="When the value of an asset falls below the Liquidation Threshold, it indicates that the asset's value has decreased significantly and may no longer be sufficient to cover the borrowed funds. In such cases, the lending platform may initiate a liquidation process to sell the borrower's assets and recover the borrowed amount."
@@ -165,7 +170,7 @@ const DepositTable: React.FC = () => {
             </th>
 
             <th scope="col" className="pl-32 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Actions
+              {t("AssetsColumn5")}
             </th>
           </tr>
         </thead>
@@ -195,13 +200,13 @@ const DepositTable: React.FC = () => {
                   className="text-sm text-accent dark:text-white btn bg-base-100 hover:bg-primary hover:text-white"
                   onClick={() => handleOpenModal(asset.name, asset.houseOfReserveContract, asset.assetContract)}
                 >
-                  Deposit
+                  {t("AssetsDepositButton")}
                 </button>
                 <button
                   className="text-sm text-accent dark:text-white btn bg-base-100 ml-2 hover:bg-primary hover:text-white"
                   onClick={() => handleOpenWithdrawModal(asset.name, asset.houseOfReserveContract, asset.assetContract)}
                 >
-                  Withdraw
+                  {t("AssetsWithdrawButton")}
                 </button>
               </td>
             </tr>

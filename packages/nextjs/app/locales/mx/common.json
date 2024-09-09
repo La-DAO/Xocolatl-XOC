@@ -76,7 +76,16 @@
   "Deposits": "Depósitos",
   "YourDepositTableTitle": "Tus Depósitos",
   "YourDepositsDescription":"Tus posiciones abiertas en los contratos de Xocolatl",
-  "YourDepositsEmpty": "Aún no has depositado nada - No se encontraron posiciones abiertas"
+  "YourDepositsEmpty": "Aún no has depositado nada - No se encontraron posiciones abiertas",
+  "AssetTableTitle": "Activos a Depositar",
+  "AssetTableDescription": "Selecciona el activo a depositar como garantía, solo entonces podrás acuñar $XOC",
+  "AssetsColumn1": "Activos",
+  "AssetsColumn2": "Saldo",
+  "AssetsColumn3": "LTV Máximo",
+  "AssetsColumn4": "Umbral de liquidación",
+  "AssetsColumn5": "Acciones",
+  "AssetsDepositButton": "Depositar",
+  "AssetsWithdrawButton": "Retirar"
 
 
 }

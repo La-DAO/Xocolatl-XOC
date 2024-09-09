@@ -21,8 +21,8 @@ const Deposits: React.FC = () => {
       </div>
       {/* Section for displaying available assets to deposit */}
       <div className="bg-white p-6 rounded-2xl shadow-md">
-        <h2 className="text-xl text-primary font-semibold mb-4">Assets to Deposit</h2>
-        <p className="text-gray-500 mb-4">Select the asset to deposit as collateral, only then can you mint $XOC</p>
+        <h2 className="text-xl text-primary font-semibold mb-4">{t("AssetTableTitle")}</h2>
+        <p className="text-gray-500 mb-4">{t("AssetTableDescription")}</p>
         {/* Table for displaying available assets to supply */}
         <DepositTable />
       </div>
