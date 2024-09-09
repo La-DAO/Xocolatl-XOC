@@ -15,8 +15,7 @@ const Testimonials = () => {
         <div className="lg:col-span-2 xl:col-auto">
           <div className="flex flex-col justify-between w-full h-full bg-neutral px-14 rounded-2xl py-14 dark:bg-neutral dark:text-secondary">
             <p className="text-2xl leading-normal text-base-100 dark:text-inherit">
-              {t("quote1")} <Mark>{t("quote1Highlight")}</Mark>{" "}
-              {t("quote1Cont")}
+              {t("quote1")} <Mark>{t("quote1Highlight")}</Mark> {t("quote1Cont")}
             </p>
             <Avatar image={Jorge} name="Jorge Magni" title={t("title1")} />
           </div>
@@ -24,8 +23,7 @@ const Testimonials = () => {
         <div className="">
           <div className="flex flex-col justify-between w-full h-full bg-neutral px-14 rounded-2xl py-14 dark:bg-neutral dark:text-secondary">
             <p className="leading-normal text-base-100 dark:text-inherit">
-              {t("quote2")} <Mark>{t("quote2Highlight")}</Mark>{" "}
-              {t("quote2Cont")}
+              {t("quote2")} <Mark>{t("quote2Highlight")}</Mark> {t("quote2Cont")}
             </p>
             <Avatar image={Chuy} name="Chuy Garcia" title={t("title2")} />
           </div>

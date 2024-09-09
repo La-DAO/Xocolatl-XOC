@@ -6,7 +6,7 @@ import { useReadContract } from "wagmi";
 import { vaultABI } from "~~/app/components/abis/vault";
 
 const VaultInfo: React.FC = () => {
-  const [, setTotalReserves] = useState<number | null>(null!);
+  const [, setTotalReserves] = useState<number | null>(null);
   const { data: totalReserves } = useReadContract({
     address: "0xD6DaB267b7C23EdB2ed5605d9f3f37420e88e291",
     abi: vaultABI,
