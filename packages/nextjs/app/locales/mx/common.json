@@ -73,7 +73,10 @@
   "Base": "Base",
   "Market": "Mercado",
   "TotalXOCMinted": "Total $XOC Acuñado",
-  "Deposits": "Depósitos"
+  "Deposits": "Depósitos",
+  "YourDepositTableTitle": "Tus Depósitos",
+  "YourDepositsDescription":"Tus posiciones abiertas en los contratos de Xocolatl",
+  "YourDepositsEmpty": "Aún no has depositado nada - No se encontraron posiciones abiertas"
 
 
 }

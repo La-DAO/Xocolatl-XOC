@@ -61,5 +61,8 @@
   "Base": "Base",
   "Market": "Market",
   "TotalXOCMinted": "Total $XOC Minted",
-  "Deposits": "Deposits"
+  "Deposits": "Deposits",
+  "YourDepositTableTitle": "Your Deposits",
+  "YourDepositsDescription":"Your open positions in the Xocolatl contracts",
+  "YourDepositsEmpty": "Nothing deposited yet - No open positions found"
   }
