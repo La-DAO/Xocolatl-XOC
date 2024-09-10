@@ -4,38 +4,36 @@ import Acid from "../../public/acidlazzer.png";
 import Chuy from "../../public/chuypunk.png";
 import Jorge from "../../public/jorge.png";
 import Container from "./container";
+import { useTranslation } from "~~/app/context/LanguageContext";
 
 const Testimonials = () => {
+  const { t } = useTranslation();
+
   return (
     <Container>
       <div className="grid gap-10 lg:grid-cols-2 xl:grid-cols-3">
         <div className="lg:col-span-2 xl:col-auto">
           <div className="flex flex-col justify-between w-full h-full bg-neutral px-14 rounded-2xl py-14 dark:bg-neutral dark:text-secondary">
             <p className="text-2xl leading-normal text-base-100 dark:text-inherit">
-              $XOC is one of the first proposals to <Mark>revolutionize DeFi in Mexico.</Mark> Integrating a stable
-              Mexican peso currency into the web3 ecosystem.
+              {t("quote1")} <Mark>{t("quote1Highlight")}</Mark> {t("quote1Cont")}
             </p>
-            <Avatar image={Jorge} name="Jorge Magni" title="Kairos Research" />
+            <Avatar image={Jorge} name="Jorge Magni" title={t("title1")} />
           </div>
         </div>
         <div className="">
           <div className="flex flex-col justify-between w-full h-full bg-neutral px-14 rounded-2xl py-14 dark:bg-neutral dark:text-secondary">
-            <p className=" leading-normal text-base-100 dark:text-inherit">
-              The Mexican peso has been a global example of strength and resilience against the US Dollar. $XOC{" "}
-              <Mark>unleashes this power in the DeFi ecosystem</Mark>, giving the rest of the world access to our
-              economy, but more importantly creating a relationship between ETH and MXN, a vision that belongs to only
-              those who are able to see the future that awaits.
+            <p className="leading-normal text-base-100 dark:text-inherit">
+              {t("quote2")} <Mark>{t("quote2Highlight")}</Mark> {t("quote2Cont")}
             </p>
-            <Avatar image={Chuy} name="Chuy Garcia" title="DappNode" />
+            <Avatar image={Chuy} name="Chuy Garcia" title={t("title2")} />
           </div>
         </div>
         <div className="">
           <div className="flex flex-col justify-between w-full h-full bg-neutral px-14 rounded-2xl py-14 dark:bg-neutral dark:text-secondary">
             <p className="text-2xl leading-normal text-base-100 dark:text-inherit">
-              <Mark>$XOC is Mexico&rsquo;s best tool</Mark> to build a decentralized financial system. Financial
-              empowerment is the key to a better future for all Mexicans.
+              <Mark>{t("quote3Highlight")}</Mark> {t("quote3Cont")}
             </p>
-            <Avatar image={Acid} name="AcidLazzer" title="Ethereum Mexico" />
+            <Avatar image={Acid} name="AcidLazzer" title={t("title3")} />
           </div>
         </div>
       </div>

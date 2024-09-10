@@ -7,8 +7,10 @@ import { useAccount } from "wagmi";
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { houseOfCoinABI } from "~~/app/components/abis/houseofcoin";
 import { assetsAccountantABI } from "~~/app/components/abis/xocabis";
+import { useTranslation } from "~~/app/context/LanguageContext";
 
 const YourDeposits = () => {
+  const { t } = useTranslation();
   const { address } = useAccount();
   const chainId = useChainId();
 
@@ -562,7 +564,7 @@ const YourDeposits = () => {
           )}
         </>
       ) : (
-        <p className="text-primary text-2xl">Nothing deposited yet - No open positions found</p>
+        <p className="text-primary text-2xl">{t("YourDepositsEmpty")}</p>
       )}
     </div>
   );

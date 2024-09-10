@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { faBridge } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { BanknotesIcon, Bars3Icon, BuildingLibraryIcon, HomeIcon } from "@heroicons/react/24/solid";
+import { useTranslation } from "~~/app/context/LanguageContext";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
@@ -77,12 +78,14 @@ export const HeaderMenuLinks = () => {
  * Site header
  */
 export const Header = () => {
+  const { t } = useTranslation();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
   useOutsideClick(
     burgerMenuRef,
     useCallback(() => setIsDrawerOpen(false), []),
   );
+  const { setLocale, locale } = useTranslation();
 
   return (
     <div className="sticky top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-accent px-0 sm:px-2">
@@ -115,7 +118,7 @@ export const Header = () => {
           </div>
           <div className="flex flex-col">
             <span className="font-bold leading-tight">Xocolatl-XOC</span>
-            <span className="text-xs">Decentralized Finances for Mexico</span>
+            <span className="text-xs">{t("navDescription")}</span>
           </div>
         </Link>
         <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
@@ -125,6 +128,14 @@ export const Header = () => {
       <div className="navbar-end flex-grow mr-4">
         <RainbowKitCustomConnectButton />
         <FaucetButton />
+        <select
+          value={locale}
+          onChange={e => setLocale(e.target.value)}
+          className="select select-ghost mx-2 hover:bg-primary"
+        >
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
       </div>
     </div>
   );
