@@ -90,5 +90,15 @@
   "CDPInfoPoint1": "Trade them on supported exchanges to buy other cryptocurrencies or assets.",
   "CDPInfoPoint2": "Use them in DeFi protocols for lending, borrowing, or earning interest.",
   "CDPInfoPoint3": "Spend them directly if they are accepted as a payment method.",
-  "CDPClosing": "The flexibility of stablecoins allows you to manage your assets more effectively, providing liquidity and stability in volatile markets."
+  "CDPClosing": "The flexibility of stablecoins allows you to manage your assets more effectively, providing liquidity and stability in volatile markets.",
+
+  "XoktleTitle": "Xoktle",
+  "XoktleDescription": "Xoktle is the word for pot 🍯 in Nahuatl. This smart contract is designed to use your deposit to expand stablecoin liquidity and pair with the DeFi ecosystem. For every 1 dollar, there will be 4 pesos in the pool, so our liquidity agent will always strive to maintain this ratio by internally rebalancing the pool.",
+  "XoktleLiquidityTitle": "Manage Liquidity",
+  "XoktleDepositSwitcher": "Deposit",
+  "XoktleWithdrawSwitcher": "Withdraw",
+  "XoktleXOCIndicate": "Indicate the amount of $XOC to deposit",
+  "XoktleXOCAmount": "Enter amount of $XOC",
+  "XoktleUSDCIndicate": "Indicate the amount of $USDC to deposit",
+  "XoktleUSDCAmount": "Enter amount of $USDC"
   }

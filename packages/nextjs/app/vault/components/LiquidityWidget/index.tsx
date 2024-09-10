@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslation } from "~~/app/context/LanguageContext";
 
 const LiquidityWidget: React.FC = () => {
+  const { t } = useTranslation();
   const [action, setAction] = useState<"Deposit" | "Withdraw">("Deposit");
   const [tokenA, setTokenA] = useState("");
   const [tokenB, setTokenB] = useState("");
@@ -20,7 +22,7 @@ const LiquidityWidget: React.FC = () => {
     <div className="w-full bg-white p-6 rounded-lg shadow-md mt-6">
       {/* Title and Divider */}
       <div className="mb-4">
-        <h2 className="text-xl font-semibold text-gray-800 mb-2">Manage Liquidity</h2>
+        <h2 className="text-xl font-semibold text-gray-800 mb-2">{t("XoktleLiquidityTitle")}</h2>
         <hr className="border-t-2 border-gray-300 rounded-t-full" />
       </div>
 
@@ -33,7 +35,7 @@ const LiquidityWidget: React.FC = () => {
               action === "Deposit" ? "bg-base-300 text-xl text-white" : "bg-gray-200 text-gray-800"
             }`}
           >
-            Deposit
+            {action === "Deposit" ? t("XoktleDepositSwitcher") : t("XoktleWithdrawSwitcher")}
           </button>
           <button
             onClick={() => handleActionChange("Withdraw")}
@@ -41,7 +43,7 @@ const LiquidityWidget: React.FC = () => {
               action === "Withdraw" ? "bg-base-300 text-xl text-white" : "bg-gray-200 text-gray-800"
             }`}
           >
-            Withdraw
+            {action === "Deposit" ? t("XoktleWithdrawSwitcher") : t("XoktleDepositSwitcher")}
           </button>
         </div>
       </div>
@@ -49,24 +51,24 @@ const LiquidityWidget: React.FC = () => {
       {/* Inputs for Token A, Token B, and Calculation */}
       <div className="space-y-4 mb-6">
         <div>
-          <label className="block text-gray-700">Indicate your $XOC deposit</label>
+          <label className="block text-gray-700">{t("XoktleXOCIndicate")}</label>
           <input
             type="number"
             value={tokenA}
             onChange={e => setTokenA(e.target.value)}
             className="w-full p-2 border rounded-lg dark:bg-neutral dark:text-neutral-content"
-            placeholder="Enter amount of $XOC"
+            placeholder={t("XoktleXOCAmount")}
           />
         </div>
 
         <div>
-          <label className="block text-gray-700">Indicate your $USDC deposit</label>
+          <label className="block text-gray-700">{t("XoktleUSDCIndicate")}</label>
           <input
             type="number"
             value={tokenB}
             onChange={e => setTokenB(e.target.value)}
             className="w-full p-2 border rounded-lg dark:bg-neutral dark:text-neutral-content"
-            placeholder="Enter amount of $USDC"
+            placeholder={t("XoktleUSDCAmount")}
           />
         </div>
 

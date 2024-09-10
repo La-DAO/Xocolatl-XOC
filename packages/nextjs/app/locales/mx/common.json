@@ -102,7 +102,17 @@
   "CDPInfoPoint1": "Comerciar con ellas en bolsas compatibles para comprar otras criptomonedas o activos.",
   "CDPInfoPoint2": "Utilízalos en protocolos DeFi para prestar, pedir prestado o ganar intereses.",
   "CDPInfoPoint3": "Gastarlos directamente si se aceptan como método de pago.",
-  "CDPClosing": "La flexibilidad de las stablecoins le permite gestionar sus activos con mayor eficacia, proporcionándole liquidez y estabilidad en mercados volátiles."
+  "CDPClosing": "La flexibilidad de las stablecoins le permite gestionar sus activos con mayor eficacia, proporcionándole liquidez y estabilidad en mercados volátiles.",
+
+  "XoktleTitle": "Xoktle",
+  "XoktleDescription": "Xoktle es la palabra en náhuatl para olla 🍯. Este contrato inteligente está diseñado para utilizar tu depósito para expandir la liquidez de la stablecoin y emparejarla con el ecosistema DeFi. Por cada 1 dólar, habrá 4 pesos en el pool, por lo que nuestro agente de liquidez siempre se esforzará por mantener esta proporción mediante el reequilibrio interno del pool.",
+  "XoktleLiquidityTitle": "Gestiona la Liquidez",
+  "XoktleDepositSwitcher": "Depositar",
+  "XoktleWithdrawSwitcher": "Retirar",
+  "XoktleXOCIndicate": "Indica la cantidad de $XOC a depositar",
+  "XoktleXOCAmount": "Cantidad de $XOC",
+  "XoktleUSDCIndicate": "Indica la cantidad de $USDC a depositar",
+  "XoktleUSDCAmount": "Cantidad de $USDC"
 
 
 

@@ -4,8 +4,10 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useReadContract } from "wagmi";
 import { vaultABI } from "~~/app/components/abis/vault";
+import { useTranslation } from "~~/app/context/LanguageContext";
 
 const VaultInfo: React.FC = () => {
+  const { t } = useTranslation();
   const [, setTotalReserves] = useState<number | null>(null);
   const { data: totalReserves } = useReadContract({
     address: "0xD6DaB267b7C23EdB2ed5605d9f3f37420e88e291",
@@ -30,11 +32,8 @@ const VaultInfo: React.FC = () => {
       <div className="ml-6 flex-grow">
         {/* Title and Description */}
         <div className="mb-4">
-          <h2 className="text-2xl font-semibold text-primary">Xoktle Vault</h2>
-          <p className="text-gray-600">
-            Xoktle is the word for jar 🍯 in nahuatl. This vault is designed to use your deposit to expand stablecoin
-            liquidity and pair with the DeFi ecosystem.
-          </p>
+          <h2 className="text-2xl font-semibold text-primary">{t("XoktleTitle")}</h2>
+          <p className="text-gray-600">{t("XoktleDescription")}</p>
         </div>
 
         {/* Number Boxes */}
