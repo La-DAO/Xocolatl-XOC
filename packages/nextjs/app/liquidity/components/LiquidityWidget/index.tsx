@@ -24,7 +24,7 @@ const LiquidityWidget: React.FC = () => {
 
   const { writeContract: deposit } = useWriteContract();
 
-  const { writeContract: approveXoc } = useWriteContract();
+  const { writeContract: approveERC20 } = useWriteContract();
 
   // Hook to read the XOC contract allowance
   const {
@@ -106,7 +106,7 @@ const LiquidityWidget: React.FC = () => {
         abi: liquidityABI,
         address: "0xD6DaB267b7C23EdB2ed5605d9f3f37420e88e291", // Liquidity contract address
         functionName: "deposit",
-        args: [xocAmountInWei, usdcAmountInWei, accountAddress],
+        args: [usdcAmountInWei, xocAmountInWei, accountAddress],
       });
 
       console.log("Transaction submitted:", tx);
@@ -125,22 +125,22 @@ const LiquidityWidget: React.FC = () => {
 
     try {
       // Approve XOC
-      if (xocAmount > parseFloat(xocAllowanceState)) {
-        await approveXoc({
+      if (usdcAmount > parseFloat(usdcAllowanceState)) {
+        await approveERC20({
           abi: ERC20ABI,
           address: usdcContract,
           functionName: "approve",
-          args: [spenderAddress, parseEther(usdcAmount.toString())],
+          args: [spenderAddress, usdcAmount * 1e6], // Multiply by 1e6 to convert to USDC decimals
         });
       }
 
       // Approve USDC
-      if (usdcAmount > parseFloat(usdcAllowanceState)) {
-        await approveXoc({
+      if (xocAmount > parseFloat(xocAllowanceState)) {
+        await approveERC20({
           abi: ERC20ABI,
-          address: usdcContract,
+          address: xocContract,
           functionName: "approve",
-          args: [spenderAddress, usdcAmount],
+          args: [spenderAddress, xocAmount * 1e18], // Multiply by 1e18 to convert to XOC decimals
         });
       }
     } catch (err) {
