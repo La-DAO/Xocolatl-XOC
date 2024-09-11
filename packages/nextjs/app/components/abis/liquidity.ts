@@ -1,4 +1,4 @@
-export const vaultABI = [
+export const liquidityABI = [
   {
     inputs: [
       { internalType: "address", name: "_pool", type: "address" },

@@ -3,15 +3,15 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useReadContract } from "wagmi";
-import { vaultABI } from "~~/app/components/abis/vault";
+import { liquidityABI } from "~~/app/components/abis/liquidity";
 import { useTranslation } from "~~/app/context/LanguageContext";
 
-const VaultInfo: React.FC = () => {
+const LiquidityInfo: React.FC = () => {
   const { t } = useTranslation();
   const [, setTotalReserves] = useState<number | null>(null);
   const { data: totalReserves } = useReadContract({
     address: "0xD6DaB267b7C23EdB2ed5605d9f3f37420e88e291",
-    abi: vaultABI,
+    abi: liquidityABI,
     functionName: "totalSupply",
   });
 
@@ -33,7 +33,7 @@ const VaultInfo: React.FC = () => {
     error: lpTokenError,
   } = useReadContract({
     address: "0xD6DaB267b7C23EdB2ed5605d9f3f37420e88e291",
-    abi: vaultABI,
+    abi: liquidityABI,
     functionName: "getTotalAmounts",
   });
 
@@ -101,4 +101,4 @@ const VaultInfo: React.FC = () => {
   );
 };
 
-export default VaultInfo;
+export default LiquidityInfo;

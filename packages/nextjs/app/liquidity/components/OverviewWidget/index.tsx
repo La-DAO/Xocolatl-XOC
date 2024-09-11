@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useReadContract } from "wagmi";
-import { vaultABI } from "~~/app/components/abis/vault";
+import { liquidityABI } from "~~/app/components/abis/liquidity";
 
 const OverviewWidget: React.FC = () => {
   const [tokenA, setTokenA] = useState<number | null>(null);
@@ -13,7 +13,7 @@ const OverviewWidget: React.FC = () => {
     error: lpTokenError,
   } = useReadContract({
     address: "0xD6DaB267b7C23EdB2ed5605d9f3f37420e88e291",
-    abi: vaultABI,
+    abi: liquidityABI,
     functionName: "getTotalAmounts",
   });
 
