@@ -115,7 +115,9 @@
   "XoktleUSDCIndicate": "Indica la cantidad de $USDC a depositar",
   "XoktleUSDCAmount": "Cantidad de $USDC",
   "XoktleShareIndicate": "Indica la cantidad de acciones a depositar",
-  "XoktleShareAmount": "Cantidad de acciones"
+  "XoktleShareAmount": "Cantidad de acciones",
+  "XoktleOverView": "Vista General",
+  "XoktleAccountShares": "Acciones en tu cuenta"
 
 
 

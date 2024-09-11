@@ -1,74 +1,63 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useReadContract } from "wagmi";
+import { useAccount, useReadContract } from "wagmi";
 import { liquidityABI } from "~~/app/components/abis/liquidity";
+import { useTranslation } from "~~/app/context/LanguageContext";
 
 const OverviewWidget: React.FC = () => {
-  const [tokenA, setTokenA] = useState<number | null>(null);
-  const [tokenB, setTokenB] = useState<number | null>(null);
+  const { t } = useTranslation();
+  const [balance, setBalance] = useState<number | null>(null);
+  const { address: accountAddress } = useAccount(); // Get accountAddress using useAccount hook
+
+  // Fetch the balanceOf using the accountAddress
   const {
-    data: lpTokenData,
-    isLoading: lpTokenLoading,
-    error: lpTokenError,
+    data: balanceData,
+    isLoading: balanceLoading,
+    error: balanceError,
   } = useReadContract({
-    address: "0xD6DaB267b7C23EdB2ed5605d9f3f37420e88e291",
+    address: "0xD6DaB267b7C23EdB2ed5605d9f3f37420e88e291", // Liquidity contract address
     abi: liquidityABI,
-    functionName: "getTotalAmounts",
+    functionName: "balanceOf",
+    args: [accountAddress], // Pass accountAddress as argument to balanceOf
   });
 
   useEffect(() => {
-    if (lpTokenData) {
-      // Extract and format tokenA and tokenB from lpTokenData
-      const [tokenAValue, tokenBValue] = (lpTokenData as bigint[]).map((value: bigint) => Number(value) / 10 ** 18);
-      setTokenA(tokenAValue);
-      setTokenB(tokenBValue);
+    if (balanceData) {
+      // Convert the BigInt to a number and format it
+      const balanceValue = Number(balanceData) / 10 ** 18; // Assuming the token has 18 decimals
+      setBalance(balanceValue);
     }
-  }, [lpTokenData]);
+  }, [balanceData]);
 
-  // Format as currency: tokenA as USD and tokenB as MXN
-  const formatCurrency = (amount: number, currency: string) => {
+  // Function to format the balance as a standard number with commas
+  const formatNumber = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+      minimumFractionDigits: 6,
+      maximumFractionDigits: 6,
     }).format(amount);
   };
 
-  const formattedTokenA = tokenA !== null ? formatCurrency(tokenA, "USD") : null;
-  const formattedTokenB = tokenB !== null ? formatCurrency(tokenB, "MXN") : null;
+  const formattedBalance = balance !== null ? formatNumber(balance) : null;
 
   return (
     <div className="w-full bg-white p-6 rounded-lg shadow-md mt-6">
       {/* Title */}
       <div className="mb-4">
-        <h2 className="text-xl font-semibold text-gray-800 mb-2">Overview</h2>
+        <h2 className="text-xl font-semibold text-gray-800 mb-2">{t("XoktleOverView")}</h2>
         <hr className="border-t-2 border-gray-300 rounded-t-full" />
       </div>
 
       {/* Loading and Error States */}
-      {lpTokenLoading && <p className="text-gray-500">Loading data...</p>}
-      {lpTokenError && <p className="text-red-500">Error loading data.</p>}
+      {balanceLoading && <p className="text-gray-500">Loading balance...</p>}
+      {balanceError && <p className="text-red-500">Error loading balance.</p>}
 
-      {/* Token Information */}
-      {!lpTokenLoading && !lpTokenError && tokenA !== null && tokenB !== null && (
+      {/* Display Balance */}
+      {!balanceLoading && !balanceError && balance !== null && (
         <div className="space-y-4">
           <div className="flex justify-between">
-            <span className="text-gray-700">Total USDC Deposits:</span>
-            <span className="text-gray-900 font-semibold">{formattedTokenA}</span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-700">Total XOC Deposits:</span>
-            <span className="text-gray-900 font-semibold">{formattedTokenB}</span>
-          </div>
-
-          <div className="flex justify-between border-t pt-4 mt-4">
-            <span className="text-gray-700">Total Value:</span>
-            <span className="text-gray-900 font-bold">
-              {formattedTokenA && formattedTokenB ? `${formattedTokenA} + ${formattedTokenB}` : ""}
-            </span>
+            <span className="text-gray-700">{t("XoktleAccountShares")}:</span>
+            <span className="text-gray-900 font-semibold">{formattedBalance} shares</span>
           </div>
         </div>
       )}
