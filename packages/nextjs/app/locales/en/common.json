@@ -101,5 +101,9 @@
   "XoktleXOCIndicate": "Indicate the amount of $XOC to deposit",
   "XoktleXOCAmount": "Enter amount of $XOC",
   "XoktleUSDCIndicate": "Indicate the amount of $USDC to deposit",
-  "XoktleUSDCAmount": "Enter amount of $USDC"
+  "XoktleUSDCAmount": "Enter amount of $USDC",
+  "XoktleShareIndicate": "Indicate the amount of shares to withdraw",
+  "XoktleShareAmount": "Enter amount of shares",
+  "XoktleOverView": "Overview",
+  "XoktleAccountShares": "Your Liquidity Shares"
   }
