@@ -18,6 +18,8 @@ const LiquidityWidget: React.FC = () => {
   const [tokenB, setTokenB] = useState(""); // XOC amount
   const [xocAllowanceState, xocSetAllowanceState] = useState<string>("0");
   const [usdcAllowanceState, usdcSetAllowanceState] = useState<string>("0");
+  // State for share withdrawal input
+  const [shareAmount, setShareAmount] = useState(""); // Share amount
 
   // State to track if approval is needed
   const [requiresApproval, setRequiresApproval] = useState(false);
@@ -25,6 +27,8 @@ const LiquidityWidget: React.FC = () => {
   const { writeContract: deposit } = useWriteContract();
 
   const { writeContract: approveERC20 } = useWriteContract();
+
+  const { writeContract: withdraw } = useWriteContract();
 
   // Hook to read the XOC contract allowance
   const {
@@ -151,6 +155,32 @@ const LiquidityWidget: React.FC = () => {
   console.log("Xoc Allowance", xocAllowanceState);
   console.log("USDC Allowance", usdcAllowanceState);
 
+  // Function to handle the withdrawal
+  const handleWithdrawal = async () => {
+    if (!accountAddress) {
+      console.error("Account address not found");
+      return;
+    }
+
+    const shareAmountInWei = parseEther(shareAmount.toString()); // XOC uses 18 decimals
+
+    try {
+      const tx = await withdraw({
+        abi: liquidityABI,
+        address: "0xD6DaB267b7C23EdB2ed5605d9f3f37420e88e291", // Liquidity contract address
+        functionName: "withdraw",
+        args: [shareAmountInWei, accountAddress],
+      });
+
+      console.log("Transaction submitted:", tx);
+      // Optionally wait for the transaction to be mined
+      // const receipt = await tx.wait();
+      // console.log("Transaction confirmed:", receipt);
+    } catch (err) {
+      console.error("Error executing contract function:", err);
+    }
+  };
+
   return (
     <div className="w-full bg-white p-6 rounded-lg shadow-md mt-6">
       <div className="mb-4">
@@ -210,8 +240,8 @@ const LiquidityWidget: React.FC = () => {
             <label className="block text-gray-700">{t("XoktleShareIndicate")}</label>
             <input
               type="number"
-              value={tokenB} // This will represent the share amount to withdraw
-              onChange={e => setTokenB(e.target.value)}
+              value={shareAmount} // This will represent the share amount to withdraw
+              onChange={e => setShareAmount(e.target.value)}
               className="w-full p-2 border rounded-lg dark:bg-neutral dark:text-neutral-content"
               placeholder={t("XoktleShareAmount")}
             />
@@ -224,8 +254,10 @@ const LiquidityWidget: React.FC = () => {
         onClick={() => {
           if (requiresApproval) {
             handleApproval(); // Call handleApproval when approval is needed
-          } else {
-            handleDeposit(); // Call handleDeposit if approval isn't required
+          } else if (action === "Deposit") {
+            handleDeposit(); // Call handleDeposit if deposit is selected
+          } else if (action === "Withdraw") {
+            handleWithdrawal(); // Call handleWithdrawal if withdraw is selected
           }
         }}
       >
