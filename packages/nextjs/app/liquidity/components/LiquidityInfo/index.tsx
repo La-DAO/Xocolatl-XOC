@@ -60,27 +60,33 @@ const LiquidityInfo: React.FC = () => {
   const formattedTokenB = tokenB !== null ? formatCurrency(tokenB, "MXN") : null;
 
   return (
-    <div className="w-4/5 mx-auto mt-8 p-6 bg-white shadow-md rounded-lg flex items-center">
+    <div className="w-full sm:w-4/5 mx-auto mt-8 p-6 bg-white shadow-md rounded-lg flex flex-col sm:flex-row items-center">
       {/* Image Section */}
-      <div className="flex-shrink-0">
-        <Image src="/warrior.png" alt="Description of Image" width={200} height={200} className="rounded-full" />
+      <div className="flex-shrink-0 mb-6 sm:mb-0 sm:mr-6">
+        <Image
+          src="/warrior.png"
+          alt="Description of Image"
+          width={150}
+          height={150}
+          className="rounded-full mx-auto"
+        />
       </div>
 
       {/* Text and Numbers Section */}
-      <div className="ml-6 flex-grow">
+      <div className="flex-grow">
         {/* Title and Description */}
-        <div className="mb-4">
-          <h2 className="text-2xl font-semibold text-primary">{t("XoktleTitle")}</h2>
+        <div className="mb-4 text-center sm:text-left">
+          <h2 className="text-xl sm:text-2xl font-semibold text-primary">{t("XoktleTitle")}</h2>
           <p className="text-gray-600">{t("XoktleDescription")}</p>
         </div>
 
-        {lpTokenLoading && <p className="text-gray-500">Loading data...</p>}
-        {lpTokenError && <p className="text-red-500">Error loading data.</p>}
+        {lpTokenLoading && <p className="text-gray-500 text-center sm:text-left">Loading data...</p>}
+        {lpTokenError && <p className="text-red-500 text-center sm:text-left">Error loading data.</p>}
 
         {/* Number Boxes */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="p-4 bg-gray-100 rounded-lg text-center">
-            <p className="text-xl font-bold text-primary">{t("XoktleTotalShares")}</p>
+            <p className="text-lg sm:text-xl font-bold text-primary">{t("XoktleTotalShares")}</p>
             <p className="text-gray-600">
               {formattedTotalReserves
                 ? formattedTotalReserves.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " Shares"
@@ -88,11 +94,11 @@ const LiquidityInfo: React.FC = () => {
             </p>
           </div>
           <div className="p-4 bg-gray-100 rounded-lg text-center">
-            <p className="text-xl font-bold text-primary">$USDC Deposits</p>
+            <p className="text-lg sm:text-xl font-bold text-primary">$USDC Deposits</p>
             <p className="text-gray-600">{formattedTokenA}</p>
           </div>
           <div className="p-4 bg-gray-100 rounded-lg text-center">
-            <p className="text-xl font-bold text-primary">$XOC Deposits</p>
+            <p className="text-lg sm:text-xl font-bold text-primary">$XOC Deposits</p>
             <p className="text-gray-600">{formattedTokenB}</p>
           </div>
         </div>
