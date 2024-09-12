@@ -232,7 +232,6 @@ const DepositTable: React.FC = () => {
           onClose={handleCloseWithdrawModal}
           assetName={selectedAsset}
           houseOfReserveContract={selectedContract}
-          assetContract={selectedAssetContract}
         />
       )}
     </div>

@@ -1,11 +1,11 @@
 // WithdrawModal.tsx
-import React, { useCallback, useEffect, useState } from "react";
-import BalanceOf from "@/app/lending/components/BalanceOf";
+import React, { useEffect, useState } from "react";
 import useAccountAddress from "@/hooks/useAccount";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Address } from "viem";
-import { useBalanceOf } from "~~/hooks/useBalanceOf";
+import { Address, formatEther } from "viem";
+import { useReadContract } from "wagmi";
+import { houseOfReserveABI } from "~~/app/components/abis/houseofreserve";
 import { useWithdraw } from "~~/hooks/useWithdrawCDP";
 
 interface WithdrawModalProps {
@@ -13,30 +13,44 @@ interface WithdrawModalProps {
   onClose: () => void;
   assetName: string;
   houseOfReserveContract: string;
-  assetContract: string;
 }
 
-const WithdrawModal: React.FC<WithdrawModalProps> = ({
-  isOpen,
-  onClose,
-  assetName,
-  houseOfReserveContract,
-  assetContract,
-}) => {
+const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, assetName, houseOfReserveContract }) => {
   const [amount, setAmount] = useState("");
   const { address: walletAddress } = useAccountAddress();
-  const [, setBalances] = useState<Record<string, string>>({});
   const [isValid, setIsValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [data, setData] = useState<any>(null);
   const [isError, setIsError] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
   const [balanceError, setBalanceError] = useState<string | null>(null);
+  const [maxWithdrawalAmount, setMaxWithdrawalAmount] = useState<string | null>(null);
 
-  const assetBalance = useBalanceOf({
-    tokenAddress: assetContract as Address,
-    walletAddress: walletAddress as Address,
+  // Fetch the maximum withdrawal amount using the useReadContract hook
+  const { data: checkMaxWithdrawal } = useReadContract({
+    address: houseOfReserveContract as Address, // House of Reserve contract address
+    abi: houseOfReserveABI,
+    functionName: "checkMaxWithdrawal", // Assuming it's a balanceOf-like function for withdrawals
+    args: [walletAddress],
   });
+  console.log("Check Max Withdrawal", checkMaxWithdrawal);
+
+  useEffect(() => {
+    if (checkMaxWithdrawal) {
+      try {
+        // Ensure that checkMaxWithdrawal is handled as a BigInt
+        const formattedAmount = formatEther(checkMaxWithdrawal as bigint);
+        setMaxWithdrawalAmount(formattedAmount);
+      } catch (error) {
+        console.error("Error formatting max withdrawal amount:", error);
+        setMaxWithdrawalAmount("0.00");
+      }
+    }
+  }, [checkMaxWithdrawal]);
+
+  // Parse formatted amount to a number if needed
+  const formattedCheckMaxWithdrawal = maxWithdrawalAmount ? parseFloat(maxWithdrawalAmount) : null;
+  console.log("Formatted Check Max Withdrawal", formattedCheckMaxWithdrawal);
 
   const {
     withdraw,
@@ -48,15 +62,11 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   } = useWithdraw(houseOfReserveContract as Address);
 
   useEffect(() => {
-    validateAmount(amount);
-  }, [amount]);
-
-  useEffect(() => {
     const assetAmount = parseFloat(amount) || 0;
 
-    // Validate if amount is valid and does not exceed asset balance
-    if (assetBalance && assetAmount > parseFloat(assetBalance)) {
-      setBalanceError("You don't have enough deposits to withdraw this amount");
+    // Validate if amount is valid and does not exceed max withdrawal amount
+    if (formattedCheckMaxWithdrawal !== null && assetAmount > formattedCheckMaxWithdrawal) {
+      setBalanceError("You can't withdraw more than the maximum allowed amount.");
       setIsValid(false);
     } else if (assetAmount <= 0 || isNaN(assetAmount)) {
       setBalanceError(null);
@@ -67,7 +77,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
       setErrorMessage("");
       setIsValid(true);
     }
-  }, [amount, assetBalance]);
+  }, [amount, formattedCheckMaxWithdrawal]);
 
   useEffect(() => {
     if (isWithdrawError) {
@@ -78,25 +88,6 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
       setData(hash);
     }
   }, [isWithdrawError, hash, error]);
-
-  const validateAmount = (value: string) => {
-    const numValue = parseFloat(value);
-    if (isNaN(numValue) || numValue <= 0) {
-      setIsValid(false);
-      setErrorMessage("Amount must be a positive number.");
-    } else {
-      setIsValid(true);
-      setErrorMessage("");
-    }
-  };
-
-  /**
-   * Callback function to handle balance change.
-   * Updates the state with new balances.
-   */
-  const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
-    setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
-  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(event.target.value);
@@ -188,13 +179,9 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                 </div>
               </div>
               <div className="flex justify-between items-center text-sm">
-                <p className="text-xs text-gray-500">Wallet Balance:</p>
+                <p className="text-xs text-gray-500">Maximum Withdrawal Amount:</p>
                 <div className="flex items-center gap-1">
-                  <BalanceOf
-                    tokenAddress={assetContract as Address}
-                    walletAddress={walletAddress as Address}
-                    onBalanceChange={handleBalanceChange}
-                  />
+                  <span>{formattedCheckMaxWithdrawal}</span>
                   <span className=" font-bold">{assetName}</span>
                 </div>
               </div>
