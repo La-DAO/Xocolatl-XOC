@@ -5,6 +5,7 @@ import useAccountAddress from "@/hooks/useAccount";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
+import { useBalanceOf } from "~~/hooks/useBalanceOf";
 import { useWithdraw } from "~~/hooks/useWithdrawCDP";
 
 interface WithdrawModalProps {
@@ -30,6 +31,12 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   const [data, setData] = useState<any>(null);
   const [isError, setIsError] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
+  const [balanceError, setBalanceError] = useState<string | null>(null);
+
+  const assetBalance = useBalanceOf({
+    tokenAddress: assetContract as Address,
+    walletAddress: walletAddress as Address,
+  });
 
   const {
     withdraw,
@@ -43,6 +50,24 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   useEffect(() => {
     validateAmount(amount);
   }, [amount]);
+
+  useEffect(() => {
+    const assetAmount = parseFloat(amount) || 0;
+
+    // Validate if amount is valid and does not exceed asset balance
+    if (assetBalance && assetAmount > parseFloat(assetBalance)) {
+      setBalanceError("You don't have enough deposits to withdraw this amount");
+      setIsValid(false);
+    } else if (assetAmount <= 0 || isNaN(assetAmount)) {
+      setBalanceError(null);
+      setErrorMessage("Amount must be a positive number.");
+      setIsValid(false);
+    } else {
+      setBalanceError(null);
+      setErrorMessage("");
+      setIsValid(true);
+    }
+  }, [amount, assetBalance]);
 
   useEffect(() => {
     if (isWithdrawError) {
@@ -149,6 +174,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                 />
                 <span className="font-bold">{assetName}</span>
               </div>
+              {balanceError && <p className="text-xs text-red-600 ml-2">{balanceError}</p>}
               {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
             </div>
 
@@ -176,9 +202,9 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
 
             <div className="flex justify-between gap-4">
               <button
-                className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                className={`flex-grow-2 basis-2/3 ${isValid && !balanceError ? "primary-btn" : "disabled-btn"}`}
                 onClick={onWithdrawClick}
-                disabled={isWithdrawPending}
+                disabled={isWithdrawPending || !isValid || balanceError !== null}
               >
                 {isWithdrawPending ? "Processing..." : "Withdraw"}
               </button>
