@@ -2,11 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { spenderAddress, usdcContract, xocContract } from "@/app/constants/contracts";
-import { parseEther, parseUnits } from "viem";
+import { Address, formatUnits, parseEther, parseUnits } from "viem";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { ERC20ABI } from "~~/app/components/abis/erc20";
 import { liquidityABI } from "~~/app/components/abis/liquidity";
 import { useTranslation } from "~~/app/context/LanguageContext";
+import { useBalanceOf } from "~~/hooks/useBalanceOf";
 
 // Use parseUnits for USDC
 
@@ -21,6 +22,11 @@ const LiquidityWidget: React.FC = () => {
   // State for share withdrawal input
   const [shareAmount, setShareAmount] = useState(""); // Share amount
 
+  // State to track errors
+  const [usdcError, setUsdcError] = useState<string | null>(null);
+  const [xocError, setXocError] = useState<string | null>(null);
+  const [sharesError, setSharesError] = useState<string | null>(null);
+
   // State to track if approval is needed
   const [requiresApproval, setRequiresApproval] = useState(false);
 
@@ -29,6 +35,20 @@ const LiquidityWidget: React.FC = () => {
   const { writeContract: approveERC20 } = useWriteContract();
 
   const { writeContract: withdraw } = useWriteContract();
+
+  const xocBalance = useBalanceOf({ tokenAddress: xocContract, walletAddress: accountAddress as Address });
+  const usdcBalance = useBalanceOf({ tokenAddress: usdcContract, walletAddress: accountAddress as Address });
+
+  // Fetch the balanceOf using the accountAddress
+  const { data: sharesBalance } = useReadContract({
+    address: "0xD6DaB267b7C23EdB2ed5605d9f3f37420e88e291", // Liquidity contract address
+    abi: liquidityABI,
+    functionName: "balanceOf",
+    args: [accountAddress], // Pass accountAddress as argument to balanceOf
+  });
+
+  console.log("XOC Balance", xocBalance);
+  console.log("USDC Balance", usdcBalance);
 
   // Hook to read the XOC contract allowance
   const {
@@ -181,6 +201,46 @@ const LiquidityWidget: React.FC = () => {
     }
   };
 
+  // Validate USDC balance against input
+  useEffect(() => {
+    const usdcAmount = parseFloat(tokenA) || 0;
+    if (usdcBalance && usdcAmount > parseFloat(usdcBalance)) {
+      setUsdcError("You don't have enough USDC tokens in your wallet");
+    } else {
+      setUsdcError(null); // Clear error if valid
+    }
+  }, [tokenA, usdcBalance]);
+
+  // Validate XOC balance against input
+  useEffect(() => {
+    const xocAmount = parseFloat(tokenB) || 0;
+    if (xocBalance && xocAmount > parseFloat(xocBalance)) {
+      setXocError("You don't have enough XOC tokens in your wallet");
+    } else {
+      setXocError(null); // Clear error if valid
+    }
+  }, [tokenB, xocBalance]);
+
+  // Validate shares balance against input for withdrawal
+  useEffect(() => {
+    const sharesAmount = parseFloat(shareAmount) || 0;
+
+    // Ensure sharesBalance is available and of type bigint
+    if (sharesBalance && typeof sharesBalance === "bigint") {
+      // Convert BigInt to a readable number, assuming 18 decimals
+      const formattedSharesBalance = parseFloat(formatUnits(sharesBalance, 18));
+
+      // Validate against user's input
+      if (sharesAmount > formattedSharesBalance) {
+        setSharesError("You don't have enough shares to withdraw");
+      } else {
+        setSharesError(null);
+      }
+    }
+  }, [shareAmount, sharesBalance]);
+
+  console.log("Shares Balance", sharesBalance);
+
   return (
     <div className="w-full bg-white p-6 rounded-lg shadow-md mt-6">
       <div className="mb-4">
@@ -221,6 +281,7 @@ const LiquidityWidget: React.FC = () => {
               className="w-full p-2 border rounded-lg dark:bg-neutral dark:text-neutral-content"
               placeholder={t("XoktleUSDCAmount")}
             />
+            {usdcError && <p className="text-red-500 mt-2">{usdcError}</p>} {/* Display USDC balance error */}
           </div>
 
           <div>
@@ -232,6 +293,7 @@ const LiquidityWidget: React.FC = () => {
               className="w-full p-2 border rounded-lg dark:bg-neutral dark:text-neutral-content"
               placeholder={t("XoktleXOCAmount")}
             />
+            {xocError && <p className="text-red-500 mt-2">{xocError}</p>} {/* Display XOC balance error */}
           </div>
         </div>
       ) : (
@@ -245,6 +307,7 @@ const LiquidityWidget: React.FC = () => {
               className="w-full p-2 border rounded-lg dark:bg-neutral dark:text-neutral-content"
               placeholder={t("XoktleShareAmount")}
             />
+            {sharesError && <p className="text-red-500 mt-2">{sharesError}</p>} {/* Display shares balance error */}
           </div>
         </div>
       )}
@@ -254,9 +317,9 @@ const LiquidityWidget: React.FC = () => {
         onClick={() => {
           if (requiresApproval) {
             handleApproval(); // Call handleApproval when approval is needed
-          } else if (action === "Deposit") {
+          } else if (action === "Deposit" && !usdcError && !xocError) {
             handleDeposit(); // Call handleDeposit if deposit is selected
-          } else if (action === "Withdraw") {
+          } else if (action === "Withdraw" && !sharesError) {
             handleWithdrawal(); // Call handleWithdrawal if withdraw is selected
           }
         }}
