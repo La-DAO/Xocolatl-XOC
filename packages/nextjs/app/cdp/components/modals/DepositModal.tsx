@@ -6,6 +6,7 @@ import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 import { useApproval } from "~~/hooks/useApproval";
+import { useBalanceOf } from "~~/hooks/useBalanceOf";
 import { useDeposit } from "~~/hooks/useDeposit";
 
 interface DepositModalProps {
@@ -32,6 +33,12 @@ const DepositModal: React.FC<DepositModalProps> = ({
   const [data, setData] = useState<any>(null);
   const [isError, setIsError] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
+  const [balanceError, setBalanceError] = useState<string | null>(null);
+
+  const assetBalance = useBalanceOf({
+    tokenAddress: assetContract as Address,
+    walletAddress: walletAddress as Address,
+  });
 
   const {
     approve,
@@ -50,8 +57,13 @@ const DepositModal: React.FC<DepositModalProps> = ({
   } = useDeposit(houseOfReserveContract as Address);
 
   useEffect(() => {
-    validateAmount(amount);
-  }, [amount]);
+    const assetAmount = parseFloat(amount) || 0;
+    if (assetBalance && assetAmount > parseFloat(assetBalance)) {
+      setBalanceError("You don't have enough tokens in your wallet");
+    } else {
+      setBalanceError(null); // Clear error if valid
+    }
+  }, [amount, assetBalance]);
 
   useEffect(() => {
     if (isDepositError) {
@@ -63,16 +75,23 @@ const DepositModal: React.FC<DepositModalProps> = ({
     }
   }, [isDepositError, hash, error]);
 
-  const validateAmount = (value: string) => {
-    const numValue = parseFloat(value);
-    if (isNaN(numValue) || numValue <= 0) {
+  useEffect(() => {
+    const assetAmount = parseFloat(amount) || 0;
+
+    // Check if the input amount is valid and within the balance
+    if (assetBalance && assetAmount > parseFloat(assetBalance)) {
+      setBalanceError("You don't have enough tokens in your wallet");
       setIsValid(false);
+    } else if (assetAmount <= 0 || isNaN(assetAmount)) {
+      setBalanceError(null);
       setErrorMessage("Amount must be a positive number.");
+      setIsValid(false);
     } else {
+      setBalanceError(null); // Clear any balance-related errors
+      setErrorMessage(""); // Clear other error messages
       setIsValid(true);
-      setErrorMessage("");
     }
-  };
+  }, [amount, assetBalance]);
 
   /**
    * Callback function to handle balance change.
@@ -167,6 +186,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
                 />
                 <span className="font-bold">{assetName}</span>
               </div>
+              {balanceError && <p className="text-xs text-red-600 ml-2">{balanceError}</p>}
               {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
             </div>
 
@@ -195,17 +215,17 @@ const DepositModal: React.FC<DepositModalProps> = ({
             <div className="flex justify-between gap-4">
               {!isApprovalSuccess ? (
                 <button
-                  className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                  className={`flex-grow-2 basis-2/3 ${isValid && !balanceError ? "primary-btn" : "disabled-btn"}`}
                   onClick={onApproveClick}
-                  disabled={isApprovalPending}
+                  disabled={isApprovalPending || !isValid || balanceError !== null}
                 >
                   {isApprovalPending ? "Approving..." : "Approve"}
                 </button>
               ) : (
                 <button
-                  className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                  className={`flex-grow-2 basis-2/3 ${isValid && !balanceError ? "primary-btn" : "disabled-btn"}`}
                   onClick={onDepositClick}
-                  disabled={isDepositPending}
+                  disabled={isDepositPending || !isValid || balanceError !== null}
                 >
                   {isDepositPending ? "Processing..." : "Deposit"}
                 </button>
