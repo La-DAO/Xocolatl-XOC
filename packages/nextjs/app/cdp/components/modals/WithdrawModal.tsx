@@ -93,6 +93,10 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, assetNam
     setAmount(event.target.value);
   };
 
+  const handleMaxClick = () => {
+    setAmount(formattedCheckMaxWithdrawal?.toString() || "");
+  };
+
   const onWithdrawClick = () => {
     withdraw(amount);
     setAmount("");
@@ -165,6 +169,9 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, assetNam
                 />
                 <span className="font-bold">{assetName}</span>
               </div>
+              <span className="font-bold hover:underline cursor-pointer" onClick={handleMaxClick}>
+                MAX
+              </span>
               {balanceError && <p className="text-xs text-red-600 ml-2">{balanceError}</p>}
               {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
             </div>
