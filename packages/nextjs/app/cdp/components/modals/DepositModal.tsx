@@ -134,6 +134,10 @@ const DepositModal: React.FC<DepositModalProps> = ({
     }
   };
 
+  const handleMaxClick = () => {
+    setAmount(assetBalance || "");
+  };
+
   const handleClose = () => {
     setAmount("");
     setIsValid(false);
@@ -186,6 +190,9 @@ const DepositModal: React.FC<DepositModalProps> = ({
                 />
                 <span className="font-bold">{assetName}</span>
               </div>
+              <span className="font-bold hover:underline cursor-pointer" onClick={handleMaxClick}>
+                MAX
+              </span>
               {balanceError && <p className="text-xs text-red-600 ml-2">{balanceError}</p>}
               {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
             </div>
