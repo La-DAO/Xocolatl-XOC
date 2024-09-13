@@ -4,6 +4,7 @@ import benefitOneImg from "../../public/Currency Crush - Payment.svg";
 import benefitTwoImg from "../../public/Currency Crush - Value.svg";
 import { useTranslation } from "../context/LanguageContext";
 import Container from "./container";
+import { motion } from "framer-motion";
 import {
   CogIcon,
   CubeTransparentIcon,
@@ -25,9 +26,25 @@ const BenefitsNew: React.FC = () => {
       </Container>
       <Container className="flex flex-wrap mb-20 lg:gap-10 lg:flex-nowrap">
         <div className={`flex items-center justify-center w-full lg:w-1/2`}>
-          <div>
-            <Image src={benefitOneImg} width="750" height="750" alt="Benefits" className="object-cover" />
-          </div>
+          <motion.div
+            variants={{
+              hidden: {
+                opacity: 0,
+                x: -1000,
+              },
+              visible: {
+                opacity: 1,
+                x: 0,
+              },
+            }}
+            initial="hidden"
+            animate="visible"
+            transition={{ duration: 0.5 }}
+          >
+            <div>
+              <Image src={benefitOneImg} width="750" height="750" alt="Benefits" className="object-cover" />
+            </div>
+          </motion.div>
         </div>
 
         <div className={`flex flex-wrap items-center w-full lg:w-1/2`}>
@@ -123,9 +140,25 @@ const BenefitsNew: React.FC = () => {
           </div>
         </div>
         <div className={`flex items-center justify-center w-full lg:w-1/2`}>
-          <div>
-            <Image src={benefitTwoImg} width="750" height="750" alt="Benefits" className="object-cover" />
-          </div>
+          <motion.div
+            variants={{
+              hidden: {
+                opacity: 0,
+                x: 1000,
+              },
+              visible: {
+                opacity: 1,
+                x: 0,
+              },
+            }}
+            initial="hidden"
+            animate="visible"
+            transition={{ duration: 0.5 }}
+          >
+            <div>
+              <Image src={benefitTwoImg} width="750" height="750" alt="Benefits" className="object-cover" />
+            </div>
+          </motion.div>
         </div>
       </Container>
     </>
