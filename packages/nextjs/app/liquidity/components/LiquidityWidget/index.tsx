@@ -241,6 +241,30 @@ const LiquidityWidget: React.FC = () => {
 
   console.log("Shares Balance", sharesBalance);
 
+  // Function to set the maximum available balance for USDC
+  const handleUSDCMaxClick = () => {
+    if (usdcBalance) {
+      setTokenA(usdcBalance.toString());
+    }
+  };
+
+  // Function to set the maximum available balance for XOC
+  const handleXOCMaxClick = () => {
+    if (xocBalance) {
+      setTokenB(xocBalance.toString());
+    }
+  };
+
+  // Function to set the maximum available balance for shares
+  const handleSharesMaxClick = () => {
+    // Ensure sharesBalance is available and of type bigint
+    if (sharesBalance && typeof sharesBalance === "bigint") {
+      // Convert BigInt to a readable number, assuming 18 decimals
+      const formattedSharesBalance = parseFloat(formatUnits(sharesBalance, 18));
+      setShareAmount(formattedSharesBalance.toString());
+    }
+  };
+
   return (
     <div className="w-full bg-white p-6 rounded-lg shadow-md mt-6">
       <div className="mb-4">
@@ -281,6 +305,9 @@ const LiquidityWidget: React.FC = () => {
               className="w-full p-2 border rounded-lg dark:bg-neutral dark:text-neutral-content"
               placeholder={t("XoktleUSDCAmount")}
             />
+            <span className="font-bold hover:underline cursor-pointer dark: text-primary" onClick={handleUSDCMaxClick}>
+              MAX
+            </span>
             {usdcError && <p className="text-red-500 mt-2">{usdcError}</p>} {/* Display USDC balance error */}
           </div>
 
@@ -293,6 +320,9 @@ const LiquidityWidget: React.FC = () => {
               className="w-full p-2 border rounded-lg dark:bg-neutral dark:text-neutral-content"
               placeholder={t("XoktleXOCAmount")}
             />
+            <span className="font-bold hover:underline cursor-pointer dark: text-primary" onClick={handleXOCMaxClick}>
+              MAX
+            </span>
             {xocError && <p className="text-red-500 mt-2">{xocError}</p>} {/* Display XOC balance error */}
           </div>
         </div>
@@ -307,6 +337,12 @@ const LiquidityWidget: React.FC = () => {
               className="w-full p-2 border rounded-lg dark:bg-neutral dark:text-neutral-content"
               placeholder={t("XoktleShareAmount")}
             />
+            <span
+              className="font-bold hover:underline cursor-pointer dark: text-primary"
+              onClick={handleSharesMaxClick}
+            >
+              MAX
+            </span>
             {sharesError && <p className="text-red-500 mt-2">{sharesError}</p>} {/* Display shares balance error */}
           </div>
         </div>
