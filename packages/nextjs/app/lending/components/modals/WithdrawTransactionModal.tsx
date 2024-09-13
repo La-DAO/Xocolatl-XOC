@@ -5,6 +5,7 @@ import { toWeiConverter } from "@/utils/toWeiConverter";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
+import { useTranslation } from "~~/app/context/LanguageContext";
 import useWithdraw from "~~/hooks/useWithdraw";
 
 interface ModalProps {
@@ -23,6 +24,7 @@ interface ModalProps {
  * @returns {JSX.Element | null} - The modal component or null if not open.
  */
 const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve, balance }) => {
+  const { t } = useTranslation();
   const [amount, setAmount] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -120,12 +122,14 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
   return (
     <div className="modal-blur-background">
       <div className="modal-container general-text-color flex flex-col gap-6">
-        <h2>Withdraw {reserve.symbol}</h2>
+        <h2>
+          {t("LendingWithdrawModalTitle")} {reserve.symbol}
+        </h2>
         <div className="table-border-top">
           {!data && !isError && (
             <div className="flex flex-col gap-6 mt-6">
               <div className="container-gray-borders flex flex-col gap-2">
-                <label className="font-bold">Amount</label>
+                <label className="font-bold">{t("LendingWithdrawModalLabel")}</label>
                 <div className="flex items-center">
                   <input
                     type="number"
@@ -137,7 +141,7 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
                   <span className="font-bold">{reserve.symbol}</span>
                 </div>
                 <div className="text-xs">
-                  Supply balance: {balance}{" "}
+                  {t("LendingWithdrawModalBalance")}: {balance}{" "}
                   <span className="font-bold hover:underline cursor-pointer" onClick={handleMaxClick}>
                     MAX
                   </span>
@@ -151,10 +155,10 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
                   onClick={handleWithdrawClick}
                   disabled={!isValid}
                 >
-                  Withdraw
+                  {t("LendingWithdrawModalButton")}
                 </button>
                 <button onClick={handleClose} className="secondary-btn flex-grow-1 basis-1/3">
-                  Cancel
+                  {t("LendingWithdrawModalClose")}
                 </button>
               </div>
             </div>
@@ -163,26 +167,26 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
             <div className="flex flex-col gap-6 mt-6">
               <div className="error-container text-center">
                 <p>
-                  You cancelled the transaction.{" "}
+                  {t("LendingWithdrawModalCancelMessage")}{" "}
                   <span onClick={handleCopyError} className="cursor-pointer underline">
-                    Copy the error.
+                    {t("LendingWithdrawModalCopyMessage")}
                   </span>
                   {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
                 </p>
               </div>
               <button onClick={handleClose} className="primary-btn">
-                Close
+                {t("LendingWithdrawModalClose")}
               </button>
             </div>
           )}
           {data && (
             <div className="flex flex-col gap-6 mt-6">
               <div className="success-container text-center">
-                <h2 className="">All done!</h2>
-                <p>Withdraw transaction successful</p>
+                <h2 className="">{t("LendingWithdrawModalSuccessTitle")}</h2>
+                <p>{t("LendingWithdrawModalSuccessMessage")}</p>
               </div>
               <button onClick={handleClose} className="primary-btn">
-                Ok, close
+                Ok, {t("LendingWithdrawModalClose")}
               </button>
             </div>
           )}

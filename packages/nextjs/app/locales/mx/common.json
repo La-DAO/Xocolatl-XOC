@@ -167,6 +167,13 @@
   "LendingAssetsToBorrowColumn3": "Interés variable",
   "LendingAssetsToBorrowColumn4": "Acciones",
 
+  "LendingWithdrawModalTitle": "Retirar",
+  "LendingWithdrawModalLabel": "Cantidad a retirar",
+  "LendingWithdrawModalBalance": "Saldo disponible",
+  "LendingWithdrawModalButton": "Retirar",
+  "LendingWithdrawModalClose": "Cerrar",
+  
+
   "XoktleTitle": "Xoktle",
   "XoktleDescription": "Xoktle es la palabra en náhuatl para olla 🍯. Este contrato inteligente está diseñado para utilizar tu depósito para expandir la liquidez de la stablecoin y emparejarla con el ecosistema DeFi. Por cada 1 dólar, habrá 4 pesos en el pool, por lo que nuestro agente de liquidez siempre se esforzará por mantener esta proporción mediante el reequilibrio interno del pool.",
   "XoktleTotalShares": "Total de Acciones",
