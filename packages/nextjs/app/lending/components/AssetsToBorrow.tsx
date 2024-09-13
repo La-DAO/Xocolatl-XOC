@@ -78,7 +78,7 @@ const AssetsToBorrow: React.FC = () => {
                     disabled={isButtonDisabled}
                     onClick={() => handleBorrowClick(reserve, availableLiquidity)}
                   >
-                    Borrow
+                    {t("LendingBorrowModalButton")}
                   </button>
                 </div>
               </div>

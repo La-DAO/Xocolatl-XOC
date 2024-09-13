@@ -203,13 +203,13 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                 {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
               </div>
               <div className="container-gray-borders flex flex-col gap-2">
-                <label className="font-bold">Transaction overview</label>
+                <label className="font-bold">{t("LendingSupplyModalTransactionOverview")}</label>
                 <div className="flex justify-between items-center text-sm">
-                  <span>Supply APY</span>
+                  <span>{t("LendingSupplyModalTransactionSupplyAPY")}</span>
                   <span className="font-bold">{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span>Collateralization</span>
+                  <span>{t("LendingSupplyModalTransactionCollateral")}</span>
                   <span
                     className={`text-sm font-medium ${
                       reserve.usageAsCollateralEnabled ? "text-success" : "text-error"

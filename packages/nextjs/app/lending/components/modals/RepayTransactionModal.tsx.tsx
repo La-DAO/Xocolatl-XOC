@@ -7,6 +7,7 @@ import { toWeiConverter } from "@/utils/toWeiConverter";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
+import { useTranslation } from "~~/app/context/LanguageContext";
 import useRepay from "~~/hooks/useRepay";
 
 interface ModalProps {
@@ -25,6 +26,8 @@ interface ModalProps {
  * @returns {JSX.Element | null} - The modal component or null if not open.
  */
 const RepayTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve, balance }) => {
+  // Translation context
+  const { t } = useTranslation();
   const [amount, setAmount] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -176,12 +179,14 @@ const RepayTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve,
   return (
     <div className="modal-blur-background">
       <div className="modal-container general-text-color flex flex-col gap-6">
-        <h2>Repay {reserve.symbol}</h2>
+        <h2>
+          {t("LendingRepayModalTitle")} {reserve.symbol}
+        </h2>
         <div className="table-border-top">
           {!data && !isError && (
             <div className="flex flex-col gap-6 mt-6">
               <div className="container-gray-borders flex flex-col gap-2">
-                <label className="font-bold">Amount</label>
+                <label className="font-bold">{t("LendingRepayModalLabel")}</label>
                 <div className="flex items-center">
                   <input
                     type="number"
@@ -193,7 +198,7 @@ const RepayTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve,
                   <span className="font-bold">{reserve.symbol}</span>
                 </div>
                 <div className="text-xs">
-                  Debt: {balance}{" "}
+                  {t("LendingRepayModalBalance")}: {balance}{" "}
                   <span className="font-bold hover:underline cursor-pointer" onClick={handleMaxClick}>
                     MAX
                   </span>
@@ -207,17 +212,17 @@ const RepayTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve,
                   onClick={handleApproveClick}
                   disabled={!isValid || approvePending || isApproved} // Approve button disabled if already approved or pending
                 >
-                  Approve
+                  {t("LendingRepayModalApprove")}
                 </button>
                 <button
                   className={`flex-grow-2 basis-2/3 ${isApproved && isValid ? "primary-btn" : "disabled-btn"}`}
                   onClick={handleRepayClick}
                   disabled={!isApproved || !isValid} // Repay button enabled only if approved
                 >
-                  Repay
+                  {t("LendingRepayModalButton")}
                 </button>
                 <button onClick={handleClose} className="secondary-btn flex-grow-1 basis-1/3">
-                  Cancel
+                  {t("LendingRepayModalClose")}
                 </button>
               </div>
             </div>
@@ -226,26 +231,26 @@ const RepayTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve,
             <div className="flex flex-col gap-6 mt-6">
               <div className="error-container text-center">
                 <p>
-                  You cancelled the transaction.{" "}
+                  {t("LendingRepayModalCancelMessage")}{" "}
                   <span onClick={handleCopyError} className="cursor-pointer underline">
-                    Copy the error.
+                    {t("LendingRepayModalCopyMessage")}
                   </span>
                   {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
                 </p>
               </div>
               <button onClick={handleClose} className="primary-btn">
-                Close
+                {t("LendingRepayModalClose")}
               </button>
             </div>
           )}
           {data && (
             <div className="flex flex-col gap-6 mt-6">
               <div className="success-container text-center">
-                <h2 className="">All done!</h2>
-                <p>Repay transaction successful</p>
+                <h2 className="">{t("LendingRepayModalSuccessTitle")}</h2>
+                <p>{t("LendingRepayModalSuccessMessage")}</p>
               </div>
               <button onClick={handleClose} className="primary-btn">
-                Ok, close
+                Ok, {t("LendingRepayModalClose")}
               </button>
             </div>
           )}

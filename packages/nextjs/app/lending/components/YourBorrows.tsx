@@ -129,7 +129,7 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
                   disabled={isButtonDisabled}
                   onClick={() => handleRepayClick(reserve, balance)}
                 >
-                  Repay
+                  {t("LendingRepayModalButton")}
                 </button>
               </div>
             </div>
