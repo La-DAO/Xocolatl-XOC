@@ -6,6 +6,7 @@ import { toWeiConverter } from "@/utils/toWeiConverter";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
+import { useTranslation } from "~~/app/context/LanguageContext";
 
 interface ModalProps {
   isOpen: boolean;
@@ -23,6 +24,8 @@ interface ModalProps {
  * @returns {JSX.Element | null} - The modal component or null if not open.
  */
 const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve, balance }) => {
+  // Translation context
+  const { t } = useTranslation();
   // State management for the amount to be borrowed, interest rate mode, validity check, and error messages
   const [amount, setAmount] = useState("");
   const [interestRateMode, setInterestRateMode] = useState(2); // Default to Stable
@@ -157,12 +160,14 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   return (
     <div className="modal-blur-background">
       <div className="modal-container general-text-color flex flex-col gap-6">
-        <h2>Borrow {reserve.symbol}</h2>
+        <h2>
+          {t("LendingBorrowModalTitle")} {reserve.symbol}
+        </h2>
         <div className="table-border-top">
           {!data && !isError && (
             <div className="flex flex-col gap-6 mt-6">
               <div className="container-gray-borders flex flex-col gap-2">
-                <label className="font-bold">Amount</label>
+                <label className="font-bold">{t("LendingBorrowModalLabel")}</label>
                 <div className="flex items-center">
                   <input
                     type="number"
@@ -174,7 +179,7 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   <span className="font-bold">{reserve.symbol}</span>
                 </div>
                 <div className="text-xs">
-                  Available liquidity: {balance}{" "}
+                  {t("LendingBorrowModalBalance")}: {balance}{" "}
                   <span className="font-bold hover:underline cursor-pointer" onClick={handleMaxClick}>
                     MAX
                   </span>
@@ -182,9 +187,9 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                 {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
               </div>
               <div className="container-gray-borders flex flex-col gap-2">
-                <label className="font-bold">Transaction overview</label>
+                <label className="font-bold">{t("LendingBorrowModalTransactionOverview")}</label>
                 <div className="flex justify-between items-center text-sm">
-                  <span>Borrow APY</span>
+                  <span>{t("LendingBorrowModalTransactionBorrowAPY")}</span>
                   <span className="font-bold">{(Number(reserve.variableBorrowRate) / 1e25).toFixed(2)}%</span>
                 </div>
               </div>
@@ -194,10 +199,10 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   onClick={handleBorrowClick}
                   disabled={!isValid}
                 >
-                  Borrow
+                  {t("LendingBorrowModalButton")}
                 </button>
                 <button onClick={handleClose} className="secondary-btn flex-grow-1 basis-1/3">
-                  Cancel
+                  {t("LendingBorrowModalClose")}
                 </button>
               </div>
             </div>
@@ -206,26 +211,26 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
             <div className="flex flex-col gap-6 mt-6">
               <div className="error-container text-center">
                 <p>
-                  You cancelled the transaction.{" "}
+                  {t("LendingBorrowModalCancelMessage")}{" "}
                   <span onClick={handleCopyError} className="cursor-pointer underline">
-                    Copy the error.
+                    {t("LendingBorrowModalCopyMessage")}
                   </span>
                   {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
                 </p>
               </div>
               <button onClick={handleClose} className="primary-btn">
-                Close
+                {t("LendingBorrowModalClose")}
               </button>
             </div>
           )}
           {data && (
             <div className="flex flex-col gap-6 mt-6">
               <div className="success-container text-center">
-                <h2 className="">All done!</h2>
-                <p>Borrow transaction successful</p>
+                <h2 className="">{t("LendingBorrowModalSuccessTitle")}</h2>
+                <p>{t("LendingBorrowModalSuccessMessage")}</p>
               </div>
               <button onClick={handleClose} className="primary-btn">
-                Ok, close
+                Ok, {t("LendingBorrowModalClose")}
               </button>
             </div>
           )}
