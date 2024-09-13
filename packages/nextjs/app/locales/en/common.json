@@ -165,6 +165,18 @@
   "LendingWithdrawModalSuccessTitle": "All done!",
   "LendingWithdrawModalSuccessMessage": "Your transaction was sent successful.",
 
+  "LendingSupplyModalTitle": "Supply",
+  "LendingSupplyModalLabel": "Amount",
+  "LendingSupplyModalBalance": "WalletBalance",
+  "LendingSupplyModalApprove": "Approve",
+  "LendingSupplyModalButton": "Supply",
+  "LendingSupplyModalClose": "Close",
+  "LendingSupplyModalCancelMessage": "You cancelled the transaction.",
+  "LendingSupplyModalCopyMessage": "Copy the error",
+  "LendingSupplyModalSuccessTitle": "All done!",
+  "LendingSupplyModalSuccessMessage": "Your transaction was sent successful.",
+  
+
 
   "XoktleTitle": "Xoktle",
   "XoktleDescription": "Xoktle is the word for pot 🍯 in Nahuatl. This smart contract is designed to use your deposit to expand stablecoin liquidity and pair with the DeFi ecosystem. For every 1 dollar, there will be 4 pesos in the pool, so our liquidity agent will always strive to maintain this ratio by internally rebalancing the pool.",

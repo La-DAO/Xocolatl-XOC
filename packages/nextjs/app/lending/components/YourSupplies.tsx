@@ -139,7 +139,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
                   disabled={isButtonDisabled}
                   onClick={() => handleWithdrawClick(reserve, balance)}
                 >
-                  Withdraw
+                  {t("LendingWithdrawModalButton")}
                 </button>
               </div>
             </div>

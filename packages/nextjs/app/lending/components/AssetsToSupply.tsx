@@ -115,7 +115,7 @@ const AssetsToSupply: React.FC = () => {
                     disabled={isButtonDisabled}
                     onClick={() => handleSupplyClick(reserve, balance)}
                   >
-                    Supply
+                    {t("LendingSupplyModalButton")}
                   </button>
                 </div>
               </div>
