@@ -6,6 +6,7 @@ import useGetReservesData from "@/hooks/useGetReservesData";
 import useGetUserReservesData from "@/hooks/useGetUserReservesData";
 import { useTotalBalance } from "@/hooks/useTotalBalance";
 import { Address } from "viem";
+import { useTranslation } from "~~/app/context/LanguageContext";
 import { useTotalAPY } from "~~/hooks/useTotalAPY";
 
 interface YourBorrowsProps {
@@ -17,6 +18,7 @@ interface YourBorrowsProps {
  * @returns {JSX.Element} - Rendered component displaying borrows, debt, APY, APY type, and actions.
  */
 const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => {
+  const { t } = useTranslation();
   const { reservesData, isLoading: isLoadingReserves, isError: isErrorReserves } = useGetReservesData();
   const { userReservesData, isLoading: isLoadingUserReserves, isError: isErrorUserReserves } = useGetUserReservesData();
   const { address: walletAddress } = useAccountAddress();
@@ -83,11 +85,11 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
       </div>
       <div className={`borrows-container mt-4 ${allBalancesZero ? "hidden" : ""}`}>
         <div className="table-header borrows-header py-3 flex justify-between tracking-wider">
-          <div className="borrows-header-item w-24">Assets</div>
-          <div className="borrows-header-item w-24">Debt</div>
-          <div className="borrows-header-item w-24">APY</div>
-          <div className="borrows-header-item w-24">APY Type</div>
-          <div className="borrows-header-item w-24">Actions</div>
+          <div className="borrows-header-item w-24">{t("LendingYourBorrowsColumn1")}</div>
+          <div className="borrows-header-item w-24">{t("LendingYourBorrowsColumn2")}</div>
+          <div className="borrows-header-item w-24">{t("LendingYourBorrowsColumn3")}</div>
+          <div className="borrows-header-item w-24">{t("LendingYourBorrowsColumn4")}</div>
+          <div className="borrows-header-item w-24">{t("LendingYourBorrowsColumn5")}</div>
         </div>
         {reservesWithBalances.map((reserve, index) => {
           const balance = reserve.balance;
@@ -134,7 +136,9 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
           );
         })}
       </div>
-      <p className={`text-left text-gray-500 ${allBalancesZero ? "" : "hidden"}`}>Nothing borrowed yet.</p>
+      <p className={`text-left text-gray-500 ${allBalancesZero ? "" : "hidden"}`}>
+        {t("LendingYourBorrowsZeroBalance")}
+      </p>
 
       <RepayModal
         isOpen={isModalOpen}

@@ -8,6 +8,7 @@ import useGetReservesData from "@/hooks/useGetReservesData";
 import useGetUserReservesData from "@/hooks/useGetUserReservesData";
 import { useTotalBalance } from "@/hooks/useTotalBalance";
 import { Address } from "viem";
+import { useTranslation } from "~~/app/context/LanguageContext";
 import { useTotalAPY } from "~~/hooks/useTotalAPY";
 
 interface YourSuppliesProps {
@@ -25,6 +26,8 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReserve, setSelectedReserve] = useState<any>(null);
   const [selectedBalance, setSelectedBalance] = useState("");
+
+  const { t } = useTranslation();
 
   const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
     setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
@@ -90,11 +93,11 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
         }`}
       >
         <div className="table-header supplies-header py-3 flex justify-between tracking-wider">
-          <div className="supplies-header-item w-24">Assets</div>
-          <div className="supplies-header-item w-24">Balance</div>
-          <div className="supplies-header-item w-24">APY</div>
-          <div className="supplies-header-item w-24">Collateral</div>
-          <div className="supplies-header-item w-24">Actions</div>
+          <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn1")}</div>
+          <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn2")}</div>
+          <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn3")}</div>
+          <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn4")}</div>
+          <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn5")}</div>
         </div>
         {reservesWithBalances.map((reserve, index) => {
           const balance = reserve.balance;
