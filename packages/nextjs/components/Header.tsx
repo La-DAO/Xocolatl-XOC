@@ -4,7 +4,7 @@ import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { faBridge } from "@fortawesome/free-solid-svg-icons";
+import { faBridge, faWater } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { BanknotesIcon, Bars3Icon, BuildingLibraryIcon, HomeIcon } from "@heroicons/react/24/solid";
 import { useTranslation } from "~~/app/context/LanguageContext";
@@ -38,11 +38,11 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "https://bridge.connext.network/XOC-from-polygon-to-ethereum?symbol=XOC",
     icon: <FontAwesomeIcon icon={faBridge} />,
   },
-  /* {
-    label: "Vault",
-    href: "/vault",
-    icon: <FontAwesomeIcon icon={faVault} className="h-4 w-4" />,
-  } */
+  {
+    label: "Liquidity",
+    href: "/liquidity",
+    icon: <FontAwesomeIcon icon={faWater} className="h-4 w-4" />,
+  },
 ];
 
 export const HeaderMenuLinks = () => {
