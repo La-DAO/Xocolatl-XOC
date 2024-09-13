@@ -6,6 +6,7 @@ import useSupply from "@/hooks/useSupply";
 import { ReserveData } from "@/types/types";
 import { toWeiConverter } from "@/utils/toWeiConverter";
 import { Address } from "viem";
+import { useTranslation } from "~~/app/context/LanguageContext";
 
 interface ModalProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ interface ModalProps {
  * @returns {JSX.Element | null} - The modal component or null if not open.
  */
 const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve, balance }) => {
+  const { t } = useTranslation();
   const [amount, setAmount] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -174,12 +176,14 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   return (
     <div className="modal-blur-background">
       <div className="modal-container general-text-color flex flex-col gap-6">
-        <h2>Supply {reserve.symbol}</h2>
+        <h2>
+          {t("LendingSupplyModalTitle")} {reserve.symbol}
+        </h2>
         <div className="table-border-top">
           {!data && !isError && (
             <div className="flex flex-col gap-6 mt-6">
               <div className="container-gray-borders flex flex-col gap-2">
-                <label className="font-bold">Amount</label>
+                <label className="font-bold">{t("LendingSupplyModalLabel")}</label>
                 <div className="flex items-center">
                   <input
                     type="number"
@@ -191,7 +195,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   <span className="font-bold">{reserve.symbol}</span>
                 </div>
                 <div className="text-xs">
-                  Wallet balance: {balance}{" "}
+                  {t("LendingSupplyModalBalance")}: {balance}{" "}
                   <span className="font-bold hover:underline cursor-pointer" onClick={handleMaxClick}>
                     MAX
                   </span>
@@ -221,17 +225,17 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   onClick={handleApproveClick}
                   disabled={!isValid || approvePending || isApproved} // Approve button disabled if already approved or pending
                 >
-                  Approve
+                  {t("LendingSupplyModalApprove")}
                 </button>
                 <button
                   className={`flex-grow-2 basis-2/3 ${isApproved && isValid ? "primary-btn" : "disabled-btn"}`}
                   onClick={handleSupplyClick}
                   disabled={!isApproved || !isValid} // Supply button enabled only if approved
                 >
-                  Supply
+                  {t("LendingSupplyModalButton")}
                 </button>
                 <button onClick={handleClose} className="secondary-btn flex-grow-1 basis-1/3">
-                  Cancel
+                  {t("LendingSupplyModalClose")}
                 </button>
               </div>
             </div>
@@ -239,11 +243,11 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
           {data && (
             <div className="flex flex-col gap-6 mt-6">
               <div className="success-container text-center">
-                <h2 className="">All done!</h2>
-                <p>Supply transaction successful</p>
+                <h2 className="">{t("LendingWithdrawModalSuccessTitle")}</h2>
+                <p>{t("LendingSupplyModalSuccessMessage")}</p>
               </div>
               <button onClick={handleClose} className="primary-btn">
-                Ok, close
+                Ok, {t("LendingSupplyModalClose")}
               </button>
             </div>
           )}
@@ -252,10 +256,10 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
               <h2 className="text-error font-bold text-2xl">Error</h2>
               <p className="text-sm">{error?.message}</p>
               <button onClick={handleCopyError} className="primary-btn">
-                Copy Error
+                {t("LendingSupplyModalCopyMessage")}
               </button>
               <button onClick={handleClose} className="secondary-btn">
-                Close
+                {t("LendingSupplyModalClose")}
               </button>
               {showSuccessIcon && <p className="text-success text-sm">Error message copied to clipboard.</p>}
             </div>

@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import WalletBalance from "./BalanceOf";
 import SupplyModal from "./modals/SupplyTransactionModal";
+import { useTranslation } from "@/app/context/LanguageContext";
 import IsolatedStateComponent from "@/components/tags/IsolatedState";
 import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
@@ -8,6 +9,7 @@ import { ReserveData } from "@/types/types";
 import { Address } from "viem";
 
 const AssetsToSupply: React.FC = () => {
+  const { t } = useTranslation();
   // Fetch reserve data and wallet address using custom hooks
   const {
     reservesData: reserveData,
@@ -59,7 +61,7 @@ const AssetsToSupply: React.FC = () => {
               onChange={() => setShowAll(prev => !prev)}
               className="mr-2 form-checkbox h-4 w-4"
             />
-            Show assets with 0 balance
+            {t("LendingAssetsToSupplyCheckbox")}
           </label>
         </div>
       )}
@@ -69,11 +71,11 @@ const AssetsToSupply: React.FC = () => {
         <div className="assets-container">
           {/* Table headers */}
           <div className="table-header assets-header py-3 flex justify-between tracking-wider">
-            <div className="assets-header-item w-24">Assets</div>
-            <div className="assets-header-item w-24">Wallet Balance</div>
-            <div className="assets-header-item w-24">APY</div>
-            <div className="assets-header-item w-24">Can be collateral</div>
-            <div className="assets-header-item w-24">Actions</div>
+            <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn1")}</div>
+            <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn2")}</div>
+            <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn3")}</div>
+            <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn4")}</div>
+            <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn5")}</div>
           </div>
 
           {/* Table rows */}
@@ -113,7 +115,7 @@ const AssetsToSupply: React.FC = () => {
                     disabled={isButtonDisabled}
                     onClick={() => handleSupplyClick(reserve, balance)}
                   >
-                    Supply
+                    {t("LendingSupplyModalButton")}
                   </button>
                 </div>
               </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { useTranslation } from "@/app/context/LanguageContext";
 import BaseLogo from "@/public/Base-Logo.jpg";
 
 interface ProfileStatsProps {
@@ -9,6 +10,7 @@ interface ProfileStatsProps {
 }
 
 const ProfileStats: React.FC<ProfileStatsProps> = ({ balance, netAPY, healthFactor }) => {
+  const { t } = useTranslation();
   const data = {
     netWorth: balance.toFixed(2),
     netAPY: netAPY.toFixed(2),
@@ -28,7 +30,7 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ balance, netAPY, healthFact
         </div>
         <div className="flex items-center space-x-8">
           <div className="text">
-            <div className="text-sm text-gray-400">Net worth</div>
+            <div className="text-sm text-gray-400">{t("LendingProfileNetWorth")}</div>
             <div className="text-lg text-accent font-semibold">${data.netWorth}</div>
           </div>
           {/* <div className="text">
@@ -36,7 +38,7 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ balance, netAPY, healthFact
             <div className="text-lg text-accent font-semibold">{data.netAPY}%</div>
           </div> */}
           <div className="text">
-            <div className="text-sm text-gray-400">Health factor</div>
+            <div className="text-sm text-gray-400">{t("LendingProfileHealthFactor")}</div>
             <div className="text-lg text-accent font-semibold">{data.healthFactor}</div>
           </div>
         </div>

@@ -3,10 +3,12 @@ import BorrowTransactionModal from "./modals/BorrowTransactionModal";
 import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
 import { ReserveData } from "@/types/types";
+import { useTranslation } from "~~/app/context/LanguageContext";
 
 // import { Address } from "viem";
 
 const AssetsToBorrow: React.FC = () => {
+  const { t } = useTranslation();
   // Fetch reserve data and wallet address using custom hooks
   const {
     reservesData: reserveData,
@@ -48,10 +50,10 @@ const AssetsToBorrow: React.FC = () => {
         <div className="assets-container">
           {/* Table headers */}
           <div className="table-header assets-header py-3 flex justify-between tracking-wider">
-            <div className="assets-header-item w-24">Asset</div>
-            <div className="assets-header-item w-24">Available Liquidity</div>
-            <div className="assets-header-item w-24">APY, variable</div>
-            <div className="assets-header-item w-24">Actions</div>
+            <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn1")}</div>
+            <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn2")}</div>
+            <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn3")}</div>
+            <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn4")}</div>
           </div>
 
           {/* Table rows */}

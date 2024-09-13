@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslation } from "../context/LanguageContext";
 import AssetsToBorrow from "./components/AssetsToBorrow";
 import AssetsToSupply from "./components/AssetsToSupply";
 import ProfileStats from "./components/ProfileStats";
@@ -15,6 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // Importa el hook de datos del usuario
 
 const Lending = () => {
+  const { t } = useTranslation();
   const [isYourSuppliesVisible, setIsYourSuppliesVisible] = useState(true);
   const [isAssetsToSupplyVisible, setIsAssetsToSupplyVisible] = useState(true);
   const [isYourBorrowsVissible, setIsYourBorrowsVissible] = useState(true);
@@ -51,7 +53,7 @@ const Lending = () => {
           />
         )}
         <button onClick={refreshComponents} className="primary-btn h-fit w-fit">
-          Refresh all data
+          {t("LendingRefreshButton")}
         </button>
       </div>
       <div className="grid grid-cols-2 gap-4">
@@ -60,7 +62,7 @@ const Lending = () => {
           <div className="table-background rounded-xl p-8 flex flex-col">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="general-text-color">Your supplies</h1>
+                <h1 className="general-text-color">{t("LendingYourSuppliesTitle")}</h1>
               </div>
               <button
                 onClick={() => setIsYourSuppliesVisible(prev => !prev)}
@@ -86,8 +88,10 @@ const Lending = () => {
           <div className="table-background rounded-xl p-8 flex flex-col">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="general-text-color">Assets to supply</h1>
-                {isAssetsToSupplyVisible && <p className="subtitles-gray-color">Select the asset to supply.</p>}
+                <h1 className="general-text-color">{t("LendingAssetsToSupplyTitle")}</h1>
+                {isAssetsToSupplyVisible && (
+                  <p className="subtitles-gray-color">{t("LendingAssetsToSupplyDescription")}</p>
+                )}
               </div>
               <button
                 onClick={() => setIsAssetsToSupplyVisible(prev => !prev)}
@@ -109,7 +113,7 @@ const Lending = () => {
           <div className="table-background rounded-xl p-8 flex flex-col">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="general-text-color">Your borrows</h1>
+                <h1 className="general-text-color">{t("LendingYourBorrowsTitle")}</h1>
               </div>
               <button
                 onClick={() => setIsYourBorrowsVissible(prev => !prev)}
@@ -128,13 +132,11 @@ const Lending = () => {
           <div className="table-background rounded-xl p-8 flex flex-col">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="general-text-color">Assets to borrow</h1>
+                <h1 className="general-text-color">{t("LendingAssetsToBorrowTitle")}</h1>
                 {isAssetsToBorrowVisible && !allBalancesZero && (
-                  <p className="subtitles-gray-color">Select the asset to borrow.</p>
+                  <p className="subtitles-gray-color">{t("LendingAssetsToBorrowDescription")}</p>
                 )}
-                {allBalancesZero && (
-                  <p className="subtitles-gray-color">You must supply assets to make borrow transactions.</p>
-                )}
+                {allBalancesZero && <p className="subtitles-gray-color">{t("LendingAssetsToBorrowZeroBalance")}</p>}
               </div>
               {!allBalancesZero && (
                 <button
