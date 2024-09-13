@@ -89,9 +89,17 @@
   "testimonialTitle": "Explora las voces de la comunidad $XOC",
   "testimonialDescription": "Descubre testimonios auténticos de aquellos que son parte de la vibrante comunidad que construye y utiliza $XOC. Desde experiencias transformadoras hasta historias de éxito, aquí encontrarás la inspiración que necesitas para unirte a esta emocionante revolución financiera.",
 
-  "faqPreTitle": "FAQ",
+  "faqPreTitle": "FAQs",
   "faqTitle": "Preguntas Frecuentes",
   "faqDescription": "Esta sección es para responder preguntas frecuentes de la comunidad emergente en torno a $XOC y todo eso.",
+  "faqQuestion1": "¿Cómo se respalda el valor de cada $XOC?",
+  "faqAnswer1": "Cada $XOC está respaldado por una reserva de activos subyacentes que se mantienen en un contrato inteligente. Estos activos subyacentes actúan como garantía y garantizan que siempre haya suficientes fondos para respaldar el valor de cada $XOC en circulación.",
+  "faqQuestion2": "¿Qué puedo hacer con $XOC?",
+  "faqAnswer2": "Puedes usar $XOC para pagar deudas, adquirir bienes y servicios, o simplemente tenerlo como depósito de valor, como cualquier otro peso mexicano. Además, puedes apoyar a la comunidad de La DAO construyendo el próximo sistema financiero abierto y descentralizado. Pregúntanos cómo empezar en Discord o Telegram",
+  "faqQuestion3": "¿Quién mantiene todo esto?",
+  "faqAnswer3": "Utilizamos un modelo de negocio basado en una DAO, actualmente conocida como &apos;La DAO.&apos; Esta organización autónoma descentralizada es responsable de gestionar todo el trabajo necesario para construir en DeFi. Estamos estableciendo una DAO LLC para gestionar los aspectos legales y financieros locales del proyecto.",
+  "faqQuestion4": "¿Cómo puedo involucrarme?",
+  "faqAnswer4": "Puedes adquirir $XOC en cualquier exchange que lo ofrezca, o participar en la DAO y contribuir a construir el futuro de las finanzas descentralizadas. Si tienes habilidades que crees que pueden ser útiles, no dudes en ponerte en contacto con nosotros.",
 
   "Base": "Base",
   "Market": "Mercado",

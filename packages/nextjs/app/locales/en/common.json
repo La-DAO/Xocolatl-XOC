@@ -77,9 +77,17 @@
   "testimonialTitle": "Explore the voices of the $XOC community",
   "testimonialDescription": "Discover authentic testimonials from those who are part of the vibrant community building and using $XOC. From transformative experiences to success stories, here you&apos;ll find the inspiration you need to join this exciting financial revolution.",
 
-  "faqPreTitle": "FAQ",
+  "faqPreTitle": "FAQs",
   "faqTitle": "Frequently Asked Questions",
   "faqDescription": "This section is for answering frequently asked questions from the emerging community around $XOC and all that jazz.",
+  "faqQuestion1": "How is the value of each $XOC backed?",
+  "faqAnswer1": "Each $XOC is backed by an ERC20 token on the EVM-compatible chain of your choosing. This backing ensures that each $XOC can be liquidated for its equivalent value in $XOC-denominated debt and settle the account in the process, all backed by the network of validators. Minting contracts are currently live in Arbitrum, Base, Binance Smart Chain, Gnosis Chain, Optimism and Polygon.",
+  "faqQuestion2": "What can I do with $XOC?",
+  "faqAnswer2": "You can use $XOC to pay off debts, acquire goods and services, or simply hold it as a store of value, much like any other Mexican peso. Additionally, you can support La DAO community by building the next open and decentralized financial system. Ask us how to get started on Discord or Telegram.",
+  "faqQuestion3": "Who maintains all this?",
+  "faqAnswer3": "We utilize a business model based on a DAO, currently known as &apos;La DAO.&apos; This decentralized autonomous organization is responsible for managing all the work needed to build in DeFi. We are establishing a DAO LLC to manage the legal and local financial aspects of the project.",
+  "faqQuestion4": "How can I get involved?",
+  "faqAnswer4": "You can acquire $XOC on any exchange that offers it, or participate in the DAO and contribute to building the future of decentralized finance. If you have skills you think may be useful, feel free to reach out to us.",
 
   "Base": "Base",
   "Market": "Market",

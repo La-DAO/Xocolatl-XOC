@@ -3,10 +3,9 @@
 // import Image from "next/image";
 import About from "./components/About/index";
 import BenefitsNew from "./components/BenefitsNew";
-import FAQTitle from "./components/FAQTitle";
+import FAQs from "./components/FAQs";
 import FeaturesTab from "./components/FeaturesTab";
 import TestimonialTitle from "./components/TestimonialTitle";
-import Faq from "./components/faq";
 import Hero from "./components/hero";
 import SectionTitle from "./components/sectionTitle";
 import Testimonials from "./components/testimonials";
@@ -27,8 +26,7 @@ const Home: NextPage = () => {
       <TestimonialTitle />
       <Testimonials />
       <div className="divider"></div>
-      <FAQTitle />
-      <Faq />
+      <FAQs />
     </>
   );
 };
