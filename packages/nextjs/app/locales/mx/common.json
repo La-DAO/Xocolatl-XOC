@@ -8,6 +8,28 @@
   "tryXocButton": "Prueba $XOC",
   "mostLiquidStablecoin": "$XOC es la stablecoin más líquida para el peso $MXN.",
 
+  "BenefitsComponentTitle": "Nuestro Pitch",
+  "BenefitsComponentSubTitle": "Porque $XOC?",
+  "Benefit1Title": "Planteamiento del Problema: Corrupción, Burocracia y Delincuencia",
+  "Benefit1SubTitle": "El crecimiento de México se ha visto obstaculizado por 3 problemas principales:",
+  "Benefit1Bullet1Title": "Corrupción en el Gobierno",
+  "Benefit1Bullet1Desc": "México ocupa el puesto 126 de 180 países en el Índice de Percepción de la Corrupción. La corrupción es un problema sistémico que afecta a todos los niveles de gobierno.",
+  "Benefit1Bullet2Title": "Burocracia Excesiva",
+  "Benefit1Bullet2Desc": "México ocupa el puesto 60 de 190 países en el Índice de Facilidad para Hacer Negocios del Banco Mundial. La burocracia excesiva es uno de los principales obstáculos para hacer negocios en México.",
+  "Benefit1Bullet3Title": "Crimen Organizada",
+  "Benefit1Bullet3Desc": "México ocupa el puesto 140 de 163 países en el Índice de Paz Global. El crimen organizado es un problema grave que afecta a la seguridad y la estabilidad del país.",
+
+  "Benefit2Title": "Solución: Dinero Programable",
+  "Benefit2SubTitle": "Nuevos problemas requieren nuevas soluciones tecnológicas. En La DAO estamos construyendo un sistema financiero descentralizado más inclusivo, transparente y accesible para todos.",
+  "Benefit2Bullet1Title": "Transparencia y Seguridad",
+  "Benefit2Bullet1Desc": "Nuestra plataforma está construida sobre tecnología blockchain, que garantiza que todas las transacciones sean seguras, transparentes e inmutables. Utilizamos contratos inteligentes para automatizar los procesos y eliminar la necesidad de intermediarios, reduciendo el riesgo de fraude y corrupción.",
+  "Benefit2Bullet2Title": "Fomentamos Innovación",
+  "Benefit2Bullet2Desc": "Estamos creando una comunidad de desarrolladores, emprendedores e inversores apasionados por construir un futuro financiero mejor. Nuestra plataforma proporciona herramientas y recursos para ayudarles a desarrollar y lanzar nuevos proyectos, productos y servicios que beneficiarán a la sociedad en su conjunto.",
+  "Benefit2Bullet3Title": "Gobernancia Comunitaria",
+  "Benefit2Bullet3Desc": "Nuestra plataforma está gobernada por una organización autónoma descentralizada (DAO) que es propiedad y está controlada por sus miembros. Esto garantiza que todas las decisiones se tomen en el mejor interés de la comunidad y que todo el mundo tenga voz y voto en el funcionamiento de la plataforma.",
+
+
+
   "featuresTab1": "Gestión de CDP",
   "featuresTab2": "Mercados de Préstamos de Dinero",
   "featuresTab3": "Interoperabilidad Total con las L2 más Populares",
@@ -67,9 +89,17 @@
   "testimonialTitle": "Explora las voces de la comunidad $XOC",
   "testimonialDescription": "Descubre testimonios auténticos de aquellos que son parte de la vibrante comunidad que construye y utiliza $XOC. Desde experiencias transformadoras hasta historias de éxito, aquí encontrarás la inspiración que necesitas para unirte a esta emocionante revolución financiera.",
 
-  "faqPreTitle": "FAQ",
+  "faqPreTitle": "FAQs",
   "faqTitle": "Preguntas Frecuentes",
   "faqDescription": "Esta sección es para responder preguntas frecuentes de la comunidad emergente en torno a $XOC y todo eso.",
+  "faqQuestion1": "¿Cómo se respalda el valor de cada $XOC?",
+  "faqAnswer1": "Cada $XOC está respaldado por una reserva de activos subyacentes que se mantienen en un contrato inteligente. Estos activos subyacentes actúan como garantía y garantizan que siempre haya suficientes fondos para respaldar el valor de cada $XOC en circulación.",
+  "faqQuestion2": "¿Qué puedo hacer con $XOC?",
+  "faqAnswer2": "Puedes usar $XOC para pagar deudas, adquirir bienes y servicios, o simplemente tenerlo como depósito de valor, como cualquier otro peso mexicano. Además, puedes apoyar a la comunidad de La DAO construyendo el próximo sistema financiero abierto y descentralizado. Pregúntanos cómo empezar en Discord o Telegram",
+  "faqQuestion3": "¿Quién mantiene todo esto?",
+  "faqAnswer3": "Utilizamos un modelo de negocio basado en una DAO, actualmente conocida como &apos;La DAO.&apos; Esta organización autónoma descentralizada es responsable de gestionar todo el trabajo necesario para construir en DeFi. Estamos estableciendo una DAO LLC para gestionar los aspectos legales y financieros locales del proyecto.",
+  "faqQuestion4": "¿Cómo puedo involucrarme?",
+  "faqAnswer4": "Puedes adquirir $XOC en cualquier exchange que lo ofrezca, o participar en la DAO y contribuir a construir el futuro de las finanzas descentralizadas. Si tienes habilidades que crees que pueden ser útiles, no dudes en ponerte en contacto con nosotros.",
 
   "Base": "Base",
   "Market": "Mercado",

@@ -2,12 +2,10 @@
 
 // import Image from "next/image";
 import About from "./components/About/index";
-import FAQTitle from "./components/FAQTitle";
+import BenefitsNew from "./components/BenefitsNew";
+import FAQs from "./components/FAQs";
 import FeaturesTab from "./components/FeaturesTab";
 import TestimonialTitle from "./components/TestimonialTitle";
-import Benefits from "./components/benefits";
-import { benefitOne, benefitTwo } from "./components/data";
-import Faq from "./components/faq";
 import Hero from "./components/hero";
 import SectionTitle from "./components/sectionTitle";
 import Testimonials from "./components/testimonials";
@@ -18,9 +16,7 @@ const Home: NextPage = () => {
     <>
       <Hero />
       <div className="divider"></div>
-      <SectionTitle pretitle="This is our pitch" title="Why $XOC?" />
-      <Benefits data={benefitOne} />
-      <Benefits imgPos="right" data={benefitTwo} />
+      <BenefitsNew />
       <div className="divider"></div>
       <SectionTitle pretitle="Curious?" title="Explore what you can do with $XOC" />
       <FeaturesTab />
@@ -30,8 +26,7 @@ const Home: NextPage = () => {
       <TestimonialTitle />
       <Testimonials />
       <div className="divider"></div>
-      <FAQTitle />
-      <Faq />
+      <FAQs />
     </>
   );
 };
