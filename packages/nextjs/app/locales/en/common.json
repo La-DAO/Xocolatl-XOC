@@ -203,6 +203,22 @@
   "LendingRepayModalSuccessMessage": "Your transaction was sent successful.",
 
 
+  "LendingInfoTitle": "Understanding Decentralized Lending",
+  "LendingInfoSubtitle": "How the lending arkets work around here",
+  "LendingInfoParagraph1": "Our protocol provides a decentralized lending market where users can supply assets to earn interest or borrow assets by providing collateral. The lending markets are governed by smart contracts that automate the lending and borrowing processes, ensuring transparency, security, and efficiency.",
+  "LendingInfoSubtitle2": "The Mechanism of Supplying and Borrowing",
+  "LendingInfoParagraph2": "When you supply assets to the lending market, you are essentially lending your assets to other users who want to borrow them. In return, you earn interest on the supplied assets. On the other hand, when you borrow assets from the lending market, you provide collateral in the form of other assets. The borrowed assets can be used for trading, investing, or other purposes.",
+  "LendingInfoStepsTitle": "Here’s how it works step-by-step:",
+  "LendingInfoStep1": "You supply assets to the lending market.",
+  "LendingInfoStep2": "Other users borrow your supplied assets and pay interest.",
+  "LendingInfoStep3": "You earn interest on the supplied assets.",
+  "LendingInfoUseTitle": "Using the Lending Markets",
+  "LendingInfoUseSubTitle": "Once you have supplied or borrowed assets, you can use them in various ways:",
+  "LendingInfoPoint1": "Earn interest on supplied assets by lending them to other users.",
+  "LendingInfoPoint2": "Borrow assets to trade, invest, or use in other DeFi protocols.",
+  "LendingInfoPoint3": "Repay borrowed assets to unlock your collateral and close the loan.",
+  "LendingClosing": "The decentralized lending markets provide a flexible and efficient way to manage your assets, earn passive income, and access liquidity for trading and investing.",
+
   "XoktleTitle": "Xoktle",
   "XoktleDescription": "Xoktle is the word for pot 🍯 in Nahuatl. This smart contract is designed to use your deposit to expand stablecoin liquidity and pair with the DeFi ecosystem. For every 1 dollar, there will be 4 pesos in the pool, so our liquidity agent will always strive to maintain this ratio by internally rebalancing the pool.",
   "XoktleTotalShares": "Total Shares",
