@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useTranslation } from "../context/LanguageContext";
 import AssetsToBorrow from "./components/AssetsToBorrow";
 import AssetsToSupply from "./components/AssetsToSupply";
+import LendingInfo from "./components/LendingInfo";
 import ProfileStats from "./components/ProfileStats";
 import YourBorrows from "./components/YourBorrows";
 import YourSupplies from "./components/YourSupplies";
@@ -62,11 +63,11 @@ const Lending = () => {
           <div className="table-background rounded-xl p-8 flex flex-col">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="general-text-color">{t("LendingYourSuppliesTitle")}</h1>
+                <h1 className="text-primary">{t("LendingYourSuppliesTitle")}</h1>
               </div>
               <button
                 onClick={() => setIsYourSuppliesVisible(prev => !prev)}
-                className="general-text-color focus:outline-none"
+                className="text-primary focus:outline-none"
               >
                 {isYourSuppliesVisible ? (
                   <FontAwesomeIcon icon={faChevronUp} />
@@ -88,14 +89,14 @@ const Lending = () => {
           <div className="table-background rounded-xl p-8 flex flex-col">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="general-text-color">{t("LendingAssetsToSupplyTitle")}</h1>
+                <h1 className="text-primary">{t("LendingAssetsToSupplyTitle")}</h1>
                 {isAssetsToSupplyVisible && (
                   <p className="subtitles-gray-color">{t("LendingAssetsToSupplyDescription")}</p>
                 )}
               </div>
               <button
                 onClick={() => setIsAssetsToSupplyVisible(prev => !prev)}
-                className="general-text-color focus:outline-none"
+                className="text-primary focus:outline-none"
               >
                 {isAssetsToSupplyVisible ? (
                   <FontAwesomeIcon icon={faChevronUp} />
@@ -113,11 +114,11 @@ const Lending = () => {
           <div className="table-background rounded-xl p-8 flex flex-col">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="general-text-color">{t("LendingYourBorrowsTitle")}</h1>
+                <h1 className="text-primary">{t("LendingYourBorrowsTitle")}</h1>
               </div>
               <button
                 onClick={() => setIsYourBorrowsVissible(prev => !prev)}
-                className="general-text-color focus:outline-none"
+                className="text-primary focus:outline-none"
               >
                 {isYourBorrowsVissible ? (
                   <FontAwesomeIcon icon={faChevronUp} />
@@ -132,7 +133,7 @@ const Lending = () => {
           <div className="table-background rounded-xl p-8 flex flex-col">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="general-text-color">{t("LendingAssetsToBorrowTitle")}</h1>
+                <h1 className="text-primary">{t("LendingAssetsToBorrowTitle")}</h1>
                 {isAssetsToBorrowVisible && !allBalancesZero && (
                   <p className="subtitles-gray-color">{t("LendingAssetsToBorrowDescription")}</p>
                 )}
@@ -141,7 +142,7 @@ const Lending = () => {
               {!allBalancesZero && (
                 <button
                   onClick={() => setIsAssetsToBorrowVisible(prev => !prev)}
-                  className="general-text-color focus:outline-none"
+                  className="text-primary focus:outline-none"
                 >
                   {isAssetsToBorrowVisible ? (
                     <FontAwesomeIcon icon={faChevronUp} />
@@ -155,6 +156,7 @@ const Lending = () => {
           </div>
         </div>
       </div>
+      <LendingInfo />
     </div>
   );
 };

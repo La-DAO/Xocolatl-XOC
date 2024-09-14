@@ -131,7 +131,7 @@ export const Header = () => {
         <select
           value={locale}
           onChange={e => setLocale(e.target.value)}
-          className="select select-ghost mx-2 hover:bg-primary"
+          className="select select-ghost mx-2 hover:bg-secondary text-neutral"
         >
           <option value="en">English</option>
           <option value="es">Español</option>

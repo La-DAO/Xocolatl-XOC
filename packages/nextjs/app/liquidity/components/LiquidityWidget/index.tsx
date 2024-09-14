@@ -305,6 +305,7 @@ const LiquidityWidget: React.FC = () => {
               className="w-full p-2 border rounded-lg dark:bg-neutral dark:text-neutral-content"
               placeholder={t("XoktleUSDCAmount")}
             />
+            <span className="text-gray-500 mr-1">{`${t("Balance")}: ${usdcBalance || 0}`}</span>
             <span className="font-bold hover:underline cursor-pointer dark: text-primary" onClick={handleUSDCMaxClick}>
               MAX
             </span>
@@ -320,6 +321,7 @@ const LiquidityWidget: React.FC = () => {
               className="w-full p-2 border rounded-lg dark:bg-neutral dark:text-neutral-content"
               placeholder={t("XoktleXOCAmount")}
             />
+            <span className="text-gray-500 mr-1">{`${t("Balance")}: ${xocBalance || 0}`}</span>
             <span className="font-bold hover:underline cursor-pointer dark: text-primary" onClick={handleXOCMaxClick}>
               MAX
             </span>
@@ -337,6 +339,9 @@ const LiquidityWidget: React.FC = () => {
               className="w-full p-2 border rounded-lg dark:bg-neutral dark:text-neutral-content"
               placeholder={t("XoktleShareAmount")}
             />
+            <span className="text-gray-500 mr-1">{`${t("Balance")}: ${
+              sharesBalance && typeof sharesBalance === "bigint" ? formatUnits(sharesBalance, 18) : 0
+            }`}</span>
             <span
               className="font-bold hover:underline cursor-pointer dark: text-primary"
               onClick={handleSharesMaxClick}
