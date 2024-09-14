@@ -140,17 +140,24 @@ const DepositTable: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
         <thead>
           <tr className="text-center">
-            <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" className="px-1 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
               {t("AssetsColumn1")}
             </th>
-            <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+            {/* Hide this column on small screens */}
+            <th
+              scope="col"
+              className="px-1 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell"
+            >
               {t("AssetsColumn2")}
             </th>
-            <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th
+              scope="col"
+              className="px-1 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell"
+            >
               {t("AssetsColumn3")}{" "}
               <div
                 className="tooltip tooltip-primary"
@@ -159,7 +166,10 @@ const DepositTable: React.FC = () => {
                 <InformationCircleIcon className="h-5 w-5 inline" />
               </div>
             </th>
-            <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th
+              scope="col"
+              className="px-1 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell"
+            >
               {t("AssetsColumn4")}{" "}
               <div
                 className="tooltip tooltip-primary"
@@ -168,8 +178,7 @@ const DepositTable: React.FC = () => {
                 <InformationCircleIcon className="h-5 w-5 inline" />
               </div>
             </th>
-
-            <th scope="col" className="pl-32 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" className="px-1 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
               {t("AssetsColumn5")}
             </th>
           </tr>
@@ -177,25 +186,26 @@ const DepositTable: React.FC = () => {
         <tbody className="bg-white divide-y divide-gray-200 text-center">
           {chainAssets.map(asset => (
             <tr key={asset.name}>
-              <td className="px-6 py-4">
+              <td className="px-1 py-4">
                 <p className="text-sm font-medium text-gray-900">{asset.name}</p>
               </td>
-              <td className="dark:text-primary px-6 py-4">
+              {/* Hide this column on small screens */}
+              <td className="dark:text-primary px-1 py-4 hidden sm:table-cell">
                 <BalanceOf
                   tokenAddress={asset.assetContract as Address}
                   walletAddress={walletAddress as Address}
                   onBalanceChange={handleBalanceChange}
                 />
               </td>
-              <td className="px-6 py-4">
+              <td className="px-1 py-4 hidden sm:table-cell">
                 <p className="text-sm text-gray-900">{asset.maxLTV}</p>
               </td>
-              <td className="px-6 py-4">
+              <td className="px-1 py-4 hidden sm:table-cell">
                 <div className="text-sm text-gray-900">
                   <p className="text-sm text-gray-900">{asset.liquidationThreshold}</p>
                 </div>
               </td>
-              <td className="px-6 py-4 text-right">
+              <td className="px-1 py-4 text-right">
                 <button
                   className="text-sm text-accent dark:text-white btn bg-base-100 hover:bg-primary hover:text-white"
                   onClick={() => handleOpenModal(asset.name, asset.houseOfReserveContract, asset.assetContract)}
@@ -213,6 +223,8 @@ const DepositTable: React.FC = () => {
           ))}
         </tbody>
       </table>
+
+      {/* Modals for deposit and withdraw */}
       {isModalOpen && selectedAsset && selectedContract && (
         <DepositModal
           isOpen={isModalOpen}
@@ -221,7 +233,6 @@ const DepositTable: React.FC = () => {
           houseOfReserveContract={selectedContract}
           assetContract={selectedAssetContract}
           deposit={amount => {
-            // handle deposit logic here
             console.log(`Depositing ${amount} ${selectedAsset}`);
           }}
         />

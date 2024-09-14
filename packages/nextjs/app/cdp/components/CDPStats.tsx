@@ -151,32 +151,35 @@ const CDPStats: React.FC = () => {
   };
 
   return (
-    <header className="bg-white text-white px-12 py-8 flex flex-col space-y-2 w-4/5 m-auto rounded-2xl shadow-md">
+    <header className="bg-white text-white px-4 py-4 md:px-12 md:py-8 flex flex-col space-y-2 w-4/5 md:w-4/5 m-auto rounded-2xl shadow-md">
       <div>
         {/* Header with Logo and Chain Name */}
-        <div className="flex items-center space-x-2 mb-2">
+        <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2 mb-2">
           <div className="text-2xl">
             <Image src={logoSrc} alt={`${chainName} Logo`} className="h-8 w-8" />
           </div>
           <div>
-            <div className="text-2xl text-primary font-semibold">
+            <div className="text-2xl text-primary font-semibold text-center md:text-left">
               {chainName} {t("Market")}
             </div>
           </div>
         </div>
         {/* Data Display */}
-        <div className="flex items-center space-x-8">
-          <div className="text">
+        <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
+          <div className="text-center md:text-left">
             <div className="text-sm text-gray-400">{t("TotalXOCMinted")}</div>
-            <div className="text-lg text-accent font-semibold flex items-end">
+            <div className="text-lg text-accent font-semibold flex items-center justify-center md:justify-start">
               {latestMintedLoading ? "Loading..." : latestMintedError ? "Error" : `$ ${latestMintedNumber?.toString()}`}
-              <ArrowTopRightOnSquareIcon className="h-6 w-6 text-accent cursor-pointer" onClick={handleProofClick} />
+              <ArrowTopRightOnSquareIcon
+                className="h-6 w-6 text-accent cursor-pointer ml-2"
+                onClick={handleProofClick}
+              />
             </div>
           </div>
           {/* Dynamically Generated House of Reserve Data */}
-          <div className="flex flex-wrap space-x-8">
+          <div className="flex flex-wrap justify-center md:justify-start space-x-4 md:space-x-8">
             {formattedHouseOfReserveData.map((data, index) => (
-              <div key={index} className="text">
+              <div key={index} className="text-center md:text-left">
                 <div className="text-sm text-gray-400">{`${assetNames[index]}  ${t("Deposits")}`}</div>
                 <div className="text-lg text-accent font-semibold">
                   {data !== 0 ? ` ${data.toFixed(4)}` : "Loading..."}

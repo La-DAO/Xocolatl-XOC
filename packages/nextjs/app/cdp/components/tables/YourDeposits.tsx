@@ -447,7 +447,7 @@ const YourDeposits = () => {
   const chainDeposits = deposits[chainId] || [];
   const allDepositsZero = formattedBalances.every(balance => balance === 0);
   return (
-    <div className="rounded-md">
+    <div className="rounded-md overflow-x-auto">
       {/* Section for displaying the user's deposits */}
       {chainDeposits.length > 0 && !allDepositsZero ? (
         <>
@@ -455,16 +455,25 @@ const YourDeposits = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
               <tr className="text-center">
-                <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Assets
                 </th>
-                <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Deposited Amount
+                <th
+                  scope="col"
+                  className="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell"
+                >
+                  Deposited
                 </th>
-                <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Already Minted
+                <th
+                  scope="col"
+                  className="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell"
+                >
+                  Minted
                 </th>
-                <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell"
+                >
                   Minting Power
                   <div
                     className="tooltip tooltip-primary"
@@ -473,7 +482,10 @@ const YourDeposits = () => {
                     <InformationCircleIcon className="h-5 w-5 inline" />
                   </div>
                 </th>
-                <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell"
+                >
                   Health Factor
                   <div
                     className="tooltip tooltip-primary"
@@ -482,7 +494,7 @@ const YourDeposits = () => {
                     <InformationCircleIcon className="h-5 w-5 inline" />
                   </div>
                 </th>
-                <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -491,19 +503,19 @@ const YourDeposits = () => {
               {/* Iterate through deposits to create table rows */}
               {chainDeposits.map((deposit, index) => (
                 <tr key={index}>
-                  <td className="px-6 py-4">
+                  <td className="px-2 py-4">
                     <p className="text-sm font-medium text-gray-900">{deposit.symbol}</p>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-2 py-4 hidden sm:table-cell">
                     <p className="text-sm text-gray-900">{deposit.amount}</p>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-2 py-4 hidden sm:table-cell">
                     <p className="text-sm text-gray-900">{deposit.minted}</p>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-2 py-4 hidden sm:table-cell">
                     <p className="text-sm text-gray-900">{deposit.mintingPower}</p>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-2 py-4 hidden sm:table-cell">
                     <div className="text-sm text-gray-900">{deposit.userHealthRatio}</div>
                   </td>
                   <td className="py-4 whitespace-nowrap text-sm font-medium">

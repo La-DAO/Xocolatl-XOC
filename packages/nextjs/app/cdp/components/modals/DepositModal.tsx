@@ -153,16 +153,16 @@ const DepositModal: React.FC<DepositModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 dark:text-primary">
-        <h2 className="text-xl font-bold mb-4 ml-1">Deposit {assetName}</h2>
-        <p className="mb-4 ml-1">Deposit {assetName} to House Of Reserve</p>
+      <div className="bg-white rounded-lg shadow-lg p-6 dark:text-primary w-full max-w-md sm:max-w-lg md:max-w-2xl mx-4">
+        <h2 className="text-lg sm:text-xl font-bold mb-4 ml-1">Deposit {assetName}</h2>
+        <p className="mb-4 ml-1 text-sm sm:text-base">Deposit {assetName} to House Of Reserve</p>
 
         <div role="alert" className="alert mb-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            className="stroke-info h-6 w-6 shrink-0"
+            className="stroke-info h-5 w-5 sm:h-6 sm:w-6 shrink-0"
           >
             <path
               strokeLinecap="round"
@@ -171,7 +171,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             ></path>
           </svg>
-          <span>
+          <span className="text-xs sm:text-sm">
             You will need to approve the transaction AND <br /> wait around 5-10 seconds before it goes through
           </span>
         </div>
@@ -179,18 +179,21 @@ const DepositModal: React.FC<DepositModalProps> = ({
         {!data && !isError && (
           <div className="flex flex-col gap-6 mt-6">
             <div className="container-gray-borders flex flex-col gap-2">
-              <label className="font-bold">Amount</label>
+              <label className="font-bold text-sm sm:text-base">Amount</label>
               <div className="flex items-center">
                 <input
                   type="number"
-                  className="without-borders"
+                  className="without-borders w-full text-sm sm:text-base"
                   placeholder="0.00"
                   value={amount}
                   onChange={handleChange}
                 />
-                <span className="font-bold">{assetName}</span>
+                <span className="font-bold ml-2">{assetName}</span>
               </div>
-              <span className="font-bold hover:underline cursor-pointer" onClick={handleMaxClick}>
+              <span
+                className="font-bold hover:underline cursor-pointer text-sm sm:text-base mt-2"
+                onClick={handleMaxClick}
+              >
                 MAX
               </span>
               {balanceError && <p className="text-xs text-red-600 ml-2">{balanceError}</p>}
@@ -198,15 +201,15 @@ const DepositModal: React.FC<DepositModalProps> = ({
             </div>
 
             <div className="container-gray-borders flex flex-col gap-2">
-              <label className="font-bold">Transaction Overview</label>
-              <div className="flex justify-between items-center text-sm">
+              <label className="font-bold text-sm sm:text-base">Transaction Overview</label>
+              <div className="flex justify-between items-center text-xs sm:text-sm">
                 <span>You will deposit:</span>
                 <div className="flex items-center gap-1">
                   <span>{amount ? amount : 0}</span>
-                  <span className=" font-bold">{assetName}</span>
+                  <span className="font-bold">{assetName}</span>
                 </div>
               </div>
-              <div className="flex justify-between items-center text-sm">
+              <div className="flex justify-between items-center text-xs sm:text-sm">
                 <p className="text-xs text-gray-500">Wallet Balance:</p>
                 <div className="flex items-center gap-1">
                   <BalanceOf
@@ -214,15 +217,15 @@ const DepositModal: React.FC<DepositModalProps> = ({
                     walletAddress={walletAddress as Address}
                     onBalanceChange={handleBalanceChange}
                   />
-                  <span className=" font-bold">{assetName}</span>
+                  <span className="font-bold">{assetName}</span>
                 </div>
               </div>
             </div>
 
-            <div className="flex justify-between gap-4">
+            <div className="flex flex-col sm:flex-row justify-between gap-4">
               {!isApprovalSuccess ? (
                 <button
-                  className={`flex-grow-2 basis-2/3 ${isValid && !balanceError ? "primary-btn" : "disabled-btn"}`}
+                  className={`flex-grow sm:basis-2/3 ${isValid && !balanceError ? "primary-btn" : "disabled-btn"}`}
                   onClick={onApproveClick}
                   disabled={isApprovalPending || !isValid || balanceError !== null}
                 >
@@ -230,14 +233,14 @@ const DepositModal: React.FC<DepositModalProps> = ({
                 </button>
               ) : (
                 <button
-                  className={`flex-grow-2 basis-2/3 ${isValid && !balanceError ? "primary-btn" : "disabled-btn"}`}
+                  className={`flex-grow sm:basis-2/3 ${isValid && !balanceError ? "primary-btn" : "disabled-btn"}`}
                   onClick={onDepositClick}
                   disabled={isDepositPending || !isValid || balanceError !== null}
                 >
                   {isDepositPending ? "Processing..." : "Deposit"}
                 </button>
               )}
-              <button onClick={handleClose} className="secondary-btn flex-grow-1 basis-1/3">
+              <button onClick={handleClose} className="secondary-btn flex-grow sm:basis-1/3">
                 Close
               </button>
             </div>
@@ -247,7 +250,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
         {isDepositError && (
           <div className="flex flex-col gap-6 mt-6">
             <div className="error-container text-center">
-              <p>
+              <p className="text-xs sm:text-sm">
                 Something went wrong.{" "}
                 <span onClick={handleCopyError} className="cursor-pointer underline">
                   Copy the error.
@@ -255,7 +258,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
                 {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
               </p>
             </div>
-            <button onClick={handleClose} className="primary-btn">
+            <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
               Close
             </button>
           </div>
@@ -264,12 +267,12 @@ const DepositModal: React.FC<DepositModalProps> = ({
         {data && (
           <div className="flex flex-col gap-6 mt-6">
             <div className="success-container text-center">
-              <h2>All done!</h2>
-              <p>Deposit transaction successful</p>
-              {hash && <div>Transaction Hash: {hash}</div>}
-              {depositStatus && <div>Deposit Status: {depositStatus}</div>}
+              <h2 className="text-base sm:text-lg">All done!</h2>
+              <p className="text-xs sm:text-sm">Deposit transaction successful</p>
+              {hash && <div className="text-xs sm:text-sm">Transaction Hash: {hash}</div>}
+              {depositStatus && <div className="text-xs sm:text-sm">Deposit Status: {depositStatus}</div>}
             </div>
-            <button onClick={handleClose} className="primary-btn">
+            <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
               Ok, close
             </button>
           </div>
