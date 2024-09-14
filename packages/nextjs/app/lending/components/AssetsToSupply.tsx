@@ -72,8 +72,8 @@ const AssetsToSupply: React.FC = () => {
           {/* Table headers */}
           <div className="table-header assets-header py-3 flex justify-between tracking-wider">
             <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn1")}</div>
-            <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn2")}</div>
-            <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn3")}</div>
+            <div className="assets-header-item w-24 hidden sm:block">{t("LendingAssetsToSupplyColumn2")}</div>
+            <div className="assets-header-item w-24 hidden sm:block">{t("LendingAssetsToSupplyColumn3")}</div>
             <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn4")}</div>
             <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn5")}</div>
           </div>
@@ -88,7 +88,7 @@ const AssetsToSupply: React.FC = () => {
                 <div className="asset-row-item w-24 h-fit">
                   <p>{reserve.symbol}</p>
                 </div>
-                <div className="asset-row-item w-24 h-fit">
+                <div className="asset-row-item w-24 h-fit hidden sm:block">
                   <p>
                     <WalletBalance
                       tokenAddress={reserve.underlyingAsset as Address}
@@ -97,7 +97,7 @@ const AssetsToSupply: React.FC = () => {
                     />
                   </p>
                 </div>
-                <div className="asset-row-item w-24 h-fit">
+                <div className="asset-row-item w-24 h-fit hidden sm:block">
                   <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
                 </div>
                 <div className="asset-row-item w-24 h-fit">
@@ -123,7 +123,6 @@ const AssetsToSupply: React.FC = () => {
           })}
         </div>
       )}
-
       {/* Modal for supply transaction */}
       <SupplyModal
         isOpen={isModalOpen}

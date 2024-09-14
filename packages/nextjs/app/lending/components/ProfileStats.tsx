@@ -18,7 +18,7 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ balance, netAPY, healthFact
   };
 
   return (
-    <header className="bg-inherit dark:bg-inherit flex flex-col space-y-2 w-fit">
+    <header className="bg-inherit dark:bg-inherit flex flex-col space-y-2 w-full md:w-fit">
       <div>
         <div className="flex items-center space-x-2 mb-2">
           <div className="text-2xl">
@@ -28,15 +28,15 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ balance, netAPY, healthFact
             <div className="text-2xl text-primary font-semibold">Base Market</div>
           </div>
         </div>
-        <div className="flex items-center space-x-8">
+        <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-8">
           <div className="text">
             <div className="text-sm text-gray-400">{t("LendingProfileNetWorth")}</div>
             <div className="text-lg text-accent font-semibold">${data.netWorth}</div>
           </div>
           {/* <div className="text">
-            <div className="text-sm text-gray-400">Net APY</div>
-            <div className="text-lg text-accent font-semibold">{data.netAPY}%</div>
-          </div> */}
+        <div className="text-sm text-gray-400">Net APY</div>
+        <div className="text-lg text-accent font-semibold">{data.netAPY}%</div>
+        </div> */}
           <div className="text">
             <div className="text-sm text-gray-400">{t("LendingProfileHealthFactor")}</div>
             <div className="text-lg text-accent font-semibold">{data.healthFactor}</div>

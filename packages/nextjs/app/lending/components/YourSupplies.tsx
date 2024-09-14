@@ -94,8 +94,8 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
       >
         <div className="table-header supplies-header py-3 flex justify-between tracking-wider">
           <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn1")}</div>
-          <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn2")}</div>
-          <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn3")}</div>
+          <div className="supplies-header-item w-24 hidden sm:block">{t("LendingYourSuppliesColumn2")}</div>
+          <div className="supplies-header-item w-24 hidden sm:block">{t("LendingYourSuppliesColumn3")}</div>
           <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn4")}</div>
           <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn5")}</div>
         </div>
@@ -113,7 +113,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
               <div className="supplies-row-item w-24">
                 <p>{reserve.symbol}</p>
               </div>
-              <div className="supplies-row-item w-24">
+              <div className="supplies-row-item w-24 hidden sm:block">
                 <p>
                   <WalletBalance
                     tokenAddress={reserve.aTokenAddress as Address}
@@ -122,7 +122,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
                   />
                 </p>
               </div>
-              <div className="supplies-row-item w-24">
+              <div className="supplies-row-item w-24 hidden sm:block">
                 <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
               </div>
               <div className="supplies-row-item w-24">

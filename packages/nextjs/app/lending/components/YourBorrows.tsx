@@ -87,8 +87,8 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
         <div className="table-header borrows-header py-3 flex justify-between tracking-wider">
           <div className="borrows-header-item w-24">{t("LendingYourBorrowsColumn1")}</div>
           <div className="borrows-header-item w-24">{t("LendingYourBorrowsColumn2")}</div>
-          <div className="borrows-header-item w-24">{t("LendingYourBorrowsColumn3")}</div>
-          <div className="borrows-header-item w-24">{t("LendingYourBorrowsColumn4")}</div>
+          <div className="borrows-header-item w-24 hidden sm:block">{t("LendingYourBorrowsColumn3")}</div>
+          <div className="borrows-header-item w-24 hidden sm:block">{t("LendingYourBorrowsColumn4")}</div>
           <div className="borrows-header-item w-24">{t("LendingYourBorrowsColumn5")}</div>
         </div>
         {reservesWithBalances.map((reserve, index) => {
@@ -114,10 +114,10 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
                   />
                 </p>
               </div>
-              <div className="borrows-row-item w-24">
+              <div className="borrows-row-item w-24 hidden sm:block">
                 <p>{(Number(reserve.variableBorrowRate) / 1e25).toFixed(2)}%</p>
               </div>
-              <div className="borrows-row-item w-24">
+              <div className="borrows-row-item w-24 hidden sm:block">
                 <span className="px-4 py-1 bg-gray-100 text-gray-400 rounded-md uppercase text-xs">
                   {reserve.variableBorrowrate !== 0n && reserve.stableBorrowRateEnabled ? "stable" : "variable"}
                 </span>
