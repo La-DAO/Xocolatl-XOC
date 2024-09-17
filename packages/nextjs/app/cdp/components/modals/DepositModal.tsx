@@ -53,7 +53,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
     isError: isDepositError,
     status: depositStatus,
     error,
-    hash,
+    depositHash,
   } = useDeposit(houseOfReserveContract as Address);
 
   useEffect(() => {
@@ -70,10 +70,10 @@ const DepositModal: React.FC<DepositModalProps> = ({
       setIsError(true);
       setErrorMessage(error?.message || "An unknown error occurred.");
     }
-    if (hash) {
-      setData(hash);
+    if (depositHash) {
+      setData(depositHash);
     }
-  }, [isDepositError, hash, error]);
+  }, [isDepositError, depositHash, error]);
 
   useEffect(() => {
     const assetAmount = parseFloat(amount) || 0;
@@ -269,7 +269,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
             <div className="success-container text-center">
               <h2 className="text-base sm:text-lg">All done!</h2>
               <p className="text-xs sm:text-sm">Deposit transaction successful</p>
-              {hash && <div className="text-xs sm:text-sm">Transaction Hash: {hash}</div>}
+              {depositHash && <div className="text-xs sm:text-sm">Transaction depositHash: {depositHash}</div>}
               {depositStatus && <div className="text-xs sm:text-sm">Deposit Status: {depositStatus}</div>}
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
