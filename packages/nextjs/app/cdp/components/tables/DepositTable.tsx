@@ -39,36 +39,22 @@ const assets: {
       name: "WETH",
       maxLTV: "85%",
       liquidationThreshold: "85%",
-      houseOfReserveContract: "0xd411BE9A105Ea7701FabBe58C2834b7033EBC203",
+      houseOfReserveContract: "0x2718644E0C38A6a1F82136FC31dcA00DFCdF92a3",
       assetContract: "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
-    },
-    {
-      name: "wstETH",
-      maxLTV: "70%",
-      liquidationThreshold: "85%",
-      houseOfReserveContract: "0x28C7DF27e5bC7Cb004c8D4bb2C2D91f246D0A2C9",
-      assetContract: "0x03b54a6e9a984069379fae1a4fc4dbae93b3bccd",
     },
     {
       name: "MATICX",
       maxLTV: "60%",
       liquidationThreshold: "85%",
-      houseOfReserveContract: "0x102dda5f4621a08dafD327f29f9c815f851846dC",
+      houseOfReserveContract: "0x76CAc0bC384a49485627D2235fE132e3038b45BB",
       assetContract: "0xfa68fb4628dff1028cfec22b4162fccd0d45efb6",
     },
     {
       name: "WMATIC",
       maxLTV: "70%",
       liquidationThreshold: "85%",
-      houseOfReserveContract: "0xdB9Dd25660240415d95144C6CE4f21f00Edf8168",
+      houseOfReserveContract: "0xF56293025437Db5C0024a37dfcEc792125d56A48",
       assetContract: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
-    },
-    {
-      name: "WBTC",
-      maxLTV: "70%",
-      liquidationThreshold: "85%",
-      houseOfReserveContract: "0x983A0eC44bf1BB11592a8bD5F91f05adE4F44D81",
-      assetContract: "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
     },
   ],
   8453: [
@@ -205,7 +191,7 @@ const DepositTable: React.FC = () => {
                   <p className="text-sm text-gray-900">{asset.liquidationThreshold}</p>
                 </div>
               </td>
-              <td className="px-1 py-4 text-right">
+              <td className="px-1 py-4">
                 <button
                   className="text-sm text-accent dark:text-white btn bg-base-100 hover:bg-primary hover:text-white"
                   onClick={() => handleOpenModal(asset.name, asset.houseOfReserveContract, asset.assetContract)}

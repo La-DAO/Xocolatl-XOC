@@ -67,32 +67,22 @@ const CDPStats: React.FC = () => {
   } else if (chainId === 137) {
     houseOfReserveContracts = [
       {
-        address: "0xd411BE9A105Ea7701FabBe58C2834b7033EBC203",
+        address: "0x2718644E0C38A6a1F82136FC31dcA00DFCdF92a3",
         abi: houseOfReserveABI,
         functionName: "totalDeposits",
       },
       {
-        address: "0x28C7DF27e5bC7Cb004c8D4bb2C2D91f246D0A2C9",
+        address: "0x76CAc0bC384a49485627D2235fE132e3038b45BB",
         abi: houseOfReserveABI,
         functionName: "totalDeposits",
       },
       {
-        address: "0x102dda5f4621a08dafD327f29f9c815f851846dC",
-        abi: houseOfReserveABI,
-        functionName: "totalDeposits",
-      },
-      {
-        address: "0xdB9Dd25660240415d95144C6CE4f21f00Edf8168",
-        abi: houseOfReserveABI,
-        functionName: "totalDeposits",
-      },
-      {
-        address: "0x983A0eC44bf1BB11592a8bD5F91f05adE4F44D81",
+        address: "0xF56293025437Db5C0024a37dfcEc792125d56A48",
         abi: houseOfReserveABI,
         functionName: "totalDeposits",
       },
     ];
-    assetNames = ["WETH", "WSTETH", "MATICX", "WMATIC", "WBTC"];
+    assetNames = ["WETH", "MATICX", "WMATIC"];
   } else if (chainId === 8453) {
     houseOfReserveContracts = [
       {

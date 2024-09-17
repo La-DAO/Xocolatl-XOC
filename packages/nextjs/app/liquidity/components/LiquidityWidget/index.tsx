@@ -148,7 +148,7 @@ const LiquidityWidget: React.FC = () => {
     const xocAmount = parseFloat(tokenB) || 0;
 
     try {
-      // Approve XOC
+      // Approve USDC
       if (usdcAmount > parseFloat(usdcAllowanceState)) {
         await approveERC20({
           abi: ERC20ABI,
@@ -158,7 +158,7 @@ const LiquidityWidget: React.FC = () => {
         });
       }
 
-      // Approve USDC
+      // Approve XOC
       if (xocAmount > parseFloat(xocAllowanceState)) {
         await approveERC20({
           abi: ERC20ABI,

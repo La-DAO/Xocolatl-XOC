@@ -11,23 +11,21 @@ const Deposits: React.FC = () => {
   const { t } = useTranslation();
   // Render the Supplies component
   return (
-    <div className="rounded-md">
+    <div className="flex flex-wrap gap-4">
       {/* Section for displaying user's deposits in the house of reserves */}
-      <div className="bg-white p-6 rounded-2xl shadow-md mb-4">
+      <div className="bg-white p-6 rounded-2xl shadow-md flex-1">
         <h2 className="text-xl text-primary font-semibold mb-4">{t("YourDepositTableTitle")}</h2>
         <p className="text-gray-500 mb-4">{t("YourDepositsDescription")}</p>
         {/* Table for displaying user's deposits in the house of reserves */}
         <YourDeposits />
       </div>
       {/* Section for displaying available assets to deposit */}
-      <div className="bg-white p-6 rounded-2xl shadow-md">
+      <div className="bg-white p-6 rounded-2xl shadow-md flex-1">
         <h2 className="text-xl text-primary font-semibold mb-4">{t("AssetTableTitle")}</h2>
         <p className="text-gray-500 mb-4">{t("AssetTableDescription")}</p>
         {/* Table for displaying available assets to supply */}
         <DepositTable />
       </div>
-
-      {/* Modal for confirming supply actions */}
     </div>
   );
 };
