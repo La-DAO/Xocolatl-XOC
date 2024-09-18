@@ -136,7 +136,7 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
           );
         })}
       </div>
-      <p className={`text-left text-gray-500 ${allBalancesZero ? "" : "hidden"}`}>
+      <p className={`text-left text-2xl mt-3 text-gray-500 ${allBalancesZero ? "" : "hidden"}`}>
         {t("LendingYourBorrowsZeroBalance")}
       </p>
 
