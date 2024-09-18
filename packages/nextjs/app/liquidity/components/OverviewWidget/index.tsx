@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useAccount, useReadContract } from "wagmi";
+import { useAccount, useChainId, useReadContract } from "wagmi";
 import { liquidityABI } from "~~/app/components/abis/liquidity";
 import { useTranslation } from "~~/app/context/LanguageContext";
 
@@ -9,7 +9,7 @@ const OverviewWidget: React.FC = () => {
   const { t } = useTranslation();
   const [balance, setBalance] = useState<number | null>(null);
   const { address: accountAddress } = useAccount(); // Get accountAddress using useAccount hook
-
+  const chainId = useChainId();
   // Fetch the balanceOf using the accountAddress
   const {
     data: balanceData,
@@ -40,6 +40,16 @@ const OverviewWidget: React.FC = () => {
 
   const formattedBalance = balance !== null ? formatNumber(balance) : null;
 
+  // Function to get network error message based on chainId
+  const getNetworkErrorMessage = () => {
+    if (chainId === 56 || chainId === 137) {
+      return t("WrongNetworkMessage"); // Replace with your translation key
+    }
+    return null;
+  };
+
+  const networkErrorMessage = getNetworkErrorMessage();
+
   return (
     <div className="w-full bg-white p-6 rounded-lg shadow-md mt-6">
       {/* Title */}
@@ -51,6 +61,7 @@ const OverviewWidget: React.FC = () => {
       {/* Loading and Error States */}
       {balanceLoading && <p className="text-gray-500">Loading balance...</p>}
       {balanceError && <p className="text-red-500">Error loading balance.</p>}
+      {networkErrorMessage && <p className="text-red-500">Wrong network, change to the Base network!</p>}
 
       {/* Display Balance */}
       {!balanceLoading && !balanceError && balance !== null && (

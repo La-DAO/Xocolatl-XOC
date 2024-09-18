@@ -2,13 +2,24 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useReadContract } from "wagmi";
+import { useChainId, useReadContract } from "wagmi";
 import { liquidityABI } from "~~/app/components/abis/liquidity";
 import { useTranslation } from "~~/app/context/LanguageContext";
 
 const LiquidityInfo: React.FC = () => {
   const { t } = useTranslation();
   const [, setTotalReserves] = useState<number | null>(null);
+  const chainId = useChainId();
+  // Function to get network error message based on chainId
+  const getNetworkErrorMessage = () => {
+    if (chainId === 56 || chainId === 137) {
+      return t("WrongNetworkMessage"); // Replace with your translation key
+    }
+    return null;
+  };
+
+  const networkErrorMessage = getNetworkErrorMessage();
+
   const { data: totalReserves } = useReadContract({
     address: "0xD6DaB267b7C23EdB2ed5605d9f3f37420e88e291",
     abi: liquidityABI,
@@ -27,11 +38,7 @@ const LiquidityInfo: React.FC = () => {
 
   const [tokenA, setTokenA] = useState<number | null>(null);
   const [tokenB, setTokenB] = useState<number | null>(null);
-  const {
-    data: lpTokenData,
-    isLoading: lpTokenLoading,
-    error: lpTokenError,
-  } = useReadContract({
+  const { data: lpTokenData, isLoading: lpTokenLoading } = useReadContract({
     address: "0xD6DaB267b7C23EdB2ed5605d9f3f37420e88e291",
     abi: liquidityABI,
     functionName: "getTotalAmounts",
@@ -80,8 +87,11 @@ const LiquidityInfo: React.FC = () => {
           <p className="text-gray-600">{t("XoktleDescription")}</p>
         </div>
 
-        {lpTokenLoading && <p className="text-gray-500 text-center sm:text-left">Loading data...</p>}
-        {lpTokenError && <p className="text-red-500 text-center sm:text-left">Error loading data.</p>}
+        {networkErrorMessage && (
+          <p className="text-red-500 text-center sm:text-left">
+            Wrong network, change to the <span className="text-blue-500 text-lg">Base</span> network! 🤖🍫
+          </p>
+        )}
 
         {/* Number Boxes */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -91,15 +101,18 @@ const LiquidityInfo: React.FC = () => {
               {formattedTotalReserves
                 ? formattedTotalReserves.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " Shares"
                 : "-"}
+              {lpTokenLoading && <p className="text-gray-500 text-center sm:text-left">Loading data...</p>}
             </p>
           </div>
           <div className="p-4 bg-gray-100 rounded-lg text-center">
             <p className="text-lg sm:text-xl font-bold text-primary">$USDC Deposits</p>
             <p className="text-gray-600">{formattedTokenA}</p>
+            {lpTokenLoading && <p className="text-gray-500 text-center sm:text-left">Loading data...</p>}
           </div>
           <div className="p-4 bg-gray-100 rounded-lg text-center">
             <p className="text-lg sm:text-xl font-bold text-primary">$XOC Deposits</p>
             <p className="text-gray-600">{formattedTokenB}</p>
+            {lpTokenLoading && <p className="text-gray-500 text-center sm:text-left">Loading data...</p>}
           </div>
         </div>
       </div>

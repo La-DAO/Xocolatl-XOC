@@ -191,15 +191,15 @@ const DepositTable: React.FC = () => {
                   <p className="text-sm text-gray-900">{asset.liquidationThreshold}</p>
                 </div>
               </td>
-              <td className="px-1 py-4">
+              <td className="flex px-1 py-4">
                 <button
-                  className="text-sm text-accent dark:text-white btn bg-base-100 hover:bg-primary hover:text-white"
+                  className="text-sm text-accent m-1 dark:text-white btn bg-base-100 hover:bg-primary hover:text-white"
                   onClick={() => handleOpenModal(asset.name, asset.houseOfReserveContract, asset.assetContract)}
                 >
                   {t("AssetsDepositButton")}
                 </button>
                 <button
-                  className="text-sm text-accent dark:text-white btn bg-base-100 ml-2 hover:bg-primary hover:text-white"
+                  className="text-sm text-accent m-1 dark:text-white btn bg-base-100 ml-2 hover:bg-primary hover:text-white"
                   onClick={() => handleOpenWithdrawModal(asset.name, asset.houseOfReserveContract, asset.assetContract)}
                 >
                   {t("AssetsWithdrawButton")}
