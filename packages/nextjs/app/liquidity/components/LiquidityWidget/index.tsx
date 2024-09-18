@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { spenderAddress, usdcContract, xocContract } from "@/app/constants/contracts";
 import { Address, formatUnits, parseEther, parseUnits } from "viem";
-import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { useAccount, useChainId, useReadContract, useWriteContract } from "wagmi";
 import { ERC20ABI } from "~~/app/components/abis/erc20";
 import { liquidityABI } from "~~/app/components/abis/liquidity";
 import { useTranslation } from "~~/app/context/LanguageContext";
@@ -14,6 +14,7 @@ import { useBalanceOf } from "~~/hooks/useBalanceOf";
 const LiquidityWidget: React.FC = () => {
   const { address: accountAddress } = useAccount(); // Get the address, not the entire account object
   const { t } = useTranslation();
+  const chainId = useChainId();
   const [action, setAction] = useState<"Deposit" | "Withdraw">("Deposit");
   const [tokenA, setTokenA] = useState(""); // USDC amount
   const [tokenB, setTokenB] = useState(""); // XOC amount
@@ -265,6 +266,13 @@ const LiquidityWidget: React.FC = () => {
     }
   };
 
+  // Modify the button style and text based on chainId
+  const isWrongNetwork = chainId === 56 || chainId === 137;
+  const buttonLabel = isWrongNetwork ? t("Wrong Network!") : requiresApproval ? t("Approve") : action;
+  const buttonClass = isWrongNetwork
+    ? "w-full py-3 bg-red-500 text-2xl text-white font-semibold rounded-lg" // Red warning button for wrong network
+    : "w-full py-3 bg-base-300 text-2xl text-white font-semibold rounded-lg"; // Normal button
+
   return (
     <div className="w-full bg-white p-6 rounded-lg shadow-md mt-6">
       <div className="mb-4">
@@ -354,8 +362,13 @@ const LiquidityWidget: React.FC = () => {
       )}
 
       <button
-        className="w-full py-3 bg-base-300 text-2xl text-white font-semibold rounded-lg"
+        className={buttonClass} // Apply the dynamic button class
         onClick={() => {
+          if (isWrongNetwork) {
+            console.warn("Wrong network! Please switch to the Base network.");
+            return;
+          }
+
           if (requiresApproval) {
             handleApproval(); // Call handleApproval when approval is needed
           } else if (action === "Deposit" && !usdcError && !xocError) {
@@ -365,7 +378,7 @@ const LiquidityWidget: React.FC = () => {
           }
         }}
       >
-        {requiresApproval ? t("Approve") : action}
+        {buttonLabel} {/* Display dynamic label */}
       </button>
     </div>
   );
