@@ -78,13 +78,13 @@ const DepositModal: React.FC<DepositModalProps> = ({
   useEffect(() => {
     const assetAmount = parseFloat(amount) || 0;
 
-    // Check if the input amount is valid and within the balance
-    if (assetBalance && assetAmount > parseFloat(assetBalance)) {
-      setBalanceError("You don't have enough tokens in your wallet");
-      setIsValid(false);
-    } else if (assetAmount <= 0 || isNaN(assetAmount)) {
-      setBalanceError(null);
+    if (assetAmount <= 0 || isNaN(assetAmount)) {
+      setBalanceError(null); // Clear balance-related errors if amount is invalid
       setErrorMessage("Amount must be a positive number.");
+      setIsValid(false);
+    } else if (assetBalance && assetAmount > parseFloat(assetBalance)) {
+      setBalanceError("You don't have enough tokens in your wallet");
+      setErrorMessage(""); // Clear the positive number error if balance error exists
       setIsValid(false);
     } else {
       setBalanceError(null); // Clear any balance-related errors
