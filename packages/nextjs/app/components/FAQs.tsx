@@ -17,7 +17,7 @@ const FAQs: React.FC = () => {
             {t("faqQuestion1")}
           </summary>
           <hr className="my-2 scale-x-150" />
-          <div className="text-sm sm:text-base -m-4 -mt-2 p-4 bg-base-100">{t("faqAnswer1")}</div>
+          <div className="text-sm sm:text-base m-4 -mt-2 p-4 bg-base-100">{t("faqAnswer1")}</div>
         </details>
 
         <details className=" bg-base-100 p-4 rounded-xl shadow-md group mx-auto overflow-hidden max-h-[56px] open:!max-h-[400px] transition-[max-height] duration-500 m-4">
@@ -25,18 +25,15 @@ const FAQs: React.FC = () => {
             {t("faqQuestion2")}
           </summary>
           <hr className="my-2 scale-x-150" />
-          <div className="text-sm sm:text-base -m-4 -mt-2 p-4 bg-base-100">{t("faqAnswer2")}</div>
+          <div className="text-sm sm:text-base m-4 -mt-2 p-4 bg-base-100">{t("faqAnswer2")}</div>
         </details>
 
-        <details
-          className=" bg-base-100 p-4 rounded-xl shadow-md group mx-auto overflow-hidden max-h-[56px] open:!max-h-[400px] transition-[max-height] duration-500"
-          m-4
-        >
+        <details className=" bg-base-100 p-4 rounded-xl shadow-md group mx-auto overflow-hidden max-h-[56px] open:!max-h-[400px] transition-[max-height] duration-500">
           <summary className="outline-none cursor-pointer focus:underline focus:text-inherit font-semibold marker:text-inherit group-open:before:rotate-90  before:origin-center relative  before:h-[18px] before:transition-transform before:duration-200 before:-left-1 before:top-2/4 before:-translate-y-2/4 before:absolute before:bg-no-repeat before:bg-[length:18px_18px] before:bg-center before:bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22h-6%20w-6%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%3E%0A%20%20%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22M9%205l7%207-7%207%22%20%2F%3E%0A%3C%2Fsvg%3E')]">
             {t("faqQuestion3")}
           </summary>
           <hr className="my-2 scale-x-150" />
-          <div className="text-sm sm:text-base -m-4 -mt-2 p-4 bg-base-100">{t("faqAnswer3")}</div>
+          <div className="text-sm sm:text-base m-4 -mt-2 p-4 bg-base-100">{t("faqAnswer3")}</div>
         </details>
 
         <details className=" bg-base-100 p-4 rounded-xl shadow-md group mx-auto overflow-hidden max-h-[56px] open:!max-h-[400px] transition-[max-height] duration-500 m-4">
@@ -44,7 +41,7 @@ const FAQs: React.FC = () => {
             {t("faqQuestion4")}
           </summary>
           <hr className="my-2 scale-x-150" />
-          <div className="text-sm sm:text-base -m-4 -mt-2 p-4 bg-base-100">{t("faqAnswer4")}</div>
+          <div className="text-sm sm:text-base m-4 -mt-2 p-4 bg-base-100">{t("faqAnswer4")}</div>
         </details>
       </div>
     </Container>

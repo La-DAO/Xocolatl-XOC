@@ -5,7 +5,8 @@ import useAccountAddress from "@/hooks/useAccount";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
-import { useApproval } from "~~/hooks/useApproval";
+import { useReadContract, useWriteContract } from "wagmi";
+import { ERC20ABI } from "~~/app/components/abis/erc20";
 import { useBalanceOf } from "~~/hooks/useBalanceOf";
 import { useDeposit } from "~~/hooks/useDeposit";
 
@@ -34,18 +35,38 @@ const DepositModal: React.FC<DepositModalProps> = ({
   const [isError, setIsError] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
   const [balanceError, setBalanceError] = useState<string | null>(null);
+  const [assetAllowanceState, setAssetAllowanceState] = useState<string>("0");
+  // State to track if approval is needed
+  const [requiresApproval, setRequiresApproval] = useState(false);
+
+  const { writeContract: approveERC20, isError: isApprovalError, isPending: isApprovalPending } = useWriteContract();
 
   const assetBalance = useBalanceOf({
     tokenAddress: assetContract as Address,
     walletAddress: walletAddress as Address,
   });
 
+  // Hook to read the asset contract allowance
   const {
-    approve,
-    isError: isApprovalError,
-    isSuccess: isApprovalSuccess,
-    isPending: isApprovalPending,
-  } = useApproval(houseOfReserveContract as Address, assetContract as Address);
+    data: assetAllowance,
+    isError: isAssetAllowanceError,
+    isLoading: isAssetAllowanceLoading,
+  } = useReadContract({
+    address: assetContract as Address,
+    abi: ERC20ABI,
+    functionName: "allowance",
+    args: [walletAddress, houseOfReserveContract], // Only pass the address
+  });
+
+  useEffect(() => {
+    if (isAssetAllowanceError) {
+      console.error("Error fetching allowance");
+      setAssetAllowanceState("0");
+    } else if (!isAssetAllowanceLoading && assetAllowance) {
+      const allowanceInEther = (Number(assetAllowance) / 1e18).toFixed(7);
+      setAssetAllowanceState(allowanceInEther);
+    }
+  }, [assetAllowance, isAssetAllowanceError, isAssetAllowanceLoading]);
 
   const {
     deposit: handleDeposit,
@@ -66,6 +87,19 @@ const DepositModal: React.FC<DepositModalProps> = ({
   }, [amount, assetBalance]);
 
   useEffect(() => {
+    // Function to check if approval is required
+    const checkIfApprovalNeeded = () => {
+      const assetAmount = parseFloat(amount) || 0;
+
+      // Compare the input value against the allowance state
+      const needsApproval = assetAmount > parseFloat(assetAllowanceState);
+      setRequiresApproval(needsApproval);
+    };
+
+    checkIfApprovalNeeded();
+  }, [amount, assetAllowanceState]);
+
+  useEffect(() => {
     if (isDepositError) {
       setIsError(true);
       setErrorMessage(error?.message || "An unknown error occurred.");
@@ -78,13 +112,13 @@ const DepositModal: React.FC<DepositModalProps> = ({
   useEffect(() => {
     const assetAmount = parseFloat(amount) || 0;
 
-    // Check if the input amount is valid and within the balance
-    if (assetBalance && assetAmount > parseFloat(assetBalance)) {
-      setBalanceError("You don't have enough tokens in your wallet");
-      setIsValid(false);
-    } else if (assetAmount <= 0 || isNaN(assetAmount)) {
-      setBalanceError(null);
+    if (assetAmount <= 0 || isNaN(assetAmount)) {
+      setBalanceError(null); // Clear balance-related errors if amount is invalid
       setErrorMessage("Amount must be a positive number.");
+      setIsValid(false);
+    } else if (assetBalance && assetAmount > parseFloat(assetBalance)) {
+      setBalanceError("You don't have enough tokens in your wallet");
+      setErrorMessage(""); // Clear the positive number error if balance error exists
       setIsValid(false);
     } else {
       setBalanceError(null); // Clear any balance-related errors
@@ -92,6 +126,23 @@ const DepositModal: React.FC<DepositModalProps> = ({
       setIsValid(true);
     }
   }, [amount, assetBalance]);
+
+  const handleApproval = async () => {
+    const assetAmount = parseFloat(amount) || 0;
+
+    try {
+      if (assetAmount > parseFloat(assetAllowanceState)) {
+        await approveERC20({
+          abi: ERC20ABI,
+          address: assetContract as Address,
+          functionName: "approve",
+          args: [houseOfReserveContract, assetAmount * 1e18],
+        });
+      }
+    } catch (error) {
+      console.error("Error approving", error);
+    }
+  };
 
   /**
    * Callback function to handle balance change.
@@ -108,9 +159,9 @@ const DepositModal: React.FC<DepositModalProps> = ({
   console.log(balances);
   console.log(walletAddress);
 
-  const onApproveClick = () => {
+  /*   const onApproveClick = () => {
     approve(amount);
-  };
+  }; */
 
   const onDepositClick = () => {
     handleDeposit(amount);
@@ -150,6 +201,8 @@ const DepositModal: React.FC<DepositModalProps> = ({
   if (!isOpen) return null;
   console.log("assetContract", assetContract as Address);
   console.log({ isApprovalError });
+  console.log("Allowance in Ethers:", assetAllowanceState);
+  console.log({ assetAllowanceState, requiresApproval });
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -220,18 +273,26 @@ const DepositModal: React.FC<DepositModalProps> = ({
                   <span className="font-bold">{assetName}</span>
                 </div>
               </div>
+              <div className="flex justify-between items-center text-xs sm:text-sm">
+                <p className="text-xs text-gray-500">Allowance:</p>
+                <div className="flex items-center gap-1">
+                  <span>{assetAllowanceState}</span>
+                  <span className="font-bold">{assetName}</span>
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-col sm:flex-row justify-between gap-4">
-              {!isApprovalSuccess ? (
+              {requiresApproval ? (
                 <button
-                  className={`flex-grow sm:basis-2/3 ${isValid && !balanceError ? "primary-btn" : "disabled-btn"}`}
-                  onClick={onApproveClick}
-                  disabled={isApprovalPending || !isValid || balanceError !== null}
+                  className={`flex-grow sm:basis-2/3 ${!isApprovalPending ? "primary-btn" : "disabled-btn"}`}
+                  onClick={handleApproval}
+                  disabled={isApprovalPending || !requiresApproval}
                 >
-                  {isApprovalPending ? "Approving..." : "Approve"}
+                  {isApprovalPending ? "Processing..." : "Approve"}
                 </button>
               ) : (
+                // Show Deposit button if no approval is needed or approval is already done
                 <button
                   className={`flex-grow sm:basis-2/3 ${isValid && !balanceError ? "primary-btn" : "disabled-btn"}`}
                   onClick={onDepositClick}
