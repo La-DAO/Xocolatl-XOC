@@ -4,7 +4,7 @@ import useAccountAddress from "@/hooks/useAccount";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address, formatEther } from "viem";
-import { useReadContract } from "wagmi";
+import { useReadContract, useWaitForTransactionReceipt } from "wagmi";
 import { houseOfReserveABI } from "~~/app/components/abis/houseofreserve";
 import { useWithdraw } from "~~/hooks/useWithdrawCDP";
 
@@ -60,6 +60,8 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, assetNam
     error,
     hash,
   } = useWithdraw(houseOfReserveContract as Address);
+
+  const { isLoading: isWithdrawLoading, isSuccess: isWithdrawSuccess } = useWaitForTransactionReceipt({ hash });
 
   useEffect(() => {
     const assetAmount = parseFloat(amount) || 0;
@@ -195,13 +197,27 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, assetNam
             </div>
 
             <div className="flex justify-between gap-4">
-              <button
-                className={`flex-grow-2 basis-2/3 ${isValid && !balanceError ? "primary-btn" : "disabled-btn"}`}
-                onClick={onWithdrawClick}
-                disabled={isWithdrawPending || !isValid || balanceError !== null}
-              >
-                {isWithdrawPending ? "Processing..." : "Withdraw"}
-              </button>
+              {isWithdrawLoading ? (
+                <div className="flex-grow-2 basis-2/3 bg-warning text-base-100 text-center rounded-lg py-2 cursor-not-allowed">
+                  Waiting for withdrawal...
+                </div>
+              ) : isWithdrawSuccess ? (
+                <button
+                  className={`flex-grow-2 basis-2/3 ${isValid && !balanceError ? "primary-btn" : "disabled-btn"}`}
+                  onClick={onWithdrawClick}
+                  disabled={isWithdrawPending || !isValid || balanceError !== null}
+                >
+                  {isWithdrawPending ? "Processing..." : "Withdraw"}
+                </button>
+              ) : (
+                <button
+                  className={`flex-grow-2 basis-2/3 ${isValid && !balanceError ? "primary-btn" : "disabled-btn"}`}
+                  onClick={onWithdrawClick}
+                  disabled={isWithdrawPending || !isValid || balanceError !== null}
+                >
+                  {isWithdrawPending ? "Processing..." : "Withdraw"}
+                </button>
+              )}
               <button onClick={handleClose} className="secondary-btn flex-grow-1 basis-1/3">
                 Close
               </button>
