@@ -5,7 +5,7 @@ import useAccountAddress from "@/hooks/useAccount";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
-import { useReadContract, useWriteContract } from "wagmi";
+import { useReadContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { ERC20ABI } from "~~/app/components/abis/erc20";
 import { useBalanceOf } from "~~/hooks/useBalanceOf";
 import { useDeposit } from "~~/hooks/useDeposit";
@@ -39,8 +39,16 @@ const DepositModal: React.FC<DepositModalProps> = ({
   // State to track if approval is needed
   const [requiresApproval, setRequiresApproval] = useState(false);
 
-  const { writeContract: approveERC20, isError: isApprovalError, isPending: isApprovalPending } = useWriteContract();
+  const {
+    writeContract: approveERC20,
+    isError: isApprovalError,
+    isPending: isApprovalPending,
+    data: hash,
+  } = useWriteContract();
 
+  const { isLoading: isApprovalLoading, isSuccess: isApprovalSuccess } = useWaitForTransactionReceipt({ hash });
+
+  // Hook to read the asset balance
   const assetBalance = useBalanceOf({
     tokenAddress: assetContract as Address,
     walletAddress: walletAddress as Address,
@@ -225,6 +233,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
             ></path>
           </svg>
           <span className="text-xs sm:text-sm">
+            This is still a Beta version, handle with care. <br />
             You will need to approve the transaction AND <br /> wait around 5-10 seconds before it goes through
           </span>
         </div>
@@ -284,13 +293,28 @@ const DepositModal: React.FC<DepositModalProps> = ({
 
             <div className="flex flex-col sm:flex-row justify-between gap-4">
               {requiresApproval ? (
-                <button
-                  className={`flex-grow sm:basis-2/3 ${!isApprovalPending ? "primary-btn" : "disabled-btn"}`}
-                  onClick={handleApproval}
-                  disabled={isApprovalPending || !requiresApproval}
-                >
-                  {isApprovalPending ? "Processing..." : "Approve"}
-                </button>
+                isApprovalLoading ? (
+                  <div className="flex-grow sm:basis-2/3 bg-warning text-base-100 text-center rounded-lg py-2 cursor-not-allowed">
+                    Waiting for approval...
+                  </div>
+                ) : isApprovalSuccess ? (
+                  // Automatically go to the Deposit button when the transaction is confirmed
+                  <button
+                    className={`flex-grow sm:basis-2/3 ${isValid && !balanceError ? "primary-btn" : "disabled-btn"}`}
+                    onClick={onDepositClick}
+                    disabled={isDepositPending || !isValid || balanceError !== null}
+                  >
+                    {isDepositPending ? "Processing..." : "Deposit"}
+                  </button>
+                ) : (
+                  <button
+                    className={`flex-grow sm:basis-2/3 ${!isApprovalPending ? "primary-btn" : "disabled-btn"}`}
+                    onClick={handleApproval}
+                    disabled={isApprovalPending || !requiresApproval}
+                  >
+                    {isApprovalPending ? "Processing..." : "Approve"}
+                  </button>
+                )
               ) : (
                 // Show Deposit button if no approval is needed or approval is already done
                 <button
