@@ -154,6 +154,7 @@
   "LendingAssetsToBorrowColumn2": "Available Liquidity",
   "LendingAssetsToBorrowColumn3": "APY, variable",
   "LendingAssetsToBorrowColumn4": "Actions",
+  "LendingAssetsToBorrowColumn5": "Borrowable?",
 
   "LendingWithdrawModalTitle": "Withdraw",
   "LendingWithdrawModalLabel": "Amount",

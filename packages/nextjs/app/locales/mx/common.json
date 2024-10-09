@@ -166,6 +166,7 @@
   "LendingAssetsToBorrowColumn2": "Liquidez Disponible",
   "LendingAssetsToBorrowColumn3": "Interés variable",
   "LendingAssetsToBorrowColumn4": "Acciones",
+  "LendingAssetsToBorrowColumn5": "Prestable?",
 
   "LendingWithdrawModalTitle": "Retirar",
   "LendingWithdrawModalLabel": "Cantidad a retirar",

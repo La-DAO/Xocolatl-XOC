@@ -1,0 +1,37 @@
+export type ReserveData = {
+  aTokenAddress: string;
+  availableLiquidity: bigint;
+  averageStableRate: bigint;
+  baseLTVasCollateral: bigint;
+  borrowingEnabled: boolean;
+  decimals: bigint;
+  interestRateStrategyAddress: string;
+  isActive: boolean;
+  isFrozen: boolean;
+  lastUpdateTimestamp: number;
+  liquidityIndex: bigint;
+  liquidityRate: bigint;
+  name: string;
+  priceInMarketReferenceCurrency: bigint;
+  reserveFactor: bigint;
+  reserveLiquidationBonus: bigint;
+  reserveLiquidationThreshold: bigint;
+  stableBorrowRate: bigint;
+  stableBorrowRateEnabled: boolean;
+  stableDebtLastUpdateTimestamp: bigint;
+  stableDebtTokenAddress: string;
+  stableRateSlope1: bigint;
+  stableRateSlope2: bigint;
+  symbol: string;
+  totalPrincipalStableDebt: bigint;
+  totalScaledVariableDebt: bigint;
+  underlyingAsset: string;
+  usageAsCollateralEnabled: boolean;
+  usageAsCollateralEnabledOnUser: boolean;
+  variableBorrowIndex: bigint;
+  variableBorrowRate: bigint;
+  variableDebtTokenAddress: string;
+  variableRateSlope1: bigint;
+  variableRateSlope2: bigint;
+  balance?: string; // Marking balance as optional
+};
