@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
-import useRepay from "~~/hooks/useRepayCDP";
+import useRepayCPD from "~~/hooks/useRepayCDP";
 
 interface RepayModalProps {
   isOpen: boolean;
@@ -19,7 +19,7 @@ const RepayModal: React.FC<RepayModalProps> = ({ isOpen, onClose, backedTokenID,
   const [isError, setIsError] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
 
-  const { handleRepay, isError: repayError, error, data: repayData } = useRepay();
+  const { handleRepay, isError: repayError, error, data: repayData } = useRepayCPD();
 
   useEffect(() => {
     validateAmount(amount);
@@ -53,7 +53,7 @@ const RepayModal: React.FC<RepayModalProps> = ({ isOpen, onClose, backedTokenID,
   const handleRepayClick = () => {
     if (amount && backedTokenID) {
       try {
-        handleRepay(backedTokenID, amount);
+        handleRepay(houseOfCoinContract, backedTokenID, amount);
       } catch (err) {
         console.error("Error during handleRepay execution:", err);
       }
