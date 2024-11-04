@@ -70,6 +70,18 @@ export const Footer = () => {
                 Support
               </a>
             </div>
+            <span>·</span>
+            <div className="text-center">
+              <Link href="/terms" passHref>
+                <p className="link">Terms of Service</p>
+              </Link>
+            </div>
+            <span>·</span>
+            <div className="text-center">
+              <Link href="/privacy" passHref>
+                <p className="link">Privacy Policy</p>
+              </Link>
+            </div>
           </div>
         </ul>
       </div>
