@@ -4,7 +4,7 @@ import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { faBridge, faWater } from "@fortawesome/free-solid-svg-icons";
+import { faBridge, faRotate, faWater } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { BanknotesIcon, Bars3Icon, BuildingLibraryIcon, HomeIcon } from "@heroicons/react/24/solid";
 import { useTranslation } from "~~/app/context/LanguageContext";
@@ -42,6 +42,11 @@ export const menuLinks: HeaderMenuLink[] = [
     label: "Liquidity",
     href: "/liquidity",
     icon: <FontAwesomeIcon icon={faWater} className="h-4 w-4" />,
+  },
+  {
+    label: "Swap",
+    href: "https://app.uniswap.org/swap?exactField=output&exactAmount=10&outputCurrency=0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf",
+    icon: <FontAwesomeIcon icon={faRotate} />,
   },
 ];
 
