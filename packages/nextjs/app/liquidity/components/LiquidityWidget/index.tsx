@@ -31,6 +31,8 @@ const LiquidityWidget: React.FC = () => {
   // State to track if approval is needed
   const [requiresApproval, setRequiresApproval] = useState(false);
 
+  const [approvalLoading, setApprovalLoading] = useState(false); // New state to track loading
+
   const { writeContract: deposit } = useWriteContract();
 
   const { writeContract: approveERC20 } = useWriteContract();
@@ -114,6 +116,38 @@ const LiquidityWidget: React.FC = () => {
     setAction(newAction);
   };
 
+  const handleApproval = async () => {
+    setApprovalLoading(true); // Start the loading state immediately
+    try {
+      const usdcAmount = parseFloat(tokenA) || 0;
+      const xocAmount = parseFloat(tokenB) || 0;
+
+      // Approve USDC if needed
+      if (usdcAmount > parseFloat(usdcAllowanceState)) {
+        await approveERC20({
+          abi: ERC20ABI,
+          address: usdcContract,
+          functionName: "approve",
+          args: [spenderAddress, usdcAmount * 1e6],
+        });
+      }
+
+      // Approve XOC if needed
+      if (xocAmount > parseFloat(xocAllowanceState)) {
+        await approveERC20({
+          abi: ERC20ABI,
+          address: xocContract,
+          functionName: "approve",
+          args: [spenderAddress, xocAmount * 1e18],
+        });
+      }
+    } catch (err) {
+      console.error("Error approving tokens:", err);
+    } finally {
+      setApprovalLoading(false); // Stop the loading state after completion
+    }
+  };
+
   // Function to handle the deposit
   const handleDeposit = async () => {
     if (!accountAddress) {
@@ -142,39 +176,6 @@ const LiquidityWidget: React.FC = () => {
       console.error("Error executing contract function:", err);
     }
   };
-
-  // Function to handle approval
-  const handleApproval = async () => {
-    const usdcAmount = parseFloat(tokenA) || 0;
-    const xocAmount = parseFloat(tokenB) || 0;
-
-    try {
-      // Approve USDC
-      if (usdcAmount > parseFloat(usdcAllowanceState)) {
-        await approveERC20({
-          abi: ERC20ABI,
-          address: usdcContract,
-          functionName: "approve",
-          args: [spenderAddress, usdcAmount * 1e6], // Multiply by 1e6 to convert to USDC decimals
-        });
-      }
-
-      // Approve XOC
-      if (xocAmount > parseFloat(xocAllowanceState)) {
-        await approveERC20({
-          abi: ERC20ABI,
-          address: xocContract,
-          functionName: "approve",
-          args: [spenderAddress, xocAmount * 1e18], // Multiply by 1e18 to convert to XOC decimals
-        });
-      }
-    } catch (err) {
-      console.error("Error approving tokens:", err);
-    }
-  };
-
-  console.log("Xoc Allowance", xocAllowanceState);
-  console.log("USDC Allowance", usdcAllowanceState);
 
   // Function to handle the withdrawal
   const handleWithdrawal = async () => {
@@ -268,10 +269,19 @@ const LiquidityWidget: React.FC = () => {
 
   // Modify the button style and text based on chainId
   const isWrongNetwork = chainId === 56 || chainId === 137;
-  const buttonLabel = isWrongNetwork ? t("Wrong Network!") : requiresApproval ? t("Approve") : action;
-  const buttonClass = isWrongNetwork
-    ? "w-full py-3 bg-red-500 text-2xl text-white font-semibold rounded-lg" // Red warning button for wrong network
-    : "w-full py-3 bg-base-300 text-2xl text-white font-semibold rounded-lg"; // Normal button
+  const buttonLabel = approvalLoading
+    ? t("Processing...") // Show "Processing" when loading
+    : isWrongNetwork
+    ? t("Wrong Network!")
+    : requiresApproval
+    ? t("Approve")
+    : action;
+
+  const buttonClass = approvalLoading
+    ? "w-full py-3 bg-gray-500 text-2xl text-white font-semibold rounded-lg"
+    : isWrongNetwork
+    ? "w-full py-3 bg-red-500 text-2xl text-white font-semibold rounded-lg"
+    : "w-full py-3 bg-base-300 text-2xl text-white font-semibold rounded-lg";
 
   return (
     <div className="w-full bg-white p-6 rounded-lg shadow-md mt-6">
@@ -362,23 +372,21 @@ const LiquidityWidget: React.FC = () => {
       )}
 
       <button
-        className={buttonClass} // Apply the dynamic button class
+        className={buttonClass}
         onClick={() => {
-          if (isWrongNetwork) {
-            console.warn("Wrong network! Please switch to the Base network.");
-            return;
-          }
-
-          if (requiresApproval) {
-            handleApproval(); // Call handleApproval when approval is needed
-          } else if (action === "Deposit" && !usdcError && !xocError) {
-            handleDeposit(); // Call handleDeposit if deposit is selected
-          } else if (action === "Withdraw" && !sharesError) {
-            handleWithdrawal(); // Call handleWithdrawal if withdraw is selected
+          if (!approvalLoading) {
+            if (requiresApproval) {
+              handleApproval(); // Handle approval logic
+            } else if (action === "Deposit") {
+              handleDeposit(); // Handle deposit logic
+            } else if (action === "Withdraw") {
+              handleWithdrawal(); // Handle withdrawal logic
+            }
           }
         }}
+        disabled={approvalLoading} // Disable button during loading
       >
-        {buttonLabel} {/* Display dynamic label */}
+        {buttonLabel} {/* Dynamically display button label */}
       </button>
     </div>
   );
