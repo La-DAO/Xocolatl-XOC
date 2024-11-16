@@ -4,9 +4,9 @@ import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { faBridge, faWater } from "@fortawesome/free-solid-svg-icons";
+import { faAnchor, faBridge, faGlassWaterDroplet } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { BanknotesIcon, Bars3Icon, BuildingLibraryIcon, HomeIcon } from "@heroicons/react/24/solid";
+import { BanknotesIcon, Bars3Icon, HomeIcon } from "@heroicons/react/24/solid";
 import { useTranslation } from "~~/app/context/LanguageContext";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
@@ -26,7 +26,7 @@ export const menuLinks: HeaderMenuLink[] = [
   {
     label: "Xocolatl",
     href: "/cdp",
-    icon: <BuildingLibraryIcon className="h-4 w-4" />,
+    icon: <FontAwesomeIcon icon={faAnchor} />,
   },
   {
     label: "Alux",
@@ -41,7 +41,7 @@ export const menuLinks: HeaderMenuLink[] = [
   {
     label: "Xoktle",
     href: "/liquidity",
-    icon: <FontAwesomeIcon icon={faWater} className="h-4 w-4" />,
+    icon: <FontAwesomeIcon icon={faGlassWaterDroplet} className="h-4 w-4" />,
   },
   /*   {
     label: "Swap",
