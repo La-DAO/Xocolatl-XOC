@@ -28,8 +28,6 @@
   "Benefit2Bullet3Title": "Community Owned and Governed",
   "Benefit2Bullet3Desc": "Our platform is governed by a decentralized autonomous organization (DAO) that is owned and controlled by its members. This ensures that all decisions are made in the best interest of the community and that everyone has a say in how the platform is run.",
 
-
-
   "featuresTab1": "CPD Management",
   "featuresTab2": "Money Lending Markets",
   "featuresTab3": "Fully Interoperable with most popular L2s",
@@ -94,7 +92,7 @@
   "TotalXOCMinted": "Total $XOC Minted",
   "Deposits": "Deposits",
   "YourDepositTableTitle": "Your Deposits",
-  "YourDepositsDescription":"Your open positions in the Xocolatl contracts",
+  "YourDepositsDescription": "Your open positions in the Xocolatl contracts",
   "YourDepositsEmpty": "Nothing deposited yet - No open positions found",
   "AssetTableTitle": "Assets to Deposit",
   "AssetTableDescription": "Select the asset to deposit as collateral, only then can you mint $XOC",
@@ -179,7 +177,7 @@
   "LendingSupplyModalCopyMessage": "Copy the error",
   "LendingSupplyModalSuccessTitle": "All done!",
   "LendingSupplyModalSuccessMessage": "Your transaction was sent successful.",
-  
+
   "LendingBorrowModalTitle": "Borrow",
   "LendingBorrowModalLabel": "Amount",
   "LendingBorrowModalBalance": "Available Liquidity",
@@ -203,9 +201,8 @@
   "LendingRepayModalSuccessTitle": "All done!",
   "LendingRepayModalSuccessMessage": "Your transaction was sent successful.",
 
-
   "LendingInfoTitle": "Understanding Decentralized Lending",
-  "LendingInfoSubtitle": "How the lending arkets work around here",
+  "LendingInfoSubtitle": "How the lending markets work around here",
   "LendingInfoParagraph1": "Our protocol provides a decentralized lending market where users can supply assets to earn interest or borrow assets by providing collateral. The lending markets are governed by smart contracts that automate the lending and borrowing processes, ensuring transparency, security, and efficiency.",
   "LendingInfoSubtitle2": "The Mechanism of Supplying and Borrowing",
   "LendingInfoParagraph2": "When you supply assets to the lending market, you are essentially lending your assets to other users who want to borrow them. In return, you earn interest on the supplied assets. On the other hand, when you borrow assets from the lending market, you provide collateral in the form of other assets. The borrowed assets can be used for trading, investing, or other purposes.",
@@ -234,4 +231,4 @@
   "XoktleShareAmount": "Enter amount of shares",
   "XoktleOverView": "Overview",
   "XoktleAccountShares": "Your Liquidity Shares"
-  }
+}
