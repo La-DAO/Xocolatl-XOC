@@ -5,7 +5,7 @@ import useAccountAddress from "@/hooks/useAccount";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
-import { useReadContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { useChainId, useReadContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { ERC20ABI } from "~~/app/components/abis/erc20";
 import { useBalanceOf } from "~~/hooks/useBalanceOf";
 import { useDeposit } from "~~/hooks/useDeposit";
@@ -26,6 +26,8 @@ const DepositModal: React.FC<DepositModalProps> = ({
   houseOfReserveContract,
   assetContract,
 }) => {
+  const chainId = useChainId();
+
   const [amount, setAmount] = useState("");
   const { address: walletAddress } = useAccountAddress();
   const [balances, setBalances] = useState<Record<string, string>>({});
@@ -45,7 +47,6 @@ const DepositModal: React.FC<DepositModalProps> = ({
     isPending: isApprovalPending,
     data: hash,
   } = useWriteContract();
-
   const { isLoading: isApprovalLoading, isSuccess: isApprovalSuccess } = useWaitForTransactionReceipt({ hash });
 
   // Hook to read the asset balance
@@ -84,6 +85,20 @@ const DepositModal: React.FC<DepositModalProps> = ({
     error,
     depositHash,
   } = useDeposit(houseOfReserveContract as Address);
+
+  const getBlockExplorerUrl = (chainId: number): string => {
+    switch (chainId) {
+      case 56: // BNB Smart Chain Mainnet
+        return "https://bscscan.com/tx/";
+      case 137: // Polygon Mainnet
+        return "https://polygonscan.com/tx/";
+      case 8453: // Base Mainnet
+        return "https://basescan.org/tx/";
+      default:
+        return ""; // Fallback for unsupported networks
+    }
+  };
+  const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${depositHash}`;
 
   useEffect(() => {
     const assetAmount = parseFloat(amount) || 0;
@@ -245,6 +260,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
               <div className="flex items-center">
                 <input
                   type="number"
+                  min="0"
                   className="without-borders w-full text-sm sm:text-base"
                   placeholder="0.00"
                   value={amount}
@@ -355,6 +371,11 @@ const DepositModal: React.FC<DepositModalProps> = ({
               <h2 className="text-base sm:text-lg">All done!</h2>
               <p className="text-xs sm:text-sm">Deposit transaction successful</p>
               {depositHash && <div className="text-xs sm:text-sm">Transaction depositHash: {depositHash}</div>}
+              {blockExplorerUrl && (
+                <a href={blockExplorerUrl} target="_blank" rel="noreferrer" className="block link pb-3">
+                  Open in Block Explorer
+                </a>
+              )}
               {depositStatus && <div className="text-xs sm:text-sm">Deposit Status: {depositStatus}</div>}
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
