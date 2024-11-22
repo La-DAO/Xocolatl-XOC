@@ -284,7 +284,7 @@ const YourDeposits = () => {
     : [0, 0, 0, 0, 0, 0, 0];
 
   const formattedUserHealthRatio: any[] = batchComputeUserHealthRatio
-    ? batchComputeUserHealthRatio.map(({ result }) => Number(result) / 10 ** 18)
+    ? batchComputeUserHealthRatio.map(({ result }) => (Number(result) / 10 ** 18).toFixed(2))
     : [0, 0, 0, 0, 0];
 
   console.log("batchBalances:", batchDeposits);
@@ -315,7 +315,7 @@ const YourDeposits = () => {
         assetContract: "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
         houseOfCoinContract: "0x518Ad4acAdb3FdE4Ab990a79A0583FA8c4E35FcA",
         assetsAccountantContract: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[0].toFixed(2)),
+        userHealthRatio: parseFloat(formattedUserHealthRatio[0]),
         backedTokenID: "20522261273989995093535621539527639348056070782168896977856206653483982583625",
       },
       {
@@ -327,7 +327,7 @@ const YourDeposits = () => {
         assetContract: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
         houseOfCoinContract: "0x518Ad4acAdb3FdE4Ab990a79A0583FA8c4E35FcA",
         assetsAccountantContract: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[1].toFixed(2)),
+        userHealthRatio: parseFloat(formattedUserHealthRatio[1]),
         backedTokenID: "36240893346862244708187722980583805772746997097966348518842957091580463611081",
       },
     ],
@@ -341,7 +341,7 @@ const YourDeposits = () => {
         assetContract: "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
         houseOfCoinContract: "0x9d29E6b3D75F5e676f91b69284e015C9CEa20533",
         assetsAccountantContract: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[2].toFixed(2)),
+        userHealthRatio: parseFloat(formattedUserHealthRatio[2]),
         backedTokenID: "80640369098075461197954251758880905983781036616487658892797544182481328362385",
       },
       {
@@ -353,7 +353,7 @@ const YourDeposits = () => {
         assetContract: "0xfa68fb4628dff1028cfec22b4162fccd0d45efb6",
         houseOfCoinContract: "0x9d29E6b3D75F5e676f91b69284e015C9CEa20533",
         assetsAccountantContract: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[3].toFixed(2)),
+        userHealthRatio: parseFloat(formattedUserHealthRatio[3]),
         backedTokenID: "17135799413344306437655147654156582701703759838473908703722998121562726910745",
       },
       {
