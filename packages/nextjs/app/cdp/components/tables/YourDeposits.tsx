@@ -280,11 +280,11 @@ const YourDeposits = () => {
     ? (batchMints as any[]).map((mint: any) => Number(mint) / 10 ** 18)
     : [0, 0, 0, 0, 0];
   const formattedMintingPower: any[] = batchCheckRemainingMintingPower
-    ? batchCheckRemainingMintingPower.map(({ result }) => Number(result) / 10 ** 18)
+    ? batchCheckRemainingMintingPower.map(({ result }) => (Number(result) / 10 ** 18).toFixed(2))
     : [0, 0, 0, 0, 0, 0, 0];
 
   const formattedUserHealthRatio: any[] = batchComputeUserHealthRatio
-    ? batchComputeUserHealthRatio.map(({ result }) => Number(result) / 10 ** 18)
+    ? batchComputeUserHealthRatio.map(({ result }) => (Number(result) / 10 ** 18).toFixed(2))
     : [0, 0, 0, 0, 0];
 
   console.log("batchBalances:", batchDeposits);
@@ -310,24 +310,24 @@ const YourDeposits = () => {
         symbol: "WETH",
         amount: parseFloat(formattedBalances[0].toFixed(6)),
         minted: parseFloat(formattedMints[0].toFixed(6)),
-        mintingPower: parseFloat(formattedMintingPower[0].toFixed(6)),
+        mintingPower: parseFloat(formattedMintingPower[0]),
         houseofReserveContract: "0xd411BE9A105Ea7701FabBe58C2834b7033EBC203",
         assetContract: "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
         houseOfCoinContract: "0x518Ad4acAdb3FdE4Ab990a79A0583FA8c4E35FcA",
         assetsAccountantContract: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[0].toFixed(2)),
+        userHealthRatio: parseFloat(formattedUserHealthRatio[0]),
         backedTokenID: "20522261273989995093535621539527639348056070782168896977856206653483982583625",
       },
       {
         symbol: "WBNB",
         amount: parseFloat(formattedBalances[1].toFixed(6)),
         minted: parseFloat(formattedMints[1].toFixed(6)),
-        mintingPower: parseFloat(formattedMintingPower[1].toFixed(6)),
+        mintingPower: parseFloat(formattedMintingPower[1]),
         houseofReserveContract: "0x070ccE6887E70b75015F948b12601D1E759D2024",
         assetContract: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
         houseOfCoinContract: "0x518Ad4acAdb3FdE4Ab990a79A0583FA8c4E35FcA",
         assetsAccountantContract: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[1].toFixed(2)),
+        userHealthRatio: parseFloat(formattedUserHealthRatio[1]),
         backedTokenID: "36240893346862244708187722980583805772746997097966348518842957091580463611081",
       },
     ],
@@ -336,31 +336,31 @@ const YourDeposits = () => {
         symbol: "WETH",
         amount: parseFloat(formattedBalances[0].toFixed(6)),
         minted: parseFloat(formattedMints[0].toFixed(6)),
-        mintingPower: parseFloat(formattedMintingPower[2].toFixed(2)),
+        mintingPower: parseFloat(formattedMintingPower[2]),
         houseofReserveContract: "0x2718644E0C38A6a1F82136FC31dcA00DFCdF92a3",
         assetContract: "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
         houseOfCoinContract: "0x9d29E6b3D75F5e676f91b69284e015C9CEa20533",
         assetsAccountantContract: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[2].toFixed(2)),
+        userHealthRatio: parseFloat(formattedUserHealthRatio[2]),
         backedTokenID: "80640369098075461197954251758880905983781036616487658892797544182481328362385",
       },
       {
         symbol: "MATICX",
         amount: parseFloat(formattedBalances[1]),
         minted: parseFloat(formattedMints[1]),
-        mintingPower: parseFloat(formattedMintingPower[3].toFixed(2)),
+        mintingPower: parseFloat(formattedMintingPower[3]),
         houseofReserveContract: "0x76CAc0bC384a49485627D2235fE132e3038b45BB",
         assetContract: "0xfa68fb4628dff1028cfec22b4162fccd0d45efb6",
         houseOfCoinContract: "0x9d29E6b3D75F5e676f91b69284e015C9CEa20533",
         assetsAccountantContract: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[3].toFixed(2)),
+        userHealthRatio: parseFloat(formattedUserHealthRatio[3]),
         backedTokenID: "17135799413344306437655147654156582701703759838473908703722998121562726910745",
       },
       {
         symbol: "WMATIC",
         amount: parseFloat(formattedBalances[2]),
         minted: parseFloat(formattedMints[2]),
-        mintingPower: parseFloat(formattedMintingPower[4].toFixed(2)),
+        mintingPower: parseFloat(formattedMintingPower[4]),
         houseofReserveContract: "0xF56293025437Db5C0024a37dfcEc792125d56A48",
         assetContract: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
         houseOfCoinContract: "0x9d29E6b3D75F5e676f91b69284e015C9CEa20533",
