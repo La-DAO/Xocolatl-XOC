@@ -4,6 +4,7 @@ import { useWriteContract } from "wagmi";
 
 export const useDeposit = (houseOfReserveContract: Address) => {
   const { writeContract, isPending, isSuccess, isError, status, error, data: depositHash } = useWriteContract();
+  console.log("data ===", depositHash);
 
   const deposit = async (amount: string) => {
     try {

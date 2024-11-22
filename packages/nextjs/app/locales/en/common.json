@@ -92,7 +92,7 @@
   "TotalXOCMinted": "Total $XOC Minted",
   "Deposits": "Deposits",
   "YourDepositTableTitle": "Your Deposits",
-  "YourDepositsDescription": "Your open positions in the Xocolatl contracts",
+  "YourDepositsDescription": "You can mint $XOC based on the asset you deposited below",
   "YourDepositsEmpty": "Nothing deposited yet - No open positions found",
   "AssetTableTitle": "Assets to Deposit",
   "AssetTableDescription": "Select the asset to deposit as collateral, only then can you mint $XOC",
