@@ -1,5 +1,6 @@
 // DepositModal.tsx
 import React, { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
 import BalanceOf from "@/app/lending/components/BalanceOf";
 import useAccountAddress from "@/hooks/useAccount";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
@@ -81,7 +82,6 @@ const DepositModal: React.FC<DepositModalProps> = ({
     deposit: handleDeposit,
     isPending: isDepositPending,
     isError: isDepositError,
-    status: depositStatus,
     error,
     depositHash,
   } = useDeposit(houseOfReserveContract as Address);
@@ -351,13 +351,20 @@ const DepositModal: React.FC<DepositModalProps> = ({
         {isDepositError && (
           <div className="flex flex-col gap-6 mt-6">
             <div className="error-container text-center">
+              <Image
+                src="/Open Doodles - Messy.svg"
+                alt="Meditating"
+                className="max-w-60 mx-auto mb-4"
+                width={250}
+                height={250}
+              />
               <p className="text-xs sm:text-sm">
-                Something went wrong.{" "}
-                <span onClick={handleCopyError} className="cursor-pointer underline">
-                  Copy the error.
-                </span>
+                Oops! Something went wrong.{" "}
                 {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
               </p>
+              <span onClick={handleCopyError} className="cursor-pointer underline font-bold text-lg">
+                Copy the error.
+              </span>
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
               Close
@@ -368,15 +375,21 @@ const DepositModal: React.FC<DepositModalProps> = ({
         {data && (
           <div className="flex flex-col gap-6 mt-6">
             <div className="success-container text-center">
+              <Image
+                src="/Open Doodles - Meditating.svg"
+                alt="Meditating"
+                className="max-w-60 mx-auto mb-4"
+                width={250}
+                height={250}
+              />
               <h2 className="text-base sm:text-lg">All done!</h2>
               <p className="text-xs sm:text-sm">Deposit transaction successful</p>
-              {depositHash && <div className="text-xs sm:text-sm">Transaction depositHash: {depositHash}</div>}
+              <div className="pb-3"></div>
               {blockExplorerUrl && (
                 <a href={blockExplorerUrl} target="_blank" rel="noreferrer" className="block link pb-3">
                   Open in Block Explorer
                 </a>
               )}
-              {depositStatus && <div className="text-xs sm:text-sm">Deposit Status: {depositStatus}</div>}
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
               Ok, close
