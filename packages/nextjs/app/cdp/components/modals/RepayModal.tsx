@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
+import { useChainId } from "wagmi";
 import useRepayCPD from "~~/hooks/useRepayCDP";
 
 interface RepayModalProps {
@@ -12,6 +14,7 @@ interface RepayModalProps {
 }
 
 const RepayModal: React.FC<RepayModalProps> = ({ isOpen, onClose, backedTokenID, houseOfCoinContract }) => {
+  const chainId = useChainId();
   const [amount, setAmount] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -19,7 +22,7 @@ const RepayModal: React.FC<RepayModalProps> = ({ isOpen, onClose, backedTokenID,
   const [isError, setIsError] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
 
-  const { handleRepay, isError: repayError, error, data: repayData } = useRepayCPD();
+  const { handleRepay, isError: repayError, error, repayHash } = useRepayCPD();
 
   useEffect(() => {
     validateAmount(amount);
@@ -30,10 +33,10 @@ const RepayModal: React.FC<RepayModalProps> = ({ isOpen, onClose, backedTokenID,
       setIsError(true);
       setErrorMessage(error?.message || "An unknown error occurred.");
     }
-    if (repayData) {
-      setData(repayData);
+    if (repayHash) {
+      setData(repayHash);
     }
-  }, [repayError, repayData, error]);
+  }, [repayError, repayHash, error]);
 
   const validateAmount = (value: string) => {
     const numValue = parseFloat(value);
@@ -87,6 +90,20 @@ const RepayModal: React.FC<RepayModalProps> = ({ isOpen, onClose, backedTokenID,
     setIsError(false);
     onClose();
   };
+
+  const getBlockExplorerUrl = (chainId: number): string => {
+    switch (chainId) {
+      case 56: // BNB Smart Chain Mainnet
+        return "https://bscscan.com/tx/";
+      case 137: // Polygon Mainnet
+        return "https://polygonscan.com/tx/";
+      case 8453: // Base Mainnet
+        return "https://basescan.org/tx/";
+      default:
+        return ""; // Fallback for unsupported networks
+    }
+  };
+  const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${repayHash}`;
 
   if (!isOpen) return null;
 
@@ -160,13 +177,20 @@ const RepayModal: React.FC<RepayModalProps> = ({ isOpen, onClose, backedTokenID,
         {isError && (
           <div className="flex flex-col gap-6 mt-6">
             <div className="error-container text-center">
+              <Image
+                src="/Open Doodles - Messy.svg"
+                alt="Meditating"
+                className="max-w-60 mx-auto mb-4"
+                width={250}
+                height={250}
+              />
               <p className="text-xs sm:text-sm">
-                You cancelled the transaction.{" "}
-                <span onClick={handleCopyError} className="cursor-pointer underline">
-                  Copy the error.
-                </span>
+                Oops! Something went wrong.{" "}
                 {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
               </p>
+              <span onClick={handleCopyError} className="cursor-pointer underline font-bold text-lg">
+                Copy the error.
+              </span>
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
               Close
@@ -177,8 +201,21 @@ const RepayModal: React.FC<RepayModalProps> = ({ isOpen, onClose, backedTokenID,
         {data && (
           <div className="flex flex-col gap-6 mt-6">
             <div className="success-container text-center">
+              <Image
+                src="/Open Doodles - Doggie.svg"
+                alt="Meditating"
+                className="max-w-60 mx-auto mb-4"
+                width={250}
+                height={250}
+              />
               <h2 className="text-base sm:text-lg">All done!</h2>
-              <p className="text-xs sm:text-sm">Repay transaction successful</p>
+              <p className="text-xs sm:text-sm">Deposit transaction successful</p>
+              <div className="pb-3"></div>
+              {blockExplorerUrl && (
+                <a href={blockExplorerUrl} target="_blank" rel="noreferrer" className="block link pb-3">
+                  Open in Block Explorer
+                </a>
+              )}
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
               Ok, close
