@@ -8,7 +8,7 @@ import { useWriteContract } from "wagmi";
  */
 const useMint = () => {
   // Hook for writing to a smart contract
-  const { writeContract, error, data: hash, isPending, isSuccess } = useWriteContract();
+  const { writeContract, error, data: mintingHash, isPending, isSuccess } = useWriteContract();
 
   /**
    * Handles the mint transaction by writing to the smart contract.
@@ -39,7 +39,7 @@ const useMint = () => {
     }
   };
 
-  return { handleMint, isError: !!error, error, hash, isPending, isSuccess };
+  return { handleMint, isError: !!error, error, mintingHash, isPending, isSuccess };
 };
 
 export default useMint;
