@@ -10,7 +10,7 @@ import { useWriteContract } from "wagmi";
  */
 const useRepayCPD = () => {
   // Hook for writing to a smart contract
-  const { writeContract, error, data, isPending, isSuccess } = useWriteContract();
+  const { writeContract, error, data: repayHash, isPending, isSuccess } = useWriteContract();
 
   /**
    * Handles the repay transaction by writing to the smart contract.
@@ -35,7 +35,7 @@ const useRepayCPD = () => {
     }
   };
 
-  return { handleRepay, isError: !!error, error, data, isPending, isSuccess };
+  return { handleRepay, isError: !!error, error, repayHash, isPending, isSuccess };
 };
 
 export default useRepayCPD;
