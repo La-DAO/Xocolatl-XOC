@@ -12,19 +12,21 @@ const Deposits: React.FC = () => {
   // Render the Supplies component
   return (
     <div className="flex flex-wrap gap-4">
-      {/* Section for displaying user's deposits in the house of reserves */}
       <div className="bg-white p-6 rounded-2xl shadow-md flex-1">
-        <h2 className="text-xl text-primary font-semibold mb-4">{t("YourDepositTableTitle")}</h2>
-        <p className="text-gray-500 mb-4">{t("YourDepositsDescription")}</p>
-        {/* Table for displaying user's deposits in the house of reserves */}
-        <YourDeposits />
-      </div>
-      {/* Section for displaying available assets to deposit */}
-      <div className="bg-white p-6 rounded-2xl shadow-md flex-1">
-        <h2 className="text-xl text-primary font-semibold mb-4">{t("AssetTableTitle")}</h2>
+        <h2 className="text-xl text-primary font-semibold mb-4">
+          <span className="font-bold text-primary">1.</span> {t("AssetTableTitle")}
+        </h2>
         <p className="text-gray-500 mb-4">{t("AssetTableDescription")}</p>
         {/* Table for displaying available assets to supply */}
         <DepositTable />
+      </div>
+      <div className="bg-white p-6 rounded-2xl shadow-md flex-1">
+        <h2 className="text-xl text-primary font-semibold mb-4">
+          <span className="font-bold text-primary">2.</span> {t("YourDepositTableTitle")}
+        </h2>
+        <p className="text-gray-500 mb-4">{t("YourDepositsDescription")}</p>
+        {/* Table for displaying user's deposits in the house of reserves */}
+        <YourDeposits />
       </div>
     </div>
   );
