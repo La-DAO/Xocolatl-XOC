@@ -7,7 +7,7 @@ import { useWriteContract } from "wagmi";
  * @returns {Object} - The borrow handler function and contract interaction states.
  */
 const useBorrow = () => {
-  const { writeContract, error, data } = useWriteContract();
+  const { writeContract, error, data: borrowHash } = useWriteContract();
   const pool = externalContracts[8453].Pool;
 
   /**
@@ -42,7 +42,7 @@ const useBorrow = () => {
     }
   };
 
-  return { handleBorrow, isError: !!error, error, data };
+  return { handleBorrow, isError: !!error, error, borrowHash };
 };
 
 export default useBorrow;

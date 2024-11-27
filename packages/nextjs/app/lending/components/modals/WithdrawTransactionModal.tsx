@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import useAccountAddress from "@/hooks/useAccount";
 import { ReserveData } from "@/types/types";
 import { toWeiConverter } from "@/utils/toWeiConverter";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
+import { useChainId } from "wagmi";
 import { useTranslation } from "~~/app/context/LanguageContext";
 import useWithdraw from "~~/hooks/useWithdraw";
 
@@ -32,8 +34,24 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
   const [isError, setIsError] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
 
-  const { handleWithdraw, isError: withdrawError, error, data: withdrawData } = useWithdraw();
+  const chainId = useChainId();
+
+  const { handleWithdraw, isError: withdrawError, error, withdrawHash } = useWithdraw();
   const { address: walletAddress } = useAccountAddress();
+
+  const getBlockExplorerUrl = (chainId: number): string => {
+    switch (chainId) {
+      case 56: // BNB Smart Chain Mainnet
+        return "https://bscscan.com/tx/";
+      case 137: // Polygon Mainnet
+        return "https://polygonscan.com/tx/";
+      case 8453: // Base Mainnet
+        return "https://basescan.org/tx/";
+      default:
+        return ""; // Fallback for unsupported networks
+    }
+  };
+  const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${withdrawHash}`;
 
   useEffect(() => {
     validateAmount(amount);
@@ -45,10 +63,10 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
       setIsError(true);
       setErrorMessage(error?.message || "An unknown error occurred.");
     }
-    if (withdrawData) {
-      setData(withdrawData);
+    if (withdrawHash) {
+      setData(withdrawHash);
     }
-  }, [withdrawError, withdrawData, error]);
+  }, [withdrawError, withdrawHash, error]);
 
   const validateAmount = (value: string) => {
     const numValue = parseFloat(value);
@@ -166,26 +184,46 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
           {isError && (
             <div className="flex flex-col gap-6 mt-6">
               <div className="error-container text-center">
-                <p>
-                  {t("LendingWithdrawModalCancelMessage")}{" "}
-                  <span onClick={handleCopyError} className="cursor-pointer underline">
-                    {t("LendingWithdrawModalCopyMessage")}
-                  </span>
+                <Image
+                  src="/Open Doodles - Messy.svg"
+                  alt="Error"
+                  className="max-w-60 mx-auto mb-4"
+                  width={250}
+                  height={250}
+                />
+                <p className="text-xs sm:text-sm">
+                  Oops! Something went wrong.{" "}
                   {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
                 </p>
+                <span onClick={handleCopyError} className="cursor-pointer underline font-bold text-lg">
+                  Copy the error.
+                </span>
               </div>
-              <button onClick={handleClose} className="primary-btn">
-                {t("LendingWithdrawModalClose")}
+              <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
+                Close
               </button>
             </div>
           )}
           {data && (
             <div className="flex flex-col gap-6 mt-6">
               <div className="success-container text-center">
-                <h2 className="">{t("LendingWithdrawModalSuccessTitle")}</h2>
-                <p>{t("LendingWithdrawModalSuccessMessage")}</p>
+                <Image
+                  src="/Open Doodles - Meditating.svg"
+                  alt="Meditating"
+                  className="max-w-60 mx-auto mb-4"
+                  width={250}
+                  height={250}
+                />
+                <h2 className="text-base sm:text-lg">{t("LendingWithdrawModalSuccessTitle")}</h2>
+                <p className="text-xs sm:text-sm">{t("LendingWithdrawModalSuccessMessage")}</p>
+                <div className="pb-3"></div>
+                {blockExplorerUrl && (
+                  <a href={blockExplorerUrl} target="_blank" rel="noreferrer" className="block link pb-3">
+                    Open in Block Explorer
+                  </a>
+                )}
               </div>
-              <button onClick={handleClose} className="primary-btn">
+              <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
                 Ok, {t("LendingWithdrawModalClose")}
               </button>
             </div>
