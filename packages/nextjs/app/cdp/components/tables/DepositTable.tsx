@@ -126,7 +126,7 @@ const DepositTable: React.FC = () => {
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div>
       <table className="min-w-full divide-y divide-gray-200">
         <thead>
           <tr className="text-center">
