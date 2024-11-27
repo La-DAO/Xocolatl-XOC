@@ -8,7 +8,7 @@ import { useWriteContract } from "wagmi";
  */
 const useWithdraw = () => {
   // Hook for writing to a smart contract
-  const { writeContract, error, data } = useWriteContract();
+  const { writeContract, error, data: withdrawHash } = useWriteContract();
   const pool = externalContracts[8453].Pool;
 
   /**
@@ -35,7 +35,7 @@ const useWithdraw = () => {
     }
   };
 
-  return { handleWithdraw, isError: !!error, error, data };
+  return { handleWithdraw, isError: !!error, error, withdrawHash };
 };
 
 export default useWithdraw;
