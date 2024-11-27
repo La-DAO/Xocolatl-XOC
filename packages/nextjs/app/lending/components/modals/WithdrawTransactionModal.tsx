@@ -184,16 +184,23 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
           {isError && (
             <div className="flex flex-col gap-6 mt-6">
               <div className="error-container text-center">
-                <p>
-                  {t("LendingWithdrawModalCancelMessage")}{" "}
-                  <span onClick={handleCopyError} className="cursor-pointer underline">
-                    {t("LendingWithdrawModalCopyMessage")}
-                  </span>
+                <Image
+                  src="/Open Doodles - Messy.svg"
+                  alt="Error"
+                  className="max-w-60 mx-auto mb-4"
+                  width={250}
+                  height={250}
+                />
+                <p className="text-xs sm:text-sm">
+                  Oops! Something went wrong.{" "}
                   {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
                 </p>
+                <span onClick={handleCopyError} className="cursor-pointer underline font-bold text-lg">
+                  Copy the error.
+                </span>
               </div>
-              <button onClick={handleClose} className="primary-btn">
-                {t("LendingWithdrawModalClose")}
+              <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
+                Close
               </button>
             </div>
           )}
