@@ -79,6 +79,10 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
     setIsModalOpen(true);
   };
 
+  console.log("reservesData", reservesData);
+  console.log("userReservesData", userReservesData);
+  console.log("reservesWithBalances", reservesWithBalances);
+
   return (
     <div>
       <div className="flex mt-2 gap-2 text-xs">

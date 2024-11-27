@@ -21,6 +21,7 @@ interface ModalProps {
  * @param {() => void} onClose - Function to call when the modal is closed.
  * @param {ReserveData | null} reserve - The reserve data to borrow from.
  * @param {string} balance - The available liquidity as a string.
+ * @param {boolean} canBorrow - Whether the user can borrow this asset.
  * @returns {JSX.Element | null} - The modal component or null if not open.
  */
 const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve, balance }) => {
