@@ -80,6 +80,7 @@ const DepositTable: React.FC = () => {
   const { t } = useTranslation();
   // Get the chain ID
   const chainId = useChainId();
+
   // Define the state variables
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);

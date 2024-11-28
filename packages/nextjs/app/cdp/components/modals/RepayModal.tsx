@@ -4,6 +4,7 @@ import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 import { useChainId } from "wagmi";
+import { getBlockExplorerUrl } from "~~/app/utils/blockExplorer";
 import useRepayCPD from "~~/hooks/useRepayCDP";
 
 interface RepayModalProps {
@@ -91,18 +92,6 @@ const RepayModal: React.FC<RepayModalProps> = ({ isOpen, onClose, backedTokenID,
     onClose();
   };
 
-  const getBlockExplorerUrl = (chainId: number): string => {
-    switch (chainId) {
-      case 56: // BNB Smart Chain Mainnet
-        return "https://bscscan.com/tx/";
-      case 137: // Polygon Mainnet
-        return "https://polygonscan.com/tx/";
-      case 8453: // Base Mainnet
-        return "https://basescan.org/tx/";
-      default:
-        return ""; // Fallback for unsupported networks
-    }
-  };
   const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${repayHash}`;
 
   if (!isOpen) return null;
