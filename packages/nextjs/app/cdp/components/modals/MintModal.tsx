@@ -5,6 +5,7 @@ import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 import { useChainId } from "wagmi";
+import { getBlockExplorerUrl } from "~~/app/utils/blockExplorer";
 
 interface MintModalProps {
   isOpen: boolean;
@@ -102,18 +103,6 @@ const MintModal: React.FC<MintModalProps> = ({
     onClose();
   };
 
-  const getBlockExplorerUrl = (chainId: number): string => {
-    switch (chainId) {
-      case 56: // BNB Smart Chain Mainnet
-        return "https://bscscan.com/tx/";
-      case 137: // Polygon Mainnet
-        return "https://polygonscan.com/tx/";
-      case 8453: // Base Mainnet
-        return "https://basescan.org/tx/";
-      default:
-        return ""; // Fallback for unsupported networks
-    }
-  };
   const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${mintingHash}`;
 
   if (!isOpen) return null;

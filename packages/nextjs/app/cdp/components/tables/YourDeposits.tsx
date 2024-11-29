@@ -400,7 +400,7 @@ const YourDeposits = () => {
   const chainDeposits = deposits[chainId] || [];
   const allDepositsZero = formattedBalances.every(balance => balance === 0);
   return (
-    <div className="rounded-md overflow-x-auto">
+    <div className="rounded-md">
       {/* Section for displaying the user's deposits */}
       {chainDeposits.length > 0 && !allDepositsZero ? (
         <>

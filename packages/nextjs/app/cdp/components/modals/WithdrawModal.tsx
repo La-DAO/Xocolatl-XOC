@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address, formatEther } from "viem";
 import { useChainId, useReadContract, useWaitForTransactionReceipt } from "wagmi";
 import { houseOfReserveABI } from "~~/app/components/abis/houseofreserve";
+import { getBlockExplorerUrl } from "~~/app/utils/blockExplorer";
 import { useWithdraw } from "~~/hooks/useWithdrawCDP";
 
 interface WithdrawModalProps {
@@ -62,18 +63,6 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, assetNam
     withdrawHash,
   } = useWithdraw(houseOfReserveContract as Address);
 
-  const getBlockExplorerUrl = (chainId: number): string => {
-    switch (chainId) {
-      case 56: // BNB Smart Chain Mainnet
-        return "https://bscscan.com/tx/";
-      case 137: // Polygon Mainnet
-        return "https://polygonscan.com/tx/";
-      case 8453: // Base Mainnet
-        return "https://basescan.org/tx/";
-      default:
-        return ""; // Fallback for unsupported networks
-    }
-  };
   const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${withdrawHash}`;
 
   const { isLoading: isWithdrawLoading, isSuccess: isWithdrawSuccess } = useWaitForTransactionReceipt({

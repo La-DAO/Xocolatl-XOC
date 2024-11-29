@@ -80,6 +80,7 @@ const DepositTable: React.FC = () => {
   const { t } = useTranslation();
   // Get the chain ID
   const chainId = useChainId();
+
   // Define the state variables
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
@@ -126,7 +127,7 @@ const DepositTable: React.FC = () => {
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div>
       <table className="min-w-full divide-y divide-gray-200">
         <thead>
           <tr className="text-center">

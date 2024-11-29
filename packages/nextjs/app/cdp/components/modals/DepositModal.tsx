@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 import { useChainId, useReadContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { ERC20ABI } from "~~/app/components/abis/erc20";
+import { getBlockExplorerUrl } from "~~/app/utils/blockExplorer";
 import { useBalanceOf } from "~~/hooks/useBalanceOf";
 import { useDeposit } from "~~/hooks/useDeposit";
 
@@ -86,18 +87,6 @@ const DepositModal: React.FC<DepositModalProps> = ({
     depositHash,
   } = useDeposit(houseOfReserveContract as Address);
 
-  const getBlockExplorerUrl = (chainId: number): string => {
-    switch (chainId) {
-      case 56: // BNB Smart Chain Mainnet
-        return "https://bscscan.com/tx/";
-      case 137: // Polygon Mainnet
-        return "https://polygonscan.com/tx/";
-      case 8453: // Base Mainnet
-        return "https://basescan.org/tx/";
-      default:
-        return ""; // Fallback for unsupported networks
-    }
-  };
   const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${depositHash}`;
 
   useEffect(() => {
