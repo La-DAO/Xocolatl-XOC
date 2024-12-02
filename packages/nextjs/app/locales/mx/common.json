@@ -121,6 +121,8 @@
   "AssetsDepositButton": "Depositar",
   "AssetsWithdrawButton": "Retirar",
 
+  "DownloadWhitepaper": "Descargar Whitepaper",
+
   "CDPInfoTitle": "Comprendiendo el Mecanismo CDP",
   "CDPInfoSubtitle": "Como funcionan los contratos",
   "CDPParagraph1": "Nuestra plataforma utiliza un conjunto de contratos inteligentes para gestionar los procesos de depósito, acuñación y retirada. Cuando deposita activos en nuestro contrato inteligente, estos activos se guardan de forma segura y sirven como garantía para la acuñación de nuevas stablecoins. Los contratos inteligentes garantizan la seguridad e integridad de sus activos aplicando reglas y condiciones estrictas.",

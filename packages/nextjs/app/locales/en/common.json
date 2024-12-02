@@ -107,6 +107,8 @@
   "AssetsDepositButton": "Deposit",
   "AssetsWithdrawButton": "Withdraw",
 
+  "DownloadWhitepaper": "Download Whitepaper",
+
   "CDPInfoTitle": "Understanding the CDP Mechanism",
   "CDPInfoSubtitle": "How the Contracts Work",
   "CDPParagraph1": "Our platform leverages a set of smart contracts to manage the deposit, minting, and withdrawal processes. When you deposit assets into our smart contract, these assets are securely held and serve as collateral for minting new stablecoins. The smart contracts ensure the safety and integrity of your assets by enforcing strict rules and conditions.",
