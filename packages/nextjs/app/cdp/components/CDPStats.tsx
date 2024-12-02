@@ -154,6 +154,7 @@ const CDPStats: React.FC = () => {
             </div>
           </div>
         </div>
+
         {/* Data Display */}
         <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
           <div className="text-center md:text-left">
@@ -166,18 +167,30 @@ const CDPStats: React.FC = () => {
               />
             </div>
           </div>
+
           {/* Dynamically Generated House of Reserve Data */}
           <div className="flex flex-wrap justify-center md:justify-start space-x-4 md:space-x-8">
             {formattedHouseOfReserveData.map((data, index) => (
               <div key={index} className="text-center md:text-left">
-                <div className="text-sm text-gray-400">{`${assetNames[index]}  ${t("Deposits")}`}</div>
+                <div className="text-sm text-gray-400">{`${assetNames[index]} ${t("Deposits")}`}</div>
                 <div className="text-lg text-accent font-semibold">
                   {data !== 0 ? ` ${data.toFixed(4)}` : "Loading..."}
                 </div>
               </div>
             ))}
           </div>
-          {/* You can add more data points here if needed */}
+        </div>
+        {/* Button to Download Whitepaper */}
+        <div className="flex justify-end mt-4 md:mt-0">
+          <a
+            href="/xocolatl_whitepaper.pdf"
+            download="xocolatl_whitepaper.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-all"
+          >
+            {t("Download Whitepaper")}
+          </a>
         </div>
       </div>
     </header>
