@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import MintModal from "../modals/MintModal";
 import RepayModal from "../modals/RepayModal";
+import { chainIds } from "@/app/constants/contracts";
 import { Address } from "viem";
 import { useChainId, useReadContract, useReadContracts } from "wagmi";
 import { useAccount } from "wagmi";
@@ -21,15 +22,15 @@ const YourDeposits = () => {
 
   // Define the contract addresses for different chainIds
   const assetsAccountantContractAddresses: ContractAddresses = {
-    56: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-    137: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-    8453: "0xB93EcD005B6053c6F8428645aAA879e7028408C7",
+    [chainIds.BNB]: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
+    [chainIds.POLYGON]: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
+    [chainIds.BASE]: "0xB93EcD005B6053c6F8428645aAA879e7028408C7",
     // Add other chainIds and their respective contract addresses as needed
   };
 
   let balanceOfBatchArgs: readonly any[] = [];
   const assetsAccountantContractAddress = assetsAccountantContractAddresses[chainId];
-  if (chainId === 56) {
+  if (chainId === chainIds.BNB) {
     balanceOfBatchArgs = [
       [address, address],
       [
@@ -37,7 +38,7 @@ const YourDeposits = () => {
         "85925987621059561469642133971917522532759533358859710307334868485990845307587",
       ],
     ];
-  } else if (chainId === 137) {
+  } else if (chainId === chainIds.POLYGON) {
     balanceOfBatchArgs = [
       [address, address, address],
       [
@@ -46,7 +47,7 @@ const YourDeposits = () => {
         "61525895172180918160808167300975909222815099626523523164453657306362585741149",
       ],
     ];
-  } else if (chainId === 8453) {
+  } else if (chainId === chainIds.BASE) {
     balanceOfBatchArgs = [
       [address, address],
       [
@@ -65,7 +66,7 @@ const YourDeposits = () => {
 
   let balanceOfBatchMintArgs: readonly any[] = [];
 
-  if (chainId === 56) {
+  if (chainId === chainIds.BNB) {
     balanceOfBatchMintArgs = [
       [address, address],
       [
@@ -73,7 +74,7 @@ const YourDeposits = () => {
         "36240893346862244708187722980583805772746997097966348518842957091580463611081",
       ],
     ];
-  } else if (chainId === 137) {
+  } else if (chainId === chainIds.POLYGON) {
     balanceOfBatchMintArgs = [
       [address, address, address],
       [
@@ -82,7 +83,7 @@ const YourDeposits = () => {
         "17135799413344306437655147654156582701703759838473908703722998121562726910745",
       ],
     ];
-  } else if (chainId === 8453) {
+  } else if (chainId === chainIds.BASE) {
     balanceOfBatchMintArgs = [
       [address, address],
       [
@@ -101,17 +102,17 @@ const YourDeposits = () => {
 
   let houseOfCoinContract: { address: Address; abi: any } | undefined;
 
-  if (chainId === 56) {
+  if (chainId === chainIds.BNB) {
     houseOfCoinContract = {
       address: "0x9d29E6b3D75F5e676f91b69284e015C9CEa20533",
       abi: houseOfCoinABI,
     };
-  } else if (chainId === 137) {
+  } else if (chainId === chainIds.POLYGON) {
     houseOfCoinContract = {
       address: "0x9d29E6b3D75F5e676f91b69284e015C9CEa20533",
       abi: houseOfCoinABI,
     };
-  } else if (chainId === 8453) {
+  } else if (chainId === chainIds.BASE) {
     houseOfCoinContract = {
       address: "0x02c531Cd9791dD3A31428B2987A82361D72F9b13",
       abi: houseOfCoinABI,
@@ -305,7 +306,7 @@ const YourDeposits = () => {
       backedTokenID: string;
     }[];
   } = {
-    56: [
+    [chainIds.BNB]: [
       {
         symbol: "WETH",
         amount: parseFloat(formattedBalances[0].toFixed(6)),
@@ -331,7 +332,7 @@ const YourDeposits = () => {
         backedTokenID: "36240893346862244708187722980583805772746997097966348518842957091580463611081",
       },
     ],
-    137: [
+    [chainIds.POLYGON]: [
       {
         symbol: "WETH",
         amount: parseFloat(formattedBalances[0].toFixed(6)),
@@ -369,7 +370,7 @@ const YourDeposits = () => {
         backedTokenID: "27778163481220956171503989467144576287986246817586635666554224569167019219186",
       },
     ],
-    8453: [
+    [chainIds.BASE]: [
       {
         symbol: "WETH",
         amount: parseFloat(formattedBalances[0].toFixed(6)),

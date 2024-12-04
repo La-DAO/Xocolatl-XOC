@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import DepositModal from "../modals/DepositModal";
 import WithdrawModal from "../modals/WithdrawModal";
+import { chainIds } from "@/app/constants/contracts";
 import BalanceOf from "@/app/lending/components/BalanceOf";
 import useAccountAddress from "@/hooks/useAccount";
 import { Address } from "viem";
@@ -18,7 +19,7 @@ const assets: {
     assetContract: Address;
   }[];
 } = {
-  56: [
+  [chainIds.BNB]: [
     {
       name: "WETH",
       maxLTV: "85%",
@@ -34,7 +35,7 @@ const assets: {
       assetContract: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
     },
   ],
-  137: [
+  [chainIds.POLYGON]: [
     {
       name: "WETH",
       maxLTV: "85%",
@@ -57,7 +58,7 @@ const assets: {
       assetContract: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
     },
   ],
-  8453: [
+  [chainIds.BASE]: [
     {
       name: "WETH",
       maxLTV: "80%",
