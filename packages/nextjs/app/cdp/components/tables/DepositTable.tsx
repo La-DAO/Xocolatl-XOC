@@ -1,79 +1,17 @@
 import React, { useCallback, useState } from "react";
 import DepositModal from "../modals/DepositModal";
 import WithdrawModal from "../modals/WithdrawModal";
+import { contractData } from "@/app/constants/contracts";
 import BalanceOf from "@/app/lending/components/BalanceOf";
 import useAccountAddress from "@/hooks/useAccount";
 import { Address } from "viem";
 import { useChainId } from "wagmi";
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { useTranslation } from "~~/app/context/LanguageContext";
+import { generateAssets } from "~~/app/utils/utils";
 
 // Define the assets for each chain
-const assets: {
-  [key: number]: {
-    name: string;
-    maxLTV: string;
-    liquidationThreshold: string;
-    houseOfReserveContract: Address;
-    assetContract: Address;
-  }[];
-} = {
-  56: [
-    {
-      name: "WETH",
-      maxLTV: "85%",
-      liquidationThreshold: "85%",
-      houseOfReserveContract: "0xd411BE9A105Ea7701FabBe58C2834b7033EBC203",
-      assetContract: "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
-    },
-    {
-      name: "WBNB",
-      maxLTV: "70%",
-      liquidationThreshold: "85%",
-      houseOfReserveContract: "0x070ccE6887E70b75015F948b12601D1E759D2024",
-      assetContract: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
-    },
-  ],
-  137: [
-    {
-      name: "WETH",
-      maxLTV: "85%",
-      liquidationThreshold: "85%",
-      houseOfReserveContract: "0x2718644E0C38A6a1F82136FC31dcA00DFCdF92a3",
-      assetContract: "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
-    },
-    {
-      name: "MATICX",
-      maxLTV: "60%",
-      liquidationThreshold: "85%",
-      houseOfReserveContract: "0x76CAc0bC384a49485627D2235fE132e3038b45BB",
-      assetContract: "0xfa68fb4628dff1028cfec22b4162fccd0d45efb6",
-    },
-    {
-      name: "WMATIC",
-      maxLTV: "70%",
-      liquidationThreshold: "85%",
-      houseOfReserveContract: "0xF56293025437Db5C0024a37dfcEc792125d56A48",
-      assetContract: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
-    },
-  ],
-  8453: [
-    {
-      name: "WETH",
-      maxLTV: "80%",
-      liquidationThreshold: "85%",
-      houseOfReserveContract: "0xfF69E183A863151B4152055974aa648b3165014D",
-      assetContract: "0x4200000000000000000000000000000000000006",
-    },
-    {
-      name: "cbETH",
-      maxLTV: "80%",
-      liquidationThreshold: "85%",
-      houseOfReserveContract: "0x5c4a154690AE52844F151bcF3aA44885db3c8A58",
-      assetContract: "0x2Ae3F1Ec7F1F5012CFEab0185bfc7aa3cf0DEc22",
-    },
-  ],
-};
+const assets = generateAssets(contractData);
 
 const DepositTable: React.FC = () => {
   // Get the translation object

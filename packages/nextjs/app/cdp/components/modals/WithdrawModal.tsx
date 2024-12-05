@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address, formatEther } from "viem";
 import { useChainId, useReadContract, useWaitForTransactionReceipt } from "wagmi";
 import { houseOfReserveABI } from "~~/app/components/abis/houseofreserve";
-import { getBlockExplorerUrl } from "~~/app/utils/blockExplorer";
+import { getBlockExplorerUrl } from "~~/app/utils/utils";
 import { useWithdraw } from "~~/hooks/useWithdrawCDP";
 
 interface WithdrawModalProps {
