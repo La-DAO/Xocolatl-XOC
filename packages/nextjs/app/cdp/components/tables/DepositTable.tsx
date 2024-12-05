@@ -1,37 +1,14 @@
 import React, { useCallback, useState } from "react";
 import DepositModal from "../modals/DepositModal";
 import WithdrawModal from "../modals/WithdrawModal";
-import { ContractData, contractData } from "@/app/constants/contracts";
+import { contractData } from "@/app/constants/contracts";
 import BalanceOf from "@/app/lending/components/BalanceOf";
 import useAccountAddress from "@/hooks/useAccount";
 import { Address } from "viem";
 import { useChainId } from "wagmi";
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { useTranslation } from "~~/app/context/LanguageContext";
-
-type Asset = {
-  name: string;
-  maxLTV: string;
-  liquidationThreshold: string;
-  houseOfReserveContract: Address;
-  assetContract: Address;
-};
-
-const generateAssets = (contractData: ContractData) => {
-  const assets: { [key: number]: Asset[] } = {};
-
-  Object.entries(contractData).forEach(([chainId, data]) => {
-    assets[parseInt(chainId)] = Object.entries(data.assets).map(([name, asset]) => ({
-      name,
-      maxLTV: asset.maxLTV,
-      liquidationThreshold: asset.liquidationThreshold,
-      houseOfReserveContract: data.houseOfReserves[name],
-      assetContract: asset.contract,
-    }));
-  });
-
-  return assets;
-};
+import { generateAssets } from "~~/app/utils/utils";
 
 // Define the assets for each chain
 const assets = generateAssets(contractData);

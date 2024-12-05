@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 import { useChainId, useReadContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { ERC20ABI } from "~~/app/components/abis/erc20";
-import { getBlockExplorerUrl } from "~~/app/utils/blockExplorer";
+import { getBlockExplorerUrl } from "~~/app/utils/utils";
 import { useBalanceOf } from "~~/hooks/useBalanceOf";
 import { useDeposit } from "~~/hooks/useDeposit";
 

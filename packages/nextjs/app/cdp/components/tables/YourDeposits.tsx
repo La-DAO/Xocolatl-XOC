@@ -10,30 +10,7 @@ import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { houseOfCoinABI } from "~~/app/components/abis/houseofcoin";
 import { assetsAccountantABI } from "~~/app/components/abis/xocabis";
 import { useTranslation } from "~~/app/context/LanguageContext";
-
-function createContractsArray(
-  functionName: string,
-  addresses: string[],
-  houseOfCoinContract: { address: `0x${string}`; abi: any },
-  userAddress: `0x${string}`,
-): { address: `0x${string}`; abi: any; functionName: string; args: readonly unknown[] }[] {
-  return addresses.map(contractAddress => ({
-    address: houseOfCoinContract.address,
-    abi: houseOfCoinContract.abi,
-    functionName,
-    args: [userAddress, contractAddress],
-  }));
-}
-
-function getContractAddress(address: string | undefined): `0x${string}` {
-  if (!address) {
-    throw new Error("Address is undefined. Check contractData.");
-  }
-  if (!address.startsWith("0x")) {
-    throw new Error(`Address ${address} is invalid.`);
-  }
-  return address as `0x${string}`;
-}
+import { createContractsArray, getContractAddress } from "~~/app/utils/utils";
 
 type Deposit = {
   symbol: string;

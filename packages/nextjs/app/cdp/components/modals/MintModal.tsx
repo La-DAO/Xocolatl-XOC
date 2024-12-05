@@ -5,7 +5,7 @@ import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 import { useChainId } from "wagmi";
-import { getBlockExplorerUrl } from "~~/app/utils/blockExplorer";
+import { getBlockExplorerUrl } from "~~/app/utils/utils";
 
 interface MintModalProps {
   isOpen: boolean;

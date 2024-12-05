@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 import { useChainId } from "wagmi";
 import { useTranslation } from "~~/app/context/LanguageContext";
-import { getBlockExplorerUrl } from "~~/app/utils/blockExplorer";
+import { getBlockExplorerUrl } from "~~/app/utils/utils";
 
 interface ModalProps {
   isOpen: boolean;
