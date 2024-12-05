@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import DepositModal from "../modals/DepositModal";
 import WithdrawModal from "../modals/WithdrawModal";
-import { chainIds } from "@/app/constants/contracts";
+import { chainIds } from "@/app/constants/chains";
 import BalanceOf from "@/app/lending/components/BalanceOf";
 import useAccountAddress from "@/hooks/useAccount";
 import { Address } from "viem";
@@ -9,15 +9,17 @@ import { useChainId } from "wagmi";
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { useTranslation } from "~~/app/context/LanguageContext";
 
+type Asset = {
+  name: string;
+  maxLTV: string;
+  liquidationThreshold: string;
+  houseOfReserveContract: Address;
+  assetContract: Address;
+};
+
 // Define the assets for each chain
 const assets: {
-  [key: number]: {
-    name: string;
-    maxLTV: string;
-    liquidationThreshold: string;
-    houseOfReserveContract: Address;
-    assetContract: Address;
-  }[];
+  [key: number]: Asset[];
 } = {
   [chainIds.BNB]: [
     {

@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import MintModal from "../modals/MintModal";
 import RepayModal from "../modals/RepayModal";
-import { chainIds } from "@/app/constants/contracts";
+import { chainIds } from "@/app/constants/chains";
+import { contractData } from "@/app/constants/contracts";
 import { Address } from "viem";
 import { useChainId, useReadContract, useReadContracts } from "wagmi";
 import { useAccount } from "wagmi";
@@ -9,6 +10,30 @@ import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { houseOfCoinABI } from "~~/app/components/abis/houseofcoin";
 import { assetsAccountantABI } from "~~/app/components/abis/xocabis";
 import { useTranslation } from "~~/app/context/LanguageContext";
+
+function createContractsArray(
+  functionName: string,
+  addresses: string[],
+  houseOfCoinContract: { address: `0x${string}`; abi: any },
+  userAddress: `0x${string}`,
+): { address: `0x${string}`; abi: any; functionName: string; args: readonly unknown[] }[] {
+  return addresses.map(contractAddress => ({
+    address: houseOfCoinContract.address,
+    abi: houseOfCoinContract.abi,
+    functionName,
+    args: [userAddress, contractAddress],
+  }));
+}
+
+function getContractAddress(address: string | undefined): `0x${string}` {
+  if (!address) {
+    throw new Error("Address is undefined. Check contractData.");
+  }
+  if (!address.startsWith("0x")) {
+    throw new Error(`Address ${address} is invalid.`);
+  }
+  return address as `0x${string}`;
+}
 
 const YourDeposits = () => {
   const { t } = useTranslation();
@@ -100,63 +125,39 @@ const YourDeposits = () => {
     args: balanceOfBatchMintArgs,
   });
 
-  let houseOfCoinContract: { address: Address; abi: any } | undefined;
+  // const houseOfCoinContract: { address: Address; abi: any } | undefined = {
+  //   address: `0x${contractData[chainId].houseOfCoin}`,
+  //   abi: houseOfCoinABI,
+  // };
 
-  if (chainId === chainIds.BNB) {
-    houseOfCoinContract = {
-      address: "0x9d29E6b3D75F5e676f91b69284e015C9CEa20533",
-      abi: houseOfCoinABI,
-    };
-  } else if (chainId === chainIds.POLYGON) {
-    houseOfCoinContract = {
-      address: "0x9d29E6b3D75F5e676f91b69284e015C9CEa20533",
-      abi: houseOfCoinABI,
-    };
-  } else if (chainId === chainIds.BASE) {
-    houseOfCoinContract = {
-      address: "0x02c531Cd9791dD3A31428B2987A82361D72F9b13",
-      abi: houseOfCoinABI,
-    };
-  }
+  const contractAddresses = [
+    contractData[chainIds.BNB].houseOfReserves.WETH,
+    contractData[chainIds.BNB].houseOfReserves.WBNB,
+    contractData[chainIds.POLYGON].houseOfReserves.WETH,
+    contractData[chainIds.POLYGON].houseOfReserves.MATICX,
+    contractData[chainIds.POLYGON].houseOfReserves.WMATIC,
+    contractData[chainIds.BASE].houseOfReserves.WETH,
+    contractData[chainIds.BASE].houseOfReserves.CBETH,
+  ];
+
+  const houseOfCoinAddress = getContractAddress(contractData[chainId].houseOfCoin);
+
+  const batchCheckRemainingMintingPowerArray = createContractsArray(
+    "checkRemainingMintingPower",
+    contractAddresses,
+    { abi: houseOfCoinABI, address: houseOfCoinAddress },
+    address as `0x${string}`,
+  );
+
+  const batchComputeUserHealthRatioArray = createContractsArray(
+    "computeUserHealthRatio",
+    contractAddresses,
+    { abi: houseOfCoinABI, address: houseOfCoinAddress },
+    address as `0x${string}`,
+  );
 
   const { data: batchCheckRemainingMintingPower, isError } = useReadContracts({
-    contracts: [
-      {
-        ...houseOfCoinContract,
-        functionName: "checkRemainingMintingPower",
-        args: [address, "0xd411BE9A105Ea7701FabBe58C2834b7033EBC203"],
-      },
-      {
-        ...houseOfCoinContract,
-        functionName: "checkRemainingMintingPower",
-        args: [address, "0x070ccE6887E70b75015F948b12601D1E759D2024"],
-      },
-      {
-        ...houseOfCoinContract,
-        functionName: "checkRemainingMintingPower",
-        args: [address, "0x2718644E0C38A6a1F82136FC31dcA00DFCdF92a3"],
-      },
-      {
-        ...houseOfCoinContract,
-        functionName: "checkRemainingMintingPower",
-        args: [address, "0x76CAc0bC384a49485627D2235fE132e3038b45BB"],
-      },
-      {
-        ...houseOfCoinContract,
-        functionName: "checkRemainingMintingPower",
-        args: [address, "0xF56293025437Db5C0024a37dfcEc792125d56A48"],
-      },
-      {
-        ...houseOfCoinContract,
-        functionName: "checkRemainingMintingPower",
-        args: [address, "0xfF69E183A863151B4152055974aa648b3165014D"],
-      },
-      {
-        ...houseOfCoinContract,
-        functionName: "checkRemainingMintingPower",
-        args: [address, "0x5c4a154690AE52844F151bcF3aA44885db3c8A58"],
-      },
-    ],
+    contracts: batchCheckRemainingMintingPowerArray,
   });
 
   useEffect(() => {
@@ -169,44 +170,10 @@ const YourDeposits = () => {
   }, [batchCheckRemainingMintingPower, isError]);
 
   const { data: batchComputeUserHealthRatio } = useReadContracts({
-    contracts: [
-      {
-        ...houseOfCoinContract,
-        functionName: "computeUserHealthRatio",
-        args: [address, "0xd411BE9A105Ea7701FabBe58C2834b7033EBC203"],
-      },
-      {
-        ...houseOfCoinContract,
-        functionName: "computeUserHealthRatio",
-        args: [address, "0x070ccE6887E70b75015F948b12601D1E759D2024"],
-      },
-      {
-        ...houseOfCoinContract,
-        functionName: "computeUserHealthRatio",
-        args: [address, "0x2718644E0C38A6a1F82136FC31dcA00DFCdF92a3"],
-      },
-      {
-        ...houseOfCoinContract,
-        functionName: "computeUserHealthRatio",
-        args: [address, "0x76CAc0bC384a49485627D2235fE132e3038b45BB"],
-      },
-      {
-        ...houseOfCoinContract,
-        functionName: "computeUserHealthRatio",
-        args: [address, "0xF56293025437Db5C0024a37dfcEc792125d56A48"],
-      },
-      {
-        ...houseOfCoinContract,
-        functionName: "computeUserHealthRatio",
-        args: [address, "0xfF69E183A863151B4152055974aa648b3165014D"],
-      },
-      {
-        ...houseOfCoinContract,
-        functionName: "computeUserHealthRatio",
-        args: [address, "0x5c4a154690AE52844F151bcF3aA44885db3c8A58"],
-      },
-    ],
+    contracts: batchComputeUserHealthRatioArray,
   });
+
+  console.log("batchComputeUserHealthRatio", batchComputeUserHealthRatio);
 
   useEffect(() => {
     if (batchComputeUserHealthRatio) {
@@ -288,9 +255,9 @@ const YourDeposits = () => {
     ? batchComputeUserHealthRatio.map(({ result }) => (Number(result) / 10 ** 18).toFixed(2))
     : [0, 0, 0, 0, 0];
 
-  console.log("batchBalances:", batchDeposits);
-  console.log("Formatted batchBalances", formattedBalances);
-  console.log("batchMints:", batchMints);
+  // console.log("batchBalances:", batchDeposits);
+  // console.log("Formatted batchBalances", formattedBalances);
+  // console.log("batchMints:", batchMints);
 
   const deposits: {
     [key: number]: {

@@ -1,4 +1,4 @@
-import { chainIds } from "@/app/constants/contracts";
+import { chainIds } from "@/app/constants/chains";
 
 export const getBlockExplorerUrl = (chainId: number): string => {
   switch (chainId) {
