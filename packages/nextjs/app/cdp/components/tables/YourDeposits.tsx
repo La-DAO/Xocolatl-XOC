@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import MintModal from "../modals/MintModal";
 import RepayModal from "../modals/RepayModal";
 import { chainIds } from "@/app/constants/chains";
-import { contractData } from "@/app/constants/contracts";
+import { ContractData, contractData } from "@/app/constants/contracts";
 import { Address } from "viem";
 import { useChainId, useReadContract, useReadContracts } from "wagmi";
 import { useAccount } from "wagmi";
@@ -35,6 +35,51 @@ function getContractAddress(address: string | undefined): `0x${string}` {
   return address as `0x${string}`;
 }
 
+type Deposit = {
+  symbol: string;
+  amount: number | string;
+  minted: number;
+  mintingPower: number;
+  houseofReserveContract: string;
+  assetContract: string;
+  houseOfCoinContract: string;
+  assetsAccountantContract: string;
+  userHealthRatio: number;
+  backedTokenID: string;
+};
+
+const generateDeposits = (
+  contractData: ContractData,
+  formattedBalances: number[],
+  formattedMints: number[],
+  formattedMintingPower: number[],
+  formattedUserHealthRatio: number[],
+): { [key: number]: Deposit[] } => {
+  const deposits: { [key: number]: Deposit[] } = {};
+
+  Object.entries(contractData).forEach(([chainId, data]) => {
+    const chainIdNumber = parseInt(chainId, 10);
+
+    // Cast 'data' to the correct type
+    const typedData = data as ContractData[typeof chainIdNumber];
+
+    deposits[chainIdNumber] = Object.entries(typedData.assets).map(([symbol, asset], assetIndex) => ({
+      symbol,
+      amount: parseFloat(formattedBalances[assetIndex]?.toFixed(6) || "0"),
+      minted: parseFloat(formattedMints[assetIndex]?.toFixed(6) || "0"),
+      mintingPower: parseFloat(String(formattedMintingPower[assetIndex] || 0)),
+      houseofReserveContract: typedData.houseOfReserves[symbol],
+      assetContract: asset.contract,
+      houseOfCoinContract: typedData.houseOfCoin,
+      assetsAccountantContract: typedData.assetsAccountant,
+      userHealthRatio: parseFloat(String(formattedUserHealthRatio[assetIndex] || 0)),
+      backedTokenID: asset.backedTokenID || "",
+    }));
+  });
+
+  return deposits;
+};
+
 const YourDeposits = () => {
   const { t } = useTranslation();
   const { address } = useAccount();
@@ -47,9 +92,9 @@ const YourDeposits = () => {
 
   // Define the contract addresses for different chainIds
   const assetsAccountantContractAddresses: ContractAddresses = {
-    [chainIds.BNB]: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-    [chainIds.POLYGON]: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-    [chainIds.BASE]: "0xB93EcD005B6053c6F8428645aAA879e7028408C7",
+    [chainIds.BNB]: contractData[chainIds.BNB].assetsAccountant,
+    [chainIds.POLYGON]: contractData[chainIds.POLYGON].assetsAccountant,
+    [chainIds.BASE]: contractData[chainIds.BASE].assetsAccountant,
     // Add other chainIds and their respective contract addresses as needed
   };
 
@@ -125,11 +170,6 @@ const YourDeposits = () => {
     args: balanceOfBatchMintArgs,
   });
 
-  // const houseOfCoinContract: { address: Address; abi: any } | undefined = {
-  //   address: `0x${contractData[chainId].houseOfCoin}`,
-  //   abi: houseOfCoinABI,
-  // };
-
   const contractAddresses = [
     contractData[chainIds.BNB].houseOfReserves.WETH,
     contractData[chainIds.BNB].houseOfReserves.WBNB,
@@ -172,8 +212,6 @@ const YourDeposits = () => {
   const { data: batchComputeUserHealthRatio } = useReadContracts({
     contracts: batchComputeUserHealthRatioArray,
   });
-
-  console.log("batchComputeUserHealthRatio", batchComputeUserHealthRatio);
 
   useEffect(() => {
     if (batchComputeUserHealthRatio) {
@@ -259,111 +297,13 @@ const YourDeposits = () => {
   // console.log("Formatted batchBalances", formattedBalances);
   // console.log("batchMints:", batchMints);
 
-  const deposits: {
-    [key: number]: {
-      symbol: string;
-      amount: number | string;
-      minted: number;
-      mintingPower: number;
-      houseofReserveContract: string;
-      assetContract: string;
-      houseOfCoinContract: string;
-      assetsAccountantContract: string;
-      userHealthRatio: number;
-      backedTokenID: string;
-    }[];
-  } = {
-    [chainIds.BNB]: [
-      {
-        symbol: "WETH",
-        amount: parseFloat(formattedBalances[0].toFixed(6)),
-        minted: parseFloat(formattedMints[0].toFixed(6)),
-        mintingPower: parseFloat(formattedMintingPower[0]),
-        houseofReserveContract: "0xd411BE9A105Ea7701FabBe58C2834b7033EBC203",
-        assetContract: "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
-        houseOfCoinContract: "0x518Ad4acAdb3FdE4Ab990a79A0583FA8c4E35FcA",
-        assetsAccountantContract: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[0]),
-        backedTokenID: "20522261273989995093535621539527639348056070782168896977856206653483982583625",
-      },
-      {
-        symbol: "WBNB",
-        amount: parseFloat(formattedBalances[1].toFixed(6)),
-        minted: parseFloat(formattedMints[1].toFixed(6)),
-        mintingPower: parseFloat(formattedMintingPower[1]),
-        houseofReserveContract: "0x070ccE6887E70b75015F948b12601D1E759D2024",
-        assetContract: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
-        houseOfCoinContract: "0x518Ad4acAdb3FdE4Ab990a79A0583FA8c4E35FcA",
-        assetsAccountantContract: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[1]),
-        backedTokenID: "36240893346862244708187722980583805772746997097966348518842957091580463611081",
-      },
-    ],
-    [chainIds.POLYGON]: [
-      {
-        symbol: "WETH",
-        amount: parseFloat(formattedBalances[0].toFixed(6)),
-        minted: parseFloat(formattedMints[0].toFixed(6)),
-        mintingPower: parseFloat(formattedMintingPower[2]),
-        houseofReserveContract: "0x2718644E0C38A6a1F82136FC31dcA00DFCdF92a3",
-        assetContract: "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
-        houseOfCoinContract: "0x9d29E6b3D75F5e676f91b69284e015C9CEa20533",
-        assetsAccountantContract: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[2]),
-        backedTokenID: "80640369098075461197954251758880905983781036616487658892797544182481328362385",
-      },
-      {
-        symbol: "MATICX",
-        amount: parseFloat(formattedBalances[1]),
-        minted: parseFloat(formattedMints[1]),
-        mintingPower: parseFloat(formattedMintingPower[3]),
-        houseofReserveContract: "0x76CAc0bC384a49485627D2235fE132e3038b45BB",
-        assetContract: "0xfa68fb4628dff1028cfec22b4162fccd0d45efb6",
-        houseOfCoinContract: "0x9d29E6b3D75F5e676f91b69284e015C9CEa20533",
-        assetsAccountantContract: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[3]),
-        backedTokenID: "17135799413344306437655147654156582701703759838473908703722998121562726910745",
-      },
-      {
-        symbol: "WMATIC",
-        amount: parseFloat(formattedBalances[2]),
-        minted: parseFloat(formattedMints[2]),
-        mintingPower: parseFloat(formattedMintingPower[4]),
-        houseofReserveContract: "0xF56293025437Db5C0024a37dfcEc792125d56A48",
-        assetContract: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
-        houseOfCoinContract: "0x9d29E6b3D75F5e676f91b69284e015C9CEa20533",
-        assetsAccountantContract: "0x076b6C91cC7e72286cd01D967A44787d1f3A6432",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[4]),
-        backedTokenID: "27778163481220956171503989467144576287986246817586635666554224569167019219186",
-      },
-    ],
-    [chainIds.BASE]: [
-      {
-        symbol: "WETH",
-        amount: parseFloat(formattedBalances[0].toFixed(6)),
-        minted: parseFloat(formattedMints[0].toFixed(6)),
-        mintingPower: parseFloat(formattedMintingPower[5]),
-        houseofReserveContract: "0xfF69E183A863151B4152055974aa648b3165014D",
-        assetContract: "0x4200000000000000000000000000000000000006",
-        houseOfCoinContract: "0x02c531Cd9791dD3A31428B2987A82361D72F9b13",
-        assetsAccountantContract: "0xB93EcD005B6053c6F8428645aAA879e7028408C7",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[5]),
-        backedTokenID: "8845051240560412557863425425586194836306989955683227883233854819693793989434",
-      },
-      {
-        symbol: "cbETH",
-        amount: parseFloat(formattedBalances[1].toFixed(6)),
-        minted: parseFloat(formattedMints[1].toFixed(6)),
-        mintingPower: parseFloat(formattedMintingPower[6]),
-        houseofReserveContract: "0x5c4a154690AE52844F151bcF3aA44885db3c8A58",
-        assetContract: "0x2Ae3F1Ec7F1F5012CFEab0185bfc7aa3cf0DEc22",
-        houseOfCoinContract: "0x02c531Cd9791dD3A31428B2987A82361D72F9b13",
-        assetsAccountantContract: "0xB93EcD005B6053c6F8428645aAA879e7028408C7",
-        userHealthRatio: parseFloat(formattedUserHealthRatio[6]),
-        backedTokenID: "113840104691995121390901058070296301361752511786326304414032534053768202616249",
-      },
-    ],
-  };
+  const deposits = generateDeposits(
+    contractData,
+    formattedBalances,
+    formattedMints,
+    formattedMintingPower,
+    formattedUserHealthRatio,
+  );
 
   const chainDeposits = deposits[chainId] || [];
   const allDepositsZero = formattedBalances.every(balance => balance === 0);
