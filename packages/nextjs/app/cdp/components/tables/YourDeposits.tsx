@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import MintModal from "../modals/MintModal";
 import RepayModal from "../modals/RepayModal";
 import { chainIds } from "@/app/constants/chains";
@@ -196,8 +196,8 @@ const YourDeposits = () => {
     }
   }, [batchComputeUserHealthRatio]);
 
-  const [isMintModalOpen, setIsMintModalOpen] = React.useState(false);
-  const [isRepayModalOpen, setIsRepayModalOpen] = React.useState(false);
+  const [isMintModalOpen, setIsMintModalOpen] = useState(false);
+  const [isRepayModalOpen, setIsRepayModalOpen] = useState(false);
   interface SelectedAsset {
     assetName: string;
     houseOfReserveContract: Address;
@@ -207,8 +207,8 @@ const YourDeposits = () => {
     backedTokenID?: bigint | number;
   }
 
-  const [selectedAsset, setSelectedAsset] = React.useState<SelectedAsset | null>(null);
-  const [backedTokenID, setBackedTokenID] = React.useState<bigint | null>(null);
+  const [selectedAsset, setSelectedAsset] = useState<SelectedAsset | null>(null);
+  const [backedTokenID, setBackedTokenID] = useState<bigint | null>(null);
 
   const openMintModal = (
     assetName: string,
