@@ -29,29 +29,31 @@ const generateDeposits = (
   contractData: ContractData,
   formattedBalances: number[],
   formattedMints: number[],
-  formattedMintingPower: number[],
-  formattedUserHealthRatio: number[],
+  formattedMintingPower: string[],
+  formattedUserHealthRatio: string[],
 ): { [key: number]: Deposit[] } => {
   const deposits: { [key: number]: Deposit[] } = {};
-
+  let globalIndex = 0;
   Object.entries(contractData).forEach(([chainId, data]) => {
     const chainIdNumber = parseInt(chainId, 10);
-
-    // Cast 'data' to the correct type
     const typedData = data as ContractData[typeof chainIdNumber];
 
-    deposits[chainIdNumber] = Object.entries(typedData.assets).map(([symbol, asset], assetIndex) => ({
-      symbol,
-      amount: parseFloat(formattedBalances[assetIndex]?.toFixed(6) || "0"),
-      minted: parseFloat(formattedMints[assetIndex]?.toFixed(6) || "0"),
-      mintingPower: parseFloat(String(formattedMintingPower[assetIndex] || 0)),
-      houseofReserveContract: typedData.houseOfReserves[symbol],
-      assetContract: asset.contract,
-      houseOfCoinContract: typedData.houseOfCoin,
-      assetsAccountantContract: typedData.assetsAccountant,
-      userHealthRatio: parseFloat(String(formattedUserHealthRatio[assetIndex] || 0)),
-      backedTokenID: asset.backedTokenID || "",
-    }));
+    deposits[chainIdNumber] = Object.entries(typedData.assets).map(([symbol, asset]) => {
+      const deposit = {
+        symbol,
+        amount: parseFloat(formattedBalances[globalIndex]?.toFixed(6) || "0"),
+        minted: parseFloat(formattedMints[globalIndex]?.toFixed(6) || "0"),
+        mintingPower: parseFloat(String(formattedMintingPower[globalIndex] || 0)),
+        houseofReserveContract: typedData.houseOfReserves[symbol],
+        assetContract: asset.contract,
+        houseOfCoinContract: typedData.houseOfCoin,
+        assetsAccountantContract: typedData.assetsAccountant,
+        userHealthRatio: parseFloat(String(formattedUserHealthRatio[globalIndex] || 0)),
+        backedTokenID: asset.backedTokenID || "",
+      };
+      globalIndex++;
+      return deposit;
+    });
   });
 
   return deposits;
