@@ -272,9 +272,9 @@ const YourDeposits = () => {
     ? batchComputeUserHealthRatio.map(({ result }) => (Number(result) / 10 ** 18).toFixed(2))
     : [0, 0, 0, 0, 0];
 
-  // console.log("batchBalances:", batchDeposits);
-  // console.log("Formatted batchBalances", formattedBalances);
-  // console.log("batchMints:", batchMints);
+  console.log("batchBalances:", batchDeposits);
+  console.log("Formatted batchBalances", formattedBalances);
+  console.log("batchMints:", batchMints);
 
   const deposits = generateDeposits(
     contractData,
@@ -316,7 +316,7 @@ const YourDeposits = () => {
                 >
                   Minting Power
                   <div
-                    className="tooltip tooltip-primary"
+                    className="tooltip tooltip-primary hover:text-neutral"
                     data-tip="The amount of $XOC you can mint based on your deposited amount."
                   >
                     <InformationCircleIcon className="h-5 w-5 inline" />
@@ -328,7 +328,7 @@ const YourDeposits = () => {
                 >
                   Health Factor
                   <div
-                    className="tooltip tooltip-primary"
+                    className="tooltip tooltip-primary hover:text-neutral"
                     data-tip="The Health of your position, which tells you how much you still can leverage your asset's worth. The closer to 1 it gets, the riskier your position becomes, when it gets under 1 the position can get liquidated."
                   >
                     <InformationCircleIcon className="h-5 w-5 inline" />
@@ -347,10 +347,10 @@ const YourDeposits = () => {
                     <p className="text-sm font-medium text-gray-900">{deposit.symbol}</p>
                   </td>
                   <td className="px-2 py-4 hidden sm:table-cell">
-                    <p className="text-sm text-gray-900">{deposit.amount}</p>
+                    <p className="text-sm text-gray-900">{formattedBalances[index]}</p>
                   </td>
                   <td className="px-2 py-4 hidden sm:table-cell">
-                    <p className="text-sm text-gray-900">{deposit.minted}</p>
+                    <p className="text-sm text-gray-900">{formattedMints[index]}</p>
                   </td>
                   <td className="px-2 py-4 hidden sm:table-cell">
                     <p className="text-sm text-gray-900">{deposit.mintingPower}</p>
