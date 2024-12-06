@@ -272,9 +272,9 @@ const YourDeposits = () => {
     ? batchComputeUserHealthRatio.map(({ result }) => (Number(result) / 10 ** 18).toFixed(2))
     : [0, 0, 0, 0, 0];
 
-  console.log("batchBalances:", batchDeposits);
-  console.log("Formatted batchBalances", formattedBalances);
-  console.log("batchMints:", batchMints);
+  // console.log("batchBalances:", batchDeposits);
+  // console.log("Formatted batchBalances", formattedBalances);
+  // console.log("batchMints:", batchMints);
 
   const deposits = generateDeposits(
     contractData,
