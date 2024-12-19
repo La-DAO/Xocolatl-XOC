@@ -4,7 +4,8 @@ import useMint from "@/hooks/useMint";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
-import { useChainId } from "wagmi";
+import { useAccount, useChainId, useReadContract } from "wagmi";
+import { houseOfCoinABI } from "~~/app/components/abis/houseofcoin";
 import { getBlockExplorerUrl } from "~~/app/utils/utils";
 
 interface MintModalProps {
@@ -24,15 +25,33 @@ const MintModal: React.FC<MintModalProps> = ({
   houseOfReserveContract,
   assetContract,
   houseOfCoinContract,
-  assetsAccountantContract,
 }) => {
   const chainId = useChainId();
+  const { address } = useAccount();
   const [amount, setAmount] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [data, setData] = useState<any>(null);
   const [isError, setIsError] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
+
+  const { data: mintingPower } = useReadContract({
+    address: houseOfCoinContract,
+    abi: houseOfCoinABI,
+    functionName: "checkRemainingMintingPower",
+    args: [address, houseOfReserveContract],
+  });
+
+  const formattedMintingPower = mintingPower ? (Number(mintingPower) / 10 ** 18).toFixed(2) : "0.00";
+
+  const { data: userHealthRatio } = useReadContract({
+    address: houseOfCoinContract,
+    abi: houseOfCoinABI,
+    functionName: "computeUserHealthRatio",
+    args: [address, houseOfReserveContract],
+  });
+
+  const formattedUserHealthRatio = userHealthRatio ? (Number(userHealthRatio) / 10 ** 18).toFixed(2) : "0.00";
 
   const { handleMint, isError: mintError, error, mintingHash } = useMint();
 
@@ -105,6 +124,33 @@ const MintModal: React.FC<MintModalProps> = ({
 
   const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${mintingHash}`;
 
+  const getProgressClass = () => {
+    const ratio = parseFloat(formattedUserHealthRatio);
+
+    if (ratio >= 5) {
+      return "progress-success";
+    } else if (ratio >= 2) {
+      return "progress-warning";
+    } else {
+      return "progress-error";
+    }
+  };
+
+  const getProgressBarValue = () => {
+    const healthRatio = parseFloat(formattedUserHealthRatio);
+    if (healthRatio < 2) {
+      return healthRatio * 5; // Maps health ratio to 0-100
+    } else if (healthRatio >= 2 && healthRatio <= 5) {
+      return healthRatio + 20; // Maps health ratio to 0-100 in the 2-5 range
+    } else if (healthRatio >= 5 && healthRatio <= 10) {
+      return healthRatio + 50;
+    } else if (healthRatio > 10 && healthRatio <= 20) {
+      return healthRatio + 70;
+    } else {
+      return 100; // Fully covered for health ratio > 5
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -150,21 +196,18 @@ const MintModal: React.FC<MintModalProps> = ({
             <div className="container-gray-borders flex flex-col gap-2">
               <label className="font-bold text-sm sm:text-base">Transaction Overview</label>
               <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span>Mint Amount</span>
-                <span className="font-bold">{amount ? amount : 0} $XOC</span>
+                <span>Minting Power:</span>
+                <span className="font-bold">{formattedMintingPower}</span>
               </div>
               <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span>House Of Reserve Address:</span>
-                <span className="break-all">{houseOfReserveContract}</span>
+                <span>User Health Ratio:</span>
+                <span className="font-bold">{formattedUserHealthRatio}</span>
               </div>
-              <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span>House Of Coin Address:</span>
-                <span className="break-all">{houseOfCoinContract}</span>
-              </div>
-              <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span>Assets Accountant Address:</span>
-                <span className="break-all">{assetsAccountantContract}</span>
-              </div>
+              <progress
+                className={`progress w-full ${getProgressClass()}`}
+                value={getProgressBarValue()}
+                max="100"
+              ></progress>
             </div>
 
             <div className="flex flex-col sm:flex-row justify-between gap-4">

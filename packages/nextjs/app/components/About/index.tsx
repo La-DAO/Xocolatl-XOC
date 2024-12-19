@@ -118,7 +118,13 @@ const About = () => {
                 <div className="timeline-middle">{/* SVG icon */}</div>
                 <div className="timeline-end mb-10">
                   <time className="font-mono italic">{t("timelineDate4")}</time>
-                  <div className="text-lg font-black">{t("timelineTitle4")}</div>
+                  <div className="text-lg font-black">
+                    {t("timelineTitle4")}{" "}
+                    <Link href="https://devfolio.co/projects/credittalent-42f6" className="underline">
+                      - CrediTalent.
+                    </Link>{" "}
+                  </div>
+
                   {t("timelineDesc4")}
                 </div>
                 <hr />

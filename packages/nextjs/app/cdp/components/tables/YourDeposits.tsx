@@ -207,6 +207,8 @@ const YourDeposits = () => {
     houseOfCoinContract: Address;
     assetsAccountantContract: Address;
     backedTokenID?: bigint | number;
+    formattedMintingPower?: number[];
+    formattedUserHealthRatio?: number[];
   }
 
   const [selectedAsset, setSelectedAsset] = useState<SelectedAsset | null>(null);
@@ -225,6 +227,8 @@ const YourDeposits = () => {
       assetContract,
       houseOfCoinContract,
       assetsAccountantContract,
+      formattedMintingPower,
+      formattedUserHealthRatio,
     });
     setIsMintModalOpen(true);
   };
