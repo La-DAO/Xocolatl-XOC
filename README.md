@@ -2,7 +2,6 @@
 
 <h4 align="center">
   <a href="https://xocolatl.finance">Website</a>
-  <a>DAO's Safe</a>
 </h4>
 
 🤖 Xocolatl (XOC) is an ERC-20 stablecoin pegged to the Mexican Peso (MXN), designed to bring transparency and programmability to Mexican currency transactions on the blockchain. Built on Ethereum using the robust scaffold-eth-2 framework, XOC represents a bridge between traditional Mexican finance and the future of digital currencies.
