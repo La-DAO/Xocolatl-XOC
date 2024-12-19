@@ -5,6 +5,7 @@ import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 import { useAccount, useChainId, useReadContract } from "wagmi";
+import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { houseOfCoinABI } from "~~/app/components/abis/houseofcoin";
 import { getBlockExplorerUrl } from "~~/app/utils/utils";
 
@@ -42,7 +43,9 @@ const MintModal: React.FC<MintModalProps> = ({
     args: [address, houseOfReserveContract],
   });
 
-  const formattedMintingPower = mintingPower ? (Number(mintingPower) / 10 ** 18).toFixed(2) : "0.00";
+  const formattedMintingPower = mintingPower
+    ? new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(Number(mintingPower) / 10 ** 18)
+    : "$0.00";
 
   const { data: userHealthRatio } = useReadContract({
     address: houseOfCoinContract,
@@ -151,6 +154,22 @@ const MintModal: React.FC<MintModalProps> = ({
     }
   };
 
+  const getProgressEmoji = () => {
+    const ratio = parseFloat(formattedUserHealthRatio);
+
+    if (ratio < 2) {
+      return "👎 Not looking too good, are we? Time to get back on track and repay some $XOC!";
+    } else if (ratio >= 2 && ratio < 5) {
+      return "🤔 Hmm, you're on the edge. Maybe a little less debt?";
+    } else if (ratio >= 5 && ratio < 10) {
+      return "👍 You're doing alright, but keep an eye on your position when the market gets volatile!";
+    } else if (ratio >= 10 && ratio < 20) {
+      return "😄 You're cruising! Keep it up, nothing to worry!";
+    } else {
+      return "🤩 You're fitter than a double-shot espresso on Monday morning!";
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -173,7 +192,9 @@ const MintModal: React.FC<MintModalProps> = ({
               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             ></path>
           </svg>
-          <span className="text-xs sm:text-sm">Here I can warn you about an important fact about minting $XOC</span>
+          <span className="text-xs sm:text-sm">
+            Unlock the power of digital MXN pesos with XOC! Experience the future of mexican finance and help us build a more inclusive and fair financial system for everyone.
+          </span>
         </div>
 
         {!data && !isError && (
@@ -191,23 +212,54 @@ const MintModal: React.FC<MintModalProps> = ({
                 <span className="font-bold ml-2">$XOC</span>
               </div>
               {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
+              <p className="text-sm font-bold">
+                Minted Amount (including 1.5% fee)
+                <div
+                  className="tooltip tooltip-primary hover:text-neutral  dark:hover:text-neutral"
+                  data-tip="A 1.5% protocol fee will be incurred at minting. This fee goes directly to our DAO treasury to support ongoing development, maintenance, and security of the protocol."
+                >
+                  <InformationCircleIcon className="h-5 w-5 inline" />
+                </div>
+              </p>
+              <div className="flex items-center">
+                <div className="without-borders w-full text-sm sm:text-base">
+                  {amount ? (parseFloat(amount) * 1.015).toFixed(2) : "0.00"}
+                </div>
+                <span className="font-bold ml-2">$XOC</span>
+              </div>
             </div>
-
             <div className="container-gray-borders flex flex-col gap-2">
-              <label className="font-bold text-sm sm:text-base">Transaction Overview</label>
+              <label className="font-bold text-sm sm:text-base">Poisition Overview</label>
               <div className="flex justify-between items-center text-xs sm:text-sm">
                 <span>Minting Power:</span>
-                <span className="font-bold">{formattedMintingPower}</span>
+                <span className="font-bold">
+                  <div
+                    className="tooltip tooltip-primary hover:text-neutral  dark:hover:text-neutral"
+                    data-tip="The amount of $XOC you can still mint based on your deposited collateral amount. The more you mint the less healthy your position becomes."
+                  >
+                    <InformationCircleIcon className="h-5 w-5 inline" />
+                  </div>
+                  {formattedMintingPower}
+                </span>
               </div>
               <div className="flex justify-between items-center text-xs sm:text-sm">
                 <span>User Health Ratio:</span>
-                <span className="font-bold">{formattedUserHealthRatio}</span>
+                <span className="font-bold">
+                  <div
+                    className="tooltip tooltip-primary hover:text-neutral dark:hover:text-neutral"
+                    data-tip="A ratio of 1 means your borrowed amount equals your collateral. Values above 1 indicate a healthy position (the higher, the safer), while falling below 1 risks liquidation. For example, a ratio of 2 means you've borrowed 50% of your maximum, while 1.2 means you're at 83% of your limit."
+                  >
+                    <InformationCircleIcon className="h-5 w-5 inline" />
+                  </div>
+                  {formattedUserHealthRatio}
+                </span>
               </div>
               <progress
                 className={`progress w-full ${getProgressClass()}`}
                 value={getProgressBarValue()}
                 max="100"
               ></progress>
+              <span className="ml-2 text-2xl">{getProgressEmoji()}</span>
             </div>
 
             <div className="flex flex-col sm:flex-row justify-between gap-4">
