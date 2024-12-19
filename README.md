@@ -1,4 +1,4 @@
-# 🍫 🇲🇽 Xocolatl ($XOC) - Mexican Peso Stablecoin
+# 🍫 Xocolatl ($XOC) - Mexican Peso Stablecoin
 
 <h4 align="center">
   <a href="https://xocolatl.finance">Website</a>
