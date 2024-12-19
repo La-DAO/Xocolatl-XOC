@@ -193,7 +193,8 @@ const MintModal: React.FC<MintModalProps> = ({
             ></path>
           </svg>
           <span className="text-xs sm:text-sm">
-            Unlock the power of digital MXN pesos with XOC! Experience the future of mexican finance and help us build a more inclusive and fair financial system for everyone.
+            Unlock the power of digital MXN pesos with XOC! Experience the future of mexican finance and help us build a
+            more inclusive and fair financial system for everyone.
           </span>
         </div>
 
