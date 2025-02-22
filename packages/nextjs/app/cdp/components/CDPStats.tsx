@@ -5,6 +5,7 @@ import { XOCABI } from "../../../app/components/abis/xocabis";
 import BaseLogo from "@/public/Base-Logo.jpg";
 import BinanceLogo from "@/public/BinanceLogo.png";
 import PolygonLogo from "@/public/PolygonLogo.png";
+import OptimismLogo from "@/public/optimism-logo.png";
 import { Address, formatEther } from "viem";
 import { useChainId, useReadContract, useReadContracts } from "wagmi";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
@@ -17,6 +18,7 @@ const CDPStats: React.FC = () => {
     56: "Binance Smart Chain",
     137: "Polygon",
     8453: t("Base"),
+    10: "Optimism",
   };
   const chainName = chainNames[chainId] || "Unknown Chain";
 
@@ -97,6 +99,20 @@ const CDPStats: React.FC = () => {
       },
     ];
     assetNames = ["WETH", "cbETH"];
+  } else if (chainId === 10) {
+    houseOfReserveContracts = [
+      {
+        address: "0x7fB68dc36044FcC02eEE779A9b35AC9D75e659Be",
+        abi: houseOfReserveABI,
+        functionName: "totalDeposits",
+      },
+      {
+        address: "0x2424BcD327DFD8e5DfF73eCB606CCED4235c1990",
+        abi: houseOfReserveABI,
+        functionName: "totalDeposits",
+      },
+    ];
+    assetNames = ["WETH", "OP"];
   }
 
   // Call to fetch data from the House of Reserve contracts
@@ -126,6 +142,8 @@ const CDPStats: React.FC = () => {
     logoSrc = PolygonLogo;
   } else if (chainId === 56) {
     logoSrc = BinanceLogo;
+  } else if (chainId === 10) {
+    logoSrc = OptimismLogo;
   }
 
   const handleProofClick = () => {
@@ -136,6 +154,8 @@ const CDPStats: React.FC = () => {
       explorerUrl = "https://bscscan.com/token/0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf";
     } else if (chainId === 8453) {
       explorerUrl = "https://basescan.org/token/0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf";
+    } else if (chainId === 10) {
+      explorerUrl = "https://optimistic.etherscan.io/token/0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf";
     }
     window.open(explorerUrl, "_blank");
   };

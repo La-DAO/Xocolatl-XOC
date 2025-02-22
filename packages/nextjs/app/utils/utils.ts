@@ -18,6 +18,8 @@ export const getBlockExplorerUrl = (chainId: number): string => {
       return "https://polygonscan.com/tx/";
     case chainIds.BASE: // Base Mainnet
       return "https://basescan.org/tx/";
+    case chainIds.OPTIMISM: // Optimism Mainnet
+      return "https://optimistic.etherscan.io/tx/";
     default:
       return ""; // Fallback for unsupported networks
   }

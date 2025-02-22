@@ -98,4 +98,26 @@ export const contractData: ContractData = {
       },
     },
   },
+  [chainIds.OPTIMISM]: {
+    houseOfReserves: {
+      WETH: "0x7fB68dc36044FcC02eEE779A9b35AC9D75e659Be",
+      OP: "0x2424BcD327DFD8e5DfF73eCB606CCED4235c1990",
+    },
+    houseOfCoin: "0x1BD6dc9162e90ca4c86Ee721b80808D21a557dEd",
+    assetsAccountant: "0xCAF99D6cF30E8e735309E4ED1dDC47E47ac0EEB9",
+    assets: {
+      WETH: {
+        contract: "0x4200000000000000000000000000000000000006",
+        maxLTV: "80%",
+        liquidationThreshold: "85%",
+        backedTokenID: "89191140644899609017819904470662040145608595656030110807049069263839213849596",
+      },
+      OP: {
+        contract: "0x4200000000000000000000000000000000000042",
+        maxLTV: "80%",
+        liquidationThreshold: "85%",
+        backedTokenID: "85740053480844256891889697717021793028884333653939004018845862249304599430213",
+      },
+    },
+  },
 };

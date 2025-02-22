@@ -20,6 +20,7 @@ const LiquidityWidget: React.FC = () => {
   const [tokenB, setTokenB] = useState(""); // XOC amount
   const [xocAllowanceState, xocSetAllowanceState] = useState<string>("0");
   const [usdcAllowanceState, usdcSetAllowanceState] = useState<string>("0");
+
   // State for share withdrawal input
   const [shareAmount, setShareAmount] = useState(""); // Share amount
 
