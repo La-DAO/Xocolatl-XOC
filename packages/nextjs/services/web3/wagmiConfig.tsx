@@ -12,6 +12,8 @@ export const enabledChains = targetNetworks.find((network: Chain) => network.id 
   ? targetNetworks
   : ([...targetNetworks, mainnet] as const);
 
+console.log("Enabled Chains:", enabledChains);
+
 export const wagmiConfig = createConfig({
   chains: enabledChains,
   connectors: wagmiConnectors,

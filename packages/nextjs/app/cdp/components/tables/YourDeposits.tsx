@@ -74,6 +74,7 @@ const YourDeposits = () => {
     [chainIds.BNB]: contractData[chainIds.BNB].assetsAccountant,
     [chainIds.POLYGON]: contractData[chainIds.POLYGON].assetsAccountant,
     [chainIds.BASE]: contractData[chainIds.BASE].assetsAccountant,
+    [chainIds.OPTIMISM]: contractData[chainIds.OPTIMISM].assetsAccountant,
     // Add other chainIds and their respective contract addresses as needed
   };
 
@@ -102,6 +103,14 @@ const YourDeposits = () => {
       [
         "103699178623717208254151570900052288551889562116172163191481545905964204685853",
         "48535059369184038424797331578893275455355989669714862332699705636188497614796",
+      ],
+    ];
+  } else if (chainId === chainIds.OPTIMISM) {
+    balanceOfBatchArgs = [
+      [address, address],
+      [
+        "98238957695230476703622097749160738363155613901659799469608818483013413714241",
+        "17446454257212154086622051658766467795745126333227561378411236993131976587669",
       ],
     ];
   }
@@ -140,6 +149,14 @@ const YourDeposits = () => {
         "113840104691995121390901058070296301361752511786326304414032534053768202616249",
       ],
     ];
+  } else if (chainId === chainIds.OPTIMISM) {
+    balanceOfBatchMintArgs = [
+      [address, address],
+      [
+        "89191140644899609017819904470662040145608595656030110807049069263839213849596",
+        "85740053480844256891889697717021793028884333653939004018845862249304599430213",
+      ],
+    ];
   }
 
   const { data: batchMints } = useReadContract({
@@ -157,6 +174,8 @@ const YourDeposits = () => {
     contractData[chainIds.POLYGON].houseOfReserves.WMATIC,
     contractData[chainIds.BASE].houseOfReserves.WETH,
     contractData[chainIds.BASE].houseOfReserves.CBETH,
+    contractData[chainIds.OPTIMISM].houseOfReserves.WETH,
+    contractData[chainIds.OPTIMISM].houseOfReserves.OP,
   ];
 
   const houseOfCoinAddress = getContractAddress(contractData[chainId].houseOfCoin);
