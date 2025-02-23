@@ -12,9 +12,16 @@ interface RepayModalProps {
   onClose: () => void;
   backedTokenID: string;
   houseOfCoinContract: Address;
+  mintedAmount: number; // Add this new prop
 }
 
-const RepayModal: React.FC<RepayModalProps> = ({ isOpen, onClose, backedTokenID, houseOfCoinContract }) => {
+const RepayModal: React.FC<RepayModalProps> = ({
+  isOpen,
+  onClose,
+  backedTokenID,
+  houseOfCoinContract,
+  mintedAmount,
+}) => {
   const chainId = useChainId();
   const [amount, setAmount] = useState("");
   const [isValid, setIsValid] = useState(false);
@@ -116,7 +123,11 @@ const RepayModal: React.FC<RepayModalProps> = ({ isOpen, onClose, backedTokenID,
               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             ></path>
           </svg>
-          <span className="text-xs sm:text-sm">Here I can warn you about an important fact about repaying $XOC</span>
+          <span className="text-xs sm:text-sm">
+            Please ensure that you have sufficient funds to cover the repayment amount. Repaying $XOC will burn the
+            specified amount from your balance, reducing your debt. Make sure to double-check the amount before
+            proceeding.
+          </span>
         </div>
 
         {!data && !isError && (
@@ -130,6 +141,7 @@ const RepayModal: React.FC<RepayModalProps> = ({ isOpen, onClose, backedTokenID,
                   placeholder="0.00"
                   value={amount}
                   onChange={handleChange}
+                  max={mintedAmount}
                 />
                 <span className="font-bold ml-2">$XOC</span>
               </div>
@@ -138,6 +150,10 @@ const RepayModal: React.FC<RepayModalProps> = ({ isOpen, onClose, backedTokenID,
 
             <div className="container-gray-borders flex flex-col gap-2">
               <label className="font-bold text-sm sm:text-base">Transaction Overview</label>
+              <div className="flex justify-between items-center text-xs sm:text-sm">
+                <span>Total Minted Amount</span>
+                <span className="font-bold">{mintedAmount.toFixed(6)} $XOC</span>
+              </div>
               <div className="flex justify-between items-center text-xs sm:text-sm">
                 <span>Repay Amount</span>
                 <span className="font-bold">{amount ? amount : 0} $XOC</span>

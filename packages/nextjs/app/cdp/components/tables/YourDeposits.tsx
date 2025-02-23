@@ -34,21 +34,40 @@ const generateDeposits = (
 ): { [key: number]: Deposit[] } => {
   const deposits: { [key: number]: Deposit[] } = {};
   let globalIndex = 0;
+  let mintingPowerIndex = 0;
+  let healthRatioIndex = 0;
+
   Object.entries(contractData).forEach(([chainId, data]) => {
     const chainIdNumber = parseInt(chainId, 10);
     const typedData = data as ContractData[typeof chainIdNumber];
 
     deposits[chainIdNumber] = Object.entries(typedData.assets).map(([symbol, asset]) => {
+      // Get the correct indices based on the chain
+      const currentChainId = parseInt(chainId, 10);
+      if (currentChainId === chainIds.BNB) {
+        mintingPowerIndex = globalIndex;
+        healthRatioIndex = globalIndex;
+      } else if (currentChainId === chainIds.POLYGON) {
+        mintingPowerIndex = globalIndex + 2; // Adjust based on BNB assets
+        healthRatioIndex = globalIndex + 2;
+      } else if (currentChainId === chainIds.BASE) {
+        mintingPowerIndex = globalIndex + 5; // Adjust based on BNB + POLYGON assets
+        healthRatioIndex = globalIndex + 5;
+      } else if (currentChainId === chainIds.OPTIMISM) {
+        mintingPowerIndex = globalIndex + 7; // Adjust based on BNB + POLYGON + BASE assets
+        healthRatioIndex = globalIndex + 7;
+      }
+
       const deposit = {
         symbol,
         amount: parseFloat(formattedBalances[globalIndex]?.toFixed(6) || "0"),
         minted: parseFloat(formattedMints[globalIndex]?.toFixed(6) || "0"),
-        mintingPower: parseFloat(String(formattedMintingPower[globalIndex] || 0)),
+        mintingPower: parseFloat(formattedMintingPower[mintingPowerIndex] || "0"),
         houseofReserveContract: typedData.houseOfReserves[symbol],
         assetContract: asset.contract,
         houseOfCoinContract: typedData.houseOfCoin,
         assetsAccountantContract: typedData.assetsAccountant,
-        userHealthRatio: parseFloat(String(formattedUserHealthRatio[globalIndex] || 0)),
+        userHealthRatio: parseFloat(formattedUserHealthRatio[healthRatioIndex] || "0"),
         backedTokenID: asset.backedTokenID || "",
       };
       globalIndex++;
@@ -228,6 +247,7 @@ const YourDeposits = () => {
     backedTokenID?: bigint | number;
     formattedMintingPower?: number[];
     formattedUserHealthRatio?: number[];
+    mintedAmount?: number; // Add this property
   }
 
   const [selectedAsset, setSelectedAsset] = useState<SelectedAsset | null>(null);
@@ -264,6 +284,7 @@ const YourDeposits = () => {
     houseOfCoinContract: Address,
     assetsAccountantContract: Address,
     backedTokenID: string,
+    mintedAmount: number, // Add this parameter
   ) => {
     setSelectedAsset({
       assetName,
@@ -271,6 +292,7 @@ const YourDeposits = () => {
       assetContract,
       houseOfCoinContract,
       assetsAccountantContract,
+      mintedAmount, // Add this to the selectedAsset state
     });
     setBackedTokenID(BigInt(backedTokenID));
     setIsRepayModalOpen(true);
@@ -406,6 +428,7 @@ const YourDeposits = () => {
                           deposit.houseOfCoinContract as Address,
                           deposit.assetsAccountantContract as Address,
                           deposit.backedTokenID as string,
+                          deposit.minted, // Pass the minted amount
                         )
                       }
                     >
@@ -435,6 +458,7 @@ const YourDeposits = () => {
               onClose={closeRepayModal}
               backedTokenID={backedTokenID?.toString() ?? "0"}
               houseOfCoinContract={selectedAsset.houseOfCoinContract}
+              mintedAmount={selectedAsset.mintedAmount ?? 0} // Add this prop
             />
           )}
         </>
