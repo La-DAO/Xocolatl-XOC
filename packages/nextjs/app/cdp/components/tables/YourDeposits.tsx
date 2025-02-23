@@ -247,6 +247,7 @@ const YourDeposits = () => {
     backedTokenID?: bigint | number;
     formattedMintingPower?: number[];
     formattedUserHealthRatio?: number[];
+    mintedAmount?: number; // Add this property
   }
 
   const [selectedAsset, setSelectedAsset] = useState<SelectedAsset | null>(null);
@@ -283,6 +284,7 @@ const YourDeposits = () => {
     houseOfCoinContract: Address,
     assetsAccountantContract: Address,
     backedTokenID: string,
+    mintedAmount: number, // Add this parameter
   ) => {
     setSelectedAsset({
       assetName,
@@ -290,6 +292,7 @@ const YourDeposits = () => {
       assetContract,
       houseOfCoinContract,
       assetsAccountantContract,
+      mintedAmount, // Add this to the selectedAsset state
     });
     setBackedTokenID(BigInt(backedTokenID));
     setIsRepayModalOpen(true);
@@ -425,6 +428,7 @@ const YourDeposits = () => {
                           deposit.houseOfCoinContract as Address,
                           deposit.assetsAccountantContract as Address,
                           deposit.backedTokenID as string,
+                          deposit.minted, // Pass the minted amount
                         )
                       }
                     >
@@ -454,6 +458,7 @@ const YourDeposits = () => {
               onClose={closeRepayModal}
               backedTokenID={backedTokenID?.toString() ?? "0"}
               houseOfCoinContract={selectedAsset.houseOfCoinContract}
+              mintedAmount={selectedAsset.mintedAmount ?? 0} // Add this prop
             />
           )}
         </>
