@@ -139,6 +139,16 @@ const About = () => {
                 </div>
                 <hr />
               </li>
+              <li>
+                <hr />
+                <div className="timeline-middle">{/* SVG icon */}</div>
+                <div className="timeline-end mb-10">
+                  <time className="font-mono italic">{t("timelineDate6")}</time>
+                  <div className="text-lg font-black">{t("timelineTitle6")}</div>
+                  {t("timelineDesc6")}
+                </div>
+                <hr />
+              </li>
             </ul>
           </div>
         </div>
