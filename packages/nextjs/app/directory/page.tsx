@@ -78,13 +78,15 @@ const Directory = () => {
   return (
     <div className="flex w-4/5 m-auto gap-4">
       {/* Sidebar for categories */}
-      <div className="w-1/4 p-4 bg-gray-100 rounded-xl text-primary">
-        <h2 className="text-xl font-bold text-primary mb-4">{t("Categories")}</h2>
+      <div className="w-1/4 p-4 bg-base-100 rounded-xl text-xl text-primary dark:text-white">
+        <h2 className="text-3xl font-bold text-primary dark:text-white mb-4">{t("Categories")}</h2>
         <ul>
           {categories.map((category, index) => (
             <li
               key={index}
-              className={`cursor-pointer mb-2 ${selectedCategory === category ? "font-bold text-primary" : ""}`}
+              className={`cursor-pointer mb-2 ${
+                selectedCategory === category ? "font-bold text-3xl text-primary dark:text-white" : ""
+              }`}
               onClick={() => setSelectedCategory(category)}
             >
               {t(category)}
