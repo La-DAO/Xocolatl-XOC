@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "../context/LanguageContext";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
 
 // Define an interface for the use-case objects
 interface UseCase {
@@ -18,19 +21,19 @@ const useCases: UseCase[] = [
     title: "Lending",
     description: "Use $XOC for lending purposes.",
     link: "/lending",
-    image: "/Transhumans - Groceries.svg",
+    image: "/Transhumans - New Beginnings.svg",
   },
   {
     title: "Liquidity Providing",
     description: "Provide liquidity with $XOC.",
     link: "/liquidity",
-    image: "/Transhumans - Plants.svg",
+    image: "/Transhumans - Pacheco.svg",
   },
   {
     title: "Liquidations",
     description: "Participate in liquidations using $XOC.",
     link: "/liquidations",
-    image: "/Transhumans - Gamestation.svg",
+    image: "/Transhumans - Kiddo.svg",
   },
   {
     title: "Everyday Currency",
@@ -38,12 +41,17 @@ const useCases: UseCase[] = [
     link: "/currency",
     image: "/Transhumans - Bueno.svg",
   },
-  { title: "Staking", description: "Stake $XOC to earn rewards.", link: "/staking", image: "/Transhumans - Rogue.svg" },
+  {
+    title: "Staking",
+    description: "Stake $XOC to earn rewards.",
+    link: "/staking",
+    image: "/Transhumans - Reflecting.svg",
+  },
   {
     title: "Governance",
     description: "Participate in governance with $XOC.",
     link: "/governance",
-    image: "/Transhumans - Pacheco.svg",
+    image: "/Transhumans - Rogue.svg",
   },
   {
     title: "Payments",
@@ -75,8 +83,16 @@ const Directory = () => {
     setSelectedUseCase(null);
   };
 
+  const carouselSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
   return (
-    <div className="flex w-4/5 m-auto gap-4">
+    <div className="flex w-full mt-4 gap-4">
       {/* Sidebar for categories */}
       <div className="w-1/4 p-4 bg-base-100 rounded-xl text-xl text-primary dark:text-white">
         <h2 className="text-3xl font-bold text-primary dark:text-white mb-4">{t("Categories")}</h2>
@@ -111,11 +127,11 @@ const Directory = () => {
           {filteredUseCases.map((useCase, index) => (
             <div
               key={index}
-              className="card flex flex-col justify-end items-end relative overflow-hidden rounded-xl cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:bg-secondary"
+              className="card flex flex-col justify-end items-end relative overflow-hidden rounded-xl cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:bg-secondary dark:hover:bg-neutral dark:hover:text-secondary"
               onClick={() => openModal(useCase)}
               style={{ height: "250px" }}
             >
-              <Image src={useCase.image} alt={useCase.title} width={140} height={100} />
+              <Image src={useCase.image} alt={useCase.title} width={210} height={100} />
 
               <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4">
                 <h2 className="text-xl font-semibold text-white mb-2">{t(useCase.title)}</h2>
@@ -135,16 +151,33 @@ const Directory = () => {
             </button>
             <h1 className="text-4xl text-primary font-bold mb-4">{selectedUseCase.title}</h1>
             <p className="mb-4 text-primary">{selectedUseCase.description}</p>
-            {/* Carousel placeholder */}
-            <div className="mb-4">
-              <Image
-                src={selectedUseCase.image}
-                alt={selectedUseCase.title}
-                width={600}
-                height={300}
-                objectFit="cover"
-              />
-            </div>
+            {/* Carousel */}
+            <Slider {...carouselSettings} className="mb-4">
+              <div>
+                <Image
+                  src={selectedUseCase.image}
+                  alt={selectedUseCase.title}
+                  width={400}
+                  height={200}
+                  objectFit="cover"
+                />
+              </div>
+              <div>
+                <Image
+                  src={selectedUseCase.image}
+                  alt={selectedUseCase.title}
+                  width={400}
+                  height={200}
+                  objectFit="cover"
+                />
+              </div>
+            </Slider>
+            {/* Additional context */}
+            <p className="mb-4 text-primary">
+              Here is a large paragraph providing more context about the use-case. This section can be expanded with
+              detailed information to help users understand the application and benefits of the use-case.
+            </p>
+            <hr className="my-4" />
             {/* Additional links */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Link href={selectedUseCase.link} className="block bg-primary text-white text-center py-2 rounded-lg">
