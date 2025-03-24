@@ -113,8 +113,10 @@ const Directory = () => {
               key={index}
               className="card flex flex-col justify-end items-end relative overflow-hidden rounded-xl cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:bg-secondary"
               onClick={() => openModal(useCase)}
+              style={{ height: "250px" }}
             >
-              <img src={useCase.image} alt={useCase.title} className="w-fit h-60 object-cover" />
+              <Image src={useCase.image} alt={useCase.title} width={140} height={100} />
+
               <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4">
                 <h2 className="text-xl font-semibold text-white mb-2">{t(useCase.title)}</h2>
                 <p className="text-gray-300">{t(useCase.description)}</p>
