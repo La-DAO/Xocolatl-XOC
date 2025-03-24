@@ -38,6 +38,8 @@
     "usehooks-ts@^2.7.2": "patch:usehooks-ts@npm:^2.7.2#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch"
   },
   "devDependencies": {
+    "@types/react-slick": "^0",
+    "@types/slick-carousel": "^1",
     "husky": "~8.0.3",
     "lint-staged": "~13.2.2",
     "next": "~14.0.4",
@@ -59,7 +61,9 @@
     "fs": "^0.0.1-security",
     "lucide-react": "^0.483.0",
     "next-i18n-router": "^5.5.1",
+    "react-slick": "^0.30.3",
     "react-wrap-balancer": "^1.1.1",
+    "slick-carousel": "^1.8.1",
     "wagmi": "^2.11.0"
   }
 }
