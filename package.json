@@ -57,7 +57,9 @@
     "framer-motion": "^11.3.24",
     "framer-motion-3d": "^11.3.2",
     "fs": "^0.0.1-security",
+    "lucide-react": "^0.483.0",
     "next-i18n-router": "^5.5.1",
+    "react-wrap-balancer": "^1.1.1",
     "wagmi": "^2.11.0"
   }
 }

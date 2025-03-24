@@ -7680,6 +7680,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lucide-react@npm:^0.483.0":
+  version: 0.483.0
+  resolution: "lucide-react@npm:0.483.0"
+  peerDependencies:
+    react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 03870326d499b532d6d3f09e641142ebb5b24acd0d7e56d3365d322dc1ad93a4409631da221cdbaa3d6ae5d1603ee735fc5790ae931c28c14fb0ef5470f57c21
+  languageName: node
+  linkType: hard
+
 "make-dir@npm:^3.1.0":
   version: 3.1.0
   resolution: "make-dir@npm:3.1.0"
@@ -9333,6 +9342,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-wrap-balancer@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "react-wrap-balancer@npm:1.1.1"
+  peerDependencies:
+    react: ">=16.8.0 || ^17.0.0 || ^18"
+  checksum: 68d9417efa751eced4a8c9f7e3f1f43d59fbf9ecf42dfd90b7b4c33f5af855766bb21bf967c9fc8a0f09f6ca4a58071c1dd47af2c813b33b3813ebe7efcb32f2
+  languageName: node
+  linkType: hard
+
 "react@npm:~18.2.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
@@ -9711,8 +9729,10 @@ __metadata:
     fs: ^0.0.1-security
     husky: ~8.0.3
     lint-staged: ~13.2.2
+    lucide-react: ^0.483.0
     next: ~14.0.4
     next-i18n-router: ^5.5.1
+    react-wrap-balancer: ^1.1.1
     vercel: ~32.4.1
     wagmi: ^2.11.0
   languageName: unknown
