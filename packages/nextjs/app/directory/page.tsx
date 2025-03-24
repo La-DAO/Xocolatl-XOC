@@ -119,7 +119,7 @@ const Directory = () => {
           placeholder={t("Search use-cases...")}
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
-          className="p-2 border bg-base-300 border-gray-300 rounded-lg mb-4"
+          className="p-2  bg-base-300 dark:bg-base-100 text-white rounded-lg mb-4"
         />
 
         {/* Use-case cards */}
@@ -127,7 +127,7 @@ const Directory = () => {
           {filteredUseCases.map((useCase, index) => (
             <div
               key={index}
-              className="card flex flex-col justify-end items-end relative overflow-hidden rounded-xl cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:bg-secondary dark:hover:bg-neutral dark:hover:text-secondary"
+              className="card flex flex-col justify-end items-end relative overflow-hidden rounded-xl cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:bg-base-300 dark:hover:bg-neutral dark:hover:text-secondary"
               onClick={() => openModal(useCase)}
               style={{ height: "250px" }}
             >
