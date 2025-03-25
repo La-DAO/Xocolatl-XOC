@@ -4,9 +4,6 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "../context/LanguageContext";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
 
 // Define an interface for the use-case objects
 interface UseCase {
@@ -14,6 +11,10 @@ interface UseCase {
   description: string;
   link: string;
   image: string;
+  benefits: string[];
+  context: string;
+  caseStudy1Link: string;
+  caseStudy2Link: string;
 }
 
 const useCases: UseCase[] = [
@@ -21,43 +22,120 @@ const useCases: UseCase[] = [
     title: "Lending",
     description: "Use $XOC for lending purposes.",
     link: "/lending",
-    image: "/Transhumans - New Beginnings.svg",
+    image: "/Transhumans - New Beginnings (1).svg",
+    benefits: [
+      "Audited and Secure: $XOC is rigorously audited, ensuring that the protocol is secure and reliable.",
+      "Robust Mechanisms for Stability: $XOC employs advanced mechanisms such as liquidations and rebalancing bots.",
+      "Powered by Alux on Base: We've deployed Alux, our lending market protocol, on Base—a fork of the renowned Aave v3 contracts.",
+      "Pioneering the First Mexican Decentralized Lending Market: $XOC is at the forefront of creating the first fully decentralized lending market in Mexico.",
+      "Unlock New On-Chain Opportunities: With $XOC, you can earn interest, leverage assets, and participate in DeFi innovations.",
+    ],
+    context:
+      "In the rapidly evolving world of decentralized finance (DeFi), stablecoins have emerged as a cornerstone, providing stability and liquidity in an otherwise volatile market. As the DeFi ecosystem continues to grow, choosing the right stablecoin is crucial for maximizing your financial potential. Here's why $XOC stands out as a top choice for lending.",
+    caseStudy1Link: "/lending",
+    caseStudy2Link: "/case-study/lending-2",
   },
   {
     title: "Liquidity Providing",
     description: "Provide liquidity with $XOC.",
     link: "/liquidity",
-    image: "/Transhumans - Pacheco.svg",
+    image: "/Transhumans - Pacheco (1).svg",
+    benefits: [
+      "Earn Fees: Provide liquidity and earn fees from trades.",
+      "Support the Ecosystem: Help maintain liquidity and stability in the market.",
+      "Flexible Options: Choose from various pools to provide liquidity.",
+      "Risk Management: Benefit from risk management tools to protect your assets.",
+      "Community Driven: Participate in a community-driven liquidity ecosystem.",
+    ],
+    context:
+      "Liquidity providing is essential for maintaining a healthy and efficient market. By providing liquidity with $XOC, you can earn fees and support the ecosystem. Discover the benefits of being a liquidity provider in the DeFi space.",
+    caseStudy1Link: "/case-study/liquidity-1",
+    caseStudy2Link: "/case-study/liquidity-2",
   },
   {
     title: "Liquidations",
     description: "Participate in liquidations using $XOC.",
     link: "/liquidations",
-    image: "/Transhumans - Kiddo.svg",
+    image: "/Transhumans - Kiddo (1).svg",
+    benefits: [
+      "Profit Opportunities: Earn profits by participating in liquidations.",
+      "Market Efficiency: Help maintain market efficiency and stability.",
+      "Advanced Tools: Use advanced tools to participate in liquidations effectively.",
+      "Secure Protocol: Participate in a secure and audited protocol.",
+      "Community Support: Join a community of liquidation participants.",
+    ],
+    context:
+      "Liquidations play a crucial role in maintaining market stability. By participating in liquidations with $XOC, you can seize profit opportunities while contributing to market efficiency. Learn how you can benefit from this dynamic aspect of DeFi.",
+    caseStudy1Link: "/case-study/liquidations-1",
+    caseStudy2Link: "/case-study/liquidations-2",
   },
   {
     title: "Everyday Currency",
     description: "Use $XOC as an everyday currency.",
     link: "/currency",
-    image: "/Transhumans - Bueno.svg",
+    image: "/Transhumans - Bueno (1).svg",
+    benefits: [
+      "Stable Value: Use a stable currency for everyday transactions.",
+      "Wide Acceptance: Accepted by a growing number of merchants.",
+      "Low Fees: Enjoy low transaction fees compared to traditional currencies.",
+      "Fast Transactions: Benefit from fast and efficient transactions.",
+      "Global Reach: Use $XOC anywhere in the world.",
+    ],
+    context:
+      "As a stable and widely accepted currency, $XOC is perfect for everyday transactions. Enjoy low fees, fast transactions, and global reach with $XOC as your everyday currency.",
+    caseStudy1Link: "/case-study/currency-1",
+    caseStudy2Link: "/case-study/currency-2",
   },
   {
     title: "Staking",
     description: "Stake $XOC to earn rewards.",
     link: "/staking",
-    image: "/Transhumans - Reflecting.svg",
+    image: "/Transhumans - Reflecting (1).svg",
+    benefits: [
+      "Earn Rewards: Stake your $XOC and earn rewards over time.",
+      "Secure the Network: Help secure the network by staking your assets.",
+      "Flexible Staking: Choose from various staking options.",
+      "Community Governance: Participate in community governance decisions.",
+      "Long-Term Growth: Benefit from long-term growth opportunities.",
+    ],
+    context:
+      "Staking $XOC allows you to earn rewards while contributing to network security. Explore the benefits of staking and how it can lead to long-term growth.",
+    caseStudy1Link: "/case-study/staking-1",
+    caseStudy2Link: "/case-study/staking-2",
   },
   {
     title: "Governance",
     description: "Participate in governance with $XOC.",
     link: "/governance",
-    image: "/Transhumans - Rogue.svg",
+    image: "/Transhumans - Looking Ahead (1).svg",
+    benefits: [
+      "Have a Voice: Participate in governance decisions and shape the future.",
+      "Community Driven: Join a community-driven governance model.",
+      "Transparent Processes: Benefit from transparent and fair governance processes.",
+      "Influence Development: Influence the development and direction of the protocol.",
+      "Earn Rewards: Earn rewards for participating in governance activities.",
+    ],
+    context:
+      "Governance is at the heart of decentralized finance. With $XOC, you can have a voice in governance decisions and help shape the future of the protocol. Discover the power of community-driven governance.",
+    caseStudy1Link: "/case-study/governance-1",
+    caseStudy2Link: "/case-study/governance-2",
   },
   {
     title: "Payments",
     description: "Make payments using $XOC.",
     link: "/payments",
-    image: "/Transhumans - Chaotic Good.svg",
+    image: "/Transhumans - Chaotic Good (1).svg",
+    benefits: [
+      "Fast and Secure: Make fast and secure payments with $XOC.",
+      "Low Fees: Enjoy low transaction fees for payments.",
+      "Global Accessibility: Make payments anywhere in the world.",
+      "User-Friendly: Easy to use for both merchants and consumers.",
+      "Innovative Solutions: Benefit from innovative payment solutions.",
+    ],
+    context:
+      "With $XOC, making payments is fast, secure, and cost-effective. Whether you're a merchant or a consumer, $XOC offers innovative solutions for all your payment needs.",
+    caseStudy1Link: "/case-study/payments-1",
+    caseStudy2Link: "/case-study/payments-2",
   },
 ];
 
@@ -68,6 +146,8 @@ const Directory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedUseCase, setSelectedUseCase] = useState<UseCase | null>(null);
+  const [activeBenefit, setActiveBenefit] = useState<number | null>(null);
+  //const [currentSlide, setCurrentSlide] = useState(0);
 
   const filteredUseCases = useCases.filter(useCase => {
     const matchesCategory = selectedCategory === "All" || useCase.title.includes(selectedCategory);
@@ -81,15 +161,20 @@ const Directory = () => {
 
   const closeModal = () => {
     setSelectedUseCase(null);
+    setActiveBenefit(null);
   };
 
-  const carouselSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
+  // const nextSlide = () => {
+  //   if (selectedUseCase) {
+  //     setCurrentSlide(prev => (prev + 1) % selectedUseCase.benefits.length);
+  //   }
+  // };
+
+  /*   const prevSlide = () => {
+    if (selectedUseCase) {
+      setCurrentSlide(prev => (prev - 1 + selectedUseCase.benefits.length) % selectedUseCase.benefits.length);
+    }
+  }; */
 
   return (
     <div className="flex w-full mt-4 gap-4">
@@ -127,7 +212,7 @@ const Directory = () => {
           {filteredUseCases.map((useCase, index) => (
             <div
               key={index}
-              className="card flex flex-col justify-end items-end relative overflow-hidden rounded-xl cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:bg-base-300 dark:hover:bg-neutral dark:hover:text-secondary"
+              className="card flex flex-col justify-end items-end relative overflow-hidden rounded-xl cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:bg-base-300 dark:hover:bg-base-100 dark:hover:text-secondary dark:bg-neutral"
               onClick={() => openModal(useCase)}
               style={{ height: "250px" }}
             >
@@ -145,15 +230,15 @@ const Directory = () => {
       {/* Modal */}
       {selectedUseCase && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg p-8 w-3/4 max-w-2xl relative">
+          <div className="bg-white rounded-lg p-8 w-4/5 max-w-3xl relative grid grid-cols-1 md:grid-cols-2 gap-4">
             <button onClick={closeModal} className="absolute text-4xl top-4 right-4 text-gray-500 hover:text-gray-700">
               &times;
             </button>
-            <h1 className="text-4xl text-primary font-bold mb-4">{selectedUseCase.title}</h1>
-            <p className="mb-4 text-primary">{selectedUseCase.description}</p>
-            {/* Carousel */}
-            <Slider {...carouselSettings} className="mb-4">
-              <div>
+            {/* Left Column */}
+            <div className="flex flex-col">
+              <h1 className="text-4xl text-primary font-bold mb-4">{selectedUseCase.title}</h1>
+              <p className="mb-4 text-primary">{selectedUseCase.description}</p>
+              <div className="relative mb-4">
                 <Image
                   src={selectedUseCase.image}
                   alt={selectedUseCase.title}
@@ -162,28 +247,41 @@ const Directory = () => {
                   objectFit="cover"
                 />
               </div>
-              <div>
-                <Image
-                  src={selectedUseCase.image}
-                  alt={selectedUseCase.title}
-                  width={400}
-                  height={200}
-                  objectFit="cover"
-                />
+            </div>
+            {/* Right Column */}
+            <div className="flex flex-col">
+              <p className="mb-4 text-primary mt-14">{selectedUseCase.context}</p>
+              <div className="flex justify-around mb-4">
+                {selectedUseCase.benefits.map((benefit, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full cursor-pointer"
+                    onClick={() => setActiveBenefit(index)}
+                  >
+                    {index + 1}
+                  </div>
+                ))}
               </div>
-            </Slider>
-            {/* Additional context */}
-            <p className="mb-4 text-primary">
-              Here is a large paragraph providing more context about the use-case. This section can be expanded with
-              detailed information to help users understand the application and benefits of the use-case.
-            </p>
-            <hr className="my-4" />
-            {/* Additional links */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Link href={selectedUseCase.link} className="block bg-primary text-white text-center py-2 rounded-lg">
-                Apply {selectedUseCase.title}
-              </Link>
-              {/* Add more links as needed */}
+              {activeBenefit !== null && (
+                <div className="bg-gray-100 text-sm p-4 rounded-lg shadow-lg dark:text-primary">
+                  <p>{selectedUseCase.benefits[activeBenefit]}</p>
+                </div>
+              )}
+              <hr className="my-4" />
+              <div className="grid grid-cols-1 gap-4">
+                <Link
+                  href={selectedUseCase.caseStudy1Link}
+                  className="block bg-primary text-white text-center py-2 rounded-lg"
+                >
+                  Case Study #1
+                </Link>
+                <Link
+                  href={selectedUseCase.caseStudy2Link}
+                  className="block bg-primary text-white text-center py-2 rounded-lg"
+                >
+                  Case Study #2
+                </Link>
+              </div>
             </div>
           </div>
         </div>
