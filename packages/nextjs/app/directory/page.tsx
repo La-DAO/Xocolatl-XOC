@@ -251,17 +251,20 @@ const Directory = () => {
             {/* Right Column */}
             <div className="flex flex-col">
               <p className="mb-4 text-primary mt-14">{selectedUseCase.context}</p>
+              <hr className="my-4" />
+              <h3 className="text-2xl font-bold text-primary mb-4">Benefits</h3>
               <div className="flex justify-around mb-4">
                 {selectedUseCase.benefits.map((benefit, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full cursor-pointer"
+                    className="flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full cursor-pointer dark:hover:bg-base-100 dark:hover:text-white hover:bg-base-100 hover:text-primary hover:text-xl"
                     onClick={() => setActiveBenefit(index)}
                   >
                     {index + 1}
                   </div>
                 ))}
               </div>
+
               {activeBenefit !== null && (
                 <div className="bg-gray-100 text-sm p-4 rounded-lg shadow-lg dark:text-primary">
                   <p>{selectedUseCase.benefits[activeBenefit]}</p>
