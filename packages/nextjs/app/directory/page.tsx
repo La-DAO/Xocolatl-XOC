@@ -34,8 +34,8 @@ const useCases: UseCase[] = [
     ],
     context:
       "AI agents are a powerful tool for automating tasks and saving time. Use AI agents with $XOC to automate your tasks and save time.",
-    caseStudy1Link: "https://www.chipipay.com/en",
-    caseStudy2Link: "https://studio.manifold.xyz/",
+    caseStudy1Link: "https://github.com/0xOucan/agentexoc",
+    caseStudy2Link: "https://github.com/La-DAO/agente-xoc",
     caseStudy1Label: "Agente XOC (Oucan)",
     caseStudy2Label: "Juan Dieguito",
   },
