@@ -21,6 +21,63 @@ interface UseCase {
 
 const useCases: UseCase[] = [
   {
+    title: "AI Agents",
+    description: "Use AI agents with $XOC.",
+    link: "/agents",
+    image: "/Miroodles - Color Comp.svg",
+    benefits: [
+      "Automated Tasks: Use AI agents to automate tasks and save time.",
+      "Customizable: Customize your AI agents to your needs.",
+      "Community Driven: Join a community of AI agents users.",
+      "Secure: Use a secure and audited protocol.",
+      "Innovative Solutions: Benefit from innovative AI solutions.",
+    ],
+    context:
+      "AI agents are a powerful tool for automating tasks and saving time. Use AI agents with $XOC to automate your tasks and save time.",
+    caseStudy1Link: "https://www.chipipay.com/en",
+    caseStudy2Link: "https://studio.manifold.xyz/",
+    caseStudy1Label: "Agente XOC (Oucan)",
+    caseStudy2Label: "Juan Dieguito",
+  },
+  {
+    title: "Everyday Currency",
+    description: "Use $XOC as an everyday currency.",
+    link: "/currency",
+    image: "/Transhumans - Bueno (1).svg",
+    benefits: [
+      "Stable Value: Use a stable currency for everyday transactions.",
+      "Wide Acceptance: Accepted by a growing number of merchants.",
+      "Low Fees: Enjoy low transaction fees compared to traditional currencies.",
+      "Fast Transactions: Benefit from fast and efficient transactions.",
+      "Global Reach: Use $XOC anywhere in the world.",
+    ],
+    context:
+      "As a stable and widely accepted currency, $XOC is perfect for everyday transactions. Enjoy low fees, fast transactions, and global reach with $XOC as your everyday currency.",
+    caseStudy1Link: "https://www.chipipay.com/en",
+    caseStudy2Link: "https://studio.manifold.xyz/",
+    caseStudy1Label: "Chipi Pay",
+    caseStudy2Label: "Manifold",
+  },
+  {
+    title: "Governance",
+    description: "Participate in governance with $XOC.",
+    link: "/governance",
+    image: "/Transhumans - Looking Ahead (1).svg",
+    benefits: [
+      "Have a Voice: Participate in governance decisions and shape the future.",
+      "Community Driven: Join a community-driven governance model.",
+      "Transparent Processes: Benefit from transparent and fair governance processes.",
+      "Influence Development: Influence the development and direction of the protocol.",
+      "Earn Rewards: Earn rewards for participating in governance activities.",
+    ],
+    context:
+      "Governance is at the heart of decentralized finance. With $XOC, you can have a voice in governance decisions and help shape the future of the protocol. Discover the power of community-driven governance.",
+    caseStudy1Link: "https://app.daohaus.club/dao/0x89/0xd3f99b1cba012d823c59e3d21bb35acd88e07c58",
+    caseStudy2Link: "https://app.charmverse.io/ladao/empieza-aqu-257587953545364",
+    caseStudy1Label: "DAOHaus",
+    caseStudy2Label: "Charmverse",
+  },
+  {
     title: "Lending",
     description: "Use $XOC for lending purposes.",
     link: "/lending",
@@ -79,63 +136,6 @@ const useCases: UseCase[] = [
     caseStudy2Label: "Liquidations Case Study 2",
   },
   {
-    title: "Everyday Currency",
-    description: "Use $XOC as an everyday currency.",
-    link: "/currency",
-    image: "/Transhumans - Bueno (1).svg",
-    benefits: [
-      "Stable Value: Use a stable currency for everyday transactions.",
-      "Wide Acceptance: Accepted by a growing number of merchants.",
-      "Low Fees: Enjoy low transaction fees compared to traditional currencies.",
-      "Fast Transactions: Benefit from fast and efficient transactions.",
-      "Global Reach: Use $XOC anywhere in the world.",
-    ],
-    context:
-      "As a stable and widely accepted currency, $XOC is perfect for everyday transactions. Enjoy low fees, fast transactions, and global reach with $XOC as your everyday currency.",
-    caseStudy1Link: "https://www.chipipay.com/en",
-    caseStudy2Link: "https://studio.manifold.xyz/",
-    caseStudy1Label: "Chipi Pay",
-    caseStudy2Label: "Manifold",
-  },
-  {
-    title: "Staking",
-    description: "Stake $XOC to earn rewards.",
-    link: "/staking",
-    image: "/Transhumans - Reflecting (1).svg",
-    benefits: [
-      "Earn Rewards: Stake your $XOC and earn rewards over time.",
-      "Secure the Network: Help secure the network by staking your assets.",
-      "Flexible Staking: Choose from various staking options.",
-      "Community Governance: Participate in community governance decisions.",
-      "Long-Term Growth: Benefit from long-term growth opportunities.",
-    ],
-    context:
-      "Staking $XOC allows you to earn rewards while contributing to network security. Explore the benefits of staking and how it can lead to long-term growth.",
-    caseStudy1Link: "/case-study/staking-1",
-    caseStudy2Link: "/case-study/staking-2",
-    caseStudy1Label: "Coming soon",
-    caseStudy2Label: "Coming soon",
-  },
-  {
-    title: "Governance",
-    description: "Participate in governance with $XOC.",
-    link: "/governance",
-    image: "/Transhumans - Looking Ahead (1).svg",
-    benefits: [
-      "Have a Voice: Participate in governance decisions and shape the future.",
-      "Community Driven: Join a community-driven governance model.",
-      "Transparent Processes: Benefit from transparent and fair governance processes.",
-      "Influence Development: Influence the development and direction of the protocol.",
-      "Earn Rewards: Earn rewards for participating in governance activities.",
-    ],
-    context:
-      "Governance is at the heart of decentralized finance. With $XOC, you can have a voice in governance decisions and help shape the future of the protocol. Discover the power of community-driven governance.",
-    caseStudy1Link: "/case-study/governance-1",
-    caseStudy2Link: "https://app.charmverse.io/ladao/empieza-aqu-257587953545364",
-    caseStudy1Label: "Governance Case Study 1",
-    caseStudy2Label: "Charmverse",
-  },
-  {
     title: "Payments",
     description: "Make payments using $XOC.",
     link: "/payments",
@@ -154,9 +154,57 @@ const useCases: UseCase[] = [
     caseStudy1Label: "Coming soon",
     caseStudy2Label: "Coming soon",
   },
+  {
+    title: "Subscriptions",
+    description: "Create subscriptions with $XOC.",
+    link: "/subscriptions",
+    image: "/Transhumans - Reflecting (1).svg",
+    benefits: [
+      "Automated Payments: Automatically receive payments from your subscribers.",
+      "Flexible Pricing: Choose from various pricing options.",
+      "User-Friendly: Easy to use for both subscribers and creators.",
+      "Secure: Use a secure and audited protocol.",
+      "Innovative Solutions: Benefit from innovative payment solutions.",
+    ],
+    context:
+      "Subscriptions are a great way to monetize your content. With $XOC, you can create subscriptions and automatically receive payments from your subscribers. Discover the benefits of creating subscriptions with $XOC.",
+    caseStudy1Link: "https://app.unlock-protocol.com/",
+    caseStudy2Link: "https://hypersub.xyz/",
+    caseStudy1Label: "Unlock Protocol",
+    caseStudy2Label: "Hypersub",
+  },
+  {
+    title: "Streaming",
+    description: "Stream $XOC to earn rewards.",
+    link: "/streaming",
+    image: "/Open Doodles - Coffee.svg",
+    benefits: [
+      "Earn Rewards: Stream your $XOC and earn rewards over time.",
+      "Secure the Network: Help secure the network by streaming your assets.",
+      "Flexible Streaming: Choose from various streaming options.",
+      "Community Governance: Participate in community governance decisions.",
+      "Long-Term Growth: Benefit from long-term growth opportunities.",
+    ],
+    context:
+      "Streaming $XOC allows you to earn rewards while contributing to network security. Explore the benefits of streaming and how it can lead to long-term growth.",
+    caseStudy1Link: "https://app.superfluid.org/",
+    caseStudy2Link: "/case-study/streaming-2",
+    caseStudy1Label: "Superfluid",
+    caseStudy2Label: "Coming soon",
+  },
 ];
 
-const categories = ["All", "Lending", "Liquidity", "Liquidations", "Currency", "Staking", "Governance", "Payments"];
+const categories = [
+  "All",
+  "AI Agents",
+  "Lending",
+  "Liquidity",
+  "Liquidations",
+  "Currency",
+  "Staking",
+  "Governance",
+  "Payments",
+];
 
 const Directory = () => {
   const { t } = useTranslation();
@@ -291,14 +339,14 @@ const Directory = () => {
               <div className="grid grid-cols-1 gap-4">
                 <Link
                   href={selectedUseCase.caseStudy1Link}
-                  className="block bg-primary text-white text-center py-2 rounded-lg"
+                  className="block bg-primary text-white text-center py-2 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-base-100 hover:text-primary dark:hover:bg-neutral dark:hover:text-primary dark:hover:border-2 dark:hover:border-primary"
                   target="_blank"
                 >
                   {selectedUseCase.caseStudy1Label}
                 </Link>
                 <Link
                   href={selectedUseCase.caseStudy2Link}
-                  className="block bg-primary text-white text-center py-2 rounded-lg"
+                  className="block bg-primary text-white text-center py-2 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-base-100 hover:text-primary dark:hover:bg-neutral dark:hover:text-primary dark:hover:border-2 dark:hover:border-primary"
                   target="_blank"
                 >
                   {selectedUseCase.caseStudy2Label}
