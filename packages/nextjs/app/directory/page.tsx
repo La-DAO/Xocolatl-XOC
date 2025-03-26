@@ -15,6 +15,8 @@ interface UseCase {
   context: string;
   caseStudy1Link: string;
   caseStudy2Link: string;
+  caseStudy1Label: string;
+  caseStudy2Label: string;
 }
 
 const useCases: UseCase[] = [
@@ -33,7 +35,9 @@ const useCases: UseCase[] = [
     context:
       "In the rapidly evolving world of decentralized finance (DeFi), stablecoins have emerged as a cornerstone, providing stability and liquidity in an otherwise volatile market. As the DeFi ecosystem continues to grow, choosing the right stablecoin is crucial for maximizing your financial potential. Here's why $XOC stands out as a top choice for lending.",
     caseStudy1Link: "/lending",
-    caseStudy2Link: "/case-study/lending-2",
+    caseStudy2Link: "https://creditalent.vercel.app/",
+    caseStudy1Label: "Alux Protocol",
+    caseStudy2Label: "CrediTalent",
   },
   {
     title: "Liquidity Providing",
@@ -49,8 +53,11 @@ const useCases: UseCase[] = [
     ],
     context:
       "Liquidity providing is essential for maintaining a healthy and efficient market. By providing liquidity with $XOC, you can earn fees and support the ecosystem. Discover the benefits of being a liquidity provider in the DeFi space.",
-    caseStudy1Link: "/case-study/liquidity-1",
-    caseStudy2Link: "/case-study/liquidity-2",
+    caseStudy1Link: "/liquidity",
+    caseStudy2Link:
+      "https://aerodrome.finance/deposit?token0=0x269caE7Dc59803e5C596c95756faEeBb6030E0aF&token1=0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf&type=0&chain=8453&factory=0x420DD381b31aEf6683db6B902084cB0FFECe40Da",
+    caseStudy1Label: "Xoktle",
+    caseStudy2Label: "Aerodrome",
   },
   {
     title: "Liquidations",
@@ -68,6 +75,8 @@ const useCases: UseCase[] = [
       "Liquidations play a crucial role in maintaining market stability. By participating in liquidations with $XOC, you can seize profit opportunities while contributing to market efficiency. Learn how you can benefit from this dynamic aspect of DeFi.",
     caseStudy1Link: "/case-study/liquidations-1",
     caseStudy2Link: "/case-study/liquidations-2",
+    caseStudy1Label: "Liquidations Case Study 1",
+    caseStudy2Label: "Liquidations Case Study 2",
   },
   {
     title: "Everyday Currency",
@@ -83,8 +92,10 @@ const useCases: UseCase[] = [
     ],
     context:
       "As a stable and widely accepted currency, $XOC is perfect for everyday transactions. Enjoy low fees, fast transactions, and global reach with $XOC as your everyday currency.",
-    caseStudy1Link: "/case-study/currency-1",
-    caseStudy2Link: "/case-study/currency-2",
+    caseStudy1Link: "https://www.chipipay.com/en",
+    caseStudy2Link: "https://studio.manifold.xyz/",
+    caseStudy1Label: "Chipi Pay",
+    caseStudy2Label: "Manifold",
   },
   {
     title: "Staking",
@@ -102,6 +113,8 @@ const useCases: UseCase[] = [
       "Staking $XOC allows you to earn rewards while contributing to network security. Explore the benefits of staking and how it can lead to long-term growth.",
     caseStudy1Link: "/case-study/staking-1",
     caseStudy2Link: "/case-study/staking-2",
+    caseStudy1Label: "Coming soon",
+    caseStudy2Label: "Coming soon",
   },
   {
     title: "Governance",
@@ -118,7 +131,9 @@ const useCases: UseCase[] = [
     context:
       "Governance is at the heart of decentralized finance. With $XOC, you can have a voice in governance decisions and help shape the future of the protocol. Discover the power of community-driven governance.",
     caseStudy1Link: "/case-study/governance-1",
-    caseStudy2Link: "/case-study/governance-2",
+    caseStudy2Link: "https://app.charmverse.io/ladao/empieza-aqu-257587953545364",
+    caseStudy1Label: "Governance Case Study 1",
+    caseStudy2Label: "Charmverse",
   },
   {
     title: "Payments",
@@ -136,6 +151,8 @@ const useCases: UseCase[] = [
       "With $XOC, making payments is fast, secure, and cost-effective. Whether you're a merchant or a consumer, $XOC offers innovative solutions for all your payment needs.",
     caseStudy1Link: "/case-study/payments-1",
     caseStudy2Link: "/case-study/payments-2",
+    caseStudy1Label: "Coming soon",
+    caseStudy2Label: "Coming soon",
   },
 ];
 
@@ -275,14 +292,16 @@ const Directory = () => {
                 <Link
                   href={selectedUseCase.caseStudy1Link}
                   className="block bg-primary text-white text-center py-2 rounded-lg"
+                  target="_blank"
                 >
-                  Case Study #1
+                  {selectedUseCase.caseStudy1Label}
                 </Link>
                 <Link
                   href={selectedUseCase.caseStudy2Link}
                   className="block bg-primary text-white text-center py-2 rounded-lg"
+                  target="_blank"
                 >
-                  Case Study #2
+                  {selectedUseCase.caseStudy2Label}
                 </Link>
               </div>
             </div>
