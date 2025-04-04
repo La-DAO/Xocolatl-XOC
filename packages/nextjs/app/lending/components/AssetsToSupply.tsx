@@ -8,7 +8,11 @@ import useGetReservesData from "@/hooks/useGetReservesData";
 import { ReserveData } from "@/types/types";
 import { Address } from "viem";
 
-const AssetsToSupply: React.FC = () => {
+interface AssetsToSupplyProps {
+  onReserveClick?: (reserve: ReserveData) => void;
+}
+
+const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
   const { t } = useTranslation();
   // Fetch reserve data and wallet address using custom hooks
   const {
@@ -85,7 +89,10 @@ const AssetsToSupply: React.FC = () => {
 
             return (
               <div key={index} className="table-content table-border-top asset-row flex justify-between py-3">
-                <div className="asset-row-item w-24 h-fit">
+                <div
+                  className="asset-row-item w-24 h-fit cursor-pointer text-blue-600 hover:underline"
+                  onClick={() => onReserveClick?.(reserve)}
+                >
                   <p>{reserve.symbol}</p>
                 </div>
                 <div className="asset-row-item w-24 h-fit hidden sm:block">

@@ -6,6 +6,7 @@ import AssetsToBorrow from "./components/AssetsToBorrow";
 import AssetsToSupply from "./components/AssetsToSupply";
 import LendingInfo from "./components/LendingInfo";
 import ProfileStats from "./components/ProfileStats";
+import ReserveAssetInfo from "./components/ReserveAssetInfo";
 import YourBorrows from "./components/YourBorrows";
 import YourSupplies from "./components/YourSupplies";
 import useAccountAddress from "@/hooks/useAccount";
@@ -13,6 +14,7 @@ import useAccountAddress from "@/hooks/useAccount";
 import useGetUserAccountData from "@/hooks/useGetUserAccountData";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ReserveData } from "~~/types/types";
 
 // Importa el hook de datos del usuario
 
@@ -22,6 +24,7 @@ const Lending = () => {
   const [isAssetsToSupplyVisible, setIsAssetsToSupplyVisible] = useState(true);
   const [isYourBorrowsVissible, setIsYourBorrowsVissible] = useState(true);
   const [isAssetsToBorrowVisible, setIsAssetsToBorrowVisible] = useState(true);
+  const [selectedReserveAsset, setSelectedReserveAsset] = useState<ReserveData | null>(null);
 
   const [allBalancesZero, setAllBalancesZero] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -34,6 +37,11 @@ const Lending = () => {
 
   const refreshComponents = () => {
     setRefreshKey(prevKey => prevKey + 1);
+  };
+
+  const handleReserveClick = (reserve: ReserveData) => {
+    console.log("Clicked: ", reserve);
+    setSelectedReserveAsset(reserve);
   };
 
   // Calculate Net Worth balance
@@ -105,7 +113,7 @@ const Lending = () => {
                 )}
               </button>
             </div>
-            {isAssetsToSupplyVisible && <AssetsToSupply key={refreshKey} />}
+            {isAssetsToSupplyVisible && <AssetsToSupply key={refreshKey} onReserveClick={handleReserveClick} />}
           </div>
         </div>
 
@@ -156,6 +164,7 @@ const Lending = () => {
           </div>
         </div>
       </div>
+      {selectedReserveAsset && <ReserveAssetInfo reserve={selectedReserveAsset} />}
       <LendingInfo />
     </div>
   );
