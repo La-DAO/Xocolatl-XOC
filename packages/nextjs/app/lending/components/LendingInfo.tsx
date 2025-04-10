@@ -1,21 +1,11 @@
 import React from "react";
-import Image from "next/image";
 import { useTranslation } from "~~/app/context/LanguageContext";
 
 const LendingInfo: React.FC = () => {
   const { t } = useTranslation();
   return (
-    <div className=" m-auto mt-8 p-6 bg-white flex flex-col lg:flex-row rounded-2xl shadow-md mb-4">
-      <div className="w-full lg:w-3/5 flex items-center justify-center">
-        <Image
-          src="/Transhumans - Astro.svg"
-          alt="about image"
-          className="w-full h-auto max-w-[100%] lg:max-w-[80%]"
-          width={800}
-          height={750}
-        />
-      </div>
-      <div className="w-full lg:w-3/5 mb-8 lg:mb-0 lg:mr-8">
+    <div className="w-full max-w-5xl mx-auto p-6 bg-white rounded-2xl shadow-md mb-4">
+      <div className="w-full p-2">
         <h1 className="text-2xl lg:text-3xl font-bold mb-4 lg:mb-6 text-center lg:text-left text-primary">
           {t("LendingInfoTitle")}
         </h1>

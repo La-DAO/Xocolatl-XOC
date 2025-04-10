@@ -40,7 +40,6 @@ const Lending = () => {
   };
 
   const handleReserveClick = (reserve: ReserveData) => {
-    console.log("Clicked: ", reserve);
     setSelectedReserveAsset(reserve);
   };
 
@@ -51,9 +50,9 @@ const Lending = () => {
     <div className="flex flex-col w-4/5 m-auto gap-4">
       <div className="lending-header flex bg-white rounded-xl py-6 px-8 justify-between items-end">
         {isLoading ? (
-          <div>Loading...</div> // Mostrar un mensaje o componente de carga mientras se obtienen los datos
+          <div>Loading...</div>
         ) : isError ? (
-          <div>Error loading data</div> // Mostrar un mensaje de error si hay un problema al obtener los datos
+          <div>Error loading data</div>
         ) : (
           <ProfileStats
             balance={netWorth}
@@ -164,8 +163,14 @@ const Lending = () => {
           </div>
         </div>
       </div>
-      {selectedReserveAsset && <ReserveAssetInfo reserve={selectedReserveAsset} />}
-      <LendingInfo />
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="w-full lg:w-1/2">
+          {selectedReserveAsset && <ReserveAssetInfo reserve={selectedReserveAsset} />}
+        </div>
+        <div className="w-full lg:w-1/2">
+          <LendingInfo />
+        </div>
+      </div>
     </div>
   );
 };
