@@ -6,6 +6,7 @@ import AssetsToBorrow from "./components/AssetsToBorrow";
 import AssetsToSupply from "./components/AssetsToSupply";
 import LendingInfo from "./components/LendingInfo";
 import ProfileStats from "./components/ProfileStats";
+import ReserveAssetInfo from "./components/ReserveAssetInfo";
 import YourBorrows from "./components/YourBorrows";
 import YourSupplies from "./components/YourSupplies";
 import useAccountAddress from "@/hooks/useAccount";
@@ -13,6 +14,7 @@ import useAccountAddress from "@/hooks/useAccount";
 import useGetUserAccountData from "@/hooks/useGetUserAccountData";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ReserveData } from "~~/types/types";
 
 // Importa el hook de datos del usuario
 
@@ -22,6 +24,7 @@ const Lending = () => {
   const [isAssetsToSupplyVisible, setIsAssetsToSupplyVisible] = useState(true);
   const [isYourBorrowsVissible, setIsYourBorrowsVissible] = useState(true);
   const [isAssetsToBorrowVisible, setIsAssetsToBorrowVisible] = useState(true);
+  const [selectedReserveAsset, setSelectedReserveAsset] = useState<ReserveData | null>(null);
 
   const [allBalancesZero, setAllBalancesZero] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -36,6 +39,10 @@ const Lending = () => {
     setRefreshKey(prevKey => prevKey + 1);
   };
 
+  const handleReserveClick = (reserve: ReserveData) => {
+    setSelectedReserveAsset(reserve);
+  };
+
   // Calculate Net Worth balance
   const netWorth = suppliesTotalBalance - borrowsTotalBalance;
 
@@ -43,9 +50,9 @@ const Lending = () => {
     <div className="flex flex-col w-4/5 m-auto gap-4">
       <div className="lending-header flex bg-white rounded-xl py-6 px-8 justify-between items-end">
         {isLoading ? (
-          <div>Loading...</div> // Mostrar un mensaje o componente de carga mientras se obtienen los datos
+          <div>Loading...</div>
         ) : isError ? (
-          <div>Error loading data</div> // Mostrar un mensaje de error si hay un problema al obtener los datos
+          <div>Error loading data</div>
         ) : (
           <ProfileStats
             balance={netWorth}
@@ -105,7 +112,7 @@ const Lending = () => {
                 )}
               </button>
             </div>
-            {isAssetsToSupplyVisible && <AssetsToSupply key={refreshKey} />}
+            {isAssetsToSupplyVisible && <AssetsToSupply key={refreshKey} onReserveClick={handleReserveClick} />}
           </div>
         </div>
 
@@ -156,7 +163,14 @@ const Lending = () => {
           </div>
         </div>
       </div>
-      <LendingInfo />
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="w-full lg:w-1/2">
+          {selectedReserveAsset && <ReserveAssetInfo reserve={selectedReserveAsset} />}
+        </div>
+        <div className="w-full lg:w-1/2">
+          <LendingInfo />
+        </div>
+      </div>
     </div>
   );
 };
