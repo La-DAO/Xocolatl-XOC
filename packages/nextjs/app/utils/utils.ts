@@ -25,6 +25,21 @@ export const getBlockExplorerUrl = (chainId: number): string => {
   }
 };
 
+export const getAddrBlockExplorerUrl = (chainId: number): string => {
+  switch (chainId) {
+    case chainIds.BNB:
+      return "https://bscscan.com/address/";
+    case chainIds.POLYGON:
+      return "https://polygonscan.com/address/";
+    case chainIds.BASE:
+      return "https://basescan.org/address/";
+    case chainIds.OPTIMISM:
+      return "https://optimistic.etherscan.io/address/";
+    default:
+      return "";
+  }
+};
+
 export function createContractsArray(
   functionName: string,
   addresses: string[],

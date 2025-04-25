@@ -238,10 +238,15 @@
 
   "ReserveInfoPanelTitle": "Configuración y Estado de la Reserva",
   "ReserveInfoPanelAvailableLiquidity": "Liquidez Disponible",
+  "ReserveInfoPanelOraclePrice": "Precio del Oráculo",
   "ReserveInfoPanelMaxLTV": "LTV Máximo",
   "ReserveInfoPanelLiquidationThreshold": "Umbral de Liquidación",
   "ReserveInfoPanelLiquidationPenalty": "Penalización de Liquidación",
   "ReserveInfoPanelVariableBorrowAPY": "APY, variable",
+  "ReserveInfoUnderlyingToken": "Token subyacente",
+  "ReserveInfoAToken": "aToken",
+  "ReserveInfoVariableDebtToken": "Token de deuda",
+  "ReserveInfoPanelReserveSize": "Tamaño de la Reserva",
 
   "XoktleTitle": "Xoktle",
   "XoktleDescription": "Xoktle es la palabra en náhuatl para olla 🍯. Este contrato inteligente está diseñado para utilizar tu depósito para expandir la liquidez de la stablecoin y emparejarla con el ecosistema DeFi. Por cada 1 dólar, habrá 4 pesos en el pool, por lo que nuestro agente de liquidez siempre se esforzará por mantener esta proporción mediante el reequilibrio interno del pool.",

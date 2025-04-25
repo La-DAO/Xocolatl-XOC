@@ -2,12 +2,12 @@ const UiPoolDataProviderV3ABI = [
   {
     inputs: [
       {
-        internalType: "contract IChainlinkAggregator",
+        internalType: "contract IEACAggregatorProxy",
         name: "_networkBaseTokenPriceInUsdProxyAggregator",
         type: "address",
       },
       {
-        internalType: "contract IChainlinkAggregator",
+        internalType: "contract IEACAggregatorProxy",
         name: "_marketReferenceCurrencyPriceInUsdProxyAggregator",
         type: "address",
       },
@@ -29,9 +29,41 @@ const UiPoolDataProviderV3ABI = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "MKR_ADDRESS",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
-        internalType: "contract ILendingPoolAddressesProvider",
+        internalType: "bytes32",
+        name: "_bytes32",
+        type: "bytes32",
+      },
+    ],
+    name: "bytes32ToString",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract IPoolAddressesProvider",
         name: "provider",
         type: "address",
       },
@@ -186,6 +218,11 @@ const UiPoolDataProviderV3ABI = [
             type: "uint256",
           },
           {
+            internalType: "address",
+            name: "priceOracle",
+            type: "address",
+          },
+          {
             internalType: "uint256",
             name: "variableRateSlope1",
             type: "uint256",
@@ -205,8 +242,108 @@ const UiPoolDataProviderV3ABI = [
             name: "stableRateSlope2",
             type: "uint256",
           },
+          {
+            internalType: "uint256",
+            name: "baseStableBorrowRate",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "baseVariableBorrowRate",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "optimalUsageRatio",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "isPaused",
+            type: "bool",
+          },
+          {
+            internalType: "bool",
+            name: "isSiloedBorrowing",
+            type: "bool",
+          },
+          {
+            internalType: "uint128",
+            name: "accruedToTreasury",
+            type: "uint128",
+          },
+          {
+            internalType: "uint128",
+            name: "unbacked",
+            type: "uint128",
+          },
+          {
+            internalType: "uint128",
+            name: "isolationModeTotalDebt",
+            type: "uint128",
+          },
+          {
+            internalType: "bool",
+            name: "flashLoanEnabled",
+            type: "bool",
+          },
+          {
+            internalType: "uint256",
+            name: "debtCeiling",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "debtCeilingDecimals",
+            type: "uint256",
+          },
+          {
+            internalType: "uint8",
+            name: "eModeCategoryId",
+            type: "uint8",
+          },
+          {
+            internalType: "uint256",
+            name: "borrowCap",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "supplyCap",
+            type: "uint256",
+          },
+          {
+            internalType: "uint16",
+            name: "eModeLtv",
+            type: "uint16",
+          },
+          {
+            internalType: "uint16",
+            name: "eModeLiquidationThreshold",
+            type: "uint16",
+          },
+          {
+            internalType: "uint16",
+            name: "eModeLiquidationBonus",
+            type: "uint16",
+          },
+          {
+            internalType: "address",
+            name: "eModePriceSource",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "eModeLabel",
+            type: "string",
+          },
+          {
+            internalType: "bool",
+            name: "borrowableInIsolation",
+            type: "bool",
+          },
         ],
-        internalType: "struct IUiPoolDataProvider.AggregatedReserveData[]",
+        internalType: "struct IUiPoolDataProviderV3.AggregatedReserveData[]",
         name: "",
         type: "tuple[]",
       },
@@ -233,7 +370,7 @@ const UiPoolDataProviderV3ABI = [
             type: "uint8",
           },
         ],
-        internalType: "struct IUiPoolDataProvider.BaseCurrencyInfo",
+        internalType: "struct IUiPoolDataProviderV3.BaseCurrencyInfo",
         name: "",
         type: "tuple",
       },
@@ -244,7 +381,7 @@ const UiPoolDataProviderV3ABI = [
   {
     inputs: [
       {
-        internalType: "contract ILendingPoolAddressesProvider",
+        internalType: "contract IPoolAddressesProvider",
         name: "provider",
         type: "address",
       },
@@ -263,7 +400,7 @@ const UiPoolDataProviderV3ABI = [
   {
     inputs: [
       {
-        internalType: "contract ILendingPoolAddressesProvider",
+        internalType: "contract IPoolAddressesProvider",
         name: "provider",
         type: "address",
       },
@@ -313,9 +450,14 @@ const UiPoolDataProviderV3ABI = [
             type: "uint256",
           },
         ],
-        internalType: "struct IUiPoolDataProvider.UserReserveData[]",
+        internalType: "struct IUiPoolDataProviderV3.UserReserveData[]",
         name: "",
         type: "tuple[]",
+      },
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
       },
     ],
     stateMutability: "view",
@@ -326,7 +468,7 @@ const UiPoolDataProviderV3ABI = [
     name: "marketReferenceCurrencyPriceInUsdProxyAggregator",
     outputs: [
       {
-        internalType: "contract IChainlinkAggregator",
+        internalType: "contract IEACAggregatorProxy",
         name: "",
         type: "address",
       },
@@ -339,7 +481,7 @@ const UiPoolDataProviderV3ABI = [
     name: "networkBaseTokenPriceInUsdProxyAggregator",
     outputs: [
       {
-        internalType: "contract IChainlinkAggregator",
+        internalType: "contract IEACAggregatorProxy",
         name: "",
         type: "address",
       },
