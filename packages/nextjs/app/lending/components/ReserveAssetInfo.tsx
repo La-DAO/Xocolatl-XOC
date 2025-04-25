@@ -1,6 +1,8 @@
 import React from "react";
 import { useTranslation } from "@/app/context/LanguageContext";
 import { ReserveData } from "@/types/types";
+import { useChainId } from "wagmi";
+import { getAddrBlockExplorerUrl } from "~~/app/utils/utils";
 
 interface Props {
   reserve: ReserveData;
@@ -8,6 +10,13 @@ interface Props {
 
 const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
   const { t } = useTranslation();
+
+  const chainId = useChainId();
+  const explorer = getAddrBlockExplorerUrl(chainId);
+
+  const aTokenUrl = `${explorer}${reserve.aTokenAddress}`;
+  const variableDebtTokenUrl = `${explorer}${reserve.variableDebtTokenAddress}`;
+  const underlyingAssetUrl = `${explorer}${reserve.underlyingAsset}`;
 
   const formatPercent = (raw: bigint, scale = 100) => (Number(raw) / scale).toFixed(2);
 
@@ -28,6 +37,11 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
       minimumFractionDigits: isStableOrFiat ? 2 : 2,
       maximumFractionDigits: isStableOrFiat ? 2 : 4,
     })} ${symbol}`;
+  };
+
+  const formatOraclePrice = (rawPrice: bigint): string => {
+    const formatted = Number(rawPrice) / 1e8;
+    return `$${formatted.toFixed(2)} USD`;
   };
 
   return (
@@ -54,6 +68,10 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
               {formatTokenAmount(reserve.availableLiquidity, reserve.decimals, reserve.symbol)}
             </p>
           </div> */}
+          <div>
+            <p className="text-gray-500 text-sm">{t("ReserveInfoPanelOraclePrice")}</p>
+            <p className="text-primary font-bold">{formatOraclePrice(reserve.priceInMarketReferenceCurrency)}</p>
+          </div>
           <div>
             <p className="text-gray-500 text-sm">{t("ReserveInfoPanelAvailableLiquidity")}</p>
             <p className="text-primary font-bold">
@@ -95,6 +113,36 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
               <p className="text-lg font-bold text-primary">{variableBorrowAPY}%</p>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="font-semibold text-primary text-lg mt-6">Contracts</p>
+        <div className="flex flex-col gap-1 text-sm text-blue-600 underline">
+          <a
+            href={underlyingAssetUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline hover:text-primary/80 transition-colors"
+          >
+            {t("ReserveInfoUnderlyingToken")}
+          </a>
+          <a
+            href={aTokenUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline hover:text-primary/80 transition-colors"
+          >
+            {t("ReserveInfoAToken")}
+          </a>
+
+          <a
+            href={variableDebtTokenUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline hover:text-primary/80 transition-colors"
+          >
+            {t("ReserveInfoVariableDebtToken")}
+          </a>
         </div>
       </div>
     </div>
