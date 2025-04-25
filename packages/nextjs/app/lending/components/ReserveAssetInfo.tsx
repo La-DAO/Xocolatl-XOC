@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "@/app/context/LanguageContext";
+import useReserveSize from "@/hooks/useReserveSize";
 import { ReserveData } from "@/types/types";
 import { useChainId } from "wagmi";
 import { getAddrBlockExplorerUrl } from "~~/app/utils/utils";
@@ -25,6 +26,11 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
 
   const liquidationPenalty = formatPercent(reserve.reserveLiquidationBonus - 10000n);
   const variableBorrowAPY = ((Number(reserve.variableBorrowRate) / 1e27) * 100).toFixed(2);
+
+  const { reserveSize, isLoading: reserveSizeLoading } = useReserveSize(
+    reserve.aTokenAddress as `0x${string}`,
+    Number(reserve.decimals),
+  );
 
   const formatTokenAmount = (amount: bigint, decimals: bigint, symbol: string): string => {
     const value = Number(amount) / Math.pow(10, Number(decimals));
@@ -68,6 +74,12 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
               {formatTokenAmount(reserve.availableLiquidity, reserve.decimals, reserve.symbol)}
             </p>
           </div> */}
+          <div>
+            <p className="text-gray-500 text-sm">{t("ReserveInfoPanelReserveSize")}</p>
+            <p className="text-primary font-bold">
+              {reserveSizeLoading ? "Loading..." : `${reserveSize} ${reserve.symbol}`}
+            </p>
+          </div>
           <div>
             <p className="text-gray-500 text-sm">{t("ReserveInfoPanelOraclePrice")}</p>
             <p className="text-primary font-bold">{formatOraclePrice(reserve.priceInMarketReferenceCurrency)}</p>
