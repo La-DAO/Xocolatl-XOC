@@ -40,6 +40,21 @@ export const getAddrBlockExplorerUrl = (chainId: number): string => {
   }
 };
 
+export const getTokenBlockExplorerUrl = (chainId: number): string => {
+  switch (chainId) {
+    case chainIds.BNB:
+      return "https://bscscan.com/token/0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf";
+    case chainIds.POLYGON:
+      return "https://polygonscan.com/token/0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf";
+    case chainIds.BASE:
+      return "https://basescan.org/token/0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf";
+    case chainIds.OPTIMISM:
+      return "https://optimistic.etherscan.io/token/0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf";
+    default:
+      return "";
+  }
+};
+
 export function createContractsArray(
   functionName: string,
   addresses: string[],
