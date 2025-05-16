@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import BalanceOf from "./BalanceOf";
-import RepayModal from "./modals/RepayTransactionModal.tsx";
+import RepayModal from "./modals/RepayTransactionModal";
 import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
 import useGetUserReservesData from "@/hooks/useGetUserReservesData";

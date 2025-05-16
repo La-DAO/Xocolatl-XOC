@@ -3,7 +3,7 @@ import MintModal from "../modals/MintModal";
 import RepayModal from "../modals/RepayModal";
 import { chainIds } from "@/app/constants/chains";
 import { ContractData, contractData } from "@/app/constants/contracts";
-import { Address } from "viem";
+import { Abi, Address } from "viem";
 import { useChainId, useReadContract, useReadContracts } from "wagmi";
 import { useAccount } from "wagmi";
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
@@ -197,19 +197,19 @@ const YourDeposits = () => {
     contractData[chainIds.OPTIMISM].houseOfReserves.OP,
   ];
 
-  const houseOfCoinAddress = getContractAddress(contractData[chainId].houseOfCoin);
+  const houseOfCoinAddress = contractData[chainId] ? getContractAddress(contractData[chainId].houseOfCoin) : null;
 
   const batchCheckRemainingMintingPowerArray = createContractsArray(
     "checkRemainingMintingPower",
     contractAddresses,
-    { abi: houseOfCoinABI, address: houseOfCoinAddress },
+    { abi: houseOfCoinABI as Abi, address: houseOfCoinAddress as `0x${string}` },
     address as `0x${string}`,
   );
 
   const batchComputeUserHealthRatioArray = createContractsArray(
     "computeUserHealthRatio",
     contractAddresses,
-    { abi: houseOfCoinABI, address: houseOfCoinAddress },
+    { abi: houseOfCoinABI as Abi, address: houseOfCoinAddress as `0x${string}` },
     address as `0x${string}`,
   );
 
