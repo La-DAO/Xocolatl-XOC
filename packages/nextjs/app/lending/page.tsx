@@ -9,11 +9,13 @@ import ProfileStats from "./components/ProfileStats";
 import ReserveAssetInfo from "./components/ReserveAssetInfo";
 import YourBorrows from "./components/YourBorrows";
 import YourSupplies from "./components/YourSupplies";
+import { fillerLoadingReserve } from "./constants";
 import useAccountAddress from "@/hooks/useAccount";
 // Importa el hook de la dirección
 import useGetUserAccountData from "@/hooks/useGetUserAccountData";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { maxUint256 } from "viem";
 import { ReserveData } from "~~/types/types";
 
 // Importa el hook de datos del usuario
@@ -24,7 +26,7 @@ const Lending = () => {
   const [isAssetsToSupplyVisible, setIsAssetsToSupplyVisible] = useState(true);
   const [isYourBorrowsVissible, setIsYourBorrowsVissible] = useState(true);
   const [isAssetsToBorrowVisible, setIsAssetsToBorrowVisible] = useState(true);
-  const [selectedReserveAsset, setSelectedReserveAsset] = useState<ReserveData | null>(null);
+  const [selectedReserveAsset, setSelectedReserveAsset] = useState<ReserveData>(fillerLoadingReserve);
 
   const [allBalancesZero, setAllBalancesZero] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -46,6 +48,27 @@ const Lending = () => {
   // Calculate Net Worth balance
   const netWorth = suppliesTotalBalance - borrowsTotalBalance;
 
+  // Format the health factor
+  // if health factor is equal to maxUint256, set it to infinity symbol, else we divide it by 1e18
+  // Handle case if health factor is not defined
+  const isMaxUint256 = (value: any) => {
+    // Check against BigInt, decimal string, and scientific notation
+    const maxUintStr = "115792089237316195423570985008687907853269984665640564039457584007913129639935";
+    return (
+      value === maxUint256 ||
+      value === maxUintStr ||
+      value === "1.157920892373162e+59" ||
+      value === Number(maxUintStr) ||
+      value === Number("1.157920892373162e+59")
+    );
+  };
+
+  const formattedHealthFactor = userAccountData?.healthFactor
+    ? isMaxUint256(userAccountData.healthFactor)
+      ? "∞"
+      : Number(userAccountData.healthFactor) / 1e18
+    : "∞";
+
   return (
     <div className="flex flex-col w-4/5 m-auto gap-4">
       <div className="lending-header flex bg-white rounded-xl py-6 px-8 justify-between items-end">
@@ -57,7 +80,7 @@ const Lending = () => {
           <ProfileStats
             balance={netWorth}
             netAPY={userAccountData?.ltv || 0} // Usa datos del hook de usuario para APY o cualquier otro campo relevante
-            healthFactor={userAccountData?.healthFactor || 0} // Usa datos del hook de usuario para el health factor
+            healthFactor={formattedHealthFactor} // Usa datos del hook de usuario para el health factor
           />
         )}
         <button onClick={refreshComponents} className="primary-btn h-fit w-fit">

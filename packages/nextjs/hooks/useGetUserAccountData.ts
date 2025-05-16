@@ -54,7 +54,7 @@ const useGetUserAccountData = (userAddress: string) => {
               availableBorrowsBase: Number(availableBorrowsBase) / 1e18,
               currentLiquidationThreshold: Number(currentLiquidationThreshold) / 1e18,
               ltv: Number(ltv) / 1e18,
-              healthFactor: Number(healthFactor) / 1e18,
+              healthFactor: healthFactor,
             };
 
             setUserAccountData(formattedData);
