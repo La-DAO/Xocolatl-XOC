@@ -37,25 +37,24 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   const [isError, setIsError] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
   const chainId = useChainId();
-  const [isApproved, setIsApproved] = useState(false); // State to handle approval
+  const [isApproved, setIsApproved] = useState(false);
   const {
     approve,
     isError: approveError,
     isSuccess: approveSuccess,
     isPending: approvePending,
-  } = useApproval(CONFIG.POOL, reserve?.underlyingAsset as Address); // Using the useApproval hook
+  } = useApproval(CONFIG.POOL, reserve?.underlyingAsset as Address);
 
   const { handleSupply, isError: supplyError, error, supplyHash } = useSupply();
   const { address: walletAddress } = useAccountAddress();
 
   useEffect(() => {
     validateAmount(amount);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount]);
 
   useEffect(() => {
     if (approveSuccess) {
-      setIsApproved(true); // Mark as approved if the transaction is successful
+      setIsApproved(true);
     }
   }, [approveSuccess]);
 
@@ -170,7 +169,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     setErrorMessage("");
     setData(null);
     setIsError(false);
-    setIsApproved(false); // Reset approval state on close
+    setIsApproved(false);
     onClose();
   };
 
@@ -227,20 +226,23 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                 </div>
               </div>
               <div className="flex justify-between gap-4">
-                <button
-                  className={`flex-grow-2 basis-2/3 ${isValid && !isApproved ? "primary-btn" : "disabled-btn"}`}
-                  onClick={handleApproveClick}
-                  disabled={!isValid || approvePending || isApproved} // Approve button disabled if already approved or pending
-                >
-                  {t("LendingSupplyModalApprove")}
-                </button>
-                <button
-                  className={`flex-grow-2 basis-2/3 ${isApproved && isValid ? "primary-btn" : "disabled-btn"}`}
-                  onClick={handleSupplyClick}
-                  disabled={!isApproved || !isValid} // Supply button enabled only if approved
-                >
-                  {t("LendingSupplyModalButton")}
-                </button>
+                {isApproved ? (
+                  <button
+                    className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                    onClick={handleSupplyClick}
+                    disabled={!isValid}
+                  >
+                    {t("LendingSupplyModalButton")}
+                  </button>
+                ) : (
+                  <button
+                    className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                    onClick={handleApproveClick}
+                    disabled={!isValid || approvePending}
+                  >
+                    {approvePending ? "Processing..." : t("LendingSupplyModalApprove")}
+                  </button>
+                )}
                 <button onClick={handleClose} className="secondary-btn flex-grow-1 basis-1/3">
                   {t("LendingSupplyModalClose")}
                 </button>
