@@ -7,7 +7,7 @@ import { useChainId } from "wagmi";
 interface ProfileStatsProps {
   balance: number;
   netAPY: number;
-  healthFactor: number;
+  healthFactor: number | string;
 }
 
 const ProfileStats: React.FC<ProfileStatsProps> = ({ balance, netAPY, healthFactor }) => {
@@ -16,7 +16,7 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ balance, netAPY, healthFact
   const data = {
     netWorth: balance.toFixed(2),
     netAPY: netAPY.toFixed(2),
-    healthFactor: healthFactor.toFixed(2),
+    healthFactor: typeof healthFactor === "number" ? healthFactor.toFixed(2) : healthFactor,
   };
 
   // Function to get network error message based on chainId

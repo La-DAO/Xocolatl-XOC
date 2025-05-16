@@ -60,13 +60,11 @@ const AssetsToBorrow: React.FC = () => {
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn2")}</div>
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn3")}</div>
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn4")}</div>
-            <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn5")}</div>
           </div>
 
           {(assetsToBorrow ?? []).map((reserve, index) => {
             const availableLiquidity = (Number(reserve.availableLiquidity) / 10 ** Number(reserve.decimals)).toFixed(5);
             const isButtonDisabled = !walletAddress;
-            const { canBorrow } = reserve;
 
             return (
               <div key={index} className="table-content table-border-top asset-row flex justify-between py-3">
@@ -82,25 +80,11 @@ const AssetsToBorrow: React.FC = () => {
                 <div className="asset-row-item w-24 h-fit">
                   <button
                     className={`${isButtonDisabled ? "disabled-btn" : "primary-btn"}`}
-                    disabled={isButtonDisabled || !canBorrow}
+                    disabled={isButtonDisabled}
                     onClick={() => handleBorrowClick(reserve, availableLiquidity)}
                   >
                     {t("LendingBorrowModalButton")}
                   </button>
-                </div>
-                <div className="asset-row-item w-24 h-fit relative">
-                  <p>
-                    {canBorrow ? (
-                      "✔️"
-                    ) : (
-                      <div
-                        className="tooltip tooltip-top tooltip-error"
-                        data-tip="You cannot borrow the same asset as you deposit"
-                      >
-                        ❌
-                      </div>
-                    )}
-                  </p>
                 </div>
               </div>
             );
