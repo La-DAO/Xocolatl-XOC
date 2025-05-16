@@ -225,6 +225,18 @@
   "LendingInfoPoint3": "Repay borrowed assets to unlock your collateral and close the loan.",
   "LendingClosing": "The decentralized lending markets provide a flexible and efficient way to manage your assets, earn passive income, and access liquidity for trading and investing.",
 
+  "ReserveInfoPanelTitle": "Reserve status & configuration",
+  "ReserveInfoPanelAvailableLiquidity": "Available Liquidity",
+  "ReserveInfoPanelOraclePrice": "Oracle Price",
+  "ReserveInfoPanelMaxLTV": "Max LTV",
+  "ReserveInfoPanelLiquidationThreshold": "Liquidation Threshold",
+  "ReserveInfoPanelLiquidationPenalty": "Liquidation Penalty",
+  "ReserveInfoPanelVariableBorrowAPY": "Variable Borrow APY",
+  "ReserveInfoUnderlyingToken": "Underlying Token",
+  "ReserveInfoAToken": "aToken",
+  "ReserveInfoVariableDebtToken": "Debt Token",
+  "ReserveInfoPanelReserveSize": "Reserve Size",
+
   "XoktleTitle": "Xoktle",
   "XoktleDescription": "Xoktle is the word for pot 🍯 in Nahuatl. This smart contract is designed to use your deposit to expand stablecoin liquidity and pair with the DeFi ecosystem. For every 1 dollar, there will be 4 pesos in the pool, so our liquidity agent will always strive to maintain this ratio by internally rebalancing the pool.",
   "XoktleTotalShares": "Total Shares",

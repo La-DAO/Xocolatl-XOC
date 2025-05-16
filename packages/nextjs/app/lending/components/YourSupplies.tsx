@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import WalletBalance from "./BalanceOf";
-import CollateralToggle from "./CollateralToggle";
 import WithdrawModal from "./modals/WithdrawTransactionModal";
 import useAccountAddress from "@/hooks/useAccount";
 import { useCollateralTotalBalance } from "@/hooks/useCollateralTotalBalance";
@@ -79,10 +78,6 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
     setIsModalOpen(true);
   };
 
-  console.log("reservesData", reservesData);
-  console.log("userReservesData", userReservesData);
-  console.log("reservesWithBalances", reservesWithBalances);
-
   return (
     <div>
       <div className="flex mt-2 gap-2 text-xs">
@@ -100,7 +95,6 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
           <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn1")}</div>
           <div className="supplies-header-item w-24 hidden sm:block">{t("LendingYourSuppliesColumn2")}</div>
           <div className="supplies-header-item w-24 hidden sm:block">{t("LendingYourSuppliesColumn3")}</div>
-          <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn4")}</div>
           <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn5")}</div>
         </div>
         {reservesWithBalances.map((reserve, index) => {
@@ -128,14 +122,6 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
               </div>
               <div className="supplies-row-item w-24 hidden sm:block">
                 <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
-              </div>
-              <div className="supplies-row-item w-24">
-                <div>
-                  <CollateralToggle
-                    assetAddress={reserve.underlyingAsset}
-                    initialUseAsCollateral={reserve.usageAsCollateralEnabledOnUser}
-                  />
-                </div>
               </div>
               <div className="supplies-row-item w-24">
                 <button

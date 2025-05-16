@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { houseOfReserveABI } from "../../../app/components/abis/houseofreserve";
 import { XOCABI } from "../../../app/components/abis/xocabis";
+import { contractData } from "@/app/constants/contracts";
 import BaseLogo from "@/public/Base-Logo.jpg";
 import BinanceLogo from "@/public/BinanceLogo.png";
 import PolygonLogo from "@/public/PolygonLogo.png";
 import OptimismLogo from "@/public/optimism-logo.png";
-import { Address, formatEther } from "viem";
+import { Abi, formatEther } from "viem";
 import { useChainId, useReadContract, useReadContracts } from "wagmi";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
 import { useTranslation } from "~~/app/context/LanguageContext";
+import { getTokenBlockExplorerUrl } from "~~/app/utils/utils";
 
 const CDPStats: React.FC = () => {
   const { t } = useTranslation();
@@ -48,72 +50,15 @@ const CDPStats: React.FC = () => {
     }
   }, [latestMinted]);
 
-  // Define the contract addresses for each chain
-  let houseOfReserveContracts: { address: Address; abi: any; functionName: string }[] = [];
-  let assetNames: string[] = [];
+  // Access config for current chain
+  const config = contractData[chainId];
 
-  if (chainId === 56) {
-    houseOfReserveContracts = [
-      {
-        address: "0xd411BE9A105Ea7701FabBe58C2834b7033EBC203",
-        abi: houseOfReserveABI,
-        functionName: "totalDeposits",
-      },
-      {
-        address: "0x070ccE6887E70b75015F948b12601D1E759D2024",
-        abi: houseOfReserveABI,
-        functionName: "totalDeposits",
-      },
-    ];
-    assetNames = ["WETH", "WBNB"];
-  } else if (chainId === 137) {
-    houseOfReserveContracts = [
-      {
-        address: "0x2718644E0C38A6a1F82136FC31dcA00DFCdF92a3",
-        abi: houseOfReserveABI,
-        functionName: "totalDeposits",
-      },
-      {
-        address: "0x76CAc0bC384a49485627D2235fE132e3038b45BB",
-        abi: houseOfReserveABI,
-        functionName: "totalDeposits",
-      },
-      {
-        address: "0xF56293025437Db5C0024a37dfcEc792125d56A48",
-        abi: houseOfReserveABI,
-        functionName: "totalDeposits",
-      },
-    ];
-    assetNames = ["WETH", "MATICX", "WMATIC"];
-  } else if (chainId === 8453) {
-    houseOfReserveContracts = [
-      {
-        address: "0xfF69E183A863151B4152055974aa648b3165014D",
-        abi: houseOfReserveABI,
-        functionName: "totalDeposits",
-      },
-      {
-        address: "0x5c4a154690AE52844F151bcF3aA44885db3c8A58",
-        abi: houseOfReserveABI,
-        functionName: "totalDeposits",
-      },
-    ];
-    assetNames = ["WETH", "cbETH"];
-  } else if (chainId === 10) {
-    houseOfReserveContracts = [
-      {
-        address: "0x7fB68dc36044FcC02eEE779A9b35AC9D75e659Be",
-        abi: houseOfReserveABI,
-        functionName: "totalDeposits",
-      },
-      {
-        address: "0x2424BcD327DFD8e5DfF73eCB606CCED4235c1990",
-        abi: houseOfReserveABI,
-        functionName: "totalDeposits",
-      },
-    ];
-    assetNames = ["WETH", "OP"];
-  }
+  // Build the wagmi-compatible contract read list
+  const houseOfReserveContracts = Object.entries(config.houseOfReserves).map(([, address]) => ({
+    address,
+    abi: houseOfReserveABI as Abi,
+    functionName: "totalDeposits",
+  }));
 
   // Call to fetch data from the House of Reserve contracts
   const { data: houseOfReserveData, isError: houseOfReserveError } = useReadContracts({
@@ -123,6 +68,8 @@ const CDPStats: React.FC = () => {
       functionName: contract.functionName,
     })),
   });
+
+  const assetNames = Object.keys(config.houseOfReserves);
 
   useEffect(() => {
     if (houseOfReserveData) {
@@ -146,17 +93,8 @@ const CDPStats: React.FC = () => {
     logoSrc = OptimismLogo;
   }
 
-  const handleProofClick = () => {
-    let explorerUrl = "";
-    if (chainId === 137) {
-      explorerUrl = "https://polygonscan.com/token/0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf";
-    } else if (chainId === 56) {
-      explorerUrl = "https://bscscan.com/token/0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf";
-    } else if (chainId === 8453) {
-      explorerUrl = "https://basescan.org/token/0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf";
-    } else if (chainId === 10) {
-      explorerUrl = "https://optimistic.etherscan.io/token/0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf";
-    }
+  const handleOpenTokenInExplorerClick = () => {
+    const explorerUrl = getTokenBlockExplorerUrl(chainId);
     window.open(explorerUrl, "_blank");
   };
 
@@ -183,7 +121,7 @@ const CDPStats: React.FC = () => {
               {latestMintedLoading ? "Loading..." : latestMintedError ? "Error" : `$ ${latestMintedNumber?.toString()}`}
               <ArrowTopRightOnSquareIcon
                 className="h-6 w-6 text-accent cursor-pointer ml-2"
-                onClick={handleProofClick}
+                onClick={handleOpenTokenInExplorerClick}
               />
             </div>
           </div>

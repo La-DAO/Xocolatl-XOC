@@ -28,12 +28,10 @@
   "Benefit2Bullet3Title": "Gobernancia Comunitaria",
   "Benefit2Bullet3Desc": "Nuestra plataforma está gobernada por una organización autónoma descentralizada (DAO) que es propiedad y está controlada por sus miembros. Esto garantiza que todas las decisiones se tomen en el mejor interés de la comunidad y que todo el mundo tenga voz y voto en el funcionamiento de la plataforma.",
 
-
-
   "featuresTab1": "Gestión de CDP",
   "featuresTab2": "Mercados de Préstamos de Dinero",
   "featuresTab3": "Interoperabilidad Total con las L2 más Populares",
-  
+
   "featuresTab1Title": "Gestión de CDP",
   "featuresTab1Desc1": "Un CDP te permite aprovechar tus activos más valiosos para pedir prestado stablecoins, en nuestro caso $XOC...",
   "featuresTab1Desc2": "$XOC es ERC20, por lo que también es compatible con el ecosistema DeFi...",
@@ -78,7 +76,6 @@
   "timelineTitle6": "Los Contratos Xocolatl se Lanzan en Optimism Mainnet",
   "timelineDesc6": "Los Contratos Xocolatl ahora están en vivo en Optimism Mainnet, marcando el primer paso en nuestra hoja de ruta para convertirnos en la stablecoin MXN más líquida y confiable en la Superchain. Este despliegue mejora la liquidez y confianza de nuestra red, allanando el camino para futuras integraciones y adopción.",
 
-  
   "quote1": "$XOC es una de las primeras propuestas para",
   "quote1Highlight": "revolucionar DeFi en México.",
   "quote1Cont": "Integrando una moneda estable de peso mexicano en el ecosistema web3.",
@@ -90,7 +87,6 @@
   "quote3Highlight": "$XOC es la mejor herramienta de México",
   "quote3Cont": "para construir un sistema financiero descentralizado. El empoderamiento financiero es la clave para un mejor futuro para todos los mexicanos.",
   "title3": "Ethereum México",
-
 
   "testimonialPreTitle": "¡Testimonios inspiradores!",
   "testimonialTitle": "Explora las voces de la comunidad $XOC",
@@ -113,7 +109,7 @@
   "TotalXOCMinted": "Total $XOC Acuñado",
   "Deposits": "Depósitos",
   "YourDepositTableTitle": "Acuña $XOC",
-  "YourDepositsDescription":"Puedes acuñar $XOC basado en tus depósitos debajo.",
+  "YourDepositsDescription": "Puedes acuñar $XOC basado en tus depósitos debajo.",
   "YourDepositsEmpty": "Aún no has depositado nada - No se encontraron posiciones abiertas",
   "AssetTableTitle": "Deposita tus Activos",
   "AssetTableDescription": "Selecciona el activo a depositar como garantía, solo entonces podrás acuñar $XOC",
@@ -186,7 +182,7 @@
   "LendingWithdrawModalCopyMessage": "Copiado al portapapeles",
   "LendingWithdrawModalSuccessTitle": "Todo bien, al cien!",
   "LendingWithdrawModalSuccessMessage": "La retirada se ha realizado con éxito",
-  
+
   "LendingSupplyModalTitle": "Depositar",
   "LendingSupplyModalLabel": "Cantidad a depositar",
   "LendingSupplyModalBalance": "Saldo disponible",
@@ -240,6 +236,18 @@
   "LendingInfoPoint3": "Intereses competitivos: Los mercados de préstamos descentralizados suelen ofrecer tasas de interés competitivas en comparación con los mercados tradicionales.",
   "LendingClosing": "Los mercados de préstamos descentralizados son una parte fundamental del ecosistema DeFi, ya que permiten a los usuarios acceder a la liquidez de forma rápida y sencilla, sin la necesidad de intermediarios.",
 
+  "ReserveInfoPanelTitle": "Configuración y Estado de la Reserva",
+  "ReserveInfoPanelAvailableLiquidity": "Liquidez Disponible",
+  "ReserveInfoPanelOraclePrice": "Precio del Oráculo",
+  "ReserveInfoPanelMaxLTV": "LTV Máximo",
+  "ReserveInfoPanelLiquidationThreshold": "Umbral de Liquidación",
+  "ReserveInfoPanelLiquidationPenalty": "Penalización de Liquidación",
+  "ReserveInfoPanelVariableBorrowAPY": "APY, variable",
+  "ReserveInfoUnderlyingToken": "Token subyacente",
+  "ReserveInfoAToken": "aToken",
+  "ReserveInfoVariableDebtToken": "Token de deuda",
+  "ReserveInfoPanelReserveSize": "Tamaño de la Reserva",
+
   "XoktleTitle": "Xoktle",
   "XoktleDescription": "Xoktle es la palabra en náhuatl para olla 🍯. Este contrato inteligente está diseñado para utilizar tu depósito para expandir la liquidez de la stablecoin y emparejarla con el ecosistema DeFi. Por cada 1 dólar, habrá 4 pesos en el pool, por lo que nuestro agente de liquidez siempre se esforzará por mantener esta proporción mediante el reequilibrio interno del pool.",
   "XoktleTotalShares": "Total de Acciones",
@@ -254,8 +262,4 @@
   "XoktleShareAmount": "Cantidad de acciones",
   "XoktleOverView": "Vista General",
   "XoktleAccountShares": "Acciones en tu cuenta"
-
-
-
-
 }
