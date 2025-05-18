@@ -8,7 +8,7 @@ import { useWriteContract } from "wagmi";
  */
 const useRepay = () => {
   // Hook for writing to a smart contract
-  const { writeContract, error, data: repayHash } = useWriteContract();
+  const { writeContract, error, data: repayHash, isPending: isRepayPending } = useWriteContract();
   const pool = externalContracts[8453].Pool;
 
   /**
@@ -36,7 +36,7 @@ const useRepay = () => {
     }
   };
 
-  return { handleRepay, isError: !!error, error, repayHash };
+  return { handleRepay, isError: !!error, error, repayHash, isRepayPending };
 };
 
 export default useRepay;
