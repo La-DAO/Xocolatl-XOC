@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { ERC20ABI } from "@/app/components/abis/erc20";
 import CONFIG from "@/config";
 import useAccountAddress from "@/hooks/useAccount";
-import { useApproval } from "@/hooks/useApproval";
 import useSupply from "@/hooks/useSupply";
 import { ReserveData } from "@/types/types";
-import { toWeiConverter } from "@/utils/toWeiConverter";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Address } from "viem";
-import { useChainId } from "wagmi";
+import { Address, parseEther } from "viem";
+import { useChainId, useReadContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { useTranslation } from "~~/app/context/LanguageContext";
 import { getBlockExplorerUrl } from "~~/app/utils/utils";
+import { useBalanceOf } from "~~/hooks/useBalanceOf";
 
 interface ModalProps {
   isOpen: boolean;
@@ -33,132 +33,183 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   const [amount, setAmount] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [balanceError, setBalanceError] = useState<string | null>(null);
   const [data, setData] = useState<any>(null);
   const [isError, setIsError] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
   const chainId = useChainId();
-  const [isApproved, setIsApproved] = useState(false);
+  const [requiresApproval, setRequiresApproval] = useState(false);
+  const [assetAllowanceState, setAssetAllowanceState] = useState("0");
   const {
+    writeContract: approveERC20,
+    isError: isApprovalError,
+    isPending: isApprovalPending,
+    data: hash,
+  } = useWriteContract();
+  /*  const {
     approve,
     isError: approveError,
     isSuccess: approveSuccess,
     isPending: approvePending,
-  } = useApproval(CONFIG.POOL, reserve?.underlyingAsset as Address);
+    hash,
+  } = useApproval(CONFIG.POOL, reserve?.underlyingAsset as Address); */
+  const { isLoading: isApprovalLoading, isSuccess: isApprovalSuccess } = useWaitForTransactionReceipt({ hash });
 
   const { handleSupply, isError: supplyError, error, supplyHash } = useSupply();
   const { address: walletAddress } = useAccountAddress();
 
-  useEffect(() => {
-    validateAmount(amount);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [amount]);
+  const assetBalance = useBalanceOf({
+    tokenAddress: reserve?.underlyingAsset as Address,
+    walletAddress: walletAddress as Address,
+  });
+
+  const {
+    data: assetAllowance,
+    isError: isAssetAllowanceError,
+    isLoading: isAssetAllowanceLoading,
+    refetch: refetchAllowance,
+  } = useReadContract({
+    address: reserve?.underlyingAsset as Address,
+    abi: ERC20ABI,
+    functionName: "allowance",
+    args: [walletAddress, CONFIG.POOL], // Only pass the address
+  });
 
   useEffect(() => {
-    if (approveSuccess) {
-      setIsApproved(true);
+    if (isAssetAllowanceError) {
+      console.error("Error fetching allowance");
+      setAssetAllowanceState("0");
+    } else if (!isAssetAllowanceLoading && assetAllowance) {
+      const allowanceInEther = (Number(assetAllowance) / 1e18).toFixed(7);
+      setAssetAllowanceState(allowanceInEther);
+
+      // Log the allowance value
+      console.log("User's allowance:", allowanceInEther);
     }
-  }, [approveSuccess]);
+  }, [assetAllowance, isAssetAllowanceError, isAssetAllowanceLoading]);
+
+  useEffect(() => {
+    const assetAmount = parseFloat(amount) || 0;
+    if (assetBalance && assetAmount > parseFloat(assetBalance)) {
+      setBalanceError("You don't have enough tokens in your wallet");
+    } else {
+      setBalanceError(null); // Clear error if valid
+    }
+  }, [amount, assetBalance]);
+
+  useEffect(() => {
+    const checkIfApprovalNeeded = () => {
+      const assetAmount = parseFloat(amount) || 0;
+      const needsApproval = assetAmount > parseFloat(assetAllowanceState);
+      setRequiresApproval(needsApproval);
+    };
+
+    checkIfApprovalNeeded();
+  }, [amount, assetAllowanceState]);
 
   useEffect(() => {
     if (supplyError) {
       setIsError(true);
-      setErrorMessage(error?.message || "An unknown error occurred.");
-    }
-    if (supplyHash) {
+      setErrorMessage(error?.message || "An unknown error occurred during the supply transaction.");
+    } else if (supplyHash) {
       setData(supplyHash);
+      setShowSuccessIcon(true);
     }
   }, [supplyError, supplyHash, error]);
 
-  /**
-   * Validates the entered amount for supply.
-   * @param {string} value - The amount to validate.
-   */
-  const validateAmount = (value: string) => {
-    const numValue = parseFloat(value);
-    if (isNaN(numValue) || numValue < 0) {
-      setIsValid(false);
+  useEffect(() => {
+    const assetAmount = parseFloat(amount) || 0;
+
+    if (assetAmount <= 0 || isNaN(assetAmount)) {
+      setBalanceError(null); // Clear balance-related errors if amount is invalid
       setErrorMessage("Amount must be a positive number.");
-    } else if (numValue > parseFloat(balance)) {
       setIsValid(false);
-      setErrorMessage("Amount exceeds wallet balance.");
-    } else if (numValue === 0) {
+    } else if (assetBalance && assetAmount > parseFloat(assetBalance)) {
+      setBalanceError("You don't have enough tokens in your wallet");
+      setErrorMessage(""); // Clear the positive number error if balance error exists
       setIsValid(false);
-      setErrorMessage("Amount must be greater than zero.");
     } else {
+      setBalanceError(null); // Clear any balance-related errors
+      setErrorMessage(""); // Clear other error messages
       setIsValid(true);
-      setErrorMessage("");
+    }
+  }, [amount, assetBalance]);
+
+  useEffect(() => {
+    if (isApprovalSuccess) {
+      refetchAllowance();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isApprovalSuccess]);
+
+  const handleApproval = async () => {
+    const assetAmount = parseFloat(amount) || 0;
+
+    try {
+      if (assetAmount > parseFloat(assetAllowanceState) && walletAddress) {
+        const decimals = Number(reserve?.decimals);
+        let adjustedAmount = assetAmount;
+
+        // Adjust the amount if decimals are less than 18
+        if (decimals < 18) {
+          const factor = Math.pow(10, 18 - decimals);
+          adjustedAmount = assetAmount / factor; // Keep as a number for compatibility with toWeiConverter
+        }
+
+        // Convert the adjusted amount to the appropriate format for the contract
+        const amountInWei = parseEther(adjustedAmount.toString());
+
+        console.log("Attempting to approveERC20:", {
+          address: reserve?.underlyingAsset,
+          abi: ERC20ABI,
+          functionName: "approve",
+          args: [CONFIG.POOL, BigInt(amountInWei)],
+        });
+
+        // Call the approveERC20 function
+        await approveERC20({
+          address: reserve?.underlyingAsset as Address,
+          abi: ERC20ABI,
+          functionName: "approve",
+          args: [CONFIG.POOL as Address, BigInt(amountInWei)],
+        });
+
+        console.log("Approval successful");
+      }
+    } catch (error) {
+      console.error("Error approving", error);
+      setErrorMessage("Failed to approve tokens. Please try again.");
     }
   };
 
-  /**
-   * Handles changes to the amount input field.
-   * @param {React.ChangeEvent<HTMLInputElement>} event - The change event.
-   */
+  const handleSupplyClick = async () => {
+    if (requiresApproval) {
+      await handleApproval();
+    } else {
+      handleSupply(reserve?.underlyingAsset as Address, parseEther(amount), walletAddress as Address);
+    }
+  };
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(event.target.value);
+    refetchAllowance();
   };
 
-  /**
-   * Sets the amount to the maximum available balance.
-   */
-  const handleMaxClick = () => {
-    setAmount(balance);
-  };
-
-  /**
-   * Handles the click event for the approve button.
-   * @throws Will throw an error if there is an issue converting the amount to a compatible format.
-   */
-  const handleApproveClick = () => {
-    if (walletAddress) {
-      const decimals = Number(reserve?.decimals);
-      let adjustedAmount = amount;
-
-      // Adjust the amount if decimals are less than 18
-      if (decimals < 18) {
-        const factor = Math.pow(10, 18 - decimals);
-        adjustedAmount = (parseFloat(amount) / factor).toFixed(18); // Convert to a format compatible with parseEther
-      }
-      approve(adjustedAmount); // Pass the adjusted value
-    }
-  };
-
-  /**
-   * Handles the click event for the supply button.
-   * @throws Will throw an error if there is an issue converting the amount to BigInt.
-   */
-  const handleSupplyClick = () => {
-    if (walletAddress && isApproved) {
-      try {
-        const decimals = Number(reserve?.decimals); // Convert to number if it's `bigint`
-        const amountInWei = toWeiConverter(parseFloat(amount), decimals);
-        handleSupply(reserve?.underlyingAsset as Address, amountInWei, walletAddress as Address);
-      } catch (err) {
-        console.error("Error converting amount to BigInt:", err);
-      }
-    } else {
-      console.error("Approval is required before supply.");
-    }
-  };
-
-  /**
-   * Handles the click event to copy the error message to the clipboard.
-   */
   const handleCopyError = () => {
     if (error?.message) {
       navigator.clipboard
         .writeText(error.message)
         .then(() => {
-          console.log("Error copied to clipboard");
-          setShowSuccessIcon(true);
-          setTimeout(() => {
-            setShowSuccessIcon(false);
-          }, 1500);
+          // Handle success if needed
         })
         .catch(err => {
-          console.error("Failed to copy error to clipboard", err);
+          console.error("Failed to copy error message: ", err);
         });
     }
+  };
+
+  const handleMaxClick = () => {
+    setAmount(assetBalance || "");
   };
 
   /**
@@ -170,7 +221,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     setErrorMessage("");
     setData(null);
     setIsError(false);
-    setIsApproved(false);
+    refetchAllowance();
     onClose();
   };
 
@@ -201,12 +252,19 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   />
                   <span className="font-bold">{reserve.symbol}</span>
                 </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span>Wallet allowance</span>
+                  <span className="font-bold">
+                    {assetAllowanceState} {reserve.symbol}
+                  </span>
+                </div>
                 <div className="text-xs">
                   {t("LendingSupplyModalBalance")}: {balance}{" "}
                   <span className="font-bold hover:underline cursor-pointer" onClick={handleMaxClick}>
                     MAX
                   </span>
                 </div>
+                {balanceError && <p className="text-error text-xs">{balanceError}</p>}
                 {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
               </div>
               <div className="container-gray-borders flex flex-col gap-2">
@@ -227,21 +285,35 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                 </div>
               </div>
               <div className="flex justify-between gap-4">
-                {isApproved ? (
+                {requiresApproval ? (
+                  isApprovalLoading ? (
+                    <div className="flex-grow-2 basis-2/3 bg-warning text-base-100 text-center rounded-lg py-2 cursor-not-allowed">
+                      Waiting for approval...
+                    </div>
+                  ) : isApprovalSuccess ? (
+                    <button
+                      className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                      onClick={handleSupplyClick}
+                      disabled={!isValid || isApprovalPending}
+                    >
+                      {isApprovalPending ? "Processing..." : t("LendingSupplyModalApprove")}
+                    </button>
+                  ) : (
+                    <button
+                      className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                      onClick={handleApproval}
+                      disabled={!isValid || isApprovalPending}
+                    >
+                      {isApprovalPending ? "Processing..." : t("LendingSupplyModalApprove")}
+                    </button>
+                  )
+                ) : (
                   <button
                     className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
                     onClick={handleSupplyClick}
                     disabled={!isValid}
                   >
                     {t("LendingSupplyModalButton")}
-                  </button>
-                ) : (
-                  <button
-                    className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
-                    onClick={handleApproveClick}
-                    disabled={!isValid || approvePending}
-                  >
-                    {approvePending ? "Processing..." : t("LendingSupplyModalApprove")}
                   </button>
                 )}
                 <button onClick={handleClose} className="secondary-btn flex-grow-1 basis-1/3">
@@ -274,7 +346,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
               </button>
             </div>
           )}
-          {approveError && (
+          {isApprovalError && (
             <div className="flex flex-col gap-6 mt-6">
               <div className="error-container text-center">
                 <Image
@@ -297,7 +369,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
               </button>
             </div>
           )}
-          {isError && !approveError && (
+          {isError && !isApprovalError && (
             <div className="flex flex-col gap-6 mt-6">
               <div className="error-container text-center">
                 <Image

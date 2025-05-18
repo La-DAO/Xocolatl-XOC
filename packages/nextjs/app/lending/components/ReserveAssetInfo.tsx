@@ -1,4 +1,5 @@
 import React from "react";
+import APYGraph from "./APYGraph";
 import { useTranslation } from "@/app/context/LanguageContext";
 import useReserveSize from "@/hooks/useReserveSize";
 import { ReserveData } from "@/types/types";
@@ -97,22 +98,25 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
       {/* Supply Info */}
       <div className="flex flex-col gap-2">
         <p className="font-semibold text-primary text-lg">Supply Info</p>
-        <div className="w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="border border-gray-300 rounded-md p-4">
-              <p className="text-xs text-gray-500">{t("ReserveInfoPanelMaxLTV")}</p>
-              <p className="text-lg font-bold text-primary">{maxLTV}%</p>
-            </div>
-            <div className="border border-gray-300 rounded-md p-4">
-              <p className="text-xs text-gray-500">{t("ReserveInfoPanelLiquidationThreshold")}</p>
-              <p className="text-lg font-bold text-primary">{liquidationThreshold}%</p>
-            </div>
-            <div className="border border-gray-300 rounded-md p-4">
-              <p className="text-xs text-gray-500">{t("ReserveInfoPanelLiquidationPenalty")}</p>
-              <p className="text-lg font-bold text-primary">{liquidationPenalty}%</p>
-            </div>
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="border border-gray-300 rounded-md p-4">
+            <p className="text-xs text-gray-500">{t("ReserveInfoPanelMaxLTV")}</p>
+            <p className="text-lg font-bold text-primary">{maxLTV}%</p>
+          </div>
+          <div className="border border-gray-300 rounded-md p-4">
+            <p className="text-xs text-gray-500">{t("ReserveInfoPanelLiquidationThreshold")}</p>
+            <p className="text-lg font-bold text-primary">{liquidationThreshold}%</p>
+          </div>
+          <div className="border border-gray-300 rounded-md p-4">
+            <p className="text-xs text-gray-500">{t("ReserveInfoPanelLiquidationPenalty")}</p>
+            <p className="text-lg font-bold text-primary">{liquidationPenalty}%</p>
           </div>
         </div>
+      </div>
+
+      {/* APY Graph */}
+      <div className="mt-6">
+        <APYGraph />
       </div>
 
       {/* Borrow Info */}
