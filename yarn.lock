@@ -936,6 +936,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@kurkle/color@npm:^0.3.0":
+  version: 0.3.4
+  resolution: "@kurkle/color@npm:0.3.4"
+  checksum: b95c6abe0241ba1745b3c84de3b464296b95ce577110b54f46e6c6dcc9a0966491533df43812bd6c66f92cf818e385d1390b280cd5851d4afb52fc37f8a6c0b9
+  languageName: node
+  linkType: hard
+
 "@lit-labs/ssr-dom-shim@npm:^1.0.0, @lit-labs/ssr-dom-shim@npm:^1.1.0":
   version: 1.2.0
   resolution: "@lit-labs/ssr-dom-shim@npm:1.2.0"
@@ -4045,6 +4052,15 @@ __metadata:
     ansi-styles: ^4.1.0
     supports-color: ^7.1.0
   checksum: fe75c9d5c76a7a98d45495b91b2172fa3b7a09e0cc9370e5c8feb1c567b85c4288e2b3fded7cfdd7359ac28d6b3844feb8b82b8686842e93d23c827c417e83fc
+  languageName: node
+  linkType: hard
+
+"chart.js@npm:^4.4.9":
+  version: 4.4.9
+  resolution: "chart.js@npm:4.4.9"
+  dependencies:
+    "@kurkle/color": ^0.3.0
+  checksum: f41f3a2bb835c32431fe95ae765028d08fb4844347ea307f803dbe9fd84df4bf8d02750ff9c084d7ab9c47b22ae243f40eb97600bc9536192089a035929db88c
   languageName: node
   linkType: hard
 
@@ -9284,6 +9300,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-chartjs-2@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "react-chartjs-2@npm:5.3.0"
+  peerDependencies:
+    chart.js: ^4.1.1
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: af05212a1e30a98379959dd2cd4670ff29ca6e9b1ad5d54d73ddc4336f463567fb0386f33dbc9de01ea724ac75dd0b7a8374e3936a91c7751b7c20c19ef3e920
+  languageName: node
+  linkType: hard
+
 "react-copy-to-clipboard@npm:~5.1.0":
   version: 5.1.0
   resolution: "react-copy-to-clipboard@npm:5.1.0"
@@ -9804,6 +9830,7 @@ __metadata:
     "@heroicons/react": ^2.1.4
     "@types/react-slick": ^0
     "@types/slick-carousel": ^1
+    chart.js: ^4.4.9
     ethers: latest
     font-awesome: ^4.7.0
     framer-motion: ^11.3.24
@@ -9814,6 +9841,7 @@ __metadata:
     lucide-react: ^0.483.0
     next: ~14.0.4
     next-i18n-router: ^5.5.1
+    react-chartjs-2: ^5.3.0
     react-slick: ^0.30.3
     react-wrap-balancer: ^1.1.1
     slick-carousel: ^1.8.1

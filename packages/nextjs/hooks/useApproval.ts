@@ -4,7 +4,7 @@ import { Address } from "viem";
 import { useWriteContract } from "wagmi";
 
 export const useApproval = (houseOfReserveContract: Address, assetContract: Address) => {
-  const { writeContract, isError, isSuccess, isPending } = useWriteContract();
+  const { writeContract, isError, isSuccess, isPending, data: hash } = useWriteContract();
 
   const approve = async (amount: string) => {
     try {
@@ -24,5 +24,6 @@ export const useApproval = (houseOfReserveContract: Address, assetContract: Addr
     isError,
     isSuccess,
     isPending,
+    hash,
   };
 };
