@@ -219,6 +219,11 @@
   "LendingRepayModalCopyMessage": "Copiado al portapapeles",
   "LendingRepayModalSuccessTitle": "Todo bien, al cien!",
   "LendingRepayModalSuccessMessage": "El reembolso se ha realizado con éxito",
+  "LendingRepayModalErrorPositive": "La cantidad debe ser un número positivo.",
+  "LendingRepayModalErrorBalance": "Saldo insuficiente.",
+  "LendingRepayModalProcessing": "Procesando...",
+  "LendingRepayModalWaiting": "Esperando...",
+  "LendingRepayModalExplore": "Verificar en el Block Explorer",
 
   "LendingInfoTitle": "Comprendiendo Préstamos Decentralizado",
   "LendingInfoSubtitle": "Cómo funcionan los mercados de préstamos",

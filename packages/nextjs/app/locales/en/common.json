@@ -208,6 +208,11 @@
   "LendingRepayModalCopyMessage": "Copy the error",
   "LendingRepayModalSuccessTitle": "All done!",
   "LendingRepayModalSuccessMessage": "Your transaction was sent successful.",
+  "LendingRepayModalErrorPositive": "Amount must be a positive number.",
+  "LendingRepayModalErrorBalance": "Insufficient balance.",
+  "LendingRepayModalProcessing": "Processing...",
+  "LendingRepayModalWaiting": "Waiting...",
+  "LendingRepayModalExplore": "Verify in Block Explorer",
 
   "LendingInfoTitle": "Understanding Decentralized Lending",
   "LendingInfoSubtitle": "How the lending markets work around here",
