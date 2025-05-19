@@ -8,7 +8,7 @@ import { useWriteContract } from "wagmi";
  */
 const useSupply = () => {
   // Hook for writing to a smart contract
-  const { writeContract, error, data: supplyHash } = useWriteContract();
+  const { writeContract, isSuccess, error, data: supplyHash } = useWriteContract();
   const pool = externalContracts[8453].Pool;
 
   /**
@@ -36,7 +36,7 @@ const useSupply = () => {
     }
   };
 
-  return { handleSupply, isError: !!error, error, supplyHash };
+  return { handleSupply, isError: !!error, error, supplyHash, isSuccess };
 };
 
 export default useSupply;

@@ -7,7 +7,7 @@ import useSupply from "@/hooks/useSupply";
 import { ReserveData } from "@/types/types";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Address, parseEther } from "viem";
+import { Address, parseUnits } from "viem";
 import { useChainId, useReadContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { useTranslation } from "~~/app/context/LanguageContext";
 import { getBlockExplorerUrl } from "~~/app/utils/utils";
@@ -20,49 +20,26 @@ interface ModalProps {
   balance: string;
 }
 
-/**
- * Modal component for handling supply transactions.
- * @param {boolean} isOpen - Whether the modal is open or not.
- * @param {() => void} onClose - Function to call when the modal is closed.
- * @param {ReserveData | null} reserve - The reserve data to supply to.
- * @param {string} balance - The wallet balance as a string.
- * @returns {JSX.Element | null} - The modal component or null if not open.
- */
 const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve, balance }) => {
   const { t } = useTranslation();
+  const chainId = useChainId();
+  const { address: walletAddress } = useAccountAddress();
+  const { handleSupply, isError: supplyError, error, supplyHash } = useSupply();
+
+  // form state
   const [amount, setAmount] = useState("");
   const [isValid, setIsValid] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const [balanceError, setBalanceError] = useState<string | null>(null);
-  const [data, setData] = useState<any>(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [data, setData] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
-  const chainId = useChainId();
+
+  // approval state
   const [requiresApproval, setRequiresApproval] = useState(false);
   const [assetAllowanceState, setAssetAllowanceState] = useState("0");
-  const {
-    writeContract: approveERC20,
-    isError: isApprovalError,
-    isPending: isApprovalPending,
-    data: hash,
-  } = useWriteContract();
-  /*  const {
-    approve,
-    isError: approveError,
-    isSuccess: approveSuccess,
-    isPending: approvePending,
-    hash,
-  } = useApproval(CONFIG.POOL, reserve?.underlyingAsset as Address); */
-  const { isLoading: isApprovalLoading, isSuccess: isApprovalSuccess } = useWaitForTransactionReceipt({ hash });
 
-  const { handleSupply, isError: supplyError, error, supplyHash } = useSupply();
-  const { address: walletAddress } = useAccountAddress();
-
-  const assetBalance = useBalanceOf({
-    tokenAddress: reserve?.underlyingAsset as Address,
-    walletAddress: walletAddress as Address,
-  });
-
+  // 1) read on-chain allowance, re-poll on every block
   const {
     data: assetAllowance,
     isError: isAssetAllowanceError,
@@ -72,149 +49,150 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     address: reserve?.underlyingAsset as Address,
     abi: ERC20ABI,
     functionName: "allowance",
-    args: [walletAddress, CONFIG.POOL], // Only pass the address
+    args: [walletAddress, CONFIG.POOL],
   });
 
+  // 2) approval tx hooks
+  const {
+    writeContract: approveERC20,
+    isError: isApprovalError,
+    isPending: isApprovalPending,
+    data: approvalHash,
+  } = useWriteContract();
+  const { isLoading: isApprovalLoading, isSuccess: isApprovalSuccess } = useWaitForTransactionReceipt({
+    hash: approvalHash,
+  });
+
+  // 3) user token balance
+  const assetBalance = useBalanceOf({
+    tokenAddress: reserve?.underlyingAsset as Address,
+    walletAddress: walletAddress as Address,
+  });
+
+  // when modal opens or reserve changes, re-fetch allowance
+  useEffect(() => {
+    if (isOpen && reserve && walletAddress) {
+      refetchAllowance();
+    }
+  }, [isOpen, reserve, walletAddress, refetchAllowance]);
+
+  // format allowance into a human string
   useEffect(() => {
     if (isAssetAllowanceError) {
-      console.error("Error fetching allowance");
       setAssetAllowanceState("0");
-    } else if (!isAssetAllowanceLoading && assetAllowance) {
-      const allowanceInEther = (Number(assetAllowance) / 1e18).toFixed(7);
-      setAssetAllowanceState(allowanceInEther);
+    } else if (!isAssetAllowanceLoading && assetAllowance != null && reserve) {
+      // Ensure assetAllowance is a string
+      const allowanceString = assetAllowance.toString();
 
-      // Log the allowance value
-      console.log("User's allowance:", allowanceInEther);
+      // Pick up the token's true decimals:
+      const tokenDecimals = Number(reserve.decimals);
+
+      // Convert the allowance to a decimal string
+      const formatted = parseUnits(allowanceString, tokenDecimals);
+
+      // Optionally round to 7 places for UI consistency:
+      setAssetAllowanceState(Number(formatted).toFixed(7));
+      console.log(`Reserve: ${reserve.name}, Allowance: ${Number(formatted).toFixed(7)}`);
     }
-  }, [assetAllowance, isAssetAllowanceError, isAssetAllowanceLoading]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [assetAllowance, isAssetAllowanceError, isAssetAllowanceLoading, reserve?.decimals]);
 
+  // re-fetch after approval lands
   useEffect(() => {
-    const assetAmount = parseFloat(amount) || 0;
-    if (assetBalance && assetAmount > parseFloat(assetBalance)) {
-      setBalanceError("You don't have enough tokens in your wallet");
+    if (isApprovalSuccess) {
+      refetchAllowance();
+    }
+  }, [isApprovalSuccess, refetchAllowance]);
+
+  // validate amount vs wallet
+  useEffect(() => {
+    const num = parseFloat(amount) || 0;
+    if (num <= 0 || isNaN(num)) {
+      setIsValid(false);
+      setErrorMessage("Amount must be > 0");
+    } else if (balance && num > parseFloat(balance)) {
+      setIsValid(false);
+      setErrorMessage("Exceeds your wallet balance");
     } else {
-      setBalanceError(null); // Clear error if valid
+      setIsValid(true);
+      setErrorMessage("");
     }
-  }, [amount, assetBalance]);
+    setBalanceError(assetBalance && num > parseFloat(assetBalance) ? "Insufficient on-chain balance" : null);
+  }, [amount, balance, assetBalance]);
 
+  // decide if approval is still needed
   useEffect(() => {
-    const checkIfApprovalNeeded = () => {
-      const assetAmount = parseFloat(amount) || 0;
-      const needsApproval = assetAmount > parseFloat(assetAllowanceState);
-      setRequiresApproval(needsApproval);
-    };
-
-    checkIfApprovalNeeded();
+    const num = parseFloat(amount) || 0;
+    setRequiresApproval(num > parseFloat(assetAllowanceState));
   }, [amount, assetAllowanceState]);
 
+  // handle supply errors / success
   useEffect(() => {
     if (supplyError) {
       setIsError(true);
-      setErrorMessage(error?.message || "An unknown error occurred during the supply transaction.");
+      setErrorMessage(error?.message || "Supply failed");
     } else if (supplyHash) {
       setData(supplyHash);
       setShowSuccessIcon(true);
     }
   }, [supplyError, supplyHash, error]);
 
-  useEffect(() => {
-    const assetAmount = parseFloat(amount) || 0;
-
-    if (assetAmount <= 0 || isNaN(assetAmount)) {
-      setBalanceError(null); // Clear balance-related errors if amount is invalid
-      setErrorMessage("Amount must be a positive number.");
-      setIsValid(false);
-    } else if (assetBalance && assetAmount > parseFloat(assetBalance)) {
-      setBalanceError("You don't have enough tokens in your wallet");
-      setErrorMessage(""); // Clear the positive number error if balance error exists
-      setIsValid(false);
-    } else {
-      setBalanceError(null); // Clear any balance-related errors
-      setErrorMessage(""); // Clear other error messages
-      setIsValid(true);
-    }
-  }, [amount, assetBalance]);
-
-  useEffect(() => {
-    if (isApprovalSuccess) {
-      refetchAllowance();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isApprovalSuccess]);
-
+  // —— event handlers ——
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(e.target.value);
+    // proactively keep allowance fresh as user types
+    refetchAllowance();
+  };
   const handleApproval = async () => {
-    const assetAmount = parseFloat(amount) || 0;
+    if (!reserve || !walletAddress) return;
+
+    const num = parseFloat(amount) || 0;
+    // if user already has enough allowance, no need to approve
+    if (num <= parseFloat(assetAllowanceState)) return;
 
     try {
-      if (assetAmount > parseFloat(assetAllowanceState) && walletAddress) {
-        const decimals = Number(reserve?.decimals);
-        let adjustedAmount = assetAmount;
+      // Use the token's own decimals, not hard‐coded 18
+      const tokenDecimals = Number(reserve.decimals);
 
-        // Adjust the amount if decimals are less than 18
-        if (decimals < 18) {
-          const factor = Math.pow(10, 18 - decimals);
-          adjustedAmount = assetAmount / factor; // Keep as a number for compatibility with toWeiConverter
-        }
+      // Convert exactly the amount they want to approve
+      const amountInWei = parseUnits(amount, tokenDecimals);
 
-        // Convert the adjusted amount to the appropriate format for the contract
-        const amountInWei = parseEther(adjustedAmount.toString());
-
-        console.log("Attempting to approveERC20:", {
-          address: reserve?.underlyingAsset,
-          abi: ERC20ABI,
-          functionName: "approve",
-          args: [CONFIG.POOL, BigInt(amountInWei)],
-        });
-
-        // Call the approveERC20 function
-        await approveERC20({
-          address: reserve?.underlyingAsset as Address,
-          abi: ERC20ABI,
-          functionName: "approve",
-          args: [CONFIG.POOL as Address, BigInt(amountInWei)],
-        });
-
-        console.log("Approval successful");
-      }
-    } catch (error) {
-      console.error("Error approving", error);
-      setErrorMessage("Failed to approve tokens. Please try again.");
+      await approveERC20({
+        address: reserve.underlyingAsset as Address,
+        abi: ERC20ABI,
+        functionName: "approve",
+        args: [CONFIG.POOL as Address, amountInWei],
+      });
+    } catch (err: any) {
+      console.error("Approval error", err);
+      setErrorMessage(`Failed to approve: ${err.message}`);
     }
   };
 
   const handleSupplyClick = async () => {
+    if (!reserve || !walletAddress) return;
+
+    // 1) figure out the real decimals (from your reserve metadata)
+    //    most tokens expose this, e.g. reserve.decimals === 6 for USDC/MXNe
+    const tokenDecimals = Number(reserve.decimals);
+
+    // 2) turn the user string into the proper big‐int
+    const amountInWei = parseUnits(amount || "0", tokenDecimals);
+
     if (requiresApproval) {
       await handleApproval();
     } else {
-      handleSupply(reserve?.underlyingAsset as Address, parseEther(amount), walletAddress as Address);
+      handleSupply(reserve.underlyingAsset as Address, amountInWei, walletAddress as Address);
     }
   };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(event.target.value);
-    refetchAllowance();
-  };
+  const handleMaxClick = () => setAmount(balance);
 
   const handleCopyError = () => {
     if (error?.message) {
-      navigator.clipboard
-        .writeText(error.message)
-        .then(() => {
-          // Handle success if needed
-        })
-        .catch(err => {
-          console.error("Failed to copy error message: ", err);
-        });
+      navigator.clipboard.writeText(error.message);
     }
   };
 
-  const handleMaxClick = () => {
-    setAmount(assetBalance || "");
-  };
-
-  /**
-   * Handles closing the modal and resets the form state.
-   */
   const handleClose = () => {
     setAmount("");
     setIsValid(false);
@@ -227,9 +205,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
 
   const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${supplyHash}`;
 
-  if (!isOpen || !reserve) {
-    return null;
-  }
+  if (!isOpen || !reserve) return null;
 
   return (
     <div className="modal-blur-background">
@@ -251,12 +227,6 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                     onChange={handleChange}
                   />
                   <span className="font-bold">{reserve.symbol}</span>
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span>Wallet allowance</span>
-                  <span className="font-bold">
-                    {assetAllowanceState} {reserve.symbol}
-                  </span>
                 </div>
                 <div className="text-xs">
                   {t("LendingSupplyModalBalance")}: {balance}{" "}
