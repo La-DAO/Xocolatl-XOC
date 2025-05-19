@@ -143,42 +143,21 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   }, [isApprovalSuccess]);
 
   const handleApproval = async () => {
-    const assetAmount = parseFloat(amount) || 0;
+    const num = parseFloat(amount) || 0;
+    if (num <= parseFloat(assetAllowanceState)) return;
 
     try {
-      if (assetAmount > parseFloat(assetAllowanceState) && walletAddress) {
-        const decimals = Number(reserve?.decimals);
-        let adjustedAmount = assetAmount;
-
-        // Adjust the amount if decimals are less than 18
-        if (decimals < 18) {
-          const factor = Math.pow(10, 18 - decimals);
-          adjustedAmount = assetAmount / factor; // Keep as a number for compatibility with toWeiConverter
-        }
-
-        // Convert the adjusted amount to the appropriate format for the contract
-        const amountInWei = parseEther(adjustedAmount.toString());
-
-        console.log("Attempting to approveERC20:", {
-          address: reserve?.underlyingAsset,
-          abi: ERC20ABI,
-          functionName: "approve",
-          args: [CONFIG.POOL, BigInt(amountInWei)],
-        });
-
-        // Call the approveERC20 function
-        await approveERC20({
-          address: reserve?.underlyingAsset as Address,
-          abi: ERC20ABI,
-          functionName: "approve",
-          args: [CONFIG.POOL as Address, BigInt(amountInWei)],
-        });
-
-        console.log("Approval successful");
-      }
-    } catch (error) {
-      console.error("Error approving", error);
-      setErrorMessage("Failed to approve tokens. Please try again.");
+      const amountInWei = BigInt(parseEther(amount));
+      await approveERC20({
+        address: reserve?.underlyingAsset as Address,
+        abi: ERC20ABI,
+        functionName: "approve",
+        args: [CONFIG.POOL as Address, amountInWei],
+      });
+    } catch (err) {
+      const error = err as Error; // Type assertion
+      console.error("Approval error", error);
+      setErrorMessage(`Failed to approve tokens. Error: ${error.message}`);
     }
   };
 
