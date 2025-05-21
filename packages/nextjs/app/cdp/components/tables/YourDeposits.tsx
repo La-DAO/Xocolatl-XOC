@@ -218,23 +218,19 @@ const YourDeposits = () => {
   });
 
   useEffect(() => {
-    if (batchCheckRemainingMintingPower) {
-      console.log("Batch CheckRemainingMintingPower:", batchCheckRemainingMintingPower);
-    }
-    if (isError) {
-      console.error("Error fetching checkRemainingMintingPower:", isError);
+    if (process.env.NODE_ENV === "development") {
+      if (batchCheckRemainingMintingPower) {
+        console.log("Batch CheckRemainingMintingPower:", batchCheckRemainingMintingPower);
+      }
+      if (isError) {
+        console.error("Error fetching checkRemainingMintingPower:", isError);
+      }
     }
   }, [batchCheckRemainingMintingPower, isError]);
 
   const { data: batchComputeUserHealthRatio } = useReadContracts({
     contracts: batchComputeUserHealthRatioArray,
   });
-
-  useEffect(() => {
-    if (batchComputeUserHealthRatio) {
-      console.log("BatchComputeUserHealthRatio:", batchComputeUserHealthRatio);
-    }
-  }, [batchComputeUserHealthRatio]);
 
   const [isMintModalOpen, setIsMintModalOpen] = useState(false);
   const [isRepayModalOpen, setIsRepayModalOpen] = useState(false);
@@ -316,10 +312,6 @@ const YourDeposits = () => {
   const formattedUserHealthRatio: any[] = batchComputeUserHealthRatio
     ? batchComputeUserHealthRatio.map(({ result }) => (Number(result) / 10 ** 18).toFixed(2))
     : [0, 0, 0, 0, 0];
-
-  // console.log("batchBalances:", batchDeposits);
-  // console.log("Formatted batchBalances", formattedBalances);
-  // console.log("batchMints:", batchMints);
 
   const deposits = generateDeposits(
     contractData,

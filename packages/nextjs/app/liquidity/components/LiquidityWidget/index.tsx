@@ -269,7 +269,7 @@ const LiquidityWidget: React.FC = () => {
   };
 
   // Modify the button style and text based on chainId
-  const isWrongNetwork = chainId === 56 || chainId === 137;
+  const isWrongNetwork = chainId !== 8453;
   const buttonLabel = approvalLoading
     ? t("Processing...") // Show "Processing" when loading
     : isWrongNetwork
