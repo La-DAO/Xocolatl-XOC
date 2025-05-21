@@ -21,8 +21,8 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ balance, netAPY, healthFact
 
   // Function to get network error message based on chainId
   const getNetworkErrorMessage = () => {
-    if (chainId === 56 || chainId === 137) {
-      return t("WrongNetworkMessage"); // Replace with your translation key
+    if (chainId !== 8453) {
+      return t("WrongNetworkMessage");
     }
     return null;
   };
@@ -33,7 +33,7 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ balance, netAPY, healthFact
     <header className="bg-inherit dark:bg-inherit flex flex-col space-y-2 w-full md:w-fit">
       <div>
         {networkErrorMessage ? (
-          <div className="text-2xl text-red-600 font-bold">Wrong network, change to the Base network!</div>
+          <div className="text-2xl text-red-600 font-bold">Wrong network, please change to the Base network!</div>
         ) : (
           <div className="flex items-center space-x-2 mb-2">
             <div className="text-2xl">

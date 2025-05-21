@@ -72,11 +72,13 @@ const CDPStats: React.FC = () => {
   const assetNames = Object.keys(config.houseOfReserves);
 
   useEffect(() => {
-    if (houseOfReserveData) {
-      console.log("House of Reserve Data:", houseOfReserveData);
-    }
-    if (houseOfReserveError) {
-      console.error("Error fetching house of reserve data:", houseOfReserveError);
+    if (process.env.NODE_ENV === "development") {
+      if (houseOfReserveData) {
+        console.log("House of Reserve Data:", houseOfReserveData);
+      }
+      if (houseOfReserveError) {
+        console.error("Error fetching house of reserve data:", houseOfReserveError);
+      }
     }
   }, [houseOfReserveData, houseOfReserveError]);
 
