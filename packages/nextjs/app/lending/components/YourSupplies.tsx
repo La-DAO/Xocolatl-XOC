@@ -63,9 +63,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
   const totalBalance = useTotalBalance(reservesWithBalances);
   const totalAPY = useTotalAPY(reservesWithBalances);
   const collateralTotalBalance = useCollateralTotalBalance(reservesWithBalances);
-  console.log("Total APY:", totalAPY);
-  console.log("reservesData", reservesData);
-  console.log("userReservesData", userReservesData);
+
   if (isLoadingReserves || isLoadingUserReserves) {
     return <p className="text-amber-950">Loading...</p>;
   }

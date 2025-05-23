@@ -214,6 +214,8 @@
   "LendingRepayModalProcessing": "Processing...",
   "LendingRepayModalWaiting": "Waiting...",
   "LendingRepayModalExplore": "Verify in Block Explorer",
+  "LendingRepayModalErrorGeneral": "An error occurred while repaying the debt.",
+  "LendingRepayModalCopyError": "Copy the error",
 
   "LendingInfoTitle": "Understanding Decentralized Lending",
   "LendingInfoSubtitle": "How the lending markets work around here",

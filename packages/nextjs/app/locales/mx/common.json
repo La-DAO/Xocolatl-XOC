@@ -225,6 +225,9 @@
   "LendingRepayModalProcessing": "Procesando...",
   "LendingRepayModalWaiting": "Esperando...",
   "LendingRepayModalExplore": "Verificar en el Block Explorer",
+  "LendingRepayModalErrorGeneral": "Ocurrió un error al reembolsar la deuda.",
+  "LendingRepayModalCopyError": "Copiar el error",
+
 
   "LendingInfoTitle": "Comprendiendo Préstamos Decentralizado",
   "LendingInfoSubtitle": "Cómo funcionan los mercados de préstamos",

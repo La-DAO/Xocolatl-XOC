@@ -164,10 +164,18 @@ const RepayTransactionModal: React.FC<RepayModalProps> = ({ isOpen, onClose, res
   };
 
   const handleCopyError = () => {
+    console.log("handleCopyError called");
     if (error?.message) {
-      navigator.clipboard.writeText(error.message);
-      setShowSuccessIcon(true);
-      setTimeout(() => setShowSuccessIcon(false), 1500);
+      console.log("Error message: ", error.message);
+      navigator.clipboard
+        .writeText(error.message)
+        .then(() => {
+          setShowSuccessIcon(true);
+          setTimeout(() => setShowSuccessIcon(false), 1500);
+        })
+        .catch(err => {
+          console.error("Failed to copy error message: ", err);
+        });
     }
   };
 
@@ -292,7 +300,7 @@ const RepayTransactionModal: React.FC<RepayModalProps> = ({ isOpen, onClose, res
           )}
 
           {isError && !isApprovalError && (
-            <div className="error-container text-center mt-6">
+            <div className="error-container text-center mt-6 flex flex-col justify-between h-full">
               <Image src="/Open Doodles - Messy.svg" alt="Error" width={250} height={250} />
               <p className="text-xs sm:text-sm">
                 {t("LendingRepayModalErrorGeneral")}{" "}
@@ -301,6 +309,9 @@ const RepayTransactionModal: React.FC<RepayModalProps> = ({ isOpen, onClose, res
               <span onClick={handleCopyError} className="underline cursor-pointer">
                 {t("LendingRepayModalCopyError")}
               </span>
+              <button onClick={handleClose} className="secondary-btn mt-auto">
+                {t("LendingRepayModalClose")}
+              </button>
             </div>
           )}
         </div>

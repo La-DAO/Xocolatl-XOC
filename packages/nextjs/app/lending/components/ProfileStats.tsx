@@ -6,17 +6,30 @@ import { useChainId } from "wagmi";
 
 interface ProfileStatsProps {
   balance: number;
-  netAPY: number;
+  ltv: number;
   healthFactor: number | string;
+  totalCollateralBase: number;
+  totalDebtBase: number;
+  availableBorrowsBase: number;
 }
 
-const ProfileStats: React.FC<ProfileStatsProps> = ({ balance, netAPY, healthFactor }) => {
+const ProfileStats: React.FC<ProfileStatsProps> = ({
+  balance,
+  ltv,
+  healthFactor,
+  totalCollateralBase,
+  totalDebtBase,
+  availableBorrowsBase,
+}) => {
   const { t } = useTranslation();
   const chainId = useChainId();
   const data = {
     netWorth: balance.toFixed(2),
-    netAPY: netAPY.toFixed(2),
+    ltv: ltv,
     healthFactor: typeof healthFactor === "number" ? healthFactor.toFixed(2) : healthFactor,
+    totalCollateralBase: totalCollateralBase,
+    totalDebtBase: totalDebtBase,
+    availableBorrowsBase: availableBorrowsBase,
   };
 
   // Function to get network error message based on chainId
@@ -49,13 +62,25 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ balance, netAPY, healthFact
             <div className="text-sm text-gray-400">{t("LendingProfileNetWorth")}</div>
             <div className="text-lg text-accent font-semibold">${data.netWorth}</div>
           </div>
+          {/*           <div className="text">
+            <div className="text-sm text-gray-400">Total Collateral</div>
+            <div className="text-lg text-accent font-semibold">${totalCollateralBase}</div>
+          </div> */}
           <div className="text">
-            <div className="text-sm text-gray-400">Net APY</div>
-            <div className="text-lg text-accent font-semibold">{data.netAPY}%</div>
+            <div className="text-sm text-gray-400">Total Debt</div>
+            <div className="text-lg text-accent font-semibold">${totalDebtBase}</div>
           </div>
+          {/* <div className="text">
+            <div className="text-sm text-gray-400">LTV</div>
+            <div className="text-lg text-accent font-semibold">{data.ltv}</div>
+          </div> */}
           <div className="text">
             <div className="text-sm text-gray-400">{t("LendingProfileHealthFactor")}</div>
             <div className="text-lg text-accent font-semibold">{data.healthFactor}</div>
+          </div>
+          <div className="text">
+            <div className="text-sm text-gray-400">Available Borrows</div>
+            <div className="text-lg text-accent font-semibold">${data.availableBorrowsBase}</div>
           </div>
         </div>
       </div>
