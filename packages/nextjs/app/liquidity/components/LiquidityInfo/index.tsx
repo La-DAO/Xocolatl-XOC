@@ -12,7 +12,7 @@ const LiquidityInfo: React.FC = () => {
   const chainId = useChainId();
   // Function to get network error message based on chainId
   const getNetworkErrorMessage = () => {
-    if (chainId === 56 || chainId === 137) {
+    if (chainId !== 8453) {
       return t("WrongNetworkMessage"); // Replace with your translation key
     }
     return null;
