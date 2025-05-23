@@ -185,7 +185,13 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
       handleSupply(reserve.underlyingAsset as Address, amountInWei, walletAddress as Address);
     }
   };
-  const handleMaxClick = () => setAmount(balance);
+  const handleMaxClick = () => {
+    if (balance !== undefined && balance !== null) {
+      // Convert balance to a number, multiply by 100 to preserve two decimal places, floor it, then divide by 100
+      const flooredBalance = Math.floor(Number(balance) * 100) / 100;
+      setAmount(flooredBalance.toFixed(2));
+    }
+  };
 
   const handleCopyError = () => {
     if (error?.message) {
