@@ -35,7 +35,7 @@ const Lending = () => {
   const [borrowsTotalBalance, setBorrowsTotalBalance] = useState(0);
 
   const { address } = useAccountAddress(); // Obtén la dirección del usuario
-  const { userAccountData, isLoading, isError } = useGetUserAccountData(address || ""); // Obtén los datos del usuario
+  const { userAccountData, isLoading, isError } = useGetUserAccountData(address || ""); // Use an empty string as a fallback
 
   const refreshComponents = () => {
     setRefreshKey(prevKey => prevKey + 1);

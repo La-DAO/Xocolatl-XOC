@@ -5,7 +5,8 @@
   "aboutName": "Sobre el nombre",
   "aboutDescription": "La palabra 'Xocolatl' proviene del náhuatl, una palabra prehispánica que se refiere a los granos de cacao. Está bien documentado que los mayas y aztecas usaban granos de cacao como",
   "aboutLinkText": "forma de moneda.",
-  "tryXocButton": "Prueba $XOC",
+  "tryXocButton": "Gana $XOC",
+  "mintXocButton": "Acuña $XOC",
   "mostLiquidStablecoin": "$XOC es la stablecoin más líquida para el peso $MXN.",
 
   "BenefitsComponentTitle": "Nuestro Pitch",

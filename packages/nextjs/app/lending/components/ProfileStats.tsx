@@ -49,10 +49,10 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ balance, netAPY, healthFact
             <div className="text-sm text-gray-400">{t("LendingProfileNetWorth")}</div>
             <div className="text-lg text-accent font-semibold">${data.netWorth}</div>
           </div>
-          {/* <div className="text">
-        <div className="text-sm text-gray-400">Net APY</div>
-        <div className="text-lg text-accent font-semibold">{data.netAPY}%</div>
-        </div> */}
+          <div className="text">
+            <div className="text-sm text-gray-400">Net APY</div>
+            <div className="text-lg text-accent font-semibold">{data.netAPY}%</div>
+          </div>
           <div className="text">
             <div className="text-sm text-gray-400">{t("LendingProfileHealthFactor")}</div>
             <div className="text-lg text-accent font-semibold">{data.healthFactor}</div>
