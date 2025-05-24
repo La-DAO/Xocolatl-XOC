@@ -9,15 +9,14 @@ import ProfileStats from "./components/ProfileStats";
 import ReserveAssetInfo from "./components/ReserveAssetInfo";
 import YourBorrows from "./components/YourBorrows";
 import YourSupplies from "./components/YourSupplies";
-import { fillerLoadingReserve } from "./constants";
 import useAccountAddress from "@/hooks/useAccount";
 // Importa el hook de la dirección
 import useGetUserAccountData from "@/hooks/useGetUserAccountData";
+import { useLendingStore } from "@/stores/lending-store";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { maxUint256 } from "viem";
 import { useChainId } from "wagmi";
-import { ReserveData } from "~~/types/types";
 
 // Importa el hook de datos del usuario
 
@@ -27,10 +26,9 @@ const Lending = () => {
   const [isAssetsToSupplyVisible, setIsAssetsToSupplyVisible] = useState(true);
   const [isYourBorrowsVissible, setIsYourBorrowsVissible] = useState(true);
   const [isAssetsToBorrowVisible, setIsAssetsToBorrowVisible] = useState(true);
-  const [selectedReserveAsset, setSelectedReserveAsset] = useState<ReserveData>(fillerLoadingReserve);
 
   const [allBalancesZero, setAllBalancesZero] = useState(true);
-  const [refreshKey, setRefreshKey] = useState(0);
+  // const [refreshKey, setRefreshKey] = useState(0);
 
   const [suppliesTotalBalance, setSuppliesTotalBalance] = useState(0);
   const [borrowsTotalBalance, setBorrowsTotalBalance] = useState(0);
@@ -40,13 +38,12 @@ const Lending = () => {
 
   const chainId = useChainId();
 
-  const refreshComponents = () => {
-    setRefreshKey(prevKey => prevKey + 1);
-  };
+  // const refreshComponents = () => {
+  //   setRefreshKey(prevKey => prevKey + 1);
+  // };
 
-  const handleReserveClick = (reserve: ReserveData) => {
-    setSelectedReserveAsset(reserve);
-  };
+  const { refreshKey, refreshComponents } = useLendingStore();
+  const { selectedReserveAsset, setSelectedReserveAsset } = useLendingStore();
 
   // Calculate Net Worth balance
   const netWorth = suppliesTotalBalance - borrowsTotalBalance;
@@ -154,7 +151,9 @@ const Lending = () => {
                     )}
                   </button>
                 </div>
-                {isAssetsToSupplyVisible && <AssetsToSupply key={refreshKey} onReserveClick={handleReserveClick} />}
+                {isAssetsToSupplyVisible && (
+                  <AssetsToSupply key={refreshKey} onReserveClick={setSelectedReserveAsset} />
+                )}
               </div>
             </div>
 
