@@ -93,6 +93,8 @@ const Lending = () => {
     ? (Number(userAccountData.availableBorrowsBase) * 1e10).toFixed(3)
     : "0.0000";
 
+  console.log("Selected Reserve Asset: ", selectedReserveAsset);
+
   return (
     <div className="flex flex-col w-4/5 m-auto gap-4">
       {networkErrorMessage ? (

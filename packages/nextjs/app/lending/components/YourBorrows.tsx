@@ -80,8 +80,16 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
   return (
     <div>
       <div className="flex mt-2 gap-2 text-xs">
-        <span className="gray-tag">Balance: {totalBalance} USD</span>
-        <span className="gray-tag">APY: {totalAPY} %</span>
+        <div className="tooltip tooltip-info tooltip-bottom" data-tip={t("LendingYourBorrowsBalanceTooltip")}>
+          <span className="gray-tag hover:bg-base-200 dark:hover:bg-base-200 hover:text-primary hover:text-md dark:hover:text-white">
+            Balance: {totalBalance} USD
+          </span>
+        </div>
+        <div className="tooltip tooltip-info tooltip-bottom" data-tip={t("LendingYourBorrowsAPYTooltip")}>
+          <span className="gray-tag hover:bg-base-200 dark:hover:bg-base-200 hover:text-primary hover:text-md dark:hover:text-white">
+            APY: {totalAPY} %
+          </span>
+        </div>
       </div>
       <div className={`borrows-container mt-4 ${allBalancesZero ? "hidden" : ""}`}>
         <div className="table-header borrows-header py-3 flex justify-between tracking-wider">

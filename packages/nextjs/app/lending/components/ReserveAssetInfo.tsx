@@ -51,6 +51,15 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
     return `$${formatted.toFixed(2)} USD`;
   };
 
+  // Format the supplyCap with proper handling of Wei
+  const formattedSupplyCap = reserve.supplyCap
+    ? formatTokenAmount(BigInt(reserve.supplyCap), reserve.decimals, reserve.symbol)
+    : "N/A"; // Fallback value if supplyCap is missing
+
+  console.log("Formatted Supply Cap: ", formattedSupplyCap);
+  console.log("Reserve Data: ", reserve);
+  console.log("Supply Cap: ", reserve.supplyCap);
+
   return (
     <div className="p-6 flex flex-col gap-6 table-background rounded-xl">
       <h1 className="text-2xl lg:text-3xl font-bold mb-4 lg:mb-6 text-center lg:text-left text-primary">
