@@ -39,4 +39,6 @@ export const fillerLoadingReserve: ReserveData = {
   scaledVariableDebt: 0n,
   principalStableDebt: 0n,
   stableBorrowLastUpdateTimestamp: 0n,
+  borrowCap: 0,
+  supplyCap: 0,
 };

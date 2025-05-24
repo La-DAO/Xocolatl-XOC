@@ -61,9 +61,6 @@ const useGetReservesData = () => {
           setReservesData(extractedReserves);
           setIsLoading(false);
           setIsError(false);
-
-          // Log fetched data for debugging
-          console.log("Fetched reserve data:", filteredReserves);
         } else {
           console.error("Filtered reserves is not an array");
         }

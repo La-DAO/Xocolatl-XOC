@@ -18,9 +18,11 @@ interface ModalProps {
   onClose: () => void;
   reserve: ReserveData | null;
   balance: string;
+  borrowCap?: number | null;
+  supplyCap?: number | null;
 }
 
-const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve, balance }) => {
+const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve, balance, borrowCap, supplyCap }) => {
   const { t } = useTranslation();
   const chainId = useChainId();
   const { address: walletAddress } = useAccountAddress();
@@ -137,6 +139,12 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     }
   }, [supplyError, supplyHash, error]);
 
+  // Log borrowCap and supplyCap when the component mounts or when they change
+  useEffect(() => {
+    console.log("borrowCap:", borrowCap);
+    console.log("supplyCap:", supplyCap);
+  }, [borrowCap, supplyCap]);
+
   // —— event handlers ——
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
@@ -185,7 +193,13 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
       handleSupply(reserve.underlyingAsset as Address, amountInWei, walletAddress as Address);
     }
   };
-  const handleMaxClick = () => setAmount(balance);
+  const handleMaxClick = () => {
+    if (balance !== undefined && balance !== null) {
+      // Convert balance to a number, multiply by 100 to preserve two decimal places, floor it, then divide by 100
+      const flooredBalance = Math.floor(Number(balance) * 100) / 100;
+      setAmount(flooredBalance.toFixed(2));
+    }
+  };
 
   const handleCopyError = () => {
     if (error?.message) {

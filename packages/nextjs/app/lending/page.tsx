@@ -82,6 +82,20 @@ const Lending = () => {
       : Number(userAccountData.healthFactor) / 1e18
     : "∞";
 
+  const formattedLtv = userAccountData?.ltv ? (Number(userAccountData.ltv) * 1e15).toFixed(2) : "0.0000";
+
+  const formattedTotalCollateralBase = userAccountData?.totalCollateralBase
+    ? (Number(userAccountData.totalCollateralBase) * 1e10).toFixed(3)
+    : "0.0000";
+
+  const formattedTotalDebtBase = userAccountData?.totalDebtBase
+    ? (Number(userAccountData.totalDebtBase) * 1e10).toFixed(3)
+    : "0.0000";
+
+  const formattedAvailableBorrowsBase = userAccountData?.availableBorrowsBase
+    ? (Number(userAccountData.availableBorrowsBase) * 1e10).toFixed(3)
+    : "0.0000";
+
   return (
     <div className="flex flex-col w-4/5 m-auto gap-4">
       {networkErrorMessage ? (
@@ -90,7 +104,7 @@ const Lending = () => {
         </div>
       ) : (
         <>
-          <div className="min-h-flex bg-white rounded-xl py-6 px-8 justify-between items-end">
+          <div className="min-h-flex bg-white rounded-xl py-6 px-8 flex justify-between items-end">
             {isLoading ? (
               <div>Loading...</div>
             ) : isError ? (
@@ -98,11 +112,14 @@ const Lending = () => {
             ) : (
               <ProfileStats
                 balance={netWorth}
-                netAPY={userAccountData?.ltv || 0} // Usa datos del hook de usuario para APY o cualquier otro campo relevante
-                healthFactor={formattedHealthFactor} // Usa datos del hook de usuario para el health factor
+                ltv={Number(formattedLtv)}
+                healthFactor={formattedHealthFactor}
+                totalCollateralBase={Number(formattedTotalCollateralBase)}
+                totalDebtBase={Number(formattedTotalDebtBase)}
+                availableBorrowsBase={Number(formattedAvailableBorrowsBase)}
               />
             )}
-            <button onClick={refreshComponents} className="primary-btn h-fit w-fit">
+            <button onClick={refreshComponents} className="primary-btn h-fit w-fit ml-auto">
               {t("LendingRefreshButton")}
             </button>
           </div>

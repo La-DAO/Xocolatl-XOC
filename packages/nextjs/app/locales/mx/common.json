@@ -5,7 +5,8 @@
   "aboutName": "Sobre el nombre",
   "aboutDescription": "La palabra 'Xocolatl' proviene del náhuatl, una palabra prehispánica que se refiere a los granos de cacao. Está bien documentado que los mayas y aztecas usaban granos de cacao como",
   "aboutLinkText": "forma de moneda.",
-  "tryXocButton": "Prueba $XOC",
+  "earnXocButton": "Gana $XOC",
+  "mintXocButton": "Acuña $XOC",
   "mostLiquidStablecoin": "$XOC es la stablecoin más líquida para el peso $MXN.",
 
   "BenefitsComponentTitle": "Nuestro Pitch",
@@ -140,6 +141,8 @@
   "CDPClosing": "La flexibilidad de las stablecoins le permite gestionar sus activos con mayor eficacia, proporcionándole liquidez y estabilidad en mercados volátiles.",
 
   "LendingProfileNetWorth": "Valor Neto de tu Perfil",
+  "LendingProfileTotalDebt": "Total de tu Deuda",
+  "LendingProfileAvailableBorrows": "Préstamos Disponibles",
   "LendingProfileHealthFactor": "Factor de Salud de tu Perfil",
   "LendingRefreshButton": "Actualizar la data",
   "LendingYourSuppliesTitle": "Tus depositos",
@@ -224,6 +227,9 @@
   "LendingRepayModalProcessing": "Procesando...",
   "LendingRepayModalWaiting": "Esperando...",
   "LendingRepayModalExplore": "Verificar en el Block Explorer",
+  "LendingRepayModalErrorGeneral": "Ocurrió un error al reembolsar la deuda.",
+  "LendingRepayModalCopyError": "Copiar el error",
+
 
   "LendingInfoTitle": "Comprendiendo Préstamos Decentralizado",
   "LendingInfoSubtitle": "Cómo funcionan los mercados de préstamos",

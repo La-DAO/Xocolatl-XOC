@@ -58,7 +58,6 @@ const useGetUserAccountData = (userAddress: string) => {
             };
 
             setUserAccountData(formattedData);
-            // console.log("Fetched user account data:", formattedData);
           } else {
             throw new Error("Invalid result format");
           }

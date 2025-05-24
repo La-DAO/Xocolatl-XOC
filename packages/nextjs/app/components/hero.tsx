@@ -44,9 +44,14 @@ const Hero = () => {
             </div>
 
             <div className="flex flex-col items-start space-y-3 sm:space-x-4 sm:space-y-0 sm:items-center sm:flex-row">
+              <Link href="/cdp">
+                <button className="px-8 py-4 text-lg font-medium text-center text-white bg-primary rounded-btn hover:bg-base-300 hover:text-neutral dark:hover:bg-neutral dark:hover:text-primary">
+                  {t("mintXocButton")}
+                </button>
+              </Link>
               <Link href="/lending">
-                <button className="px-8 py-4 text-lg font-medium text-center text-white bg-primary rounded-btn hover:bg-base-100 hover:text-neutral">
-                  {t("tryXocButton")}
+                <button className="px-8 py-4 text-lg font-medium text-center text-white bg-primary rounded-btn hover:bg-base-300 hover:text-neutral dark:hover:bg-neutral dark:hover:text-primary">
+                  {t("earnXocButton")}
                 </button>
               </Link>
             </div>

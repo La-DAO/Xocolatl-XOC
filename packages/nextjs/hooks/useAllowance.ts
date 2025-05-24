@@ -35,7 +35,7 @@ export function useAllowance({ tokenAddress, ownerAddress, spenderAddress }: All
   const [allowance, setAllowance] = useState<string>("0"); // State to store the allowance amount
 
   // Use the useReadContract hook to read the allowance from the contract
-  const { data, isError, isLoading } = useReadContract({
+  const { data, isError, isLoading, refetch } = useReadContract({
     address: tokenAddress,
     abi: ERC20ABI,
     functionName: "allowance",
@@ -51,7 +51,7 @@ export function useAllowance({ tokenAddress, ownerAddress, spenderAddress }: All
       const allowanceInEther = (Number(data) / 1e18).toFixed(7); // Convert allowance to ether and format
       setAllowance(allowanceInEther);
     }
-  }, [data, isError, isLoading]);
+  }, [data, isError, isLoading, refetch]);
 
   return allowance;
 }
