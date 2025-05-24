@@ -9847,6 +9847,7 @@ __metadata:
     slick-carousel: ^1.8.1
     vercel: ~32.4.1
     wagmi: ^2.11.0
+    zustand: ^5.0.5
   languageName: unknown
   linkType: soft
 
@@ -11873,6 +11874,27 @@ __metadata:
     react:
       optional: true
   checksum: 80acd0fbf633782996642802c8692bbb80ae5c80a8dff4c501b88250acd5ccd468fbc6398bdce198475a25e3839c91385b81da921274f33ffb5c2d08c3eab400
+  languageName: node
+  linkType: hard
+
+"zustand@npm:^5.0.5":
+  version: 5.0.5
+  resolution: "zustand@npm:5.0.5"
+  peerDependencies:
+    "@types/react": ">=18.0.0"
+    immer: ">=9.0.6"
+    react: ">=18.0.0"
+    use-sync-external-store: ">=1.2.0"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    immer:
+      optional: true
+    react:
+      optional: true
+    use-sync-external-store:
+      optional: true
+  checksum: 9f4fa5d7152c6b5a9cbcccb08ae34500c7495f8707549e7a8de3cea2844a75a81b4acc69a85601dbe539ee91f69c2d25d4e5286eb973bc76292a2012256061cb
   languageName: node
   linkType: hard
 
