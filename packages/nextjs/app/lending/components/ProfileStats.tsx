@@ -67,7 +67,7 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
             <div className="text-lg text-accent font-semibold">${totalCollateralBase}</div>
           </div> */}
           <div className="text">
-            <div className="text-sm text-gray-400">Total Debt</div>
+            <div className="text-sm text-gray-400">{t("LendingProfileTotalDebt")}</div>
             <div className="text-lg text-accent font-semibold">${totalDebtBase}</div>
           </div>
           {/* <div className="text">
@@ -79,7 +79,7 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
             <div className="text-lg text-accent font-semibold">{data.healthFactor}</div>
           </div>
           <div className="text">
-            <div className="text-sm text-gray-400">Available Borrows</div>
+            <div className="text-sm text-gray-400">{t("LendingProfileAvailableBorrows")}</div>
             <div className="text-lg text-accent font-semibold">${data.availableBorrowsBase}</div>
           </div>
         </div>

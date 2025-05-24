@@ -5,7 +5,7 @@
   "aboutName": "About the name",
   "aboutDescription": "The word 'Xocolatl' comes from the Nahuatl, a Pre-Hispanic word, refers to cacao beans. It is well documented that cocoa beans were used by Mayans and Aztecs as a",
   "aboutLinkText": "form of currency.",
-  "tryXocButton": "Earn $XOC",
+  "earnXocButton": "Earn $XOC",
   "mintXocButton": "Mint $XOC",
   "mostLiquidStablecoin": "$XOC is the most liquid stablecoin for the MXN currency.",
 
@@ -130,7 +130,9 @@
   "CDPClosing": "The flexibility of stablecoins allows you to manage your assets more effectively, providing liquidity and stability in volatile markets.",
 
   "LendingProfileNetWorth": "Net Worth",
+  "LendingProfileTotalDebt": "Total Debt",
   "LendingProfileHealthFactor": "Health Factor",
+  "LendingProfileAvailableBorrows": "Available Borrows",
   "LendingRefreshButton": "Refresh all data",
   "LendingYourSuppliesTitle": "Your Supplies",
   "LendingYourSuppliesZeroBalance": "Nothing supplied yet.",

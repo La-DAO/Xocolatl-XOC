@@ -7,6 +7,7 @@ export type ReserveData = {
   symbol: string;
   decimals: bigint;
   baseLTVasCollateral: bigint;
+  borrowCap: number;
   reserveLiquidationThreshold: bigint;
   reserveLiquidationBonus: bigint;
   reserveFactor: bigint;
@@ -40,6 +41,7 @@ export type ReserveData = {
   scaledVariableDebt: bigint;
   principalStableDebt: bigint;
   stableBorrowLastUpdateTimestamp: bigint;
+  supplyCap: number;
 };
 
 export type ContractResult = {

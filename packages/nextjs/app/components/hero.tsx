@@ -51,7 +51,7 @@ const Hero = () => {
               </Link>
               <Link href="/lending">
                 <button className="px-8 py-4 text-lg font-medium text-center text-white bg-primary rounded-btn hover:bg-base-300 hover:text-neutral dark:hover:bg-neutral dark:hover:text-primary">
-                  {t("tryXocButton")}
+                  {t("earnXocButton")}
                 </button>
               </Link>
             </div>
