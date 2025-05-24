@@ -66,6 +66,7 @@
     "react-slick": "^0.30.3",
     "react-wrap-balancer": "^1.1.1",
     "slick-carousel": "^1.8.1",
-    "wagmi": "^2.11.0"
+    "wagmi": "^2.11.0",
+    "zustand": "^5.0.5"
   }
 }
