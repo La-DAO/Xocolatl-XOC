@@ -104,7 +104,7 @@ const Lending = () => {
         </div>
       ) : (
         <>
-          <div className="min-h-flex bg-white rounded-xl py-6 px-8 justify-between items-end">
+          <div className="min-h-flex bg-white rounded-xl py-6 px-8 flex justify-between items-end">
             {isLoading ? (
               <div>Loading...</div>
             ) : isError ? (
@@ -119,7 +119,7 @@ const Lending = () => {
                 availableBorrowsBase={Number(formattedAvailableBorrowsBase)}
               />
             )}
-            <button onClick={refreshComponents} className="primary-btn h-fit w-fit">
+            <button onClick={refreshComponents} className="primary-btn h-fit w-fit ml-auto">
               {t("LendingRefreshButton")}
             </button>
           </div>
