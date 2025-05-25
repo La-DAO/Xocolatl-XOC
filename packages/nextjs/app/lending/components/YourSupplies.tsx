@@ -81,9 +81,23 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
   return (
     <div>
       <div className="flex mt-2 gap-2 text-xs">
-        <span className="gray-tag">Balance: {totalBalance} USD</span>
-        <span className="gray-tag">APY: {totalAPY}%</span>
-        <span className="gray-tag">Collateral: ${collateralTotalBalance} USD</span>
+        <div className="tooltip tooltip-info tooltip-bottom" data-tip={t("LendingYourSuppliesBalanceTooltip")}>
+          <span className="gray-tag hover:bg-base-200 dark:hover:bg-base-200 hover:text-primary hover:text-md dark:hover:text-white">
+            Balance: {totalBalance} USD
+          </span>
+        </div>
+
+        <div className="tooltip tooltip-info tooltip-bottom" data-tip={t("LendingYourSuppliesAPYTooltip")}>
+          <span className="gray-tag hover:bg-base-200 dark:hover:bg-base-200 hover:text-primary hover:text-md dark:hover:text-white">
+            APY: {totalAPY} %
+          </span>
+        </div>
+
+        <div className="tooltip tooltip-info tooltip-bottom" data-tip={t("LendingYourSuppliesCollateralTooltip")}>
+          <span className="gray-tag hover:bg-base-200 dark:hover:bg-base-200 hover:text-primary hover:text-md dark:hover:text-white">
+            Collateral: ${collateralTotalBalance} USD
+          </span>
+        </div>
       </div>
 
       <div
