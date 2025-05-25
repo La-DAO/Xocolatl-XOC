@@ -16,7 +16,7 @@ export const fillerLoadingReserve: ReserveData = {
   isFrozen: false,
   liquidityIndex: 1064564401080267262951296195n,
   variableBorrowIndex: 1074927389394874442752466666n,
-  liquidityRate: 546134717994206498982028633n,
+  liquidityRate: 0n,
   variableBorrowRate: 609878131475598697731895204n,
   stableBorrowRate: 624878131475598697731895204n,
   lastUpdateTimestamp: 1747373219,
@@ -40,5 +40,5 @@ export const fillerLoadingReserve: ReserveData = {
   principalStableDebt: 0n,
   stableBorrowLastUpdateTimestamp: 0n,
   borrowCap: 0,
-  supplyCap: 0,
+  supplyCap: 1000000,
 };

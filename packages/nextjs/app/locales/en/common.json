@@ -254,7 +254,17 @@
   "ReserveInfoPanelReserveSize": "Reserve Size",
   "ReserveInfoPanelSupplyAPY": "Supply APY",
   "ReserveInfoPanelBorrowCap": "Borrow Cap",
-
+  "ReserveInfoPanelReserveSizeTooltip": "The reserve size is the total amount of assets that have been deposited into the reserve.",
+  "ReserveInfoPanelSupplyAPYTooltip": "The supply APY is the annual percentage yield (APY) that is paid to the depositors of the reserve.",
+  "ReserveInfoPanelOraclePriceTooltip": "The oracle price is the current price of the underlying token in the reserve.",
+  "ReserveInfoPanelAvailableLiquidityTooltip": "The available liquidity is the amount of assets that can be borrowed in the reserve.",
+  "ReserveInfoPanelSupplyCapTooltip": "The supply cap is the maximum amount of assets that can be deposited in the reserve.",
+  "ReserveInfoPanelMaxLTVTooltip": "The max LTV is the maximum loan-to-value ratio that can be used to borrow assets.",
+  "ReserveInfoPanelLiquidationThresholdTooltip": "The liquidation threshold is the minimum amount of assets that must be maintained in the reserve to avoid liquidation.",
+  "ReserveInfoPanelLiquidationPenaltyTooltip": "The liquidation penalty is the percentage of assets that are lost if the reserve is liquidated.",
+  "ReserveInfoPanelVariableBorrowAPYTooltip": "The variable borrow APY is the annual percentage yield (APY) that is charged to the borrowers of the reserve.",
+  "ReserveInfoPanelBorrowCapTooltip": "The borrow cap is the maximum amount of assets that can be borrowed in the reserve.",
+  
   "XoktleTitle": "Xoktle",
   "XoktleDescription": "Xoktle is the word for pot 🍯 in Nahuatl. This smart contract is designed to use your deposit to expand stablecoin liquidity and pair with the DeFi ecosystem. For every 1 dollar, there will be 4 pesos in the pool, so our liquidity agent will always strive to maintain this ratio by internally rebalancing the pool.",
   "XoktleTotalShares": "Total Shares",

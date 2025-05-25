@@ -3,6 +3,8 @@ import APYGraph from "./APYGraph";
 import { useTranslation } from "@/app/context/LanguageContext";
 import useReserveSize from "@/hooks/useReserveSize";
 import { ReserveData } from "@/types/types";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useChainId } from "wagmi";
 import { getAddrBlockExplorerUrl } from "~~/app/utils/utils";
 
@@ -51,15 +53,6 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
     return `$${formatted.toFixed(2)} USD`;
   };
 
-  // Format the supplyCap with proper handling of Wei
-  const formattedSupplyCap = reserve.supplyCap
-    ? formatTokenAmount(BigInt(reserve.supplyCap), reserve.decimals, reserve.symbol)
-    : "N/A"; // Fallback value if supplyCap is missing
-
-  console.log("Formatted Supply Cap: ", formattedSupplyCap);
-  console.log("Reserve Data: ", reserve);
-  console.log("Supply Cap: ", reserve.supplyCap);
-
   return (
     <div className="p-6 flex flex-col gap-6 table-background rounded-xl">
       <h1 className="text-2xl lg:text-3xl font-bold mb-4 lg:mb-6 text-center lg:text-left text-primary">
@@ -78,28 +71,42 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
 
         {/* Right: Metrics */}
         <div className="flex flex-wrap justify-end gap-x-8 gap-y-4 text-sm w-full">
-          {/* <div>
-            <p className="text-gray-500 text-sm">Reserve Size</p>
-            <p className="text-primary font-bold">
-              {formatTokenAmount(reserve.availableLiquidity, reserve.decimals, reserve.symbol)}
-            </p>
-          </div> */}
           <div>
-            <p className="text-gray-500 text-sm">{t("ReserveInfoPanelReserveSize")}</p>
+            <p className="text-gray-500 text-sm">
+              {t("ReserveInfoPanelReserveSize")}
+              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelReserveSizeTooltip")}>
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+              </div>
+            </p>
             <p className="text-primary font-bold">
               {reserveSizeLoading ? "Loading..." : `${reserveSize} ${reserve.symbol}`}
             </p>
           </div>
           <div>
-            <p className="text-gray-500 text-sm">{t("ReserveInfoPanelSupplyAPY")}</p>
+            <p className="text-gray-500 text-sm">
+              {t("ReserveInfoPanelSupplyAPY")}
+              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelSupplyAPYTooltip")}>
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+              </div>
+            </p>
             <p className="text-primary font-bold">{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
           </div>
           <div>
-            <p className="text-gray-500 text-sm">{t("ReserveInfoPanelOraclePrice")}</p>
+            <p className="text-gray-500 text-sm">
+              {t("ReserveInfoPanelOraclePrice")}
+              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelOraclePriceTooltip")}>
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+              </div>
+            </p>
             <p className="text-primary font-bold">{formatOraclePrice(reserve.priceInMarketReferenceCurrency)}</p>
           </div>
           <div>
-            <p className="text-gray-500 text-sm">{t("ReserveInfoPanelAvailableLiquidity")}</p>
+            <p className="text-gray-500 text-sm">
+              {t("ReserveInfoPanelAvailableLiquidity")}
+              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelAvailableLiquidityTooltip")}>
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+              </div>
+            </p>
             <p className="text-primary font-bold">
               {formatTokenAmount(reserve.availableLiquidity, reserve.decimals, reserve.symbol)}
             </p>
@@ -113,21 +120,41 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
         <p className="font-semibold text-primary text-lg">Supply Info</p>
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="border border-gray-300 rounded-md p-4">
-            <p className="text-xs text-gray-500">{t("ReserveInfoPanelSupplyCap")}</p>
+            <p className="text-xs text-gray-500">
+              {t("ReserveInfoPanelSupplyCap")}
+              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelSupplyCapTooltip")}>
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+              </div>
+            </p>
             <p className="text-lg font-bold text-primary">
               {reserve.supplyCap ? `${Math.floor(Number(reserve.supplyCap)).toLocaleString("en-US")}` : "N/A"}
             </p>
           </div>
           <div className="border border-gray-300 rounded-md p-4">
-            <p className="text-xs text-gray-500">{t("ReserveInfoPanelMaxLTV")}</p>
+            <p className="text-xs text-gray-500">
+              {t("ReserveInfoPanelMaxLTV")}
+              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelMaxLTVTooltip")}>
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+              </div>
+            </p>
             <p className="text-lg font-bold text-primary">{maxLTV}%</p>
           </div>
           <div className="border border-gray-300 rounded-md p-4">
-            <p className="text-xs text-gray-500">{t("ReserveInfoPanelLiquidationThreshold")}</p>
+            <p className="text-xs text-gray-500">
+              {t("ReserveInfoPanelLiquidationThreshold")}
+              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelLiquidationThresholdTooltip")}>
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+              </div>
+            </p>
             <p className="text-lg font-bold text-primary">{liquidationThreshold}%</p>
           </div>
           <div className="border border-gray-300 rounded-md p-4">
-            <p className="text-xs text-gray-500">{t("ReserveInfoPanelLiquidationPenalty")}</p>
+            <p className="text-xs text-gray-500">
+              {t("ReserveInfoPanelLiquidationPenalty")}
+              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelLiquidationPenaltyTooltip")}>
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+              </div>
+            </p>
             <p className="text-lg font-bold text-primary">{liquidationPenalty}%</p>
           </div>
         </div>
@@ -144,11 +171,21 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
         <div className="w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="border border-gray-300 rounded-md p-4">
-              <p className="text-xs text-gray-500">{t("ReserveInfoPanelVariableBorrowAPY")}</p>
+              <p className="text-xs text-gray-500">
+                {t("ReserveInfoPanelVariableBorrowAPY")}
+                <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelVariableBorrowAPYTooltip")}>
+                  <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+                </div>
+              </p>
               <p className="text-lg font-bold text-primary">{variableBorrowAPY}%</p>
             </div>
             <div className="border border-gray-300 rounded-md p-4">
-              <p className="text-xs text-gray-500">{t("ReserveInfoPanelBorrowCap")}</p>
+              <p className="text-xs text-gray-500">
+                {t("ReserveInfoPanelBorrowCap")}
+                <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelBorrowCapTooltip")}>
+                  <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+                </div>
+              </p>
               <p className="text-lg font-bold text-primary">
                 {reserve.borrowCap ? `${Math.floor(Number(reserve.borrowCap)).toLocaleString("en-US")}` : "N/A"}
               </p>
