@@ -71,6 +71,12 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
    */
   const validateAmount = (value: string) => {
     const numValue = parseFloat(value);
+    const decimals = reserve?.decimals ? Number(reserve.decimals) : 18;
+    const borrowCap = reserve?.borrowCap ? Number(reserve.borrowCap) : null;
+    const alreadyBorrowed = reserve?.totalScaledVariableDebt
+      ? Number(reserve.totalScaledVariableDebt) / 10 ** decimals
+      : 0;
+
     if (isNaN(numValue) || numValue < 0) {
       setIsValid(false);
       setErrorMessage("Amount must be a positive number.");
@@ -80,6 +86,9 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     } else if (numValue > parseFloat(balance)) {
       setIsValid(false);
       setErrorMessage("Amount exceeds available liquidity.");
+    } else if (borrowCap !== null && borrowCap > 0 && numValue + alreadyBorrowed > borrowCap) {
+      setIsValid(false);
+      setErrorMessage("Amount exceeds the borrow cap.");
     } else {
       setIsValid(true);
       setErrorMessage("");
@@ -98,7 +107,17 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
    * Sets the input amount to the maximum available balance.
    */
   const handleMaxClick = () => {
-    setAmount(balance);
+    const decimals = reserve?.decimals ? Number(reserve.decimals) : 18;
+    const borrowCap = reserve?.borrowCap ? Number(reserve.borrowCap) : null;
+    const alreadyBorrowed = reserve?.totalScaledVariableDebt
+      ? Number(reserve.totalScaledVariableDebt) / 10 ** decimals
+      : 0;
+    let maxAmount = parseFloat(balance);
+
+    if (borrowCap !== null && borrowCap > 0) {
+      maxAmount = Math.min(maxAmount, borrowCap - alreadyBorrowed);
+    }
+    setAmount(maxAmount > 0 ? maxAmount.toFixed(2) : "0");
   };
 
   /**
@@ -200,6 +219,59 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   <span>{t("LendingBorrowModalTransactionBorrowAPY")}</span>
                   <span className="font-bold">{(Number(reserve.variableBorrowRate) / 1e25).toFixed(2)}%</span>
                 </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span>{t("LendingBorrowModalTransactionBorrowCap")}</span>
+                  <span className="font-bold">
+                    {reserve.borrowCap ? `${Math.floor(Number(reserve.borrowCap)).toLocaleString("en-US")}` : "N/A"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span>{t("LendingBorrowModalTransactionBorrowed")}</span>
+                  <span className="font-bold">
+                    {reserve.totalScaledVariableDebt
+                      ? (() => {
+                          const decimals = reserve.decimals ? Number(reserve.decimals) : 18;
+                          const borrowed = Number(reserve.totalScaledVariableDebt) / 10 ** decimals;
+                          return borrowed.toLocaleString("en-US");
+                        })()
+                      : "N/A"}
+                  </span>
+                </div>
+
+                {/* Radial Progress */}
+                {reserve.borrowCap &&
+                  Number(reserve.borrowCap) > 0 &&
+                  reserve.totalScaledVariableDebt &&
+                  (() => {
+                    const decimals = reserve.decimals ? Number(reserve.decimals) : 18;
+                    const borrowed = Number(reserve.totalScaledVariableDebt) / 10 ** decimals;
+                    const borrowCap = Number(reserve.borrowCap);
+                    const progress = Math.min(Math.round((borrowed / borrowCap) * 100), 100); // capped at 100
+                    return (
+                      <div className="flex justify-center items-center m-3 space-x-2">
+                        <div
+                          className="radial-progress text-primary flex items-center justify-center"
+                          style={
+                            {
+                              "--value": progress,
+                              width: "100px",
+                              height: "100px",
+                              fontSize: "12px",
+                              lineHeight: "1.2",
+                              textAlign: "center",
+                            } as React.CSSProperties
+                          }
+                          aria-valuenow={progress}
+                          role="progressbar"
+                        >
+                          <div>
+                            {progress}%<br />
+                            {t("LendingBorrowModalTransactionBorrowed")}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
               </div>
               <div className="flex justify-between gap-4">
                 <button
