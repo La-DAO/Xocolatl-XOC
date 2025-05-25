@@ -243,6 +243,7 @@
   "ReserveInfoPanelTitle": "Reserve status & configuration",
   "ReserveInfoPanelAvailableLiquidity": "Available Liquidity",
   "ReserveInfoPanelOraclePrice": "Oracle Price",
+  "ReserveInfoPanelSupplyCap": "Supply Cap",
   "ReserveInfoPanelMaxLTV": "Max LTV",
   "ReserveInfoPanelLiquidationThreshold": "Liquidation Threshold",
   "ReserveInfoPanelLiquidationPenalty": "Liquidation Penalty",
@@ -251,6 +252,8 @@
   "ReserveInfoAToken": "aToken",
   "ReserveInfoVariableDebtToken": "Debt Token",
   "ReserveInfoPanelReserveSize": "Reserve Size",
+  "ReserveInfoPanelSupplyAPY": "Supply APY",
+  "ReserveInfoPanelBorrowCap": "Borrow Cap",
 
   "XoktleTitle": "Xoktle",
   "XoktleDescription": "Xoktle is the word for pot 🍯 in Nahuatl. This smart contract is designed to use your deposit to expand stablecoin liquidity and pair with the DeFi ecosystem. For every 1 dollar, there will be 4 pesos in the pool, so our liquidity agent will always strive to maintain this ratio by internally rebalancing the pool.",

@@ -91,6 +91,10 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
             </p>
           </div>
           <div>
+            <p className="text-gray-500 text-sm">{t("ReserveInfoPanelSupplyAPY")}</p>
+            <p className="text-primary font-bold">{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
+          </div>
+          <div>
             <p className="text-gray-500 text-sm">{t("ReserveInfoPanelOraclePrice")}</p>
             <p className="text-primary font-bold">{formatOraclePrice(reserve.priceInMarketReferenceCurrency)}</p>
           </div>
@@ -108,6 +112,12 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
       <div className="flex flex-col gap-2">
         <p className="font-semibold text-primary text-lg">Supply Info</p>
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="border border-gray-300 rounded-md p-4">
+            <p className="text-xs text-gray-500">{t("ReserveInfoPanelSupplyCap")}</p>
+            <p className="text-lg font-bold text-primary">
+              {reserve.supplyCap ? `${Math.floor(Number(reserve.supplyCap)).toLocaleString("en-US")}` : "N/A"}
+            </p>
+          </div>
           <div className="border border-gray-300 rounded-md p-4">
             <p className="text-xs text-gray-500">{t("ReserveInfoPanelMaxLTV")}</p>
             <p className="text-lg font-bold text-primary">{maxLTV}%</p>
@@ -136,6 +146,12 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
             <div className="border border-gray-300 rounded-md p-4">
               <p className="text-xs text-gray-500">{t("ReserveInfoPanelVariableBorrowAPY")}</p>
               <p className="text-lg font-bold text-primary">{variableBorrowAPY}%</p>
+            </div>
+            <div className="border border-gray-300 rounded-md p-4">
+              <p className="text-xs text-gray-500">{t("ReserveInfoPanelBorrowCap")}</p>
+              <p className="text-lg font-bold text-primary">
+                {reserve.borrowCap ? `${Math.floor(Number(reserve.borrowCap)).toLocaleString("en-US")}` : "N/A"}
+              </p>
             </div>
           </div>
         </div>
