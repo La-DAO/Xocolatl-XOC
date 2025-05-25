@@ -45,8 +45,6 @@ const Lending = () => {
   const { refreshKey, refreshComponents } = useLendingStore();
   const { selectedReserveAsset, setSelectedReserveAsset } = useLendingStore();
 
-
-
   // Calculate Net Worth balance
   const netWorth = suppliesTotalBalance - borrowsTotalBalance;
 
