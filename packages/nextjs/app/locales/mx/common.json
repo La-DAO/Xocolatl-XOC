@@ -216,7 +216,7 @@
   "LendingBorrowModalCopyMessage": "Copiado al portapapeles",
   "LendingBorrowModalSuccessTitle": "Todo bien, al cien!",
   "LendingBorrowModalSuccessMessage": "El préstamo se ha realizado con éxito",
-  "LendingBorrowModalTransactionBorrowCap": "Limite de prestamos",
+  "LendingBorrowModalTransactionBorrowCap": "Límite de préstamos",
   "LendingBorrowModalTransactionBorrowed": "Prestado",
 
   "LendingRepayModalTitle": "Reembolsar",
