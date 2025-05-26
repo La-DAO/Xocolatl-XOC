@@ -186,6 +186,8 @@
   "LendingSupplyModalTransactionOverview": "Transaction Overview",
   "LendingSupplyModalTransactionSupplyAPY": "Supply APY",
   "LendingSupplyModalTransactionCollateral": "Collateralization",
+  "LendingSupplyModalTransactionSupplyCap": "Supply Cap",
+  "LendingSupplyModalTransactionAvailableLiquidity": "Available Liquidity",
   "LendingSupplyModalApprove": "Approve",
   "LendingSupplyModalButton": "Supply",
   "LendingSupplyModalClose": "Close",

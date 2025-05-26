@@ -267,6 +267,24 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                     {reserve.usageAsCollateralEnabled ? "Enabled" : "Disabled"}
                   </span>
                 </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span>{t("LendingSupplyModalTransactionSupplyCap")}</span>
+                  <span className="font-bold">
+                    {reserve.supplyCap ? `${Math.floor(Number(reserve.supplyCap)).toLocaleString("en-US")}` : "N/A"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span>{t("LendingSupplyModalTransactionAvailableLiquidity")}</span>
+                  <span className="font-bold">
+                    {reserve.availableLiquidity
+                      ? (() => {
+                          const decimals = reserve.decimals ? Number(reserve.decimals) : 18;
+                          const supplied = Number(reserve.availableLiquidity) / 10 ** decimals;
+                          return supplied.toLocaleString("en-US");
+                        })()
+                      : "N/A"}
+                  </span>
+                </div>
               </div>
               <div className="flex justify-between gap-4">
                 {requiresApproval ? (
