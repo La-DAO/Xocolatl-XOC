@@ -197,6 +197,8 @@
   "LendingSupplyModalTransactionOverview": "Vista General de la Transacción",
   "LendingSupplyModalTransactionSupplyAPY": "Interés por Depositar",
   "LendingSupplyModalTransactionCollateral": "Colateralización",
+  "LendingSupplyModalTransactionSupplyCap": "Capacidad de Deposito",
+  "LendingSupplyModalTransactionAvailableLiquidity": "Liqudiez Disponible",
   "LendingSupplyModalApprove": "Aprobar",
   "LendingSupplyModalButton": "Depositar",
   "LendingSupplyModalClose": "Cerrar",

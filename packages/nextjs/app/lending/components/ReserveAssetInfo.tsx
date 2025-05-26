@@ -74,9 +74,9 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
           <div>
             <p className="text-gray-500 text-sm">
               {t("ReserveInfoPanelReserveSize")}
-              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelReserveSizeTooltip")}>
+              <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelReserveSizeTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
-              </div>
+              </span>
             </p>
             <p className="text-primary font-bold">
               {reserveSizeLoading ? "Loading..." : `${reserveSize} ${reserve.symbol}`}
@@ -85,27 +85,27 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
           <div>
             <p className="text-gray-500 text-sm">
               {t("ReserveInfoPanelSupplyAPY")}
-              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelSupplyAPYTooltip")}>
+              <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelSupplyAPYTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
-              </div>
+              </span>
             </p>
             <p className="text-primary font-bold">{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
           </div>
           <div>
             <p className="text-gray-500 text-sm">
               {t("ReserveInfoPanelOraclePrice")}
-              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelOraclePriceTooltip")}>
+              <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelOraclePriceTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
-              </div>
+              </span>
             </p>
             <p className="text-primary font-bold">{formatOraclePrice(reserve.priceInMarketReferenceCurrency)}</p>
           </div>
           <div>
             <p className="text-gray-500 text-sm">
               {t("ReserveInfoPanelAvailableLiquidity")}
-              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelAvailableLiquidityTooltip")}>
+              <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelAvailableLiquidityTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
-              </div>
+              </span>
             </p>
             <p className="text-primary font-bold">
               {formatTokenAmount(reserve.availableLiquidity, reserve.decimals, reserve.symbol)}
@@ -122,9 +122,9 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
           <div className="border border-gray-300 rounded-md p-4">
             <p className="text-xs text-gray-500">
               {t("ReserveInfoPanelSupplyCap")}
-              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelSupplyCapTooltip")}>
+              <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelSupplyCapTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
-              </div>
+              </span>
             </p>
             <p className="text-lg font-bold text-primary">
               {reserve.supplyCap ? `${Math.floor(Number(reserve.supplyCap)).toLocaleString("en-US")}` : "N/A"}
@@ -133,27 +133,27 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
           <div className="border border-gray-300 rounded-md p-4">
             <p className="text-xs text-gray-500">
               {t("ReserveInfoPanelMaxLTV")}
-              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelMaxLTVTooltip")}>
+              <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelMaxLTVTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
-              </div>
+              </span>
             </p>
             <p className="text-lg font-bold text-primary">{maxLTV}%</p>
           </div>
           <div className="border border-gray-300 rounded-md p-4">
             <p className="text-xs text-gray-500">
               {t("ReserveInfoPanelLiquidationThreshold")}
-              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelLiquidationThresholdTooltip")}>
+              <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelLiquidationThresholdTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
-              </div>
+              </span>
             </p>
             <p className="text-lg font-bold text-primary">{liquidationThreshold}%</p>
           </div>
           <div className="border border-gray-300 rounded-md p-4">
             <p className="text-xs text-gray-500">
               {t("ReserveInfoPanelLiquidationPenalty")}
-              <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelLiquidationPenaltyTooltip")}>
+              <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelLiquidationPenaltyTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
-              </div>
+              </span>
             </p>
             <p className="text-lg font-bold text-primary">{liquidationPenalty}%</p>
           </div>
@@ -173,18 +173,18 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
             <div className="border border-gray-300 rounded-md p-4">
               <p className="text-xs text-gray-500">
                 {t("ReserveInfoPanelVariableBorrowAPY")}
-                <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelVariableBorrowAPYTooltip")}>
+                <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelVariableBorrowAPYTooltip")}>
                   <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
-                </div>
+                </span>
               </p>
               <p className="text-lg font-bold text-primary">{variableBorrowAPY}%</p>
             </div>
             <div className="border border-gray-300 rounded-md p-4">
               <p className="text-xs text-gray-500">
                 {t("ReserveInfoPanelBorrowCap")}
-                <div className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelBorrowCapTooltip")}>
+                <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelBorrowCapTooltip")}>
                   <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
-                </div>
+                </span>
               </p>
               <p className="text-lg font-bold text-primary">
                 {reserve.borrowCap ? `${Math.floor(Number(reserve.borrowCap)).toLocaleString("en-US")}` : "N/A"}
