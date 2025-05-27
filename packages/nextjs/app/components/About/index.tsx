@@ -152,7 +152,7 @@ const About = () => {
               <li>
                 <hr />
                 <div className="timeline-middle">{/* SVG icon */}</div>
-                <div className="timeline-start mb-10">
+                <div className="timeline-start mb-10 md:text-end ml-10">
                   <time className="font-mono italic">{t("timelineDate7")}</time>
                   <div className="text-lg font-black">{t("timelineTitle7")}</div>
                   {t("timelineDesc7")}
