@@ -32,6 +32,7 @@
   "featuresTab1": "CPD Management",
   "featuresTab2": "Money Lending Markets",
   "featuresTab3": "Fully Interoperable with most popular L2s",
+  "featuresTab4": "Liquidity Providing",
 
   "imageAlt1": "about image 1",
   "imageAlt2": "about image 2",
@@ -61,6 +62,9 @@
   "timelineDate6": "Februaruy 23rd, 2025",
   "timelineTitle6": "Xocolatl Contracts Go Live on Optimism Mainnet",
   "timelineDesc6": "The Xocolatl Contracts are now live on Optimism Mainnet, marking the first step in our roadmap to becoming the most liquid and trusted MXN stablecoin in the Superchain. This deployment enhances our network's liquidity and trust, paving the way for further integrations and adoption.",
+  "timelineDate7": "May 3rd-4th, 2025",
+  "timelineTitle7": "La DAO represents $XOC at ETHCDM(ETH Cinco De Mayo)",
+  "timelineDesc7": "Mexican DeFi Builders got together for a week to hack and discover new ways of buiding a new decentralized financial system. La DAO offered a $5,000 $XOC prize and MictlAI was the winner of the hackathon and of the delicious xocolatl.",
 
   "quote1": "$XOC is one of the first proposals to",
   "quote1Highlight": "revolutionize DeFi in Mexico.",
