@@ -187,7 +187,7 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
                 </span>
               </p>
               <p className="text-lg font-bold text-primary">
-                {reserve.borrowCap ? `${Math.floor(Number(reserve.borrowCap)).toLocaleString("en-US")}` : "N/A"}
+                {reserve.borrowCap ? `${Math.floor(Number(reserve.borrowCap)).toLocaleString("en-US")}` : "Unlimited"}
               </p>
             </div>
           </div>

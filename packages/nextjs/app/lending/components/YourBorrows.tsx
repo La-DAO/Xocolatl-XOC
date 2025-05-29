@@ -126,8 +126,8 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
                 <p>{(Number(reserve.variableBorrowRate) / 1e25).toFixed(2)}%</p>
               </div>
               <div className="borrows-row-item w-24 hidden sm:block">
-                <span className="px-4 py-1 bg-gray-100 text-gray-400 rounded-md uppercase text-xs">
-                  {reserve.variableBorrowrate !== 0n && reserve.stableBorrowRateEnabled ? "stable" : "variable"}
+                <span className="px-4 py-1 bg-[#93c572] text-white rounded-md uppercase text-xs font-bold shadow-md">
+                  {reserve.variableBorrowRate !== 0n && reserve.stableBorrowRateEnabled ? "stable" : "variable"}
                 </span>
               </div>
 
