@@ -16,6 +16,8 @@ const AssetsToBorrow: React.FC = () => {
   const [selectedReserve, setSelectedReserve] = useState<ReserveData | null>(null);
   const [selectedBalance, setSelectedBalance] = useState("");
 
+  const numberFormatter = useMemo(() => new Intl.NumberFormat("en-US", { style: "decimal" }), []);
+
   // Handle borrow button click
   const handleBorrowClick = (reserve: ReserveData, balance: string) => {
     setSelectedReserve(reserve);
@@ -64,9 +66,7 @@ const AssetsToBorrow: React.FC = () => {
 
           {(assetsToBorrow ?? []).map((reserve, index) => {
             const availableLiquidity = (Number(reserve.availableLiquidity) / 10 ** Number(reserve.decimals)).toFixed(5);
-            const formattedLiquidity = new Intl.NumberFormat("en-US", { style: "decimal" }).format(
-              Number(availableLiquidity),
-            );
+            const formattedLiquidity = numberFormatter.format(Number(availableLiquidity));
             const formattedBorrowRate = (Number(reserve.variableBorrowRate) / 1e25).toFixed(2);
             const isButtonDisabled = !walletAddress;
 
