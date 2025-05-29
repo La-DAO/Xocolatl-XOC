@@ -127,7 +127,7 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
               </div>
               <div className="borrows-row-item w-24 hidden sm:block">
                 <span className="px-4 py-1 bg-[#93c572] text-white rounded-md uppercase text-xs font-bold shadow-md">
-                  {reserve.variableBorrowrate !== 0n && reserve.stableBorrowRateEnabled ? "stable" : "variable"}
+                  {reserve.variableBorrowRate !== 0n && reserve.stableBorrowRateEnabled ? "stable" : "variable"}
                 </span>
               </div>
 
