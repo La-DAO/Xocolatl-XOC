@@ -64,6 +64,10 @@ const AssetsToBorrow: React.FC = () => {
 
           {(assetsToBorrow ?? []).map((reserve, index) => {
             const availableLiquidity = (Number(reserve.availableLiquidity) / 10 ** Number(reserve.decimals)).toFixed(5);
+            const formattedLiquidity = new Intl.NumberFormat("en-US", { style: "decimal" }).format(
+              Number(availableLiquidity),
+            );
+            const formattedBorrowRate = (Number(reserve.variableBorrowRate) / 1e25).toFixed(2);
             const isButtonDisabled = !walletAddress;
 
             return (
@@ -72,10 +76,10 @@ const AssetsToBorrow: React.FC = () => {
                   <p>{reserve.symbol}</p>
                 </div>
                 <div className="asset-row-item w-24 h-fit">
-                  <p>{availableLiquidity}</p>
+                  <p>{formattedLiquidity}</p>
                 </div>
                 <div className="asset-row-item w-24 h-fit">
-                  <p>{(Number(reserve.variableBorrowRate) / 1e25).toFixed(2)}%</p>
+                  <p>{formattedBorrowRate}%</p>
                 </div>
                 <div className="asset-row-item w-24 h-fit">
                   <button
