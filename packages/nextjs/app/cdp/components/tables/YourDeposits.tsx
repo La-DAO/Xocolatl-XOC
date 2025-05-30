@@ -305,9 +305,6 @@ const YourDeposits = () => {
     ? batchComputeUserHealthRatio.map(({ result }) => (Number(result) / 10 ** 18).toFixed(2))
     : [0, 0, 0, 0, 0];
 
-  console.log("formattedMintingPower", formattedMintingPower);
-  console.log("formattedUserHealthRatio", formattedUserHealthRatio);
-
   const deposits = generateDeposits(
     contractData,
     formattedBalances,
