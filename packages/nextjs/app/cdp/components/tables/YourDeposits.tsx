@@ -25,53 +25,42 @@ type Deposit = {
   backedTokenID: string;
 };
 
+const chainOffsets: Record<number, number> = {
+  [chainIds.BNB]: 0,
+  [chainIds.POLYGON]: 2,
+  [chainIds.BASE]: 5,
+  [chainIds.OPTIMISM]: 7,
+};
+
 const generateDeposits = (
   contractData: ContractData,
-  formattedBalances: number[],
-  formattedMints: number[],
-  formattedMintingPower: string[],
-  formattedUserHealthRatio: string[],
-): { [key: number]: Deposit[] } => {
-  const deposits: { [key: number]: Deposit[] } = {};
-  let globalIndex = 0;
-  let mintingPowerIndex = 0;
-  let healthRatioIndex = 0;
+  balances: number[],
+  mints: number[],
+  mintingPowers: string[],
+  healthRatios: string[],
+): Record<number, Deposit[]> => {
+  const deposits: Record<number, Deposit[]> = {};
 
-  Object.entries(contractData).forEach(([chainId, data]) => {
-    const chainIdNumber = parseInt(chainId, 10);
-    const typedData = data as ContractData[typeof chainIdNumber];
+  Object.entries(contractData).forEach(([chainIdStr, data]) => {
+    const chainIdNum = parseInt(chainIdStr, 10);
+    const offset = chainOffsets[chainIdNum] ?? 0;
+    const assetsArray = Object.entries(data.assets);
 
-    deposits[chainIdNumber] = Object.entries(typedData.assets).map(([symbol, asset]) => {
-      // Get the correct indices based on the chain
-      const currentChainId = parseInt(chainId, 10);
-      if (currentChainId === chainIds.BNB) {
-        mintingPowerIndex = globalIndex;
-        healthRatioIndex = globalIndex;
-      } else if (currentChainId === chainIds.POLYGON) {
-        mintingPowerIndex = globalIndex + 2; // Adjust based on BNB assets
-        healthRatioIndex = globalIndex + 2;
-      } else if (currentChainId === chainIds.BASE) {
-        mintingPowerIndex = globalIndex + 5; // Adjust based on BNB + POLYGON assets
-        healthRatioIndex = globalIndex + 5;
-      } else if (currentChainId === chainIds.OPTIMISM) {
-        mintingPowerIndex = globalIndex + 7; // Adjust based on BNB + POLYGON + BASE assets
-        healthRatioIndex = globalIndex + 7;
-      }
+    deposits[chainIdNum] = assetsArray.map(([symbol, asset], localIndex) => {
+      const idx = offset + localIndex;
 
-      const deposit = {
+      return {
         symbol,
-        amount: parseFloat(formattedBalances[globalIndex]?.toFixed(6) || "0"),
-        minted: parseFloat(formattedMints[globalIndex]?.toFixed(6) || "0"),
-        mintingPower: parseFloat(formattedMintingPower[mintingPowerIndex] || "0"),
-        houseofReserveContract: typedData.houseOfReserves[symbol],
+        amount: parseFloat(balances[idx]?.toFixed(6) || "0"),
+        minted: Number(mints[idx] || 0),
+        mintingPower: parseFloat(mintingPowers[idx] || "0"),
+        userHealthRatio: parseFloat(healthRatios[idx] || "0"),
+        houseofReserveContract: data.houseOfReserves[symbol],
         assetContract: asset.contract,
-        houseOfCoinContract: typedData.houseOfCoin,
-        assetsAccountantContract: typedData.assetsAccountant,
-        userHealthRatio: parseFloat(formattedUserHealthRatio[healthRatioIndex] || "0"),
+        houseOfCoinContract: data.houseOfCoin,
+        assetsAccountantContract: data.assetsAccountant,
         backedTokenID: asset.backedTokenID || "",
       };
-      globalIndex++;
-      return deposit;
     });
   });
 
@@ -303,7 +292,10 @@ const YourDeposits = () => {
     ? (batchDeposits as (number | string)[]).map((balance: number | string) => Number(balance) / 10 ** 18)
     : [0, 0, 0, 0, 0, 0, 0];
   const formattedMints: any[] = batchMints
-    ? (batchMints as any[]).map((mint: any) => Number(mint) / 10 ** 18)
+    ? (batchMints as any[]).map((mint: any) => {
+        const number = Number(mint) / 10 ** 18;
+        return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(number);
+      })
     : [0, 0, 0, 0, 0];
   const formattedMintingPower: any[] = batchCheckRemainingMintingPower
     ? batchCheckRemainingMintingPower.map(({ result }) => (Number(result) / 10 ** 18).toFixed(2))
@@ -390,7 +382,7 @@ const YourDeposits = () => {
                     <p className="text-sm text-gray-900">{formattedMints[index]}</p>
                   </td>
                   <td className="px-2 py-4 hidden sm:table-cell">
-                    <p className="text-sm text-gray-900">{deposit.mintingPower}</p>
+                    <p className="text-sm text-gray-900">{deposit.mintingPower.toFixed(2)}</p>
                   </td>
                   <td className="px-2 py-4 hidden sm:table-cell">
                     <div className="text-sm text-gray-900">{deposit.userHealthRatio}</div>

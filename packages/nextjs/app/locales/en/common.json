@@ -100,7 +100,7 @@
 
   "Base": "Base",
   "Market": "Market",
-  "TotalXOCMinted": "Total $XOC Minted",
+  "TotalXOCMinted": "Total $XOC In Circulation",
   "Deposits": "Deposits",
   "YourDepositTableTitle": "Mint $XOC",
   "YourDepositsDescription": "You can mint $XOC based on the asset you deposited below",
@@ -108,7 +108,7 @@
   "AssetTableTitle": "Deposit Assets",
   "AssetTableDescription": "Select the asset to deposit as collateral, only then can you mint $XOC",
   "AssetsColumn1": "Assets",
-  "AssetsColumn2": "Balance",
+  "AssetsColumn2": "Wallet Balance",
   "AssetsColumn3": "Max LTV",
   "AssetsColumn4": "Liquidation Threshold",
   "AssetsColumn5": "Actions",

@@ -111,7 +111,7 @@
 
   "Base": "Base",
   "Market": "Mercado",
-  "TotalXOCMinted": "Total $XOC Acuñado",
+  "TotalXOCMinted": "$XOC Total en Circulación",
   "Deposits": "Depósitos",
   "YourDepositTableTitle": "Acuña $XOC",
   "YourDepositsDescription": "Puedes acuñar $XOC basado en tus depósitos debajo.",
@@ -119,7 +119,7 @@
   "AssetTableTitle": "Deposita tus Activos",
   "AssetTableDescription": "Selecciona el activo a depositar como garantía, solo entonces podrás acuñar $XOC",
   "AssetsColumn1": "Activos",
-  "AssetsColumn2": "Saldo",
+  "AssetsColumn2": "Saldo Wallet",
   "AssetsColumn3": "LTV Máximo",
   "AssetsColumn4": "Umbral de liquidación",
   "AssetsColumn5": "Acciones",
