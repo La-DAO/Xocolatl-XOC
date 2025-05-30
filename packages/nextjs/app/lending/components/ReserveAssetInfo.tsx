@@ -1,5 +1,5 @@
 import React from "react";
-// import APYGraph from "./APYGraph";
+import APYGraph from "./APYGraph";
 import { useTranslation } from "@/app/context/LanguageContext";
 import useReserveSize from "@/hooks/useReserveSize";
 import { ReserveData } from "@/types/types";
@@ -160,10 +160,10 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
         </div>
       </div>
 
-      {/* APY Graph
+      {/* APY Graph*/}
       <div className="mt-6">
         <APYGraph />
-      </div> */}
+      </div>
 
       {/* Borrow Info */}
       <div className="flex flex-col gap-2">
