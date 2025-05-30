@@ -100,7 +100,7 @@
 
   "Base": "Base",
   "Market": "Market",
-  "TotalXOCMinted": "Total $XOC Minted",
+  "TotalXOCMinted": "Total $XOC In Circulation",
   "Deposits": "Deposits",
   "YourDepositTableTitle": "Mint $XOC",
   "YourDepositsDescription": "You can mint $XOC based on the asset you deposited below",

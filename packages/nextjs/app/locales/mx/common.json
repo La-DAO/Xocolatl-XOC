@@ -111,7 +111,7 @@
 
   "Base": "Base",
   "Market": "Mercado",
-  "TotalXOCMinted": "Total $XOC Acuñado",
+  "TotalXOCMinted": "$XOC Total en Circulación",
   "Deposits": "Depósitos",
   "YourDepositTableTitle": "Acuña $XOC",
   "YourDepositsDescription": "Puedes acuñar $XOC basado en tus depósitos debajo.",
