@@ -4,7 +4,7 @@ import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { faAnchor, faBridge, faGlassWaterDroplet } from "@fortawesome/free-solid-svg-icons";
+import { faAnchor, faGlassWaterDroplet } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { BanknotesIcon, Bars3Icon, HomeIcon } from "@heroicons/react/24/solid";
 import { useTranslation } from "~~/app/context/LanguageContext";
@@ -34,20 +34,10 @@ export const menuLinks: HeaderMenuLink[] = [
     icon: <BanknotesIcon className="h-4 w-4" />,
   },
   {
-    label: "Cuappanahuaztli",
-    href: "https://bridge.connext.network/XOC-from-polygon-to-ethereum?symbol=XOC",
-    icon: <FontAwesomeIcon icon={faBridge} />,
-  },
-  {
     label: "Xoktle",
     href: "/liquidity",
     icon: <FontAwesomeIcon icon={faGlassWaterDroplet} className="h-4 w-4" />,
   },
-  /*   {
-    label: "Swap",
-    href: "https://app.uniswap.org/swap?exactField=output&exactAmount=10&outputCurrency=0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf",
-    icon: <FontAwesomeIcon icon={faRotate} />,
-  }, */
 ];
 
 export const HeaderMenuLinks = () => {
