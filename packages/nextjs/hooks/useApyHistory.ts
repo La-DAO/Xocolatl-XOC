@@ -18,7 +18,7 @@ export function useApyHistory(tokenAddress: string, timePeriod: string) {
           apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
         },
         params: {
-          select: "supply_apy,timestamp",
+          select: "supply_apy, borrow_apr, timestamp",
           token_address: `eq.${tokenAddress}`,
           timestamp: `gte.${dateFrom?.toISOString()}`,
           order: "timestamp.asc",

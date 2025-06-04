@@ -162,7 +162,7 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
 
       {/* APY Graph*/}
       <div className="mt-6">
-        <APYGraph />
+        <APYGraph mode="Supply" tokenAddress={reserve.underlyingAsset} />
       </div>
 
       {/* Borrow Info */}
@@ -192,6 +192,7 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
             </div>
           </div>
         </div>
+        <APYGraph mode="Borrow" tokenAddress={reserve.underlyingAsset} />
       </div>
       <div className="flex flex-col gap-2">
         <p className="font-semibold text-primary text-lg mt-6">Contracts</p>
