@@ -1,12 +1,13 @@
 import React from "react";
 import TokenConverter from "./components";
+import Flows from "./components/Flows";
 
 const StreamsPage: React.FC = () => {
   return (
     <div
       style={{
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
@@ -14,6 +15,7 @@ const StreamsPage: React.FC = () => {
       }}
     >
       <TokenConverter />
+      <Flows />
     </div>
   );
 };
