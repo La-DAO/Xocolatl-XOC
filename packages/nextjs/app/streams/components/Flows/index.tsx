@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Address } from "viem";
 import { useAccount, useWriteContract } from "wagmi";
-import { supertokenABI } from "~~/app/components/abis/Supertoken";
+import { forwarderABI } from "~~/app/components/abis/ForwarderContract";
 
 const Flows: React.FC = () => {
   const { address: accountAddress } = useAccount();
@@ -11,7 +11,7 @@ const Flows: React.FC = () => {
   const [selectedToken, setSelectedToken] = useState<string>("");
   const [flowRate, setFlowRate] = useState<number>(0);
   const [timeUnit, setTimeUnit] = useState<string>("second");
-  const { writeContract: createFlow } = useWriteContract();
+  const { writeContract: updateFlow } = useWriteContract();
 
   const superTokens = [
     { address: "0xedF89f2612a5B07FEF051e1a0444342B5410C405", symbol: "Super XOC" },
@@ -26,25 +26,24 @@ const Flows: React.FC = () => {
     { value: "month", label: "per month" },
   ];
 
-  const handleCreateFlow = async () => {
+  const handleUpdateFlow = async () => {
     if (!accountAddress || !recipientAddress || !selectedToken || !flowRate) {
       console.error("Missing required fields");
       return;
     }
 
     try {
-      // Convert flow rate based on time unit
-      const flowRateInWei = flowRate * 1e18; // Adjust based on token decimals
-
-      const tx = await createFlow({
-        abi: supertokenABI,
-        address: selectedToken as Address,
-        functionName: "createFlow",
-        args: [recipientAddress as Address, flowRateInWei],
+      // Convert flow rate to uint96 (should be safe for small numbers)
+      const flowRateUint96 = BigInt(flowRate);
+      const tx = await updateFlow({
+        abi: forwarderABI,
+        address: "0x19ba78B9cDB05A877718841c574325fdB53601bb",
+        functionName: "updateFlow",
+        args: [selectedToken as Address, recipientAddress as Address, flowRateUint96, "0x"],
       });
-      console.log("Flow creation transaction submitted:", tx);
+      console.log("Flow update transaction submitted:", tx);
     } catch (error) {
-      console.error("Error creating flow:", error);
+      console.error("Error updating flow:", error);
     }
   };
 
@@ -113,7 +112,7 @@ const Flows: React.FC = () => {
 
       <button
         className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        onClick={handleCreateFlow}
+        onClick={handleUpdateFlow}
       >
         Create Flow
       </button>

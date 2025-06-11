@@ -50,6 +50,7 @@
     "node": ">=18.17.0"
   },
   "dependencies": {
+    "@divvi/referral-sdk": "^1.0.0",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
