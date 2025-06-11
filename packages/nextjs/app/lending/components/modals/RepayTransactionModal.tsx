@@ -6,7 +6,7 @@ import useAccountAddress from "@/hooks/useAccount";
 import { ReserveData } from "@/types/types";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Address, parseEther } from "viem";
+import { Address, parseEther, parseUnits } from "viem";
 import { useChainId, useReadContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { useTranslation } from "~~/app/context/LanguageContext";
 import { getBlockExplorerUrl } from "~~/app/utils/utils";
@@ -149,12 +149,14 @@ const RepayTransactionModal: React.FC<RepayModalProps> = ({ isOpen, onClose, res
   };
 
   const handleRepayClick = () => {
+    if (!reserve || !walletAddress) return;
+    const tokenDecimals = Number(reserve.decimals);
+    const amountInWei = parseUnits(amount || "0", tokenDecimals);
     if (requiresApproval) {
       handleApproval();
     } else {
-      const amountInWei = parseEther(amount);
       handleRepay(
-        reserve?.underlyingAsset as Address,
+        reserve.underlyingAsset as Address,
         amountInWei,
         2, // interest rate mode
         walletAddress as Address,

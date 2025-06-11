@@ -227,6 +227,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@divvi/referral-sdk@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@divvi/referral-sdk@npm:1.0.0"
+  checksum: 4a87198677de7faae2e95cd1199df11aeab5221e71aac0138ed025a75a5a1327b247b02045f634bb22885f9ed6a6b14adb91f9e8503355a3404064f28b088a26
+  languageName: node
+  linkType: hard
+
 "@edge-runtime/cookies@npm:3.4.1":
   version: 3.4.1
   resolution: "@edge-runtime/cookies@npm:3.4.1"
@@ -10008,6 +10015,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "se-2@workspace:."
   dependencies:
+    "@divvi/referral-sdk": ^1.0.0
     "@fortawesome/fontawesome-svg-core": ^6.5.2
     "@fortawesome/free-solid-svg-icons": ^6.6.0
     "@fortawesome/react-fontawesome": ^0.2.2
