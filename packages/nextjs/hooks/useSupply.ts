@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import externalContracts from "@/contracts/externalContracts";
 import { getDataSuffix, submitReferral } from "@divvi/referral-sdk";
 import { Address } from "viem";
@@ -45,12 +46,15 @@ const useSupply = () => {
   };
 
   // Submit referral after successful supply
-  if (isSuccess && supplyHash) {
-    submitReferral({
-      txHash: supplyHash,
-      chainId,
-    });
-  }
+  useEffect(() => {
+    if (isSuccess && supplyHash) {
+      submitReferral({
+        txHash: supplyHash,
+        chainId,
+      });
+    }
+  }, [isSuccess, supplyHash, chainId]);
+
   return { handleSupply, isError: !!error, error, supplyHash, isSuccess };
 };
 
