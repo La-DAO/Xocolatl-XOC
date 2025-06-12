@@ -11,7 +11,6 @@
 - ✅ **Transparent Transactions**: All transfers are permanently recorded on-chain
 - 🪝 **[Smart Contract Enabled](https://github.com/La-DAO/xocolatl-contracts)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
 - 🧱 [**Components**](https://github.com/La-DAO/Xocolatl-XOC): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
 - 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
 
 <h2>⚙️ Technical Architecture</h2>
