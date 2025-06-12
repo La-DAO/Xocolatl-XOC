@@ -47,7 +47,7 @@ const useSupply = () => {
 
   // Submit referral after successful supply
   useEffect(() => {
-    if (isSuccess && supplyHash) {
+    if (isSuccess && supplyHash && chainId !== undefined) {
       submitReferral({
         txHash: supplyHash,
         chainId,
