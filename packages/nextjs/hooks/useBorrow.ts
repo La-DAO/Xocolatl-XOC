@@ -1,6 +1,13 @@
+import { useEffect } from "react";
 import externalContracts from "@/contracts/externalContracts";
+import { getDataSuffix, submitReferral } from "@divvi/referral-sdk";
 import { Address } from "viem";
-import { useWriteContract } from "wagmi";
+import { useChainId, useWriteContract } from "wagmi";
+
+const dataSuffix = getDataSuffix({
+  consumer: "0xC863DFEE737C803c93aF4b6b27029294f6a56eB5",
+  providers: ["0xc95876688026be9d6fa7a7c33328bd013effa2bb"],
+});
 
 /**
  * Custom hook to handle borrow transactions.
@@ -8,6 +15,7 @@ import { useWriteContract } from "wagmi";
  */
 const useBorrow = () => {
   const { writeContract, error, data: borrowHash } = useWriteContract();
+  const chainId = useChainId();
   const pool = externalContracts[8453].Pool;
 
   /**
@@ -36,11 +44,22 @@ const useBorrow = () => {
         address: pool.address,
         functionName: "borrow",
         args: [asset, amount, interestRateMode, referralCode, onBehalfOf],
+        dataSuffix: dataSuffix as `0x${string}`,
       });
     } catch (err) {
       console.error("Error executing contract function:", err);
     }
   };
+
+  // Submit referral after successful borrow
+  useEffect(() => {
+    if (borrowHash && chainId !== undefined) {
+      submitReferral({
+        txHash: borrowHash,
+        chainId,
+      });
+    }
+  }, [borrowHash, chainId]);
 
   return { handleBorrow, isError: !!error, error, borrowHash };
 };
