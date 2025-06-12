@@ -1,6 +1,13 @@
+import { useEffect } from "react";
 import externalContracts from "@/contracts/externalContracts";
+import { getDataSuffix, submitReferral } from "@divvi/referral-sdk";
 import { Address } from "viem";
-import { useWriteContract } from "wagmi";
+import { useChainId, useWriteContract } from "wagmi";
+
+const dataSuffix = getDataSuffix({
+  consumer: "0xC863DFEE737C803c93aF4b6b27029294f6a56eB5",
+  providers: ["0xc95876688026be9d6fa7a7c33328bd013effa2bb"],
+});
 
 /**
  * Custom hook to handle supply transactions.
@@ -9,6 +16,7 @@ import { useWriteContract } from "wagmi";
 const useSupply = () => {
   // Hook for writing to a smart contract
   const { writeContract, isSuccess, error, data: supplyHash } = useWriteContract();
+  const chainId = useChainId();
   const pool = externalContracts[8453].Pool;
 
   /**
@@ -30,11 +38,22 @@ const useSupply = () => {
         address: pool.address,
         functionName: "supply",
         args: [asset, amount, onBehalfOf, referralCode],
+        dataSuffix: dataSuffix as `0x${string}`,
       });
     } catch (err) {
       console.error("Error executing contract function:", err);
     }
   };
+
+  // Submit referral after successful supply
+  useEffect(() => {
+    if (isSuccess && supplyHash && chainId !== undefined) {
+      submitReferral({
+        txHash: supplyHash,
+        chainId,
+      });
+    }
+  }, [isSuccess, supplyHash, chainId]);
 
   return { handleSupply, isError: !!error, error, supplyHash, isSuccess };
 };

@@ -134,9 +134,13 @@
   "CDPClosing": "The flexibility of stablecoins allows you to manage your assets more effectively, providing liquidity and stability in volatile markets.",
 
   "LendingProfileNetWorth": "Net Worth",
+  "LendingProfileNetWorthTooltip": "This is the total USD value of all your supplied assets minus the borrowed assets",
   "LendingProfileTotalDebt": "Total Debt",
+  "LendingProfileTotalDebtTooltip": "This is the total value of all your borrowed assets in USD",
   "LendingProfileHealthFactor": "Health Factor",
+  "LendingProfileHealthFactorTooltip": "This is the health factor of your account, if it's under 1 it could be liquidated.",
   "LendingProfileAvailableBorrows": "Available Borrows",
+  "LendingProfileAvailableBorrowsTooltip": "This is the total USD value of your available borrowing power.",
   "LendingRefreshButton": "Refresh all data",
   "LendingYourSuppliesTitle": "Your Supplies",
   "LendingYourSuppliesBalanceTooltip": "This is the balance in USD of all your supplied assets",

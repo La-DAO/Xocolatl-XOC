@@ -2,6 +2,8 @@ import React from "react";
 import Image from "next/image";
 import { useTranslation } from "@/app/context/LanguageContext";
 import BaseLogo from "@/public/Base-Logo.jpg";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useChainId } from "wagmi";
 
 interface ProfileStatsProps {
@@ -59,7 +61,12 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
         )}
         <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-8">
           <div className="text">
-            <div className="text-sm text-gray-400">{t("LendingProfileNetWorth")}</div>
+            <div className="text-sm text-gray-400">
+              {t("LendingProfileNetWorth")}
+              <span className="tooltip tooltip-info" data-tip={t("LendingProfileNetWorthTooltip")}>
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+              </span>
+            </div>
             <div className="text-lg text-accent font-semibold">${data.netWorth}</div>
           </div>
           {/*           <div className="text">
@@ -67,7 +74,12 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
             <div className="text-lg text-accent font-semibold">${totalCollateralBase}</div>
           </div> */}
           <div className="text">
-            <div className="text-sm text-gray-400">{t("LendingProfileTotalDebt")}</div>
+            <div className="text-sm text-gray-400">
+              {t("LendingProfileTotalDebt")}
+              <span className="tooltip tooltip-info" data-tip={t("LendingProfileTotalDebtTooltip")}>
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+              </span>
+            </div>
             <div className="text-lg text-accent font-semibold">${totalDebtBase}</div>
           </div>
           {/* <div className="text">
@@ -75,11 +87,21 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
             <div className="text-lg text-accent font-semibold">{data.ltv}</div>
           </div> */}
           <div className="text">
-            <div className="text-sm text-gray-400">{t("LendingProfileHealthFactor")}</div>
+            <div className="text-sm text-gray-400">
+              {t("LendingProfileHealthFactor")}
+              <span className="tooltip tooltip-info" data-tip={t("LendingProfileHealthFactorTooltip")}>
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+              </span>
+            </div>
             <div className="text-lg text-accent font-semibold">{data.healthFactor}</div>
           </div>
           <div className="text">
-            <div className="text-sm text-gray-400">{t("LendingProfileAvailableBorrows")}</div>
+            <div className="text-sm text-gray-400">
+              {t("LendingProfileAvailableBorrows")}
+              <span className="tooltip tooltip-info" data-tip={t("LendingProfileAvailableBorrowsTooltip")}>
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+              </span>
+            </div>
             <div className="text-lg text-accent font-semibold">${data.availableBorrowsBase}</div>
           </div>
         </div>
