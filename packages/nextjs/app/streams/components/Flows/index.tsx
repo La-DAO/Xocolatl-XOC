@@ -89,6 +89,25 @@ const Flows: React.FC = () => {
     }
   };
 
+  const handleDeleteFlow = async () => {
+    if (!accountAddress || !recipientAddress || !selectedToken) {
+      console.error("Missing required fields");
+      return;
+    }
+
+    try {
+      const tx = await writeContract({
+        abi: forwarderABI,
+        address: "0xcfA132E353cB4E398080B9700609bb008eceB125",
+        functionName: "deleteFlow",
+        args: [selectedToken as Address, accountAddress as Address, recipientAddress as Address, "0x"],
+      });
+      console.log("Flow deletion transaction submitted:", tx);
+    } catch (error) {
+      console.error("Error deleting flow:", error);
+    }
+  };
+
   return (
     <div className="bg-white dark:bg-base-100 rounded-2xl p-6 max-w-md mx-auto overflow-hidden shadow-lg">
       {/* Blue accent in top right corner */}
@@ -203,6 +222,18 @@ const Flows: React.FC = () => {
             disabled={!recipientAddress || !selectedToken || !flowRate}
           >
             Send Stream
+          </button>
+
+          <button
+            onClick={handleDeleteFlow}
+            className={`w-full py-4 rounded-xl font-medium text-white transition-colors ${
+              !recipientAddress || !selectedToken
+                ? "bg-gray-300 dark:bg-gray-600 cursor-not-allowed"
+                : "bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700"
+            }`}
+            disabled={!recipientAddress || !selectedToken}
+          >
+            Cancel Stream
           </button>
         </div>
       )}
