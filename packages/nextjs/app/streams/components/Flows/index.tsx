@@ -7,6 +7,15 @@ import { ChevronDown, Info, Search } from "lucide-react";
 import type { Address } from "viem";
 import { useAccount, useWriteContract } from "wagmi";
 
+// Constants for time unit conversions (in seconds)
+const TIME_UNITS = {
+  second: 1,
+  minute: 60,
+  hour: 3600,
+  day: 86400,
+  month: 2592000, // 30 days
+} as const;
+
 const Flows: React.FC = () => {
   const { address: accountAddress } = useAccount();
   const [recipientAddress, setRecipientAddress] = useState<string>("");
@@ -30,6 +39,19 @@ const Flows: React.FC = () => {
     { value: "month", label: "/ month" },
   ];
 
+  // Calculate flow rate per second from user input
+  const calculateFlowRatePerSecond = (amount: number, unit: string): bigint => {
+    const amountInWei = BigInt(Math.floor(amount * 1e18)); // Convert to wei
+    const secondsInUnit = BigInt(TIME_UNITS[unit as keyof typeof TIME_UNITS]);
+
+    // Calculate flow rate per second (amount / seconds)
+    // We multiply by 1e18 first to maintain precision during division
+    const flowRatePerSecond = (amountInWei * BigInt(1e18)) / secondsInUnit;
+
+    // Convert back to wei (divide by 1e18)
+    return flowRatePerSecond / BigInt(1e18);
+  };
+
   const handleUpdateFlow = async () => {
     if (!accountAddress || !recipientAddress || !selectedToken || !flowRate) {
       console.error("Missing required fields");
@@ -37,17 +59,33 @@ const Flows: React.FC = () => {
     }
 
     try {
-      // Convert flow rate to uint96 (should be safe for small numbers)
-      const flowRateUint96 = BigInt(Number.parseFloat(flowRate));
+      const amount = Number.parseFloat(flowRate);
+      if (isNaN(amount) || amount <= 0) {
+        console.error("Invalid flow rate amount");
+        return;
+      }
+
+      // Calculate the flow rate per second
+      const flowRatePerSecond = calculateFlowRatePerSecond(amount, timeUnit);
+
+      console.log("Flow rate per second:", flowRatePerSecond.toString());
+      console.log("Original amount:", amount, timeUnit);
+
       const tx = await writeContract({
         abi: forwarderABI,
         address: "0xcfA132E353cB4E398080B9700609bb008eceB125",
-        functionName: "createFlow",
-        args: [selectedToken as Address, accountAddress as Address, recipientAddress as Address, flowRateUint96, "0x"],
+        functionName: "updateFlow",
+        args: [
+          selectedToken as Address,
+          accountAddress as Address,
+          recipientAddress as Address,
+          flowRatePerSecond,
+          "0x",
+        ],
       });
-      console.log("Flow update transaction submitted:", tx);
+      console.log("Flow creation transaction submitted:", tx);
     } catch (error) {
-      console.error("Error updating flow:", error);
+      console.error("Error creating flow:", error);
     }
   };
 
