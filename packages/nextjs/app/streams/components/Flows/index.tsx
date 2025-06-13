@@ -5,6 +5,7 @@ import { useState } from "react";
 import { forwarderABI } from "../../../components/abis/ForwarderContract";
 import { ChevronDown, Info, Search } from "lucide-react";
 import type { Address } from "viem";
+import { parseEther } from "viem";
 import { useAccount, useWriteContract } from "wagmi";
 
 // Constants for time unit conversions (in seconds)
@@ -41,7 +42,7 @@ const Flows: React.FC = () => {
 
   // Calculate flow rate per second from user input
   const calculateFlowRatePerSecond = (amount: number, unit: string): bigint => {
-    const amountInWei = BigInt(Math.floor(amount * 1e18)); // Convert to wei
+    const amountInWei = parseEther(amount.toString()); // Convert to wei using parseEther
     const secondsInUnit = BigInt(TIME_UNITS[unit as keyof typeof TIME_UNITS]);
 
     // Calculate flow rate per second (amount / seconds)
