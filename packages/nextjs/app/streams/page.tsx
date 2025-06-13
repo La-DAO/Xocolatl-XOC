@@ -1,6 +1,6 @@
 import React from "react";
-import TokenConverter from "./components";
 import Flows from "./components/Flows";
+import TokenConverter from "./components/Supertokens";
 
 const StreamsPage: React.FC = () => {
   return (
