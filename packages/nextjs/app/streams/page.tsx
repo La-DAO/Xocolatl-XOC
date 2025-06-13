@@ -12,7 +12,7 @@ export default function StreamsPage() {
           <TokenConverter />
         </div>
         <div className="bg-white dark:bg-base-100 rounded-2xl p-6 pt-12 shadow-lg">
-          <h2 className="text-6xl font-bold text-neutral dark:text-white pb-12 mb-6">Create a Money Stream</h2>
+          <h2 className="text-6xl font-bold text-neutral dark:text-white mt-12 mb-6">Create a Money Stream</h2>
           <Flows />
         </div>
       </div>
