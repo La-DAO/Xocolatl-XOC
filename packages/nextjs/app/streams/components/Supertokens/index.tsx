@@ -122,25 +122,38 @@ const TokenConverter = () => {
     }
   };
 
+  // Balance validation effect
   useEffect(() => {
-    const amount = Number.parseFloat(tokenAmount) || 0;
+    const amount = Number.parseFloat(tokenAmount);
+    if (isNaN(amount) || amount <= 0) {
+      setTokenError("Please enter a valid amount");
+      return;
+    }
+
     if (tab === "upgrade") {
-      if (xocBalance && amount > Number.parseFloat(xocBalance)) {
-        setTokenError("Insufficient balance");
+      if (amount > Number.parseFloat(xocBalance || "0")) {
+        setTokenError("Insufficient XOC balance");
       } else {
         setTokenError(null);
       }
     } else {
-      if (superXocBalance && amount > Number.parseFloat(superXocBalance)) {
-        setTokenError("Insufficient balance");
+      if (amount > Number.parseFloat(superXocBalance || "0")) {
+        setTokenError("Insufficient Super XOC balance");
       } else {
         setTokenError(null);
       }
     }
-
-    // Update USD value (mock calculation)
-    setUsdValue(`$${(amount * 0).toFixed(2)}`);
   }, [tokenAmount, xocBalance, superXocBalance, tab]);
+
+  // USD value calculation effect
+  useEffect(() => {
+    const amount = Number.parseFloat(tokenAmount);
+    if (!isNaN(amount) && amount > 0) {
+      setUsdValue(`$${(amount * 0).toFixed(2)}`);
+    } else {
+      setUsdValue("$0.00");
+    }
+  }, [tokenAmount]);
 
   const handleMaxClick = () => {
     if (tab === "upgrade") {
@@ -230,7 +243,7 @@ const TokenConverter = () => {
           <input
             type="text"
             value={tokenAmount}
-            readOnly
+            onChange={handleInputChange}
             className="bg-transparent text-gray-900 dark:text-white text-4xl font-light w-full focus:outline-none"
             placeholder="0.0"
           />
