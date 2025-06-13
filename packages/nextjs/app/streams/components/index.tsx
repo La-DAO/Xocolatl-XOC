@@ -1,25 +1,27 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import clsx from "clsx";
-import { NextPage } from "next";
-import { Address, parseEther } from "viem";
+import type React from "react";
+import { useEffect, useState } from "react";
+import { ArrowDown, ChevronDown } from "lucide-react";
+import { type Address, parseEther } from "viem";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { supertokenABI } from "~~/app/components/abis/Supertoken";
 import { ERC20ABI } from "~~/app/components/abis/erc20";
 import { spenderAddress, xocContract } from "~~/app/constants/contracts";
 import { useBalanceOf } from "~~/hooks/useBalanceOf";
 
-const TokenConverter: NextPage = () => {
+const TokenConverter = () => {
   const { address: accountAddress } = useAccount();
   const [tab, setTab] = useState<"upgrade" | "downgrade">("upgrade");
-  const [xocAmount, setXocAmount] = useState<number>(0);
-  const [xocError, setXocError] = useState<string | null>(null);
+  const [tokenAmount, setTokenAmount] = useState<string>("0.0");
+  const [tokenError, setTokenError] = useState<string | null>(null);
+  const [usdValue, setUsdValue] = useState<string>("$0.00");
+
   const xocBalance = useBalanceOf({ tokenAddress: xocContract, walletAddress: accountAddress as Address });
   const [xocAllowanceState, xocSetAllowanceState] = useState<string>("0");
   const [requiresApproval, setRequiresApproval] = useState(false);
 
-  //write contract
+  // Write contract hooks
   const { writeContract: upgradeXOC } = useWriteContract();
   const { writeContract: approveERC20 } = useWriteContract();
   const { writeContract: downgradeSuperXOC } = useWriteContract();
@@ -38,7 +40,7 @@ const TokenConverter: NextPage = () => {
     address: xocContract,
     abi: ERC20ABI,
     functionName: "allowance",
-    args: [accountAddress, spenderAddress], // Only pass the address
+    args: [accountAddress, spenderAddress],
   });
 
   useEffect(() => {
@@ -46,28 +48,30 @@ const TokenConverter: NextPage = () => {
       console.error("Error fetching allowance");
       xocSetAllowanceState("0");
     } else if (!isLoading && xocAllowance) {
-      const formattedAllowance = (parseFloat(xocAllowance.toString()) / 1e18).toString(); // Convert from Wei to readable format
+      const formattedAllowance = (Number.parseFloat(xocAllowance.toString()) / 1e18).toString();
       xocSetAllowanceState(formattedAllowance);
     }
   }, [xocAllowance, isError, isLoading]);
 
   useEffect(() => {
+    const amount = Number.parseFloat(tokenAmount) || 0;
     if (tab === "upgrade") {
-      const xocAmountInWei = xocAmount * 1e18; // XOC amount in Wei
-      const xocAllowanceInWei = parseFloat(xocAllowanceState) * 1e18; // Allowance in Wei
+      const xocAmountInWei = amount * 1e18;
+      const xocAllowanceInWei = Number.parseFloat(xocAllowanceState) * 1e18;
       const needsApproval = xocAmountInWei > xocAllowanceInWei;
       setRequiresApproval(needsApproval);
     } else {
-      setRequiresApproval(false); // No approval needed for downgrade
+      setRequiresApproval(false);
     }
-  }, [xocAmount, xocAllowanceState, tab]);
+  }, [tokenAmount, xocAllowanceState, tab]);
 
   const handleUpgrade = async () => {
     if (!accountAddress) {
       console.error("Account address not found");
       return;
     }
-    const xocAmountInWei = parseEther(xocAmount.toString());
+    const amount = Number.parseFloat(tokenAmount) || 0;
+    const xocAmountInWei = parseEther(amount.toString());
     try {
       const tx = await upgradeXOC({
         abi: supertokenABI,
@@ -81,11 +85,11 @@ const TokenConverter: NextPage = () => {
     }
   };
 
-  // Function to handle XOC approval
   const handleXocApproval = async () => {
-    const xocAmountInWei = xocAmount * 1e18;
+    const amount = Number.parseFloat(tokenAmount) || 0;
+    const xocAmountInWei = amount * 1e18;
     try {
-      if (xocAmountInWei > parseFloat(xocAllowanceState)) {
+      if (xocAmountInWei > Number.parseFloat(xocAllowanceState)) {
         await approveERC20({
           abi: ERC20ABI,
           address: xocContract,
@@ -98,13 +102,13 @@ const TokenConverter: NextPage = () => {
     }
   };
 
-  // Downgrade handler
   const handleDowngrade = async () => {
     if (!accountAddress) {
       console.error("Account address not found");
       return;
     }
-    const xocAmountInWei = parseEther(xocAmount.toString());
+    const amount = Number.parseFloat(tokenAmount) || 0;
+    const xocAmountInWei = parseEther(amount.toString());
     try {
       const tx = await downgradeSuperXOC({
         abi: supertokenABI,
@@ -118,98 +122,158 @@ const TokenConverter: NextPage = () => {
     }
   };
 
-  // Validate balance against input
   useEffect(() => {
+    const amount = Number.parseFloat(tokenAmount) || 0;
     if (tab === "upgrade") {
-      if (xocBalance && xocAmount > parseFloat(xocBalance)) {
-        setXocError("You don't have enough XOC tokens in your wallet");
+      if (xocBalance && amount > Number.parseFloat(xocBalance)) {
+        setTokenError("Insufficient balance");
       } else {
-        setXocError(null);
+        setTokenError(null);
       }
     } else {
-      if (superXocBalance && xocAmount > parseFloat(superXocBalance)) {
-        setXocError("You don't have enough Super XOC tokens in your wallet");
+      if (superXocBalance && amount > Number.parseFloat(superXocBalance)) {
+        setTokenError("Insufficient balance");
       } else {
-        setXocError(null);
+        setTokenError(null);
       }
     }
-  }, [xocAmount, xocBalance, superXocBalance, tab]);
 
-  // Set max for current tab
-  const handleXOCMaxClick = () => {
+    // Update USD value (mock calculation)
+    setUsdValue(`$${(amount * 0).toFixed(2)}`);
+  }, [tokenAmount, xocBalance, superXocBalance, tab]);
+
+  const handleMaxClick = () => {
     if (tab === "upgrade") {
-      if (xocBalance) setXocAmount(parseFloat(xocBalance));
+      if (xocBalance) setTokenAmount(xocBalance);
     } else {
-      if (superXocBalance) setXocAmount(parseFloat(superXocBalance));
+      if (superXocBalance) setTokenAmount(superXocBalance);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+      setTokenAmount(value);
     }
   };
 
   return (
-    <div className="bg-white rounded-lg border p-6 max-w-md mx-auto mt-10">
-      <h2 className="text-2xl font-bold mb-4 dark:text-primary">Token Converter</h2>
+    <div className="bg-white dark:bg-base-100 rounded-2xl p-6 max-w-md mx-auto overflow-hidden shadow-lg">
+      {/* Blue accent in top right corner */}
+      <div className="absolute top-0 right-0 w-16 h-8 bg-blue-500 dark:bg-blue-600 rounded-bl-2xl"></div>
+
       {/* Tabs */}
-      <div className="flex mb-6 border-b">
+      <div className="flex mb-6 gap-4">
         <button
-          className={clsx(
-            "px-4 py-2 font-semibold focus:outline-none transition-colors",
-            tab === "upgrade" ? "border-b-2 border-indigo-600 text-indigo-600" : "text-gray-500 hover:text-indigo-600",
-          )}
+          className={`px-6 py-2 rounded-full font-medium text-sm transition-colors ${
+            tab === "upgrade"
+              ? "bg-green-100 dark:bg-secondary text-neutral dark:text-gray-400"
+              : "text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300"
+          }`}
           onClick={() => setTab("upgrade")}
         >
-          Upgrade
+          Wrap
         </button>
         <button
-          className={clsx(
-            "px-4 py-2 font-semibold focus:outline-none transition-colors",
+          className={`px-6 py-2 rounded-full font-medium text-sm transition-colors ${
             tab === "downgrade"
-              ? "border-b-2 border-indigo-600 text-indigo-600"
-              : "text-gray-500 hover:text-indigo-600",
-          )}
+              ? "bg-green-100 dark:bg-secondary text-neutral dark:text-gray-400"
+              : "text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300"
+          }`}
           onClick={() => setTab("downgrade")}
         >
-          Downgrade
+          Unwrap
         </button>
       </div>
-      <div className="mb-4">
-        <label htmlFor="xocAmount" className="block text-lg font-medium text-gray-700 mb-1">
-          {tab === "upgrade" ? "XOC Amount:" : "Super XOC Amount:"}
-        </label>
-        <input
-          type="number"
-          id="xocAmount"
-          value={xocAmount}
-          onChange={e => setXocAmount(Number(e.target.value))}
-          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-lg border-gray-300 rounded-md dark:bg-base-100 px-2"
-        />
-        <span className="text-gray-500 mr-1">
-          {tab === "upgrade" ? `Balance: ${xocBalance || 0}` : `Balance: ${superXocBalance || 0}`}
-        </span>
-        <span className="font-bold hover:underline cursor-pointer dark: text-primary" onClick={handleXOCMaxClick}>
-          MAX
-        </span>
+
+      {/* First input field */}
+      <div className="mb-2 bg-gray-50 dark:bg-secondary rounded-xl p-4">
+        <div className="flex justify-between items-center mb-2">
+          <input
+            type="text"
+            value={tokenAmount}
+            onChange={handleInputChange}
+            className="bg-transparent text-gray-900 dark:text-white text-4xl font-light w-full focus:outline-none"
+            placeholder="0.0"
+          />
+          <div className="flex items-center bg-gray-100 dark:bg-[#3a3a3a] rounded-lg px-3 py-2 text-gray-900 dark:text-white">
+            <span className="mr-1">{tab === "upgrade" ? "XOC" : "sXOC"}</span>
+            <ChevronDown size={16} />
+          </div>
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="text-gray-500 dark:text-gray-400">{usdValue}</span>
+          <div className="flex items-center">
+            <span className="text-gray-500 dark:text-gray-400 mr-1">
+              Balance: {tab === "upgrade" ? xocBalance || "0" : superXocBalance || "0"}
+            </span>
+            <button
+              className="text-green-600 dark:text-green-500 font-medium ml-1 hover:text-green-700 dark:hover:text-green-400"
+              onClick={handleMaxClick}
+            >
+              MAX
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="mb-4">
-        <h2 className="text-2xl font-bold mb-4 dark:text-primary">{`Super XOC Balance: ${superXocBalance || 0}`}</h2>
+
+      {/* Arrow down */}
+      <div className="flex justify-center -my-1">
+        <div className="bg-gray-50 dark:bg-secondary rounded-full p-2">
+          <ArrowDown size={16} className="text-gray-500 dark:text-gray-400" />
+        </div>
       </div>
-      <div className="mb-4"></div>
-      {tab === "upgrade" && <span className="text-gray-500 ml-2">{`Allowance: ${xocAllowanceState}`}</span>}
+
+      {/* Second input field */}
+      <div className="mt-2 mb-4 bg-gray-50 dark:bg-secondary rounded-xl p-4">
+        <div className="flex justify-between items-center mb-2">
+          <input
+            type="text"
+            value={tokenAmount}
+            readOnly
+            className="bg-transparent text-gray-900 dark:text-white text-4xl font-light w-full focus:outline-none"
+            placeholder="0.0"
+          />
+          <div className="flex items-center bg-gray-100 dark:bg-[#3a3a3a] rounded-lg px-3 py-2 text-gray-900 dark:text-white">
+            <span className="mr-1">{tab === "upgrade" ? "sXOC" : "XOC"}</span>
+            <ChevronDown size={16} />
+          </div>
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="text-gray-500 dark:text-gray-400">{usdValue}</span>
+          <div className="flex items-center">
+            <span className="text-gray-500 dark:text-gray-400">
+              Balance: {tab === "upgrade" ? superXocBalance || "0" : xocBalance || "0"}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Exchange rate */}
+      <div className="text-center text-gray-600 dark:text-gray-300 mb-6">1 XOC = 1 sXOC ({usdValue})</div>
+
+      {/* Action button */}
       <button
-        className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        className={`w-full py-4 rounded-xl font-medium text-white transition-colors ${
+          tokenError || Number.parseFloat(tokenAmount) <= 0
+            ? "bg-gray-300 dark:bg-gray-600 cursor-not-allowed"
+            : "bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700"
+        }`}
+        disabled={!!tokenError || Number.parseFloat(tokenAmount) <= 0}
         onClick={() => {
           if (tab === "upgrade") {
             if (requiresApproval) {
               handleXocApproval();
-            } else if (!xocError) {
+            } else {
               handleUpgrade();
             }
-          } else if (tab === "downgrade" && !xocError) {
+          } else {
             handleDowngrade();
           }
         }}
       >
-        {tab === "upgrade" ? (requiresApproval ? "Approve" : "Upgrade") : "Downgrade"}
+        {tokenError ? tokenError : tab === "upgrade" ? (requiresApproval ? "Approve" : "Wrap") : "Unwrap"}
       </button>
-      {xocError && <p className="text-red-500 mt-2">{xocError}</p>}
     </div>
   );
 };
