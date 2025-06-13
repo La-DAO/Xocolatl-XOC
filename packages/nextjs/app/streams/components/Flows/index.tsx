@@ -15,7 +15,7 @@ const Flows: React.FC = () => {
   const [timeUnit, setTimeUnit] = useState<string>("month");
   const [enableScheduling, setEnableScheduling] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("stream");
-  const { writeContract: updateFlow } = useWriteContract();
+  const { writeContract } = useWriteContract();
 
   const superTokens = [
     { address: "0xedF89f2612a5B07FEF051e1a0444342B5410C405", symbol: "Super XOC" },
@@ -39,11 +39,11 @@ const Flows: React.FC = () => {
     try {
       // Convert flow rate to uint96 (should be safe for small numbers)
       const flowRateUint96 = BigInt(Number.parseFloat(flowRate));
-      const tx = await updateFlow({
+      const tx = await writeContract({
         abi: forwarderABI,
-        address: "0x19ba78B9cDB05A877718841c574325fdB53601bb",
-        functionName: "updateFlow",
-        args: [selectedToken as Address, recipientAddress as Address, flowRateUint96, "0x"],
+        address: "0xcfA132E353cB4E398080B9700609bb008eceB125",
+        functionName: "createFlow",
+        args: [selectedToken as Address, accountAddress as Address, recipientAddress as Address, flowRateUint96, "0x"],
       });
       console.log("Flow update transaction submitted:", tx);
     } catch (error) {
