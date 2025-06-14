@@ -16,8 +16,11 @@ interface FlowInfo {
 const WalletStats: React.FC = () => {
   const { address: accountAddress } = useAccount();
 
-  // Mock data
-  const mockXocBalance = "1,234.56";
+  const xocBalance = useBalanceOf({
+    tokenAddress: "0xa411c9aa00e020e4f88bc19996d29c5b7adb4acf",
+    walletAddress: accountAddress as Address,
+  });
+
   const SUPER_XOC_ADDRESS = "0xedF89f2612a5B07FEF051e1a0444342B5410C405";
 
   const superXocBalance = useBalanceOf({
@@ -40,6 +43,11 @@ const WalletStats: React.FC = () => {
   });
   console.log("flowInfo", flowInfo);
 
+  const formatBalance = (balance: string | undefined) => {
+    if (!balance) return "0.00";
+    return Number(balance).toFixed(2);
+  };
+
   const formatFlowRate = (flowRate: number) => {
     return `${flowRate.toFixed(2)} XOC/s`;
   };
@@ -48,13 +56,13 @@ const WalletStats: React.FC = () => {
     <div className="stats stats-vertical md:stats-vertical lg:stats-horizontal shadow mb-6 bg-white dark:bg-base-100">
       <div className="stat">
         <div className="stat-title">XOC Balance</div>
-        <div className="stat-value">{mockXocBalance}</div>
+        <div className="stat-value">{formatBalance(xocBalance)}</div>
         <div className="stat-desc">Native Token</div>
       </div>
 
       <div className="stat">
         <div className="stat-title">SuperXOC Balance</div>
-        <div className="stat-value">{superXocBalance}</div>
+        <div className="stat-value">{formatBalance(superXocBalance)}</div>
         <div className="stat-desc">Superfluid Token</div>
       </div>
 
