@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { faAnchor, faGlassWaterDroplet } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { BanknotesIcon, Bars3Icon, HomeIcon } from "@heroicons/react/24/solid";
+import { BanknotesIcon, Bars3Icon, HomeIcon, UsersIcon } from "@heroicons/react/24/solid";
 import { useTranslation } from "~~/app/context/LanguageContext";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
@@ -37,6 +37,11 @@ export const menuLinks: HeaderMenuLink[] = [
     label: "Xoktle",
     href: "/liquidity",
     icon: <FontAwesomeIcon icon={faGlassWaterDroplet} className="h-4 w-4" />,
+  },
+  {
+    label: "Ecosystem",
+    href: "/directory",
+    icon: <UsersIcon className="h-4 w-4" />,
   },
 ];
 
