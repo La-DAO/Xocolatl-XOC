@@ -247,7 +247,6 @@
   "LendingRepayModalErrorGeneral": "Ocurrió un error al reembolsar la deuda.",
   "LendingRepayModalCopyError": "Copiar el error",
 
-
   "LendingInfoTitle": "Comprendiendo Préstamos Decentralizado",
   "LendingInfoSubtitle": "Cómo funcionan los mercados de préstamos",
   "LendingInfoParagraph1": "Los mercados de préstamos descentralizados permiten a los usuarios prestar y pedir prestado activos digitales sin la necesidad de intermediarios. Los préstamos se realizan directamente entre pares a través de contratos inteligentes, lo que garantiza la transparencia y la seguridad de las transacciones. Los usuarios pueden prestar sus activos para ganar intereses o pedir prestado activos proporcionando garantías.",

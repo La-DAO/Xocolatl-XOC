@@ -1,4 +1,5 @@
 import React from "react";
+import ActiveStreams from "./components/ActiveStreams";
 import Flows from "./components/Flows";
 import TokenConverter from "./components/Supertokens";
 import WalletStats from "./components/WalletStats";
@@ -16,6 +17,7 @@ export default function StreamsPage() {
           <Flows />
         </div>
       </div>
+      <ActiveStreams />
     </div>
   );
 }
