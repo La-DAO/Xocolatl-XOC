@@ -149,9 +149,9 @@ const useCases: UseCase[] = [
     ],
     context:
       "With $XOC, making payments is fast, secure, and cost-effective. Whether you're a merchant or a consumer, $XOC offers innovative solutions for all your payment needs.",
-    caseStudy1Link: "/case-study/payments-1",
+    caseStudy1Link: "https://farcaster.xyz/",
     caseStudy2Link: "/case-study/payments-2",
-    caseStudy1Label: "Coming soon",
+    caseStudy1Label: "Warplet (Farcaster's Wallet)",
     caseStudy2Label: "Coming soon",
   },
   {
