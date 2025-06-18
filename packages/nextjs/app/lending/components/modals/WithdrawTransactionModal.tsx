@@ -69,6 +69,16 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
       setIsValid(false);
       setErrorMessage("Amount must be greater than zero.");
     } else {
+      // Check against available liquidity
+      if (reserve?.availableLiquidity) {
+        const decimals = reserve.decimals ? Number(reserve.decimals) : 18;
+        const availableLiquidity = Number(reserve.availableLiquidity) / 10 ** decimals;
+        if (numValue > availableLiquidity) {
+          setIsValid(false);
+          setErrorMessage("There's not enough liquidity to withdraw your funds, check back soon.");
+          return;
+        }
+      }
       setIsValid(true);
       setErrorMessage("");
     }
