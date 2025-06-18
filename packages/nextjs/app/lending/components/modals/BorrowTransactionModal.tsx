@@ -237,41 +237,6 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                       : "N/A"}
                   </span>
                 </div>
-
-                {/* Radial Progress */}
-                {reserve.borrowCap &&
-                  Number(reserve.borrowCap) > 0 &&
-                  reserve.totalScaledVariableDebt &&
-                  (() => {
-                    const decimals = reserve.decimals ? Number(reserve.decimals) : 18;
-                    const borrowed = Number(reserve.totalScaledVariableDebt) / 10 ** decimals;
-                    const borrowCap = Number(reserve.borrowCap);
-                    const progress = Math.min(Math.round((borrowed / borrowCap) * 100), 100); // capped at 100
-                    return (
-                      <div className="flex justify-center items-center m-3 space-x-2">
-                        <div
-                          className="radial-progress text-primary flex items-center justify-center"
-                          style={
-                            {
-                              "--value": progress,
-                              width: "100px",
-                              height: "100px",
-                              fontSize: "12px",
-                              lineHeight: "1.2",
-                              textAlign: "center",
-                            } as React.CSSProperties
-                          }
-                          aria-valuenow={progress}
-                          role="progressbar"
-                        >
-                          <div>
-                            {progress}%<br />
-                            {t("LendingBorrowModalTransactionBorrowed")}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })()}
               </div>
               <div className="flex justify-between gap-4">
                 <button
