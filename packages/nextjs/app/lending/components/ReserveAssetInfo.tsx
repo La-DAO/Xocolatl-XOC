@@ -118,6 +118,30 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
       {/* Supply Info */}
       <div className="flex flex-col gap-2">
         <p className="font-semibold text-primary text-lg">Supply Info</p>
+        {reserveSize && reserve.supplyCap && Number(reserve.supplyCap) > 0 && (
+          <div className="flex flex-col gap-1 mb-4">
+            <div className="flex justify-between text-sm text-gray-500">
+              <span>Supply Cap Progress</span>
+              <span>
+                {(() => {
+                  const supplied = parseFloat(reserveSize.replace(/,/g, ""));
+                  const supplyCap = Number(reserve.supplyCap);
+                  const progress = supplyCap > 0 ? Math.min(Math.round((supplied / supplyCap) * 100), 100) : 0;
+                  return `${progress}%`;
+                })()}
+              </span>
+            </div>
+            <progress
+              className="progress progress-primary w-full h-4"
+              value={(() => {
+                const supplied = parseFloat(reserveSize.replace(/,/g, ""));
+                const supplyCap = Number(reserve.supplyCap);
+                return supplyCap > 0 ? Math.min(Math.round((supplied / supplyCap) * 100), 100) : 0;
+              })()}
+              max="100"
+            ></progress>
+          </div>
+        )}
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="border border-gray-300 rounded-md p-4">
             <p className="text-xs text-gray-500">
@@ -168,6 +192,30 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
       {/* Borrow Info */}
       <div className="flex flex-col gap-2">
         <p className="font-semibold text-primary text-lg mt-6">Borrow Info</p>
+        <div className="flex flex-col gap-1 mb-4">
+          <div className="flex justify-between text-sm text-gray-500">
+            <span>Borrow Cap Progress</span>
+            <span>
+              {(() => {
+                const decimals = reserve.decimals ? Number(reserve.decimals) : 18;
+                const borrowed = Number(reserve.totalScaledVariableDebt) / 10 ** decimals;
+                const borrowCap = Number(reserve.borrowCap);
+                const progress = Math.min(Math.round((borrowed / borrowCap) * 100), 100);
+                return `${progress}%`;
+              })()}
+            </span>
+          </div>
+          <progress
+            className="progress progress-primary w-full h-4"
+            value={(() => {
+              const decimals = reserve.decimals ? Number(reserve.decimals) : 18;
+              const borrowed = Number(reserve.totalScaledVariableDebt) / 10 ** decimals;
+              const borrowCap = Number(reserve.borrowCap);
+              return Math.min(Math.round((borrowed / borrowCap) * 100), 100);
+            })()}
+            max="100"
+          ></progress>
+        </div>
         <div className="w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="border border-gray-300 rounded-md p-4">
