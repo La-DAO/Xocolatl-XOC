@@ -120,26 +120,20 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
         <p className="font-semibold text-primary text-lg">Supply Info</p>
         {reserveSize && reserve.supplyCap && Number(reserve.supplyCap) > 0 && (
           <div className="flex flex-col gap-1 mb-4">
-            <div className="flex justify-between text-sm text-gray-500">
-              <span>Supply Cap Progress</span>
-              <span>
-                {(() => {
-                  const supplied = parseFloat(reserveSize.replace(/,/g, ""));
-                  const supplyCap = Number(reserve.supplyCap);
-                  const progress = supplyCap > 0 ? Math.min(Math.round((supplied / supplyCap) * 100), 100) : 0;
-                  return `${progress}%`;
-                })()}
-              </span>
-            </div>
-            <progress
-              className="progress progress-primary w-full h-4"
-              value={(() => {
-                const supplied = parseFloat(reserveSize.replace(/,/g, ""));
-                const supplyCap = Number(reserve.supplyCap);
-                return supplyCap > 0 ? Math.min(Math.round((supplied / supplyCap) * 100), 100) : 0;
-              })()}
-              max="100"
-            ></progress>
+            {(() => {
+              const supplied = parseFloat(reserveSize.replace(/,/g, ""));
+              const supplyCap = Number(reserve.supplyCap);
+              const progress = supplyCap > 0 ? Math.min(Math.round((supplied / supplyCap) * 100), 100) : 0;
+              return (
+                <>
+                  <div className="flex justify-between text-sm text-gray-500">
+                    <span>Supply Cap Progress</span>
+                    <span>{`${progress}%`}</span>
+                  </div>
+                  <progress className="progress progress-primary w-full h-4" value={progress} max="100"></progress>
+                </>
+              );
+            })()}
           </div>
         )}
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
