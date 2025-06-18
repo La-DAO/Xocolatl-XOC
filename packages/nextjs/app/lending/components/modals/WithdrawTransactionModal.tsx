@@ -69,6 +69,16 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
       setIsValid(false);
       setErrorMessage("Amount must be greater than zero.");
     } else {
+      // Check against available liquidity
+      if (reserve?.availableLiquidity !== undefined) {
+        const decimals = reserve.decimals ? Number(reserve.decimals) : 18;
+        const availableLiquidity = Number(reserve.availableLiquidity) / 10 ** decimals;
+        if (numValue > availableLiquidity) {
+          setIsValid(false);
+          setErrorMessage("There's not enough liquidity to withdraw your funds, check back soon.");
+          return;
+        }
+      }
       setIsValid(true);
       setErrorMessage("");
     }
@@ -154,6 +164,22 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
                   </span>
                 </div>
                 {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
+              </div>
+
+              <div className="container-gray-borders flex flex-col gap-2">
+                <label className="font-bold">{t("LendingWithdrawModalTransactionOverview")}</label>
+                <div className="flex justify-between items-center text-sm">
+                  <span>{t("LendingWithdrawModalTransactionAvailableLiquidity")}</span>
+                  <span className="font-bold">
+                    {reserve.availableLiquidity
+                      ? (() => {
+                          const decimals = reserve.decimals ? Number(reserve.decimals) : 18;
+                          const supplied = Number(reserve.availableLiquidity) / 10 ** decimals;
+                          return supplied.toLocaleString("en-US");
+                        })()
+                      : "N/A"}
+                  </span>
+                </div>
               </div>
 
               <div className="flex justify-between gap-4">

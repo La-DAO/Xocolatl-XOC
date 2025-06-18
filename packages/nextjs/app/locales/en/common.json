@@ -181,6 +181,8 @@
   "LendingWithdrawModalTitle": "Withdraw",
   "LendingWithdrawModalLabel": "Amount",
   "LendingWithdrawModalBalance": "SupplyBalance",
+  "LendingWithdrawModalTransactionOverview": "Transaction Overview",
+  "LendingWithdrawModalTransactionAvailableLiquidity": "Available Liquidity",
   "LendingWithdrawModalButton": "Withdraw",
   "LendingWithdrawModalClose": "Close",
   "LendingWithdrawModalCancelMessage": "You cancelled the transaction.",
@@ -217,6 +219,7 @@
   "LendingBorrowModalSuccessMessage": "Your transaction was sent successful.",
   "LendingBorrowModalTransactionBorrowCap": "Borrow Cap",
   "LendingBorrowModalTransactionBorrowed": "Borrowed",
+  "LendingBorrowModalTransactionAvailableLiquidity": "Available Liquidity",
 
   "LendingRepayModalTitle": "Repay",
   "LendingRepayModalLabel": "Amount",
