@@ -70,7 +70,7 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
       setErrorMessage("Amount must be greater than zero.");
     } else {
       // Check against available liquidity
-      if (reserve?.availableLiquidity) {
+      if (reserve?.availableLiquidity !== undefined) {
         const decimals = reserve.decimals ? Number(reserve.decimals) : 18;
         const availableLiquidity = Number(reserve.availableLiquidity) / 10 ** decimals;
         if (numValue > availableLiquidity) {
