@@ -219,6 +219,7 @@
   "LendingBorrowModalSuccessMessage": "Your transaction was sent successful.",
   "LendingBorrowModalTransactionBorrowCap": "Borrow Cap",
   "LendingBorrowModalTransactionBorrowed": "Borrowed",
+  "LendingBorrowModalTransactionAvailableLiquidity": "Available Liquidity",
 
   "LendingRepayModalTitle": "Repay",
   "LendingRepayModalLabel": "Amount",

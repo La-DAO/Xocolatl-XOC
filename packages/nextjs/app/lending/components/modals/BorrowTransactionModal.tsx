@@ -237,6 +237,25 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                       : "N/A"}
                   </span>
                 </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span>{t("LendingBorrowModalTransactionAvailableLiquidity")}</span>
+                  <span
+                    className={`font-bold ${(() => {
+                      if (!reserve.availableLiquidity) return "";
+                      const decimals = reserve.decimals ? Number(reserve.decimals) : 18;
+                      const available = Number(reserve.availableLiquidity) / 10 ** decimals;
+                      return available < 5 ? "text-error" : "";
+                    })()}`}
+                  >
+                    {reserve.availableLiquidity
+                      ? (() => {
+                          const decimals = reserve.decimals ? Number(reserve.decimals) : 18;
+                          const available = Number(reserve.availableLiquidity) / 10 ** decimals;
+                          return available.toLocaleString("en-US");
+                        })()
+                      : "N/A"}
+                  </span>
+                </div>
               </div>
               <div className="flex justify-between gap-4">
                 <button

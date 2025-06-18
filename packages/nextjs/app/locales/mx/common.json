@@ -230,6 +230,7 @@
   "LendingBorrowModalSuccessMessage": "El préstamo se ha realizado con éxito",
   "LendingBorrowModalTransactionBorrowCap": "Límite de préstamos",
   "LendingBorrowModalTransactionBorrowed": "Prestado",
+  "LendingBorrowModalTransactionAvailableLiquidity": "Liquidez Disponible",
 
   "LendingRepayModalTitle": "Reembolsar",
   "LendingRepayModalLabel": "Cantidad a reembolsar",
