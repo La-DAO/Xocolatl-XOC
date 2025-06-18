@@ -200,7 +200,7 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
                 const decimals = reserve.decimals ? Number(reserve.decimals) : 18;
                 const borrowed = Number(reserve.totalScaledVariableDebt) / 10 ** decimals;
                 const borrowCap = Number(reserve.borrowCap);
-                const progress = Math.min(Math.round((borrowed / borrowCap) * 100), 100);
+                const progress = borrowCap > 0 ? Math.min(Math.round((borrowed / borrowCap) * 100), 100) : 0;
                 return `${progress}%`;
               })()}
             </span>
