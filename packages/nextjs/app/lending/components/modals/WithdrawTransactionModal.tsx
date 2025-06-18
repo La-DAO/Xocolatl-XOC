@@ -156,6 +156,22 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
                 {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
               </div>
 
+              <div className="container-gray-borders flex flex-col gap-2">
+                <label className="font-bold">{t("LendingWithdrawModalTransactionOverview")}</label>
+                <div className="flex justify-between items-center text-sm">
+                  <span>{t("LendingWithdrawModalTransactionAvailableLiquidity")}</span>
+                  <span className="font-bold">
+                    {reserve.availableLiquidity
+                      ? (() => {
+                          const decimals = reserve.decimals ? Number(reserve.decimals) : 18;
+                          const supplied = Number(reserve.availableLiquidity) / 10 ** decimals;
+                          return supplied.toLocaleString("en-US");
+                        })()
+                      : "N/A"}
+                  </span>
+                </div>
+              </div>
+
               <div className="flex justify-between gap-4">
                 <button
                   className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
