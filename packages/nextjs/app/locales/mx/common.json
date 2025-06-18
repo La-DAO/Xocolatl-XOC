@@ -192,6 +192,8 @@
   "LendingWithdrawModalTitle": "Retirar",
   "LendingWithdrawModalLabel": "Cantidad a retirar",
   "LendingWithdrawModalBalance": "Saldo disponible",
+  "LendingWithdrawModalTransactionOverview": "Vista General de la Transacción",
+  "LendingWithdrawModalTransactionAvailableLiquidity": "Liquidez Disponible",
   "LendingWithdrawModalButton": "Retirar",
   "LendingWithdrawModalClose": "Cerrar",
   "LendingWithdrawModalCancelMessage": "Cancelaste la retirada",
