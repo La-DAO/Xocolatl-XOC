@@ -127,7 +127,15 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
               return (
                 <>
                   <div className="flex justify-between text-sm text-gray-500">
-                    <span>Supply Cap Progress</span>
+                    <span>
+                      Supply Cap Progress
+                      <span
+                        className="tooltip tooltip-info"
+                        data-tip="Supply cap represents the maximum amount of assets that can be supplied to this reserve. This progress bar shows how much of the supply cap has been utilized so far."
+                      >
+                        <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+                      </span>
+                    </span>
                     <span>{`${progress}%`}</span>
                   </div>
                   <progress className="progress progress-primary w-full h-4" value={progress} max="100"></progress>
@@ -188,7 +196,15 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
         <p className="font-semibold text-primary text-lg mt-6">Borrow Info</p>
         <div className="flex flex-col gap-1 mb-4">
           <div className="flex justify-between text-sm text-gray-500">
-            <span>Borrow Cap Progress</span>
+            <span>
+              Borrow Cap Progress
+              <span
+                className="tooltip tooltip-info"
+                data-tip="This shows the percentage of the borrow cap that has been utilized. When it reaches 100%, no more borrowing is allowed for this asset."
+              >
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+              </span>
+            </span>
             <span>
               {(() => {
                 const decimals = reserve.decimals ? Number(reserve.decimals) : 18;
