@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useTranslation } from "../context/LanguageContext";
 import CreateStreamModal from "./components/CreateStreamModal";
 import TokenConverter from "./components/Supertokens";
@@ -23,6 +23,7 @@ export default function StreamsPage() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("overview");
   const [isCreateStreamModalOpen, setIsCreateStreamModalOpen] = useState(false);
+  const tokenConverterRef = useRef<HTMLDivElement>(null);
 
   // Mock data for demonstration
   const mockStreams = [
@@ -52,6 +53,37 @@ export default function StreamsPage() {
     setIsCreateStreamModalOpen(false);
   };
 
+  const handleWrapTokensClick = () => {
+    setActiveTab("overview");
+
+    // Use setTimeout to ensure tab switch completes
+    setTimeout(() => {
+      if (tokenConverterRef.current) {
+        // Scroll to the token converter with smooth behavior
+        tokenConverterRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+
+        // Add highlight effect
+        tokenConverterRef.current.classList.add("ring-4", "ring-primary", "ring-opacity-75", "scale-105", "shadow-2xl");
+
+        // Remove the highlight effect after 3 seconds
+        setTimeout(() => {
+          if (tokenConverterRef.current) {
+            tokenConverterRef.current.classList.remove(
+              "ring-4",
+              "ring-primary",
+              "ring-opacity-75",
+              "scale-105",
+              "shadow-2xl",
+            );
+          }
+        }, 3000);
+      }
+    }, 300);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 dark:from-gray-900 dark:to-gray-800 p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-8">
@@ -69,52 +101,7 @@ export default function StreamsPage() {
             </button>
             <button
               className="btn btn-outline btn-lg hover:scale-105 transition-transform duration-200"
-              onClick={() => {
-                setActiveTab("overview");
-
-                // Function to find and highlight the token converter
-                const findAndHighlightTokenConverter = (attempts = 0) => {
-                  const tokenConverter = document.querySelector("[data-token-converter]");
-
-                  if (tokenConverter) {
-                    // Scroll to the token converter with smooth behavior
-                    tokenConverter.scrollIntoView({
-                      behavior: "smooth",
-                      block: "center",
-                    });
-
-                    // Add a more prominent highlight effect
-                    tokenConverter.classList.add(
-                      "ring-4",
-                      "ring-primary",
-                      "ring-opacity-75",
-                      "scale-105",
-                      "shadow-2xl",
-                    );
-
-                    // Remove the highlight effect after 3 seconds
-                    setTimeout(() => {
-                      tokenConverter.classList.remove(
-                        "ring-4",
-                        "ring-primary",
-                        "ring-opacity-75",
-                        "scale-105",
-                        "shadow-2xl",
-                      );
-                    }, 3000);
-                  } else if (attempts < 5) {
-                    // Retry up to 5 times with increasing delays
-                    setTimeout(() => {
-                      findAndHighlightTokenConverter(attempts + 1);
-                    }, 200 * (attempts + 1));
-                  }
-                };
-
-                // Start the process after a delay to ensure tab switch completes
-                setTimeout(() => {
-                  findAndHighlightTokenConverter();
-                }, 300);
-              }}
+              onClick={handleWrapTokensClick}
             >
               <ArrowUpDown className="w-5 h-5 mr-2" />
               {t("StreamsWrapTokens")}
@@ -229,7 +216,9 @@ export default function StreamsPage() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Token Converter */}
-                <TokenConverter />
+                <div ref={tokenConverterRef}>
+                  <TokenConverter />
+                </div>
 
                 {/* Quick Actions */}
                 <div className="card bg-white dark:bg-base-100 shadow-lg">
