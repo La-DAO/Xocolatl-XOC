@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslation } from "../context/LanguageContext";
 import CreateStreamModal from "./components/CreateStreamModal";
 import TokenConverter from "./components/Supertokens";
 import {
@@ -19,6 +20,7 @@ import {
 } from "lucide-react";
 
 export default function StreamsPage() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("overview");
   const [isCreateStreamModalOpen, setIsCreateStreamModalOpen] = useState(false);
 
@@ -55,17 +57,12 @@ export default function StreamsPage() {
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Hero Section */}
         <div className="text-center space-y-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
-            Salary Streaming with <span className="text-primary dark:text-blue-400">$XOC</span>
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Revolutionary payroll system using continuous money streams. Pay and receive salaries in real-time with
-            stablecoins.
-          </p>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">{t("StreamsTitle")}</h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">{t("StreamsDescription")}</p>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
             <button className="btn btn-primary btn-lg" onClick={handleOpenCreateStreamModal}>
               <Plus className="w-5 h-5 mr-2" />
-              Create Stream
+              {t("StreamsCreateStream")}
             </button>
             <button
               className="btn btn-outline btn-lg hover:scale-105 transition-transform duration-200"
@@ -117,7 +114,7 @@ export default function StreamsPage() {
               }}
             >
               <ArrowUpDown className="w-5 h-5 mr-2" />
-              Wrap Tokens
+              {t("StreamsWrapTokens")}
             </button>
           </div>
         </div>
@@ -127,44 +124,44 @@ export default function StreamsPage() {
           <div className="card bg-white dark:bg-base-100 shadow-lg">
             <div className="card-body">
               <div className="flex items-center justify-between">
-                <h3 className="card-title text-sm">XOC Balance</h3>
+                <h3 className="card-title text-sm">{t("StreamsXOCBalance")}</h3>
                 <Wallet className="h-4 w-4 text-gray-500" />
               </div>
               <div className="text-2xl font-bold">0.59</div>
-              <p className="text-xs text-gray-500">Native Token</p>
+              <p className="text-xs text-gray-500">{t("StreamsNativeToken")}</p>
             </div>
           </div>
 
           <div className="card bg-white dark:bg-base-100 shadow-lg">
             <div className="card-body">
               <div className="flex items-center justify-between">
-                <h3 className="card-title text-sm">SuperXOC Balance</h3>
+                <h3 className="card-title text-sm">{t("StreamsSuperXOCBalance")}</h3>
                 <TrendingUp className="h-4 w-4 text-gray-500" />
               </div>
               <div className="text-2xl font-bold">9.49</div>
-              <p className="text-xs text-gray-500">Streamable Token</p>
+              <p className="text-xs text-gray-500">{t("StreamsStreamableToken")}</p>
             </div>
           </div>
 
           <div className="card bg-white dark:bg-base-100 shadow-lg">
             <div className="card-body">
               <div className="flex items-center justify-between">
-                <h3 className="card-title text-sm">Active Streams</h3>
+                <h3 className="card-title text-sm">{t("StreamsActiveStreams")}</h3>
                 <Users className="h-4 w-4 text-gray-500" />
               </div>
               <div className="text-2xl font-bold">2</div>
-              <p className="text-xs text-gray-500">Outgoing</p>
+              <p className="text-xs text-gray-500">{t("StreamsOutgoing")}</p>
             </div>
           </div>
 
           <div className="card bg-white dark:bg-base-100 shadow-lg">
             <div className="card-body">
               <div className="flex items-center justify-between">
-                <h3 className="card-title text-sm">Monthly Flow</h3>
+                <h3 className="card-title text-sm">{t("StreamsMonthlyFlow")}</h3>
                 <Clock className="h-4 w-4 text-gray-500" />
               </div>
               <div className="text-2xl font-bold">250.75</div>
-              <p className="text-xs text-gray-500">XOC/month</p>
+              <p className="text-xs text-gray-500">{t("StreamsXOCMonth")}</p>
             </div>
           </div>
         </div>
@@ -174,35 +171,29 @@ export default function StreamsPage() {
           <div className="card-body">
             <h2 className="card-title flex items-center gap-2">
               <Info className="w-5 h-5" />
-              How Salary Streaming Works
+              {t("StreamsHowItWorks")}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center space-y-2">
                 <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto">
                   <ArrowUpDown className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h3 className="font-semibold">1. Wrap Tokens</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Convert XOC to SuperXOC to enable streaming functionality
-                </p>
+                <h3 className="font-semibold">1. {t("StreamsWrapTokens")}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">{t("StreamsWrapTokensDescription")}</p>
               </div>
               <div className="text-center space-y-2">
                 <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto">
                   <Play className="w-6 h-6 text-green-600 dark:text-green-400" />
                 </div>
-                <h3 className="font-semibold">2. Create Stream</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Set up continuous salary payments to employees
-                </p>
+                <h3 className="font-semibold">2. {t("StreamsCreateStream")}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">{t("StreamsCreateStreamDescription")}</p>
               </div>
               <div className="text-center space-y-2">
                 <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto">
                   <TrendingUp className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                 </div>
-                <h3 className="font-semibold">3. Real-time Payments</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Money flows continuously, no more monthly payroll hassles
-                </p>
+                <h3 className="font-semibold">3. {t("StreamsRealTimePayments")}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">{t("StreamsRealTimePaymentsDescription")}</p>
               </div>
             </div>
           </div>
@@ -215,19 +206,19 @@ export default function StreamsPage() {
               className={`tab ${activeTab === "overview" ? "tab-active" : ""}`}
               onClick={() => setActiveTab("overview")}
             >
-              Overview
+              {t("StreamsOverview")}
             </button>
             <button
               className={`tab ${activeTab === "outgoing" ? "tab-active" : ""}`}
               onClick={() => setActiveTab("outgoing")}
             >
-              Outgoing Streams
+              {t("StreamsOutgoingStreams")}
             </button>
             <button
               className={`tab ${activeTab === "incoming" ? "tab-active" : ""}`}
               onClick={() => setActiveTab("incoming")}
             >
-              Incoming Streams
+              {t("StreamsIncomingStreams")}
             </button>
           </div>
 
@@ -240,20 +231,20 @@ export default function StreamsPage() {
                 {/* Quick Actions */}
                 <div className="card bg-white dark:bg-base-100 shadow-lg">
                   <div className="card-body">
-                    <h3 className="card-title">Quick Actions</h3>
-                    <p className="text-gray-600 dark:text-gray-300">Manage your salary streams</p>
+                    <h3 className="card-title">{t("StreamsQuickActions")}</h3>
+                    <p className="text-gray-600 dark:text-gray-300">{t("StreamsQuickActionsDescription")}</p>
                     <div className="space-y-3">
                       <button className="btn btn-primary w-full justify-start" onClick={handleOpenCreateStreamModal}>
                         <Plus className="w-4 h-4 mr-2" />
-                        Create New Stream
+                        {t("StreamsCreateNewStream")}
                       </button>
                       <button className="btn btn-outline w-full justify-start">
                         <Edit className="w-4 h-4 mr-2" />
-                        Edit Existing Stream
+                        {t("StreamsEditExistingStream")}
                       </button>
                       <button className="btn btn-outline w-full justify-start">
                         <Users className="w-4 h-4 mr-2" />
-                        Manage Recipients
+                        {t("StreamsManageRecipients")}
                       </button>
                     </div>
                   </div>
@@ -265,10 +256,10 @@ export default function StreamsPage() {
           {activeTab === "outgoing" && (
             <div className="space-y-6">
               <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Outgoing Streams</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t("StreamsOutgoingStreams")}</h2>
                 <button className="btn btn-primary" onClick={handleOpenCreateStreamModal}>
                   <Plus className="w-4 h-4 mr-2" />
-                  New Stream
+                  {t("StreamsNewStream")}
                 </button>
               </div>
 
@@ -284,9 +275,13 @@ export default function StreamsPage() {
                           </div>
                           <p className="text-sm text-gray-600 dark:text-gray-300">To: {stream.to}</p>
                           <div className="flex items-center gap-4 text-sm text-gray-500">
-                            <span>{stream.flowRate} XOC/month</span>
+                            <span>
+                              {stream.flowRate} {t("StreamsXOCMonth")}
+                            </span>
                             <span>•</span>
-                            <span>Started: {stream.startDate}</span>
+                            <span>
+                              {t("StreamsStarted")}: {stream.startDate}
+                            </span>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -310,7 +305,7 @@ export default function StreamsPage() {
 
           {activeTab === "incoming" && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Incoming Streams</h2>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t("StreamsIncomingStreams")}</h2>
 
               <div className="card bg-white dark:bg-base-100 shadow-lg">
                 <div className="card-body text-center">
@@ -319,13 +314,11 @@ export default function StreamsPage() {
                       <TrendingUp className="w-8 h-8 text-gray-400" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg">No Incoming Streams</h3>
-                      <p className="text-gray-600 dark:text-gray-300">
-                        You don&apos;t have any active incoming salary streams yet.
-                      </p>
+                      <h3 className="font-semibold text-lg">{t("StreamsNoIncomingStreams")}</h3>
+                      <p className="text-gray-600 dark:text-gray-300">{t("StreamsNoIncomingStreamsDescription")}</p>
                     </div>
                     <button className="btn btn-outline">
-                      Share Your Address
+                      {t("StreamsShareYourAddress")}
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </button>
                   </div>
