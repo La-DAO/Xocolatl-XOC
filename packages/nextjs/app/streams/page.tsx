@@ -57,10 +57,13 @@ export default function StreamsPage() {
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Hero Section */}
         <div className="text-center space-y-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">{t("StreamsTitle")}</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-neutral dark:text-white">{t("StreamsTitle")}</h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">{t("StreamsDescription")}</p>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
-            <button className="btn btn-primary btn-lg" onClick={handleOpenCreateStreamModal}>
+            <button
+              className="btn btn-primary bg-neutral dark:bg-base-100 text-white dark:text-white btn-lg hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 transition-all duration-300 hover:bg-orange-600 dark:hover:bg-orange-500 hover:text-white dark:hover:text-white font-semibold"
+              onClick={handleOpenCreateStreamModal}
+            >
               <Plus className="w-5 h-5 mr-2" />
               {t("StreamsCreateStream")}
             </button>
