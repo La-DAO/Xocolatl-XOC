@@ -110,7 +110,7 @@ const Flows: React.FC = () => {
   };
 
   return (
-    <div className="bg-white dark:bg-base-100 rounded-2xl p-6 max-w-md mx-auto overflow-hidden shadow-lg">
+    <div className="bg-white dark:bg-base-100 rounded-2xl p-6 w-full mx-auto overflow-hidden shadow-lg">
       {/* Tabs */}
       <div className="flex mb-6 gap-4">
         <button
