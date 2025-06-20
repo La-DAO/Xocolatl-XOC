@@ -111,9 +111,6 @@ const Flows: React.FC = () => {
 
   return (
     <div className="bg-white dark:bg-base-100 rounded-2xl p-6 max-w-md mx-auto overflow-hidden shadow-lg">
-      {/* Blue accent in top right corner */}
-      <div className="absolute top-0 right-0 w-16 h-8 bg-blue-500 dark:bg-blue-600 rounded-bl-2xl"></div>
-
       {/* Tabs */}
       <div className="flex mb-6 gap-4">
         <button

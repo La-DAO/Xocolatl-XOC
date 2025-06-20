@@ -67,7 +67,55 @@ export default function StreamsPage() {
               <Plus className="w-5 h-5 mr-2" />
               Create Stream
             </button>
-            <button className="btn btn-outline btn-lg">
+            <button
+              className="btn btn-outline btn-lg hover:scale-105 transition-transform duration-200"
+              onClick={() => {
+                setActiveTab("overview");
+
+                // Function to find and highlight the token converter
+                const findAndHighlightTokenConverter = (attempts = 0) => {
+                  const tokenConverter = document.querySelector("[data-token-converter]");
+
+                  if (tokenConverter) {
+                    // Scroll to the token converter with smooth behavior
+                    tokenConverter.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
+
+                    // Add a more prominent highlight effect
+                    tokenConverter.classList.add(
+                      "ring-4",
+                      "ring-primary",
+                      "ring-opacity-75",
+                      "scale-105",
+                      "shadow-2xl",
+                    );
+
+                    // Remove the highlight effect after 3 seconds
+                    setTimeout(() => {
+                      tokenConverter.classList.remove(
+                        "ring-4",
+                        "ring-primary",
+                        "ring-opacity-75",
+                        "scale-105",
+                        "shadow-2xl",
+                      );
+                    }, 3000);
+                  } else if (attempts < 5) {
+                    // Retry up to 5 times with increasing delays
+                    setTimeout(() => {
+                      findAndHighlightTokenConverter(attempts + 1);
+                    }, 200 * (attempts + 1));
+                  }
+                };
+
+                // Start the process after a delay to ensure tab switch completes
+                setTimeout(() => {
+                  findAndHighlightTokenConverter();
+                }, 300);
+              }}
+            >
               <ArrowUpDown className="w-5 h-5 mr-2" />
               Wrap Tokens
             </button>
