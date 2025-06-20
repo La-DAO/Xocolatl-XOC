@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { forwarderABI } from "../../../app/components/abis/ForwarderContract";
 import { ChevronDown, Info, Search, X } from "lucide-react";
 import type { Address } from "viem";
@@ -31,6 +31,16 @@ const CreateStreamModal: React.FC<CreateStreamModalProps> = ({ isOpen, onClose }
   const [enableScheduling, setEnableScheduling] = useState<boolean>(false);
   const { writeContract } = useWriteContract();
 
+  const handleClose = useCallback(() => {
+    // Reset form state
+    setRecipientAddress("");
+    setSelectedToken("");
+    setFlowRate("0.0");
+    setTimeUnit("month");
+    setEnableScheduling(false);
+    onClose();
+  }, [onClose]);
+
   // Handle ESC key to close modal
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
@@ -49,7 +59,7 @@ const CreateStreamModal: React.FC<CreateStreamModalProps> = ({ isOpen, onClose }
       document.removeEventListener("keydown", handleEscKey);
       document.body.style.overflow = "unset";
     };
-  }, [isOpen]);
+  }, [isOpen, handleClose]);
 
   const superTokens = [
     { address: "0xedF89f2612a5B07FEF051e1a0444342B5410C405", symbol: "Super XOC" },
@@ -115,16 +125,6 @@ const CreateStreamModal: React.FC<CreateStreamModalProps> = ({ isOpen, onClose }
     } catch (error) {
       console.error("Error creating flow:", error);
     }
-  };
-
-  const handleClose = () => {
-    // Reset form state
-    setRecipientAddress("");
-    setSelectedToken("");
-    setFlowRate("0.0");
-    setTimeUnit("month");
-    setEnableScheduling(false);
-    onClose();
   };
 
   if (!isOpen) return null;
