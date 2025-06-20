@@ -219,6 +219,27 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
 
   const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${supplyHash}`;
 
+  // Function to get buy URL for different tokens
+  const getBuyTokenUrl = (tokenSymbol: string): string => {
+    const buyUrls: Record<string, string> = {
+      USDC: "https://app.uniswap.org/#/swap?outputCurrency=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913&exactField=output&exactAmount=1",
+      WETH: "https://app.uniswap.org/#/swap?outputCurrency=0x4200000000000000000000000000000000000006&exactField=output&exactAmount=1",
+      CBETH: "https://app.uniswap.org/#/swap?outputCurrency=0x2Ae3F1Ec7F1F5012CFEab0185bfc7aa3cf0DEc22",
+      XOC: "https://app.uniswap.org/#/swap?outputCurrency=0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf&exactField=output&exactAmount=1",
+      MXNe: "https://aerodrome.finance/swap?from=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913&to=0x269cae7dc59803e5c596c95756faeebb6030e0af&chain0=8453&chain1=8453",
+      // Add more tokens as needed
+    };
+
+    return buyUrls[tokenSymbol] || "https://app.uniswap.org/";
+  };
+
+  const handleBuyToken = () => {
+    if (reserve) {
+      const buyUrl = getBuyTokenUrl(reserve.symbol);
+      window.open(buyUrl, "_blank");
+    }
+  };
+
   if (!isOpen || !reserve) return null;
 
   return (
@@ -284,6 +305,19 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                         })()
                       : "N/A"}
                   </span>
+                </div>
+              </div>
+              <div className="container-gray-borders flex flex-col gap-2">
+                <label className="font-bold">
+                  {t("LendingSupplyModalNeedToken")} {reserve.symbol}?
+                </label>
+                <div className="flex justify-between items-center text-sm">
+                  <span>
+                    {t("LendingSupplyModalBuyToken")} {reserve.symbol} {t("LendingSupplyModalBuyOnADex")}
+                  </span>
+                  <button onClick={handleBuyToken} className="text-primary hover:underline font-medium">
+                    {t("LendingSupplyModalBuyNow")} →
+                  </button>
                 </div>
               </div>
               <div className="flex justify-between gap-4">
