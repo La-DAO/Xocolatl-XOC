@@ -308,11 +308,15 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                 </div>
               </div>
               <div className="container-gray-borders flex flex-col gap-2">
-                <label className="font-bold">Need {reserve.symbol}?</label>
+                <label className="font-bold">
+                  {t("LendingSupplyModalNeedToken")} {reserve.symbol}?
+                </label>
                 <div className="flex justify-between items-center text-sm">
-                  <span>Buy {reserve.symbol} on a DEX</span>
+                  <span>
+                    {t("LendingSupplyModalBuyToken")} {reserve.symbol} {t("LendingSupplyModalBuyOnADex")}
+                  </span>
                   <button onClick={handleBuyToken} className="text-primary hover:underline font-medium">
-                    Buy Now →
+                    {t("LendingSupplyModalBuyNow")} →
                   </button>
                 </div>
               </div>
