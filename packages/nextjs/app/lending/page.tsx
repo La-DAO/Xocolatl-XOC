@@ -192,7 +192,7 @@ const Lending = () => {
   return (
     <div className="flex flex-col w-4/5 m-auto gap-4">
       {/* Floating Tour Button */}
-      <div className="fixed top-1/2 right-4 transform -translate-y-1/2 z-50">
+      <div className="fixed top-1/2 right-4 transform -translate-y-1/2 z-50 dark:bg-base-300">
         <button
           onClick={() => {
             localStorage.removeItem("lending-tour-completed");
