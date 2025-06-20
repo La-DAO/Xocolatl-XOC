@@ -192,7 +192,7 @@ const Lending = () => {
   return (
     <div className="flex flex-col w-4/5 m-auto gap-4">
       {/* Floating Tour Button */}
-      <div className="fixed top-1/2 right-4 transform -translate-y-1/2 z-50 dark:bg-base-300">
+      <div className="fixed top-1/2 right-4 transform -translate-y-1/2 z-50">
         <button
           onClick={() => {
             localStorage.removeItem("lending-tour-completed");
@@ -273,7 +273,7 @@ const Lending = () => {
             });
             driverObj.drive();
           }}
-          className="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:bg-primary/80 transition-colors duration-200"
+          className="bg-success dark:bg-success text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:bg-[#93C572]/80 transition-colors duration-200"
           title="Start Guided Tour"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
