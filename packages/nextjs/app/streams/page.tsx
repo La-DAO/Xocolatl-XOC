@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import CreateStreamModal from "./components/CreateStreamModal";
 import TokenConverter from "./components/Supertokens";
 import {
   ArrowRight,
@@ -19,6 +20,7 @@ import {
 
 export default function StreamsPage() {
   const [activeTab, setActiveTab] = useState("overview");
+  const [isCreateStreamModalOpen, setIsCreateStreamModalOpen] = useState(false);
 
   // Mock data for demonstration
   const mockStreams = [
@@ -40,6 +42,14 @@ export default function StreamsPage() {
     },
   ];
 
+  const handleOpenCreateStreamModal = () => {
+    setIsCreateStreamModalOpen(true);
+  };
+
+  const handleCloseCreateStreamModal = () => {
+    setIsCreateStreamModalOpen(false);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 dark:from-gray-900 dark:to-gray-800 p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-8">
@@ -53,7 +63,7 @@ export default function StreamsPage() {
             stablecoins.
           </p>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
-            <button className="btn btn-primary btn-lg">
+            <button className="btn btn-primary btn-lg" onClick={handleOpenCreateStreamModal}>
               <Plus className="w-5 h-5 mr-2" />
               Create Stream
             </button>
@@ -185,7 +195,7 @@ export default function StreamsPage() {
                     <h3 className="card-title">Quick Actions</h3>
                     <p className="text-gray-600 dark:text-gray-300">Manage your salary streams</p>
                     <div className="space-y-3">
-                      <button className="btn btn-primary w-full justify-start">
+                      <button className="btn btn-primary w-full justify-start" onClick={handleOpenCreateStreamModal}>
                         <Plus className="w-4 h-4 mr-2" />
                         Create New Stream
                       </button>
@@ -208,7 +218,7 @@ export default function StreamsPage() {
             <div className="space-y-6">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Outgoing Streams</h2>
-                <button className="btn btn-primary">
+                <button className="btn btn-primary" onClick={handleOpenCreateStreamModal}>
                   <Plus className="w-4 h-4 mr-2" />
                   New Stream
                 </button>
@@ -277,6 +287,9 @@ export default function StreamsPage() {
           )}
         </div>
       </div>
+
+      {/* Create Stream Modal */}
+      <CreateStreamModal isOpen={isCreateStreamModalOpen} onClose={handleCloseCreateStreamModal} />
     </div>
   );
 }
