@@ -45,12 +45,12 @@ const Hero = () => {
 
             <div className="flex flex-col items-start space-y-3 sm:space-x-4 sm:space-y-0 sm:items-center sm:flex-row">
               <Link href="/cdp">
-                <button className="px-8 py-4 text-lg font-medium text-center text-white bg-primary rounded-btn hover:bg-base-300 hover:text-neutral dark:hover:bg-neutral dark:hover:text-primary">
+                <button className="px-8 py-4 text-lg font-medium text-center text-white bg-primary dark:bg-base-100 rounded-btn hover:bg-base-300 hover:text-neutral dark:hover:bg-warning dark:hover:text-primary hover:ring-4 hover:ring-pink-500 hover:ring-opacity-75 hover:shadow-primary/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 dark:hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] dark:hover:scale-105 dark">
                   {t("mintXocButton")}
                 </button>
               </Link>
               <Link href="/lending">
-                <button className="px-8 py-4 text-lg font-medium text-center text-white bg-primary rounded-btn hover:bg-base-300 hover:text-neutral dark:hover:bg-neutral dark:hover:text-primary">
+                <button className="px-8 py-4 text-lg font-medium text-center text-white bg-primary dark:bg-base-100 rounded-btn hover:bg-base-300 hover:text-neutral dark:hover:bg-warning dark:hover:text-primary hover:ring-4 hover:ring-pink-500 hover:ring-opacity-75 hover:shadow-primary/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 dark:hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] dark:hover:scale-105 dark">
                   {t("earnXocButton")}
                 </button>
               </Link>
