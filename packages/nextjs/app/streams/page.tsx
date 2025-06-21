@@ -245,21 +245,21 @@ export default function StreamsPage() {
 
         {/* Main Content Tabs */}
         <div className="space-y-6">
-          <div className="tabs tabs-boxed bg-white dark:bg-base-100 shadow-lg py-2">
+          <div className="tabs tabs-boxed bg-white dark:bg-base-100 shadow-lg py-2 font-medium pb-4">
             <button
-              className={`tab ${activeTab === "overview" ? "tab-active !text-white" : ""}`}
+              className={`tab ${activeTab === "overview" ? "tab-active h-10 !text-white" : ""}`}
               onClick={() => setActiveTab("overview")}
             >
               {t("StreamsOverview")}
             </button>
             <button
-              className={`tab ${activeTab === "outgoing" ? "tab-active !text-white" : ""}`}
+              className={`tab ${activeTab === "outgoing" ? "tab-active h-10 !text-white" : ""}`}
               onClick={() => setActiveTab("outgoing")}
             >
               {t("StreamsOutgoingStreams")}
             </button>
             <button
-              className={`tab ${activeTab === "incoming" ? "tab-active !text-white" : ""}`}
+              className={`tab ${activeTab === "incoming" ? "tab-active h-10 !text-white" : ""}`}
               onClick={() => setActiveTab("incoming")}
             >
               {t("StreamsIncomingStreams")}
