@@ -4,9 +4,10 @@ import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { forwarderABI } from "../../../components/abis/ForwarderContract";
 import { ChevronDown, Info, Search, X } from "lucide-react";
+import { useDebounceValue } from "usehooks-ts";
 import type { Address } from "viem";
-import { parseEther } from "viem";
-import { useAccount, useWriteContract } from "wagmi";
+import { isAddress, parseEther } from "viem";
+import { useAccount, useEnsAddress, useEnsName, useWriteContract } from "wagmi";
 
 // Constants for time unit conversions (in seconds)
 const TIME_UNITS = {
@@ -17,6 +18,16 @@ const TIME_UNITS = {
   month: 2592000, // 30 days
 } as const;
 
+// ENS regex pattern - supports all TLDs, not just .eth
+const ensRegex = /^[a-zA-Z0-9_-]+\.[a-zA-Z0-9-]+$/;
+
+// Utility function to check if input is ENS
+const isENS = (address = "") => {
+  const result = ensRegex.test(address);
+  console.log("isENS check:", address, "result:", result);
+  return result;
+};
+
 interface CreateStreamModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -25,19 +36,125 @@ interface CreateStreamModalProps {
 const CreateStreamModal: React.FC<CreateStreamModalProps> = ({ isOpen, onClose }) => {
   const { address: accountAddress } = useAccount();
   const [recipientAddress, setRecipientAddress] = useState<string>("");
+  const [resolvedAddress, setResolvedAddress] = useState<string>("");
   const [selectedToken, setSelectedToken] = useState<string>("");
   const [flowRate, setFlowRate] = useState<string>("0.0");
   const [timeUnit, setTimeUnit] = useState<string>("month");
-  const [enableScheduling, setEnableScheduling] = useState<boolean>(false);
+  const [shouldResolveENS, setShouldResolveENS] = useState<boolean>(false);
   const { writeContract } = useWriteContract();
+
+  // Debounce the input for ENS resolution
+  const [debouncedRecipientAddress] = useDebounceValue(recipientAddress, 500);
+
+  // ENS resolution for Base chain
+  const {
+    data: ensAddress,
+    isLoading: isEnsAddressLoading,
+    isError: isEnsAddressError,
+  } = useEnsAddress({
+    name: debouncedRecipientAddress,
+    // Remove coinType for now to test basic ENS resolution
+    chainId: 1, // ENS resolution happens on Ethereum mainnet
+    query: {
+      gcTime: 30_000,
+      enabled: shouldResolveENS && isENS(debouncedRecipientAddress) && debouncedRecipientAddress.length > 0,
+    },
+  });
+
+  // Debug ENS resolution
+  useEffect(() => {
+    console.log("ENS Resolution Debug:", {
+      shouldResolveENS,
+      debouncedRecipientAddress,
+      isENS: isENS(debouncedRecipientAddress),
+      ensAddress,
+      isEnsAddressLoading,
+      isEnsAddressError,
+      enabled: shouldResolveENS && isENS(debouncedRecipientAddress) && debouncedRecipientAddress.length > 0,
+    });
+  }, [shouldResolveENS, debouncedRecipientAddress, ensAddress, isEnsAddressLoading, isEnsAddressError]);
+
+  // Handle ENS resolution
+  useEffect(() => {
+    console.log("ENS Resolution Effect:", {
+      ensAddress,
+      recipientAddress,
+      isAddress: isAddress(recipientAddress),
+    });
+
+    if (ensAddress) {
+      console.log("Setting resolved address:", ensAddress);
+      setResolvedAddress(ensAddress);
+      setShouldResolveENS(false); // Reset the trigger
+    } else if (isAddress(recipientAddress)) {
+      console.log("Setting resolved address (direct):", recipientAddress);
+      setResolvedAddress(recipientAddress);
+    } else {
+      console.log("Clearing resolved address");
+      setResolvedAddress("");
+    }
+  }, [ensAddress, recipientAddress]);
+
+  // ENS name resolution (reverse lookup)
+  const {
+    data: ensName,
+    isLoading: isEnsNameLoading,
+    isError: isEnsNameError,
+  } = useEnsName({
+    address: debouncedRecipientAddress as Address,
+    chainId: 1,
+    query: {
+      gcTime: 30_000,
+      enabled: isAddress(debouncedRecipientAddress),
+    },
+  });
+
+  // Handle input changes with real-time validation
+  const handleRecipientAddressChange = (value: string) => {
+    setRecipientAddress(value);
+
+    // Clear resolved address if input is empty
+    if (!value.trim()) {
+      setResolvedAddress("");
+      setShouldResolveENS(false);
+      return;
+    }
+
+    // If it's a valid Ethereum address, use it directly
+    if (isAddress(value)) {
+      setResolvedAddress(value);
+      setShouldResolveENS(false);
+      return;
+    }
+
+    // If it's an ENS name, don't auto-resolve - wait for Enter key
+    if (isENS(value)) {
+      setResolvedAddress(""); // Clear previous resolution
+      return;
+    }
+
+    // Invalid input
+    setResolvedAddress("");
+    setShouldResolveENS(false);
+  };
+
+  // Handle Enter key press for ENS resolution
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    console.log("Key pressed:", e.key, "Current address:", recipientAddress, "Is ENS:", isENS(recipientAddress));
+    if (e.key === "Enter" && isENS(recipientAddress)) {
+      e.preventDefault();
+      console.log("Triggering ENS resolution for:", recipientAddress);
+      setShouldResolveENS(true);
+    }
+  };
 
   const handleClose = useCallback(() => {
     // Reset form state
     setRecipientAddress("");
+    setResolvedAddress("");
     setSelectedToken("");
     setFlowRate("0.0");
     setTimeUnit("month");
-    setEnableScheduling(false);
     onClose();
   }, [onClose]);
 
@@ -88,7 +205,7 @@ const CreateStreamModal: React.FC<CreateStreamModalProps> = ({ isOpen, onClose }
   };
 
   const handleUpdateFlow = async () => {
-    if (!accountAddress || !recipientAddress || !selectedToken || !flowRate) {
+    if (!accountAddress || !resolvedAddress || !selectedToken || !flowRate) {
       console.error("Missing required fields");
       return;
     }
@@ -109,19 +226,19 @@ const CreateStreamModal: React.FC<CreateStreamModalProps> = ({ isOpen, onClose }
       const tx = await writeContract({
         abi: forwarderABI,
         address: "0xcfA132E353cB4E398080B9700609bb008eceB125",
-        functionName: "updateFlow",
+        functionName: "createFlow",
         args: [
           selectedToken as Address,
           accountAddress as Address,
-          recipientAddress as Address,
+          resolvedAddress as Address,
           flowRatePerSecond,
           "0x",
         ],
       });
       console.log("Flow creation transaction submitted:", tx);
 
-      // Close modal after successful transaction
-      onClose();
+      // Don't close modal automatically - let user close it manually
+      // onClose();
     } catch (error) {
       console.error("Error creating flow:", error);
     }
@@ -159,12 +276,70 @@ const CreateStreamModal: React.FC<CreateStreamModalProps> = ({ isOpen, onClose }
                 <input
                   type="text"
                   value={recipientAddress}
-                  onChange={e => setRecipientAddress(e.target.value)}
-                  placeholder="Public Address, ENS or Lens"
-                  className="w-full bg-gray-50 dark:bg-secondary text-gray-900 dark:text-white rounded-lg py-3 pl-10 pr-10 border-none focus:ring-2 focus:ring-green-500 focus:outline-none text-sm"
+                  onChange={e => handleRecipientAddressChange(e.target.value)}
+                  onKeyDown={handleKeyPress}
+                  placeholder="Public Address or ENS (Press Enter for ENS)"
+                  className={`w-full bg-gray-50 dark:bg-secondary text-gray-900 dark:text-white rounded-lg py-3 pl-10 pr-10 border-none focus:ring-2 focus:ring-green-500 focus:outline-none text-sm ${
+                    isEnsAddressLoading ? "animate-pulse" : ""
+                  } ${resolvedAddress && !isEnsAddressLoading ? "ring-2 ring-green-500" : ""} ${
+                    isEnsAddressError ? "ring-2 ring-red-500" : ""
+                  }`}
                 />
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
               </div>
+              {/* Show loading state or validation feedback */}
+              {isEnsAddressLoading && (
+                <div className="text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                  <div className="w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                  Fetching ENS address...
+                </div>
+              )}
+              {isEnsNameLoading && (
+                <div className="text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                  <div className="w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                  Looking up ENS name...
+                </div>
+              )}
+              {isENS(recipientAddress) && !shouldResolveENS && !resolvedAddress && (
+                <div className="text-xs text-gray-500 dark:text-gray-400">
+                  Press Enter to resolve ENS name
+                  <button
+                    onClick={() => {
+                      console.log("Manual trigger for:", recipientAddress);
+                      setShouldResolveENS(true);
+                    }}
+                    className="ml-2 px-2 py-1 bg-blue-500 text-white rounded text-xs"
+                  >
+                    Test Resolve
+                  </button>
+                </div>
+              )}
+              {resolvedAddress && !isEnsAddressLoading && isENS(recipientAddress) && (
+                <div className="text-xs text-green-600 dark:text-green-400">✓ ENS resolved successfully</div>
+              )}
+              {ensName && !isEnsNameLoading && isAddress(recipientAddress) && (
+                <div className="text-xs text-green-600 dark:text-green-400">✓ ENS name found</div>
+              )}
+              {resolvedAddress && !isEnsAddressLoading && (
+                <div className="text-xs text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 p-2 rounded">
+                  <strong>Resolved Address:</strong> {resolvedAddress}
+                </div>
+              )}
+              {ensName && !isEnsNameLoading && isAddress(recipientAddress) && (
+                <div className="text-xs text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 p-2 rounded">
+                  <strong>ENS Name:</strong> {ensName}
+                </div>
+              )}
+              {isEnsAddressError && isENS(recipientAddress) && (
+                <div className="text-xs text-red-600 dark:text-red-400">✗ Invalid ENS name</div>
+              )}
+              {isEnsNameError && isAddress(recipientAddress) && (
+                <div className="text-xs text-orange-600 dark:text-orange-400">No ENS name found for this address</div>
+              )}
+              {recipientAddress && !isAddress(recipientAddress) && !isENS(recipientAddress) && (
+                <div className="text-xs text-orange-600 dark:text-orange-400">
+                  ⚠ Enter a valid Ethereum address or ENS name
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -220,37 +395,17 @@ const CreateStreamModal: React.FC<CreateStreamModalProps> = ({ isOpen, onClose }
             </div>
           </div>
 
-          <div className="flex items-center justify-between py-3">
-            <div className="flex items-center gap-3">
-              <input
-                type="checkbox"
-                checked={enableScheduling}
-                onChange={e => setEnableScheduling(e.target.checked)}
-                className="toggle toggle-primary toggle-sm"
-              />
-              <span className="text-neutral dark:text-white text-sm font-medium">Stream Scheduling</span>
-            </div>
-            <Info className="h-4 w-4 text-gray-500" />
-          </div>
-
           <div className="space-y-3 pt-2">
             <button
               onClick={handleUpdateFlow}
               className={`w-full py-4 rounded-xl font-medium text-white transition-colors ${
-                !recipientAddress || !selectedToken || !flowRate
+                !resolvedAddress || !selectedToken || !flowRate || Number(flowRate) <= 0
                   ? "bg-gray-300 dark:bg-gray-600 cursor-not-allowed"
-                  : "bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700"
+                  : "text-white dark:text-secondary bg-base-300 dark:bg-warning rounded-btn hover:bg-primary hover:text-white dark:hover:bg-success dark:hover:text-primary hover:ring-4 hover:ring-secondary hover:ring-opacity-75 hover:shadow-primary/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 dark:hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] dark:hover:scale-105"
               }`}
-              disabled={!recipientAddress || !selectedToken || !flowRate}
+              disabled={!resolvedAddress || !selectedToken || !flowRate || Number(flowRate) <= 0}
             >
               Send Stream
-            </button>
-
-            <button
-              onClick={handleClose}
-              className="w-full py-3 rounded-xl font-medium text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-            >
-              Close
             </button>
           </div>
         </div>
