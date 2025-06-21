@@ -2,7 +2,7 @@
 
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
-import { forwarderABI } from "../../../app/components/abis/ForwarderContract";
+import { forwarderABI } from "../../../components/abis/ForwarderContract";
 import { ChevronDown, Info, Search, X } from "lucide-react";
 import type { Address } from "viem";
 import { parseEther } from "viem";

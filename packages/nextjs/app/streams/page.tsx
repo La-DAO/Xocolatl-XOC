@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useRef, useState } from "react";
+import Image from "next/image";
 import { useTranslation } from "../context/LanguageContext";
-import CreateStreamModal from "./components/CreateStreamModal";
+import CreateStreamModal from "./components/Flows/CreateStreamModal";
 import TokenConverter from "./components/Supertokens";
 import {
   ArrowRight,
@@ -11,7 +12,6 @@ import {
   Edit,
   Info,
   Pause,
-  Play,
   Plus,
   Trash2,
   TrendingUp,
@@ -109,6 +109,57 @@ export default function StreamsPage() {
           </div>
         </div>
 
+        {/* How It Works */}
+        <div className="card bg-white/80 dark:bg-base-100/80 backdrop-blur-sm shadow-lg">
+          <div className="card-body">
+            <h2 className="card-title flex items-center gap-2">
+              <Info className="w-5 h-5" />
+              {t("StreamsHowItWorks")}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center space-y-4">
+                <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto overflow-hidden bg-gray-100 dark:bg-gray-800">
+                  <Image
+                    src="/wrap token.png"
+                    alt="Wrap Tokens"
+                    width={128}
+                    height={128}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <h3 className="font-semibold">1. {t("StreamsWrapTokens")}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">{t("StreamsWrapTokensDescription")}</p>
+              </div>
+              <div className="text-center space-y-4">
+                <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto overflow-hidden bg-gray-100 dark:bg-gray-800">
+                  <Image
+                    src="/create a stream.png"
+                    alt="Create Stream"
+                    width={128}
+                    height={128}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <h3 className="font-semibold">2. {t("StreamsCreateStream")}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">{t("StreamsCreateStreamDescription")}</p>
+              </div>
+              <div className="text-center space-y-4">
+                <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto overflow-hidden bg-gray-100 dark:bg-gray-800">
+                  <Image
+                    src="/real-time payments.png"
+                    alt="Real Time Payments"
+                    width={128}
+                    height={128}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <h3 className="font-semibold">3. {t("StreamsRealTimePayments")}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">{t("StreamsRealTimePaymentsDescription")}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="card bg-white dark:bg-base-100 shadow-lg">
@@ -156,56 +207,23 @@ export default function StreamsPage() {
           </div>
         </div>
 
-        {/* How It Works */}
-        <div className="card bg-white/80 dark:bg-base-100/80 backdrop-blur-sm shadow-lg">
-          <div className="card-body">
-            <h2 className="card-title flex items-center gap-2">
-              <Info className="w-5 h-5" />
-              {t("StreamsHowItWorks")}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center space-y-2">
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto">
-                  <ArrowUpDown className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                </div>
-                <h3 className="font-semibold">1. {t("StreamsWrapTokens")}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">{t("StreamsWrapTokensDescription")}</p>
-              </div>
-              <div className="text-center space-y-2">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto">
-                  <Play className="w-6 h-6 text-green-600 dark:text-green-400" />
-                </div>
-                <h3 className="font-semibold">2. {t("StreamsCreateStream")}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">{t("StreamsCreateStreamDescription")}</p>
-              </div>
-              <div className="text-center space-y-2">
-                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto">
-                  <TrendingUp className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                </div>
-                <h3 className="font-semibold">3. {t("StreamsRealTimePayments")}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">{t("StreamsRealTimePaymentsDescription")}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Main Content Tabs */}
         <div className="space-y-6">
-          <div className="tabs tabs-boxed bg-white dark:bg-base-100 shadow-lg">
+          <div className="tabs tabs-boxed bg-white dark:bg-base-100 shadow-lg py-2">
             <button
-              className={`tab ${activeTab === "overview" ? "tab-active" : ""}`}
+              className={`tab ${activeTab === "overview" ? "tab-active !text-white" : ""}`}
               onClick={() => setActiveTab("overview")}
             >
               {t("StreamsOverview")}
             </button>
             <button
-              className={`tab ${activeTab === "outgoing" ? "tab-active" : ""}`}
+              className={`tab ${activeTab === "outgoing" ? "tab-active !text-white" : ""}`}
               onClick={() => setActiveTab("outgoing")}
             >
               {t("StreamsOutgoingStreams")}
             </button>
             <button
-              className={`tab ${activeTab === "incoming" ? "tab-active" : ""}`}
+              className={`tab ${activeTab === "incoming" ? "tab-active !text-white" : ""}`}
               onClick={() => setActiveTab("incoming")}
             >
               {t("StreamsIncomingStreams")}
