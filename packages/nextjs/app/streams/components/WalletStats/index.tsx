@@ -1,55 +1,52 @@
 "use client";
 
 import type React from "react";
-import { forwarderABI } from "../../../components/abis/ForwarderContract";
-import { type Address } from "viem";
-import { useAccount, useReadContract } from "wagmi";
-import { useBalanceOf } from "~~/hooks/useBalanceOf";
-
-interface FlowInfo {
-  lastUpdated: number;
-  flowRate: number;
-  deposit: number;
-  owedDeposit: number;
-}
+import FlowingBalance from "../FlowingBalance";
+import { useStreamingStore, useUpdateFlowInfo, useUpdateSuperXocBalance } from "~~/stores/streaming-store";
 
 const WalletStats: React.FC = () => {
-  const { address: accountAddress } = useAccount();
+  // Store integration
+  useUpdateSuperXocBalance();
+  useUpdateFlowInfo();
 
-  const xocBalance = useBalanceOf({
-    tokenAddress: "0xa411c9aa00e020e4f88bc19996d29c5b7adb4acf",
-    walletAddress: accountAddress as Address,
-  });
-
-  const SUPER_XOC_ADDRESS = "0xedF89f2612a5B07FEF051e1a0444342B5410C405";
-
-  const superXocBalance = useBalanceOf({
-    tokenAddress: "0xedF89f2612a5B07FEF051e1a0444342B5410C405",
-    walletAddress: accountAddress as Address,
-  });
-
-  const mockFlowInfo: FlowInfo = {
-    lastUpdated: Date.now() / 1000,
-    flowRate: 0.000001,
-    deposit: 100,
-    owedDeposit: 0,
-  };
-
-  const { data: flowInfo } = useReadContract({
-    address: "0xcfA132E353cB4E398080B9700609bb008eceB125",
-    abi: forwarderABI,
-    functionName: "getAccountFlowInfo",
-    args: [SUPER_XOC_ADDRESS, accountAddress as Address],
-  });
-  console.log("flowInfo", flowInfo);
+  const { xocBalance, superXocBalance, flowInfo } = useStreamingStore();
 
   const formatBalance = (balance: string | undefined) => {
     if (!balance) return "0.00";
     return Number(balance).toFixed(2);
   };
 
-  const formatFlowRate = (flowRate: number) => {
-    return `${flowRate.toFixed(2)} XOC/s`;
+  const formatFlowRate = () => {
+    if (!flowInfo || flowInfo.flowRate === 0n) return "0.00 XOC/s";
+
+    // Convert flowRate from wei per second to XOC per second
+    const flowRateXOC = Number(flowInfo.flowRate) / Math.pow(10, 18);
+    return `${Math.abs(flowRateXOC).toFixed(6)} XOC/s`;
+  };
+
+  const formatLastUpdated = () => {
+    if (!flowInfo) return "Never";
+    return new Date(Number(flowInfo.lastUpdated) * 1000).toLocaleDateString();
+  };
+
+  // Calculate monthly flow rate for FlowingBalance
+  const calculateMonthlyFlowRate = () => {
+    if (!flowInfo || flowInfo.flowRate === 0n) return 0n;
+
+    // Take the absolute value of the flow rate (since negative means outgoing)
+    const absoluteFlowRate = flowInfo.flowRate < 0n ? -flowInfo.flowRate : flowInfo.flowRate;
+
+    // Convert from per-second to per-month rate
+    const secondsInMonth = 30 * 24 * 60 * 60; // 30 days
+    const monthlyFlowWei = absoluteFlowRate * BigInt(secondsInMonth);
+
+    return monthlyFlowWei;
+  };
+
+  // Get starting date from flowInfo or use current date
+  const getStartingDate = () => {
+    if (!flowInfo || flowInfo.lastUpdated === 0n) return new Date();
+    return new Date(Number(flowInfo.lastUpdated) * 1000);
   };
 
   return (
@@ -68,8 +65,24 @@ const WalletStats: React.FC = () => {
 
       <div className="stat">
         <div className="stat-title">Current Flow Rate</div>
-        <div className="stat-value">{formatFlowRate(mockFlowInfo.flowRate)}</div>
-        <div className="stat-desc">Last Updated: {new Date(mockFlowInfo.lastUpdated * 1000).toLocaleDateString()}</div>
+        <div className="stat-value">{formatFlowRate()}</div>
+        <div className="stat-desc">Last Updated: {formatLastUpdated()}</div>
+      </div>
+
+      <div className="stat">
+        <div className="stat-title">Monthly Flow</div>
+        <div className="stat-value">
+          {flowInfo && flowInfo.flowRate !== 0n ? (
+            <FlowingBalance
+              startingBalance={0n}
+              startingBalanceDate={getStartingDate()}
+              flowRate={calculateMonthlyFlowRate()}
+            />
+          ) : (
+            "0.00"
+          )}
+        </div>
+        <div className="stat-desc">XOC per Month</div>
       </div>
     </div>
   );

@@ -7,7 +7,8 @@ import { ChevronDown, Info, Search, X } from "lucide-react";
 import { useDebounceValue } from "usehooks-ts";
 import type { Address } from "viem";
 import { isAddress, parseEther } from "viem";
-import { useAccount, useEnsAddress, useEnsName, useWriteContract } from "wagmi";
+import { useAccount, useEnsAddress, useEnsName, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { useUpdateFlowInfo } from "~~/stores/streaming-store";
 
 // Constants for time unit conversions (in seconds)
 const TIME_UNITS = {
@@ -41,7 +42,33 @@ const CreateStreamModal: React.FC<CreateStreamModalProps> = ({ isOpen, onClose }
   const [flowRate, setFlowRate] = useState<string>("0.0");
   const [timeUnit, setTimeUnit] = useState<string>("month");
   const [shouldResolveENS, setShouldResolveENS] = useState<boolean>(false);
-  const { writeContract } = useWriteContract();
+  const {
+    writeContract,
+    data: transactionHash,
+    isPending: isTransactionPending,
+    isError: isTransactionError,
+  } = useWriteContract();
+
+  // Store integration
+  const { refetchFlowInfo } = useUpdateFlowInfo();
+
+  // Transaction state
+  const [isTransactionSuccess, setIsTransactionSuccess] = useState(false);
+
+  // Wait for transaction receipt
+  const { isSuccess: isTransactionReceiptSuccess } = useWaitForTransactionReceipt({
+    hash: transactionHash,
+  });
+
+  // Handle transaction success
+  useEffect(() => {
+    if (isTransactionReceiptSuccess) {
+      setIsTransactionSuccess(true);
+      // Refetch flow info to update the store
+      refetchFlowInfo();
+      console.log("Transaction successful! Flow info updated.");
+    }
+  }, [isTransactionReceiptSuccess, refetchFlowInfo]);
 
   // Debounce the input for ENS resolution
   const [debouncedRecipientAddress] = useDebounceValue(recipientAddress, 500);
@@ -235,7 +262,10 @@ const CreateStreamModal: React.FC<CreateStreamModalProps> = ({ isOpen, onClose }
           "0x",
         ],
       });
+
       console.log("Flow creation transaction submitted:", tx);
+      // Transaction hash is now available from the useWriteContract hook
+      // setTransactionHash(tx);
 
       // Don't close modal automatically - let user close it manually
       // onClose();
@@ -263,6 +293,38 @@ const CreateStreamModal: React.FC<CreateStreamModalProps> = ({ isOpen, onClose }
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Create Money Stream</h2>
           <p className="text-gray-600 dark:text-gray-300">Set up continuous salary payments</p>
         </div>
+
+        {/* Transaction Status */}
+        {isTransactionPending && (
+          <div className="px-6 pb-4">
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-blue-800 dark:text-blue-200">Transaction pending...</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {isTransactionSuccess && (
+          <div className="px-6 pb-4">
+            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+              <div className="flex items-center gap-2">
+                <span className="text-green-800 dark:text-green-200">✓ Transaction successful! Flow info updated.</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {isTransactionError && (
+          <div className="px-6 pb-4">
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+              <div className="flex items-center gap-2">
+                <span className="text-red-800 dark:text-red-200">✗ Transaction failed. Please try again.</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="px-6 pb-6 space-y-6">
           <div className="space-y-4">
@@ -398,14 +460,16 @@ const CreateStreamModal: React.FC<CreateStreamModalProps> = ({ isOpen, onClose }
           <div className="space-y-3 pt-2">
             <button
               onClick={handleUpdateFlow}
-              className={`w-full py-4 rounded-xl font-medium text-white transition-colors ${
-                !resolvedAddress || !selectedToken || !flowRate || Number(flowRate) <= 0
+              disabled={
+                !resolvedAddress || !selectedToken || !flowRate || Number(flowRate) <= 0 || isTransactionPending
+              }
+              className={`w-full py-4 rounded-xl font-medium text-primary transition-colors ${
+                !resolvedAddress || !selectedToken || !flowRate || Number(flowRate) <= 0 || isTransactionPending
                   ? "bg-gray-300 dark:bg-gray-600 cursor-not-allowed"
-                  : "text-white dark:text-secondary bg-base-300 dark:bg-warning rounded-btn hover:bg-primary hover:text-white dark:hover:bg-success dark:hover:text-primary hover:ring-4 hover:ring-secondary hover:ring-opacity-75 hover:shadow-primary/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 dark:hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] dark:hover:scale-105"
+                  : "text-primary dark:text-secondary bg-base-300 ring-2 ring-success dark:bg-warning rounded-btn hover:bg-primary hover:text-white dark:hover:bg-success dark:hover:text-primary hover:ring-4 hover:ring-success hover:ring-opacity-75 hover:shadow-primary/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 dark:hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] dark:hover:scale-105"
               }`}
-              disabled={!resolvedAddress || !selectedToken || !flowRate || Number(flowRate) <= 0}
             >
-              Send Stream
+              {isTransactionPending ? "Creating Stream..." : "Send Stream"}
             </button>
           </div>
         </div>

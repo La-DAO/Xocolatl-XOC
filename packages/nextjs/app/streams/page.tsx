@@ -3,6 +3,7 @@
 import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslation } from "../context/LanguageContext";
+import FlowingBalance from "./components/FlowingBalance";
 import CreateStreamModal from "./components/Flows/CreateStreamModal";
 import TokenConverter from "./components/Supertokens";
 import {
@@ -18,12 +19,37 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
+import { useStreamingStore, useUpdateFlowInfo, useUpdateSuperXocBalance } from "~~/stores/streaming-store";
 
 export default function StreamsPage() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("overview");
   const [isCreateStreamModalOpen, setIsCreateStreamModalOpen] = useState(false);
   const tokenConverterRef = useRef<HTMLDivElement>(null);
+
+  // Store integration
+  useUpdateSuperXocBalance(); // This will update the store with Super XOC balance
+  useUpdateFlowInfo(); // This will update the store with flow info
+
+  const { xocBalance, superXocBalance, flowInfo } = useStreamingStore();
+
+  // Calculate monthly flow rate for FlowingBalance
+  const calculateMonthlyFlowRate = () => {
+    if (!flowInfo || flowInfo.flowRate === 0n) return 0n;
+
+    // Convert flowRate from per-second to per-month
+    // flowRate is in wei per second, so multiply by seconds in a month
+    const secondsInMonth = 30 * 24 * 60 * 60; // 30 days
+    const monthlyFlowWei = flowInfo.flowRate * BigInt(secondsInMonth);
+
+    return monthlyFlowWei;
+  };
+
+  // Get starting date from flowInfo or use current date
+  const getStartingDate = () => {
+    if (!flowInfo || flowInfo.lastUpdated === 0n) return new Date();
+    return new Date(Number(flowInfo.lastUpdated) * 1000);
+  };
 
   // Mock data for demonstration
   const mockStreams = [
@@ -93,7 +119,7 @@ export default function StreamsPage() {
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">{t("StreamsDescription")}</p>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
             <button
-              className="btn btn-primary bg-neutral dark:bg-base-100 text-white dark:text-white btn-lg hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 transition-all duration-300 hover:bg-orange-600 dark:hover:bg-orange-500 hover:text-white dark:hover:text-white font-semibold"
+              className="btn btn-primary bg-neutral dark:bg-base-100 text-white dark:text-white btn-lg hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 transition-all duration-300 hover:bg-success dark:hover:bg-success hover:text-primary dark:hover:text-white font-semibold"
               onClick={handleOpenCreateStreamModal}
             >
               <Plus className="w-5 h-5 mr-2" />
@@ -168,7 +194,7 @@ export default function StreamsPage() {
                 <h3 className="card-title text-sm">{t("StreamsXOCBalance")}</h3>
                 <Wallet className="h-4 w-4 text-gray-500" />
               </div>
-              <div className="text-2xl font-bold">0.59</div>
+              <div className="text-2xl font-bold">{xocBalance}</div>
               <p className="text-xs text-gray-500">{t("StreamsNativeToken")}</p>
             </div>
           </div>
@@ -179,7 +205,7 @@ export default function StreamsPage() {
                 <h3 className="card-title text-sm">{t("StreamsSuperXOCBalance")}</h3>
                 <TrendingUp className="h-4 w-4 text-gray-500" />
               </div>
-              <div className="text-2xl font-bold">9.49</div>
+              <div className="text-2xl font-bold">{superXocBalance}</div>
               <p className="text-xs text-gray-500">{t("StreamsStreamableToken")}</p>
             </div>
           </div>
@@ -190,7 +216,7 @@ export default function StreamsPage() {
                 <h3 className="card-title text-sm">{t("StreamsActiveStreams")}</h3>
                 <Users className="h-4 w-4 text-gray-500" />
               </div>
-              <div className="text-2xl font-bold">2</div>
+              <div className="text-2xl font-bold">{flowInfo && flowInfo.flowRate !== 0n ? "1" : "0"}</div>
               <p className="text-xs text-gray-500">{t("StreamsOutgoing")}</p>
             </div>
           </div>
@@ -201,7 +227,17 @@ export default function StreamsPage() {
                 <h3 className="card-title text-sm">{t("StreamsMonthlyFlow")}</h3>
                 <Clock className="h-4 w-4 text-gray-500" />
               </div>
-              <div className="text-2xl font-bold">250.75</div>
+              <div className="text-2xl font-bold">
+                {flowInfo && flowInfo.flowRate !== 0n ? (
+                  <FlowingBalance
+                    startingBalance={0n}
+                    startingBalanceDate={getStartingDate()}
+                    flowRate={calculateMonthlyFlowRate()}
+                  />
+                ) : (
+                  "0.00"
+                )}
+              </div>
               <p className="text-xs text-gray-500">{t("StreamsXOCMonth")}</p>
             </div>
           </div>
@@ -244,7 +280,10 @@ export default function StreamsPage() {
                     <h3 className="card-title">{t("StreamsQuickActions")}</h3>
                     <p className="text-gray-600 dark:text-gray-300">{t("StreamsQuickActionsDescription")}</p>
                     <div className="space-y-3">
-                      <button className="btn btn-primary w-full justify-start" onClick={handleOpenCreateStreamModal}>
+                      <button
+                        className="btn btn-primary text-white w-full justify-start"
+                        onClick={handleOpenCreateStreamModal}
+                      >
                         <Plus className="w-4 h-4 mr-2" />
                         {t("StreamsCreateNewStream")}
                       </button>
