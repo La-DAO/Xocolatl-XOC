@@ -180,7 +180,7 @@ const TokenConverter = () => {
         <button
           className={`px-6 py-2 rounded-full font-medium text-sm transition-colors ${
             tab === "upgrade"
-              ? "bg-secondary dark:bg-secondary text-neutral dark:text-gray-400"
+              ? "bg-primary dark:bg-secondary text-white dark:text-gray-400"
               : "text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300"
           }`}
           onClick={() => setTab("upgrade")}
@@ -190,7 +190,7 @@ const TokenConverter = () => {
         <button
           className={`px-6 py-2 rounded-full font-medium text-sm transition-colors ${
             tab === "downgrade"
-              ? "bg-secondary dark:bg-secondary text-neutral dark:text-gray-400"
+              ? "bg-primary dark:bg-secondary text-white dark:text-gray-400"
               : "text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300"
           }`}
           onClick={() => setTab("downgrade")}
