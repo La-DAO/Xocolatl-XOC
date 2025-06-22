@@ -322,8 +322,8 @@ export default function StreamsPage() {
           {activeTab === "outgoing" && (
             <div className="space-y-6">
               <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t("StreamsOutgoingStreams")}</h2>
-                <button className="btn btn-primary" onClick={handleOpenCreateStreamModal}>
+                <h2 className="text-2xl font-bold text-neutral dark:text-white">{t("StreamsOutgoingStreams")}</h2>
+                <button className="btn btn-primary text-white" onClick={handleOpenCreateStreamModal}>
                   <Plus className="w-4 h-4 mr-2" />
                   {t("StreamsNewStream")}
                 </button>
