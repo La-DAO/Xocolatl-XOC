@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useTranslation } from "../context/LanguageContext";
 import FlowingBalance from "./components/FlowingBalance";
 import CreateStreamModal from "./components/Flows/CreateStreamModal";
+import SuperXocFlowingBalance from "./components/SuperXocFlowingBalance";
 import TokenConverter from "./components/Supertokens";
 import {
   ArrowRight,
@@ -205,7 +206,15 @@ export default function StreamsPage() {
                 <h3 className="card-title text-sm">{t("StreamsSuperXOCBalance")}</h3>
                 <TrendingUp className="h-4 w-4 text-gray-500" />
               </div>
-              <div className="text-2xl font-bold">{superXocBalance}</div>
+              {flowInfo && flowInfo.flowRate !== 0n ? (
+                <SuperXocFlowingBalance
+                  balance={superXocBalance}
+                  flowRate={flowInfo.flowRate}
+                  lastUpdated={flowInfo.lastUpdated}
+                />
+              ) : (
+                <div className="text-2xl font-bold">{superXocBalance}</div>
+              )}
               <p className="text-xs text-gray-500">{t("StreamsStreamableToken")}</p>
             </div>
           </div>
