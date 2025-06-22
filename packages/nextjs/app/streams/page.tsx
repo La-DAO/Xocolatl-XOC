@@ -93,7 +93,14 @@ export default function StreamsPage() {
         });
 
         // Add highlight effect
-        tokenConverterRef.current.classList.add("ring-4", "ring-primary", "ring-opacity-75", "scale-105", "shadow-2xl");
+        tokenConverterRef.current.classList.add(
+          "ring-4",
+          "ring-primary",
+          "ring-opacity-75",
+          "scale-105",
+          "shadow-2xl",
+          "rounded-lg",
+        );
 
         // Remove the highlight effect after 3 seconds
         setTimeout(() => {
@@ -104,6 +111,7 @@ export default function StreamsPage() {
               "ring-opacity-75",
               "scale-105",
               "shadow-2xl",
+              "rounded-lg",
             );
           }
         }, 3000);
