@@ -28,8 +28,6 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReserve, setSelectedReserve] = useState<ReserveData | null>(null);
   const [selectedBalance, setSelectedBalance] = useState("");
-  const [borrowCap, setBorrowCap] = useState<number | null>(null);
-  const [supplyCap, setSupplyCap] = useState<number | null>(null);
 
   // Callback for balance changes
   const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
@@ -43,14 +41,10 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
     return showAll || balance > 0;
   });
 
-  console.log("filteredAndDisplayedReserveData", filteredAndDisplayedReserveData);
-
   // Handle supply button click
   const handleSupplyClick = (reserve: ReserveData, balance: string) => {
     setSelectedReserve(reserve);
     setSelectedBalance(balance);
-    setBorrowCap(reserve.borrowCap || null); // Assuming borrowCap is part of the reserve
-    setSupplyCap(reserve.supplyCap || null); // Assuming supplyCap is part of the reserve
     setIsModalOpen(true);
   };
 
@@ -142,8 +136,6 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
         onClose={() => setIsModalOpen(false)}
         reserve={selectedReserve}
         balance={selectedBalance}
-        borrowCap={borrowCap}
-        supplyCap={supplyCap}
       />
     </div>
   );

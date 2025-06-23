@@ -17,7 +17,11 @@ const useGetUserAccountData = (userAddress: string) => {
   const [isError, setIsError] = useState<boolean>(false);
 
   // Hook to read data from smart contracts
-  const { data: result, isError: isFetchingError } = useReadContracts({
+  const {
+    data: result,
+    isError: isFetchingError,
+    refetch,
+  } = useReadContracts({
     contracts: [
       {
         address: poolContract.address,
@@ -78,7 +82,7 @@ const useGetUserAccountData = (userAddress: string) => {
     }
   }, [result, isFetchingError]);
 
-  return { userAccountData, isLoading, isError };
+  return { userAccountData, isLoading, isError, refetch };
 };
 
 export default useGetUserAccountData;

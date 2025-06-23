@@ -4,6 +4,7 @@ import { ERC20ABI } from "@/app/components/abis/erc20";
 import CONFIG from "@/config";
 import useAccountAddress from "@/hooks/useAccount";
 import useSupply from "@/hooks/useSupply";
+import { useLendingStore } from "@/stores/lending-store";
 import { ReserveData } from "@/types/types";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,15 +19,14 @@ interface ModalProps {
   onClose: () => void;
   reserve: ReserveData | null;
   balance: string;
-  borrowCap?: number | null;
-  supplyCap?: number | null;
 }
 
-const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve, balance, borrowCap, supplyCap }) => {
+const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve, balance }) => {
   const { t } = useTranslation();
   const chainId = useChainId();
   const { address: walletAddress } = useAccountAddress();
   const { handleSupply, isError: supplyError, error, supplyHash } = useSupply();
+  const { refreshComponents } = useLendingStore();
 
   // form state
   const [amount, setAmount] = useState("");
@@ -71,6 +71,15 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     walletAddress: walletAddress as Address,
   });
 
+  // Transaction confirmation tracking for supply
+  const {
+    isLoading: isSupplyConfirming,
+    isSuccess: isSupplyConfirmed,
+    data: transactionReceipt,
+  } = useWaitForTransactionReceipt({
+    hash: supplyHash,
+  });
+
   // when modal opens or reserve changes, re-fetch allowance
   useEffect(() => {
     if (isOpen && reserve && walletAddress) {
@@ -89,12 +98,11 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
       // Pick up the token's true decimals:
       const tokenDecimals = Number(reserve.decimals);
 
-      // Convert the allowance to a decimal string
-      const formatted = parseUnits(allowanceString, tokenDecimals);
+      // Convert the allowance from wei to decimal string
+      const formatted = Number(allowanceString) / Math.pow(10, tokenDecimals);
 
       // Optionally round to 7 places for UI consistency:
-      setAssetAllowanceState(Number(formatted).toFixed(7));
-      console.log(`Reserve: ${reserve.name}, Allowance: ${Number(formatted).toFixed(7)}`);
+      setAssetAllowanceState(formatted.toFixed(7));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assetAllowance, isAssetAllowanceError, isAssetAllowanceLoading, reserve?.decimals]);
@@ -102,7 +110,13 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   // re-fetch after approval lands
   useEffect(() => {
     if (isApprovalSuccess) {
-      refetchAllowance();
+      // Add a small delay to ensure blockchain state is updated
+      const timer = setTimeout(() => {
+        refetchAllowance();
+        console.log("Approval successful, refetching allowance");
+      }, 1000);
+
+      return () => clearTimeout(timer);
     }
   }, [isApprovalSuccess, refetchAllowance]);
 
@@ -125,8 +139,15 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   // decide if approval is still needed
   useEffect(() => {
     const num = parseFloat(amount) || 0;
-    setRequiresApproval(num > parseFloat(assetAllowanceState));
-  }, [amount, assetAllowanceState]);
+    const needsApproval = num > parseFloat(assetAllowanceState);
+    setRequiresApproval(needsApproval);
+    console.log("Approval check:", {
+      amount: num,
+      allowance: assetAllowanceState,
+      needsApproval,
+      isApprovalSuccess,
+    });
+  }, [amount, assetAllowanceState, isApprovalSuccess]);
 
   // handle supply errors / success
   useEffect(() => {
@@ -139,11 +160,18 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     }
   }, [supplyError, supplyHash, error]);
 
-  // Log borrowCap and supplyCap when the component mounts or when they change
+  // Handle transaction confirmation and refresh store data
   useEffect(() => {
-    console.log("borrowCap:", borrowCap);
-    console.log("supplyCap:", supplyCap);
-  }, [borrowCap, supplyCap]);
+    if (isSupplyConfirmed && transactionReceipt) {
+      // Transaction confirmed successfully with receipt, wait a bit then refresh all lending data
+      const timer = setTimeout(() => {
+        refreshComponents();
+        console.log("Supply transaction confirmed with receipt, refreshing lending store data", transactionReceipt);
+      }, 2000); // Wait 2 seconds to ensure blockchain state is updated
+
+      return () => clearTimeout(timer);
+    }
+  }, [isSupplyConfirmed, transactionReceipt, refreshComponents]);
 
   // —— event handlers ——
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -330,9 +358,9 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                     <button
                       className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
                       onClick={handleSupplyClick}
-                      disabled={!isValid || isApprovalPending}
+                      disabled={!isValid}
                     >
-                      {isApprovalPending ? "Processing..." : t("LendingSupplyModalApprove")}
+                      {t("LendingSupplyModalButton")}
                     </button>
                   ) : (
                     <button
@@ -368,8 +396,25 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   width={250}
                   height={250}
                 />
-                <h2 className="text-base sm:text-lg">{t("LendingWithdrawModalSuccessTitle")}</h2>
-                <p className="text-xs sm:text-sm">{t("LendingSupplyModalSuccessMessage")}</p>
+                {isSupplyConfirming ? (
+                  <>
+                    <h2 className="text-base sm:text-lg">Transaction Submitted!</h2>
+                    <p className="text-xs sm:text-sm flex items-center justify-center gap-2">
+                      <span className="animate-spin">⏳</span>
+                      Waiting for confirmation...
+                    </p>
+                  </>
+                ) : isSupplyConfirmed ? (
+                  <>
+                    <h2 className="text-base sm:text-lg">{t("LendingSupplyModalSuccessTitle")}</h2>
+                    <p className="text-xs sm:text-sm">{t("LendingSupplyModalSuccessMessage")}</p>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="text-base sm:text-lg">Transaction Submitted!</h2>
+                    <p className="text-xs sm:text-sm">Your supply transaction has been submitted to the network.</p>
+                  </>
+                )}
                 <div className="pb-3"></div>
                 {blockExplorerUrl && (
                   <a href={blockExplorerUrl} target="_blank" rel="noreferrer" className="block link pb-3">

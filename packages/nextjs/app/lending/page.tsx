@@ -10,17 +10,12 @@ import ReserveAssetInfo from "./components/ReserveAssetInfo";
 import YourBorrows from "./components/YourBorrows";
 import YourSupplies from "./components/YourSupplies";
 import useAccountAddress from "@/hooks/useAccount";
-// Importa el hook de la dirección
-import useGetUserAccountData from "@/hooks/useGetUserAccountData";
-import { useLendingStore } from "@/stores/lending-store";
+import { useLendingStore, useUserAccountDataSync } from "@/stores/lending-store";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
-import { maxUint256 } from "viem";
 import { useChainId } from "wagmi";
-
-// Importa el hook de datos del usuario
 
 const Lending = () => {
   const { t } = useTranslation();
@@ -30,22 +25,30 @@ const Lending = () => {
   const [isAssetsToBorrowVisible, setIsAssetsToBorrowVisible] = useState(true);
 
   const [allBalancesZero, setAllBalancesZero] = useState(true);
-  // const [refreshKey, setRefreshKey] = useState(0);
-
   const [suppliesTotalBalance, setSuppliesTotalBalance] = useState(0);
   const [borrowsTotalBalance, setBorrowsTotalBalance] = useState(0);
 
   const { address } = useAccountAddress(); // Obtén la dirección del usuario
-  const { userAccountData, isLoading, isError } = useGetUserAccountData(address || ""); // Obtén los datos del usuario
+
+  // Use the store for user account data
+  const {
+    userAccountLoading: isLoading,
+    userAccountError: isError,
+    formattedHealthFactor,
+    formattedLTV,
+    formattedTotalCollateralBase,
+    formattedTotalDebtBase,
+    formattedAvailableBorrowsBase,
+    refreshKey,
+    refreshComponents,
+    selectedReserveAsset,
+    setSelectedReserveAsset,
+  } = useLendingStore();
+
+  // Sync user account data with the store
+  useUserAccountDataSync(address || "");
 
   const chainId = useChainId();
-
-  // const refreshComponents = () => {
-  //   setRefreshKey(prevKey => prevKey + 1);
-  // };
-
-  const { refreshKey, refreshComponents } = useLendingStore();
-  const { selectedReserveAsset, setSelectedReserveAsset } = useLendingStore();
 
   // Function to get network error message based on chainId
   const getNetworkErrorMessage = () => {
@@ -154,41 +157,6 @@ const Lending = () => {
   // Calculate Net Worth balance
   const netWorth = suppliesTotalBalance - borrowsTotalBalance;
 
-  // Format the health factor
-  // if health factor is equal to maxUint256, set it to infinity symbol, else we divide it by 1e18
-  // Handle case if health factor is not defined
-  const isMaxUint256 = (value: any) => {
-    // Check against BigInt, decimal string, and scientific notation
-    const maxUintStr = "115792089237316195423570985008687907853269984665640564039457584007913129639935";
-    return (
-      value === maxUint256 ||
-      value === maxUintStr ||
-      value === "1.157920892373162e+59" ||
-      value === Number(maxUintStr) ||
-      value === Number("1.157920892373162e+59")
-    );
-  };
-
-  const formattedHealthFactor = userAccountData?.healthFactor
-    ? isMaxUint256(userAccountData.healthFactor)
-      ? "∞"
-      : Number(userAccountData.healthFactor) / 1e18
-    : "∞";
-
-  const formattedLtv = userAccountData?.ltv ? (Number(userAccountData.ltv) * 1e15).toFixed(2) : "0.0000";
-
-  const formattedTotalCollateralBase = userAccountData?.totalCollateralBase
-    ? (Number(userAccountData.totalCollateralBase) * 1e10).toFixed(3)
-    : "0.0000";
-
-  const formattedTotalDebtBase = userAccountData?.totalDebtBase
-    ? (Number(userAccountData.totalDebtBase) * 1e10).toFixed(3)
-    : "0.0000";
-
-  const formattedAvailableBorrowsBase = userAccountData?.availableBorrowsBase
-    ? (Number(userAccountData.availableBorrowsBase) * 1e10).toFixed(3)
-    : "0.0000";
-
   return (
     <div className="flex flex-col w-4/5 m-auto gap-4">
       {/* Floating Tour Button */}
@@ -271,7 +239,11 @@ const Lending = () => {
                 },
               ],
             });
+
             driverObj.drive();
+
+            // Mark tour as completed
+            localStorage.setItem("lending-tour-completed", "true");
           }}
           className="bg-success dark:bg-success text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:bg-[#93C572]/80 transition-colors duration-200"
           title="Start Guided Tour"
@@ -301,7 +273,7 @@ const Lending = () => {
             ) : (
               <ProfileStats
                 balance={netWorth}
-                ltv={Number(formattedLtv)}
+                ltv={Number(formattedLTV)}
                 healthFactor={formattedHealthFactor}
                 totalCollateralBase={Number(formattedTotalCollateralBase)}
                 totalDebtBase={Number(formattedTotalDebtBase)}

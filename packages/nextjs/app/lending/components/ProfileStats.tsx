@@ -104,6 +104,15 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
             </div>
             <div className="text-lg text-accent font-semibold">${data.availableBorrowsBase}</div>
           </div>
+          <div className="text">
+            <div className="text-sm text-gray-400">
+              {t("LendingProfileLTV")}
+              <span className="tooltip tooltip-info" data-tip={t("LendingProfileLTVTooltip")}>
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+              </span>
+            </div>
+            <div className="text-lg text-accent font-semibold">{data.ltv}</div>
+          </div>
         </div>
       </div>
     </header>

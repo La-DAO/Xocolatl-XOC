@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import useAccountAddress from "@/hooks/useAccount";
 import useBorrow from "@/hooks/useBorrow";
+import { useLendingStore } from "@/stores/lending-store";
 import { ReserveData } from "@/types/types";
 import { toWeiConverter } from "@/utils/toWeiConverter";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
-import { useChainId } from "wagmi";
+import { useChainId, useWaitForTransactionReceipt } from "wagmi";
 import { useTranslation } from "~~/app/context/LanguageContext";
 import { getBlockExplorerUrl } from "~~/app/utils/utils";
 
@@ -44,10 +45,129 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   // Hook for handling borrow transactions
   const { handleBorrow, isError: borrowError, error, borrowHash } = useBorrow();
 
+  // Transaction confirmation tracking for borrow
+  const {
+    isLoading: isBorrowConfirming,
+    isSuccess: isBorrowConfirmed,
+    data: transactionReceipt,
+  } = useWaitForTransactionReceipt({
+    hash: borrowHash,
+  });
+
   // Fetch the user's wallet address
   const { address: walletAddress } = useAccountAddress();
 
+  // Fetch user account data for health factor and LTV
+  const { userAccountData, refreshComponents } = useLendingStore();
+
   const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${borrowHash}`;
+
+  // Helper function to check if value is max uint256
+  const isMaxUint256 = (value: any) => {
+    const maxUintStr = "115792089237316195423570985008687907853269984665640564039457584007913129639935";
+    return (
+      value === maxUintStr ||
+      value === "1.157920892373162e+59" ||
+      value === Number(maxUintStr) ||
+      value === Number("1.157920892373162e+59")
+    );
+  };
+
+  // Calculate current health factor and LTV
+  const currentHealthFactor = userAccountData?.healthFactor
+    ? isMaxUint256(userAccountData.healthFactor)
+      ? "∞"
+      : Number(userAccountData.healthFactor) / 1e18
+    : "∞";
+
+  const currentLTV = userAccountData?.ltv ? (Number(userAccountData.ltv) * 1e15).toFixed(2) : "0.00";
+
+  // Calculate simulated values based on borrow amount
+  const calculateSimulatedValues = (borrowAmount: number) => {
+    if (!borrowAmount || borrowAmount <= 0 || !userAccountData) {
+      return {
+        newHealthFactor: currentHealthFactor,
+        newLTV: currentLTV,
+      };
+    }
+
+    // Simple simulation - replace with actual calculation logic
+    const currentTotalDebt = Number(userAccountData.totalDebtBase) * 1e10;
+    const currentTotalCollateral = Number(userAccountData.totalCollateralBase) * 1e10;
+    const newTotalDebt = currentTotalDebt + borrowAmount;
+
+    // Calculate new LTV (simplified)
+    const newLTV = currentTotalCollateral > 0 ? (newTotalDebt / currentTotalCollateral) * 100 : 0;
+
+    // Calculate new health factor (simplified)
+    let newHealthFactor = currentHealthFactor;
+    if (typeof currentHealthFactor === "number" && currentTotalDebt > 0) {
+      newHealthFactor = currentHealthFactor * (currentTotalDebt / newTotalDebt);
+    }
+
+    return {
+      newHealthFactor: typeof newHealthFactor === "number" ? Math.max(newHealthFactor, 1.0) : newHealthFactor,
+      newLTV: Math.min(newLTV, 95).toFixed(2),
+    };
+  };
+
+  const simulatedValues = calculateSimulatedValues(Number.parseFloat(amount) || 0);
+  console.log("simulatedValues:", simulatedValues);
+
+  // Helper functions for color coding
+  const getHealthFactorColor = (ratio: number | string) => {
+    if (ratio === "∞" || isMaxUint256(ratio)) return "text-green-600";
+    const numRatio = typeof ratio === "string" ? parseFloat(ratio) : ratio;
+    if (numRatio >= 2) return "text-green-600";
+    if (numRatio >= 1.5) return "text-yellow-600";
+    return "text-red-600";
+  };
+  console.log("getHealthFactorColor function:", getHealthFactorColor);
+
+  const getHealthFactorProgress = (ratio: number | string) => {
+    if (ratio === "∞" || isMaxUint256(ratio)) return 100;
+    const numRatio = typeof ratio === "string" ? parseFloat(ratio) : ratio;
+    return Math.min((numRatio / 3) * 100, 100);
+  };
+  console.log("getHealthFactorProgress function:", getHealthFactorProgress);
+
+  const getLTVColor = (ltv: number | string) => {
+    const numLTV = typeof ltv === "string" ? parseFloat(ltv) : ltv;
+    if (numLTV <= 50) return "text-green-600";
+    if (numLTV <= 75) return "text-yellow-600";
+    return "text-red-600";
+  };
+  console.log("getLTVColor function:", getLTVColor);
+
+  const getProgressBarColor = (value: number | string, type: "health" | "ltv") => {
+    if (type === "health") {
+      if (value === "∞" || isMaxUint256(value)) return "bg-green-500";
+      const numValue = typeof value === "string" ? parseFloat(value) : value;
+      if (numValue >= 2) return "bg-green-500";
+      if (numValue >= 1.5) return "bg-yellow-500";
+      return "bg-red-500";
+    } else {
+      const numValue = typeof value === "string" ? parseFloat(value) : value;
+      if (numValue <= 50) return "bg-green-500";
+      if (numValue <= 75) return "bg-yellow-500";
+      return "bg-red-500";
+    }
+  };
+  console.log("getProgressBarColor function:", getProgressBarColor);
+
+  // Helper function to format health factor display
+  const formatHealthFactorDisplay = (healthFactor: number | string) => {
+    if (healthFactor === "∞" || isMaxUint256(healthFactor)) {
+      return (
+        <span className="flex items-center gap-1">
+          <span>∞</span>
+          <span className="text-green-600">✓</span>
+        </span>
+      );
+    }
+    return typeof healthFactor === "number" ? healthFactor.toFixed(2) : healthFactor;
+  };
+  console.log("formatHealthFactorDisplay function:", formatHealthFactorDisplay);
 
   useEffect(() => {
     validateAmount(amount);
@@ -64,6 +184,19 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
       setData(borrowHash);
     }
   }, [borrowError, borrowHash, error]);
+
+  // Handle transaction confirmation and refresh store data
+  useEffect(() => {
+    if (isBorrowConfirmed && transactionReceipt) {
+      // Transaction confirmed successfully with receipt, wait a bit then refresh all lending data
+      const timer = setTimeout(() => {
+        refreshComponents();
+        console.log("Borrow transaction confirmed with receipt, refreshing lending store data", transactionReceipt);
+      }, 2000); // Wait 2 seconds to ensure blockchain state is updated
+
+      return () => clearTimeout(timer);
+    }
+  }, [isBorrowConfirmed, transactionReceipt, refreshComponents]);
 
   /**
    * Validates the input amount for borrow.
@@ -213,6 +346,95 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                 </div>
                 {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
               </div>
+
+              {/* Health Factor & LTV Visualization */}
+              {/* <div className="grid grid-cols-2 gap-3">
+                <div className="container-gray-borders flex flex-col gap-2">
+                  <div className="flex items-center gap-1">
+                    <label className="font-bold text-sm">Health Factor</label>
+                    <div className="group relative">
+                      <FontAwesomeIcon icon={faInfoCircle} className="text-xs text-gray-400" />
+                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                        Higher is safer. Below 1.0 risks liquidation
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-600">Current</span>
+                      <span className={`font-bold ${getHealthFactorColor(currentHealthFactor)}`}>
+                        {formatHealthFactorDisplay(currentHealthFactor)}
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className={`h-2 rounded-full ${getProgressBarColor(currentHealthFactor, "health")}`}
+                        style={{ width: `${getHealthFactorProgress(currentHealthFactor)}%` }}
+                      ></div>
+                    </div>
+                    {Number.parseFloat(amount) > 0 && (
+                      <>
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs text-gray-600">After</span>
+                          <span className={`font-bold ${getHealthFactorColor(simulatedValues.newHealthFactor)}`}>
+                            {formatHealthFactorDisplay(simulatedValues.newHealthFactor)}
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className={`h-2 rounded-full ${getProgressBarColor(
+                              simulatedValues.newHealthFactor,
+                              "health",
+                            )}`}
+                            style={{ width: `${getHealthFactorProgress(simulatedValues.newHealthFactor)}%` }}
+                          ></div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                <div className="container-gray-borders flex flex-col gap-2">
+                  <div className="flex items-center gap-1">
+                    <label className="font-bold text-sm">LTV</label>
+                    <div className="group relative">
+                      <FontAwesomeIcon icon={faInfoCircle} className="text-xs text-gray-400" />
+                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                        Loan-to-Value ratio. Lower is safer
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-600">Current</span>
+                      <span className={`font-bold ${getLTVColor(currentLTV)}`}>{currentLTV}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className={`h-2 rounded-full ${getProgressBarColor(currentLTV, "ltv")}`}
+                        style={{ width: `${Math.min(parseFloat(currentLTV), 100)}%` }}
+                      ></div>
+                    </div>
+                    {Number.parseFloat(amount) > 0 && (
+                      <>
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs text-gray-600">After</span>
+                          <span className={`font-bold ${getLTVColor(simulatedValues.newLTV)}`}>
+                            {simulatedValues.newLTV}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className={`h-2 rounded-full ${getProgressBarColor(simulatedValues.newLTV, "ltv")}`}
+                            style={{ width: `${Math.min(parseFloat(simulatedValues.newLTV), 100)}%` }}
+                          ></div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div> */}
+
               <div className="container-gray-borders flex flex-col gap-2">
                 <label className="font-bold">{t("LendingBorrowModalTransactionOverview")}</label>
                 <div className="flex justify-between items-center text-sm">
@@ -304,8 +526,25 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   width={250}
                   height={250}
                 />
-                <h2 className="text-base sm:text-lg">All done!</h2>
-                <p className="text-xs sm:text-sm">Deposit transaction successful</p>
+                {isBorrowConfirming ? (
+                  <>
+                    <h2 className="text-base sm:text-lg">Transaction Submitted!</h2>
+                    <p className="text-xs sm:text-sm flex items-center justify-center gap-2">
+                      <span className="animate-spin">⏳</span>
+                      Waiting for confirmation...
+                    </p>
+                  </>
+                ) : isBorrowConfirmed ? (
+                  <>
+                    <h2 className="text-base sm:text-lg">Borrow Successful!</h2>
+                    <p className="text-xs sm:text-sm">Your borrow transaction has been confirmed on the blockchain.</p>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="text-base sm:text-lg">Transaction Submitted!</h2>
+                    <p className="text-xs sm:text-sm">Your borrow transaction has been submitted to the network.</p>
+                  </>
+                )}
                 <div className="pb-3"></div>
                 {blockExplorerUrl && (
                   <a href={blockExplorerUrl} target="_blank" rel="noreferrer" className="block link pb-3">
