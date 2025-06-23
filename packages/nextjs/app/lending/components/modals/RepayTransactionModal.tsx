@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ERC20ABI } from "@/app/components/abis/erc20";
 import CONFIG from "@/config";
 import useAccountAddress from "@/hooks/useAccount";
+import { useLendingStore } from "@/stores/lending-store";
 import { ReserveData } from "@/types/types";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -66,6 +67,18 @@ const RepayTransactionModal: React.FC<RepayModalProps> = ({ isOpen, onClose, res
 
   const { handleRepay, isError: repayError, error, repayHash, isRepayPending } = useRepay();
 
+  // Transaction confirmation tracking for repay
+  const {
+    isLoading: isRepayConfirming,
+    isSuccess: isRepayConfirmed,
+    data: transactionReceipt,
+  } = useWaitForTransactionReceipt({
+    hash: repayHash,
+  });
+
+  // Store for refreshing user account data
+  const { refreshComponents } = useLendingStore();
+
   const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${repayHash}`;
 
   // Format on-chain allowance
@@ -123,6 +136,19 @@ const RepayTransactionModal: React.FC<RepayModalProps> = ({ isOpen, onClose, res
       setShowSuccessIcon(true);
     }
   }, [repayError, repayHash, error, t]);
+
+  // Handle transaction confirmation and refresh store data
+  useEffect(() => {
+    if (isRepayConfirmed && transactionReceipt) {
+      // Transaction confirmed successfully with receipt, wait a bit then refresh all lending data
+      const timer = setTimeout(() => {
+        refreshComponents();
+        console.log("Repay transaction confirmed with receipt, refreshing lending store data", transactionReceipt);
+      }, 2000); // Wait 2 seconds to ensure blockchain state is updated
+
+      return () => clearTimeout(timer);
+    }
+  }, [isRepayConfirmed, transactionReceipt, refreshComponents]);
 
   // Handlers
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -286,8 +312,25 @@ const RepayTransactionModal: React.FC<RepayModalProps> = ({ isOpen, onClose, res
                   width={250}
                   height={250}
                 />
-                <h2 className="text-base sm:text-lg">{t("LendingRepayModalSuccessTitle")}</h2>
-                <p className="text-xs sm:text-sm">{t("LendingRepayModalSuccessMessage")}</p>
+                {isRepayConfirming ? (
+                  <>
+                    <h2 className="text-base sm:text-lg">Transaction Submitted!</h2>
+                    <p className="text-xs sm:text-sm flex items-center justify-center gap-2">
+                      <span className="animate-spin">⏳</span>
+                      Waiting for confirmation...
+                    </p>
+                  </>
+                ) : isRepayConfirmed ? (
+                  <>
+                    <h2 className="text-base sm:text-lg">{t("LendingRepayModalSuccessTitle")}</h2>
+                    <p className="text-xs sm:text-sm">{t("LendingRepayModalSuccessMessage")}</p>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="text-base sm:text-lg">Transaction Submitted!</h2>
+                    <p className="text-xs sm:text-sm">Your repay transaction has been submitted to the network.</p>
+                  </>
+                )}
                 <div className="pb-3"></div>
                 {blockExplorerUrl && (
                   <a href={blockExplorerUrl} target="_blank" rel="noreferrer" className="block link pb-3">
