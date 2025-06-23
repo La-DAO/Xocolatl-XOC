@@ -6,6 +6,29 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useChainId } from "wagmi";
 
+// Helper function to check if value is max uint256 (same as in lending store)
+const isMaxUint256 = (value: any) => {
+  const maxUintStr = "115792089237316195423570985008687907853269984665640564039457584007913129639935";
+  return (
+    value === maxUintStr ||
+    value === "1.157920892373162e+59" ||
+    value === Number(maxUintStr) ||
+    value === Number("1.157920892373162e+59")
+  );
+};
+
+// Helper function to format health factor display (same as in BorrowTransactionModal)
+const formatHealthFactorDisplay = (healthFactor: number | string) => {
+  if (healthFactor === "∞" || isMaxUint256(healthFactor)) {
+    return (
+      <span className="flex items-center gap-1">
+        <span>∞</span>
+      </span>
+    );
+  }
+  return typeof healthFactor === "number" ? healthFactor.toFixed(2) : healthFactor;
+};
+
 interface ProfileStatsProps {
   balance: number;
   ltv: number;
@@ -28,7 +51,7 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
   const data = {
     netWorth: balance.toFixed(2),
     ltv: ltv,
-    healthFactor: typeof healthFactor === "number" ? healthFactor.toFixed(2) : healthFactor,
+    healthFactor: formatHealthFactorDisplay(healthFactor),
     totalCollateralBase: totalCollateralBase,
     totalDebtBase: totalDebtBase,
     availableBorrowsBase: availableBorrowsBase,
@@ -80,7 +103,7 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
               </span>
             </div>
-            <div className="text-lg text-accent font-semibold">${totalDebtBase}</div>
+            <div className="text-lg text-accent font-semibold">${data.totalDebtBase}</div>
           </div>
           {/* <div className="text">
             <div className="text-sm text-gray-400">LTV</div>
@@ -103,15 +126,6 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
               </span>
             </div>
             <div className="text-lg text-accent font-semibold">${data.availableBorrowsBase}</div>
-          </div>
-          <div className="text">
-            <div className="text-sm text-gray-400">
-              {t("LendingProfileLTV")}
-              <span className="tooltip tooltip-info" data-tip={t("LendingProfileLTVTooltip")}>
-                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
-              </span>
-            </div>
-            <div className="text-lg text-accent font-semibold">{data.ltv}</div>
           </div>
         </div>
       </div>
