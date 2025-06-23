@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import useAccountAddress from "@/hooks/useAccount";
+import { useLendingStore } from "@/stores/lending-store";
 import { ReserveData } from "@/types/types";
 import { toWeiConverter } from "@/utils/toWeiConverter";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
-import { useChainId } from "wagmi";
+import { useChainId, useWaitForTransactionReceipt } from "wagmi";
 import { useTranslation } from "~~/app/context/LanguageContext";
 import { getBlockExplorerUrl } from "~~/app/utils/utils";
 import useWithdraw from "~~/hooks/useWithdraw";
@@ -40,6 +41,18 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
   const { handleWithdraw, isError: withdrawError, error, withdrawHash } = useWithdraw();
   const { address: walletAddress } = useAccountAddress();
 
+  // Transaction confirmation tracking for withdraw
+  const {
+    isLoading: isWithdrawConfirming,
+    isSuccess: isWithdrawConfirmed,
+    data: transactionReceipt,
+  } = useWaitForTransactionReceipt({
+    hash: withdrawHash,
+  });
+
+  // Store for refreshing user account data
+  const { refreshComponents } = useLendingStore();
+
   const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${withdrawHash}`;
 
   useEffect(() => {
@@ -56,6 +69,19 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
       setData(withdrawHash);
     }
   }, [withdrawError, withdrawHash, error]);
+
+  // Handle transaction confirmation and refresh store data
+  useEffect(() => {
+    if (isWithdrawConfirmed && transactionReceipt) {
+      // Transaction confirmed successfully with receipt, wait a bit then refresh all lending data
+      const timer = setTimeout(() => {
+        refreshComponents();
+        console.log("Withdraw transaction confirmed with receipt, refreshing lending store data", transactionReceipt);
+      }, 2000); // Wait 2 seconds to ensure blockchain state is updated
+
+      return () => clearTimeout(timer);
+    }
+  }, [isWithdrawConfirmed, transactionReceipt, refreshComponents]);
 
   const validateAmount = (value: string) => {
     const numValue = parseFloat(value);
@@ -229,8 +255,25 @@ const WithdrawTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reser
                   width={250}
                   height={250}
                 />
-                <h2 className="text-base sm:text-lg">{t("LendingWithdrawModalSuccessTitle")}</h2>
-                <p className="text-xs sm:text-sm">{t("LendingWithdrawModalSuccessMessage")}</p>
+                {isWithdrawConfirming ? (
+                  <>
+                    <h2 className="text-base sm:text-lg">Transaction Submitted!</h2>
+                    <p className="text-xs sm:text-sm flex items-center justify-center gap-2">
+                      <span className="animate-spin">⏳</span>
+                      Waiting for confirmation...
+                    </p>
+                  </>
+                ) : isWithdrawConfirmed ? (
+                  <>
+                    <h2 className="text-base sm:text-lg">{t("LendingWithdrawModalSuccessTitle")}</h2>
+                    <p className="text-xs sm:text-sm">{t("LendingWithdrawModalSuccessMessage")}</p>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="text-base sm:text-lg">Transaction Submitted!</h2>
+                    <p className="text-xs sm:text-sm">Your withdraw transaction has been submitted to the network.</p>
+                  </>
+                )}
                 <div className="pb-3"></div>
                 {blockExplorerUrl && (
                   <a href={blockExplorerUrl} target="_blank" rel="noreferrer" className="block link pb-3">
