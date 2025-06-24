@@ -42,7 +42,7 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
     const fixedSymbols = ["USDC", "XOC", "MXNe"];
     const isStableOrFiat = fixedSymbols.includes(symbol);
 
-    return `${value.toLocaleString(undefined, {
+    return `${value.toLocaleString("en-US", {
       minimumFractionDigits: isStableOrFiat ? 2 : 2,
       maximumFractionDigits: isStableOrFiat ? 2 : 4,
     })} ${symbol}`;

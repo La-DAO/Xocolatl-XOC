@@ -3,9 +3,11 @@ import WalletBalance from "./BalanceOf";
 import WithdrawModal from "./modals/WithdrawTransactionModal";
 import useAccountAddress from "@/hooks/useAccount";
 import { useCollateralTotalBalance } from "@/hooks/useCollateralTotalBalance";
+import { useEarningsSync } from "@/hooks/useEarningsSync";
 import useGetReservesData from "@/hooks/useGetReservesData";
 import useGetUserReservesData from "@/hooks/useGetUserReservesData";
 import { useTotalBalance } from "@/hooks/useTotalBalance";
+import { useLendingStore } from "@/stores/lending-store";
 import { Address } from "viem";
 import { useTranslation } from "~~/app/context/LanguageContext";
 import { useTotalAPY } from "~~/hooks/useTotalAPY";
@@ -16,17 +18,17 @@ interface YourSuppliesProps {
 }
 
 const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSuppliesTotalBalance }) => {
+  const { t } = useTranslation();
   const { reservesData, isLoading: isLoadingReserves, isError: isErrorReserves } = useGetReservesData();
   const { userReservesData, isLoading: isLoadingUserReserves, isError: isErrorUserReserves } = useGetUserReservesData();
   const { address: walletAddress } = useAccountAddress();
+  const { earningsData } = useLendingStore();
 
   const [balances, setBalances] = useState<Record<string, string>>({});
   const [reservesWithBalances, setReservesWithBalances] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReserve, setSelectedReserve] = useState<any>(null);
   const [selectedBalance, setSelectedBalance] = useState("");
-
-  const { t } = useTranslation();
 
   const handleBalanceChange = useCallback((tokenAddress: Address, balance: string) => {
     setBalances(prevBalances => ({ ...prevBalances, [tokenAddress]: balance }));
@@ -60,6 +62,9 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
     }
   }, [reservesData, userReservesData, balances, setAllBalancesZero, setSuppliesTotalBalance]);
 
+  // Track earnings for all supplied assets
+  useEarningsSync({ reservesWithBalances });
+
   const totalBalance = useTotalBalance(reservesWithBalances);
   const totalAPY = useTotalAPY(reservesWithBalances);
   const collateralTotalBalance = useCollateralTotalBalance(reservesWithBalances);
@@ -76,6 +81,11 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
     setSelectedReserve(reserve);
     setSelectedBalance(balance);
     setIsModalOpen(true);
+  };
+
+  // Helper function to get earnings for a specific reserve
+  const getEarningsForReserve = (reserveAddress: string) => {
+    return earningsData.find(earning => earning.reserveAddress === reserveAddress);
   };
 
   return (
@@ -100,71 +110,89 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
         </div>
       </div>
 
-      <div
-        className={`supplies-container mt-4 ${
-          reservesWithBalances.every(reserve => parseFloat(reserve.balance) === 0) ? "hidden" : ""
-        }`}
-      >
+      <div className="supplies-container mt-4">
         <div className="table-header supplies-header py-3 flex justify-between tracking-wider">
-          <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn1")}</div>
-          <div className="supplies-header-item w-24 hidden sm:block">{t("LendingYourSuppliesColumn2")}</div>
-          <div className="supplies-header-item w-24 hidden sm:block">{t("LendingYourSuppliesColumn3")}</div>
-          <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn5")}</div>
+          <div className="supplies-header-item w-16">{t("LendingYourSuppliesColumn1")}</div>
+          <div className="supplies-header-item w-20">{t("LendingYourSuppliesColumn2")}</div>
+          <div className="supplies-header-item w-16 hidden sm:block">{t("LendingYourSuppliesColumn3")}</div>
+          <div className="supplies-header-item w-18 hidden sm:block">{t("LendingYourSuppliesColumn4")}</div>
+          <div className="supplies-header-item w-20 hidden md:block">Projected Annual Earnings</div>
+          <div className="supplies-header-item w-16">{t("LendingYourSuppliesColumn5")}</div>
         </div>
+
         {reservesWithBalances.map((reserve, index) => {
           const balance = reserve.balance;
-          const isButtonDisabled = parseFloat(balance) === 0;
+          const isButtonDisabled = !balance || parseFloat(balance) === 0;
+          const earnings = getEarningsForReserve(reserve.underlyingAsset as string);
 
           return (
-            <div
-              key={index}
-              className={`table-content table-border-top supplies-row flex justify-between py-3 ${
-                isButtonDisabled ? "hidden" : "block"
-              }`}
-            >
-              <div className="supplies-row-item w-24">
-                <p>{reserve.symbol}</p>
-              </div>
-              <div className="supplies-row-item w-24 hidden sm:block">
-                <p>
-                  <WalletBalance
-                    tokenAddress={reserve.aTokenAddress as Address}
-                    walletAddress={walletAddress as Address}
-                    onBalanceChange={handleBalanceChange}
-                  />
-                </p>
-              </div>
-              <div className="supplies-row-item w-24 hidden sm:block">
-                <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
-              </div>
-              <div className="supplies-row-item w-24">
-                <button
-                  className={`${isButtonDisabled ? "disabled-btn" : "primary-btn"}`}
-                  disabled={isButtonDisabled}
-                  onClick={() => handleWithdrawClick(reserve, balance)}
-                >
-                  {t("LendingWithdrawModalButton")}
-                </button>
+            <div key={index}>
+              <div className="table-content table-border-top asset-row flex justify-between py-3">
+                <div className="asset-row-item w-16 h-fit">
+                  <p>{reserve.symbol}</p>
+                </div>
+                <div className="asset-row-item w-16 h-fit">
+                  <p>
+                    <WalletBalance
+                      tokenAddress={reserve.aTokenAddress as Address}
+                      walletAddress={walletAddress as Address}
+                      onBalanceChange={handleBalanceChange}
+                    />
+                  </p>
+                </div>
+                <div className="asset-row-item w-16 h-fit hidden sm:block">
+                  <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
+                </div>
+                <div className="asset-row-item h-fit hidden sm:block">
+                  <div>
+                    {reserve.usageAsCollateralEnabled ? (
+                      <span className="text-xl text-success font-bold">&#10003;</span>
+                    ) : (
+                      <span className="text-xl text-error font-bold">&#10005;</span>
+                    )}
+                  </div>
+                </div>
+                <div className="asset-row-item w-24 h-fit hidden md:block">
+                  {earnings ? (
+                    <div className="text-right">
+                      <div className="text-success font-medium text-sm">${earnings.earningsUSD}</div>
+                      <div className="text-xs text-gray-500">
+                        {earnings.estimatedEarnings} {reserve.symbol}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-gray-400 text-sm">-</div>
+                  )}
+                </div>
+                <div className="asset-row-item w-16 h-fit mr-2">
+                  <button
+                    onClick={() => handleWithdrawClick(reserve, balance)}
+                    disabled={isButtonDisabled}
+                    className={`${isButtonDisabled ? "disabled-btn" : "primary-btn"}`}
+                  >
+                    {t("LendingWithdrawModalTitle")}
+                  </button>
+                </div>
               </div>
             </div>
           );
         })}
       </div>
 
-      <p
-        className={`text-left text-gray-500 ${
-          reservesWithBalances.every(reserve => parseFloat(reserve.balance) === 0) ? "" : "hidden"
-        }`}
-      >
-        Nothing supplied yet.
-      </p>
+      {/* Earnings info note */}
+      <div className="mt-3 p-2 bg-base-100 rounded text-xs text-primary dark:text-white">
+        Note: Projected annual earnings based on current balance and APY rates. These are estimates of what you would
+        earn if you maintain the same balance for one year.
+      </div>
 
-      <WithdrawModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        reserve={selectedReserve}
-        balance={selectedBalance}
-      />
+      {isModalOpen && selectedReserve && (
+        <WithdrawModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          reserve={selectedReserve}
+          balance={selectedBalance}
+        />
+      )}
     </div>
   );
 };

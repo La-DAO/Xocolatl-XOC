@@ -166,7 +166,11 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
       // Transaction confirmed successfully with receipt, wait a bit then refresh all lending data
       const timer = setTimeout(() => {
         refreshComponents();
-        console.log("Supply transaction confirmed with receipt, refreshing lending store data", transactionReceipt);
+        // Also refresh earnings data to start tracking the newly supplied assets
+        console.log(
+          "Supply transaction confirmed with receipt, refreshing lending store data and earnings",
+          transactionReceipt,
+        );
       }, 2000); // Wait 2 seconds to ensure blockchain state is updated
 
       return () => clearTimeout(timer);

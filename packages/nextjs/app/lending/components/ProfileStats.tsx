@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { useTranslation } from "@/app/context/LanguageContext";
 import BaseLogo from "@/public/Base-Logo.jpg";
+import { useLendingStore } from "@/stores/lending-store";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useChainId } from "wagmi";
@@ -48,6 +49,8 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
 }) => {
   const { t } = useTranslation();
   const chainId = useChainId();
+  const { totalEarningsUSD } = useLendingStore();
+
   const data = {
     netWorth: balance.toFixed(2),
     ltv: ltv,
@@ -55,6 +58,7 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
     totalCollateralBase: totalCollateralBase,
     totalDebtBase: totalDebtBase,
     availableBorrowsBase: availableBorrowsBase,
+    totalEarnings: totalEarningsUSD,
   };
 
   // Function to get network error message based on chainId
@@ -126,6 +130,15 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
               </span>
             </div>
             <div className="text-lg text-accent font-semibold">${data.availableBorrowsBase}</div>
+          </div>
+          <div className="text">
+            <div className="text-sm text-gray-400">
+              {t("LendingProfileProjectedEarnings")}
+              <span className="tooltip tooltip-info" data-tip={t("LendingProfileProjectedEarningsTooltip")}>
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
+              </span>
+            </div>
+            <div className="text-lg text-success font-semibold">${data.totalEarnings}</div>
           </div>
         </div>
       </div>
