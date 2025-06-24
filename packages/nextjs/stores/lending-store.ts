@@ -15,6 +15,17 @@ const isMaxUint256 = (value: any) => {
   );
 };
 
+// Earnings data interface
+interface EarningsData {
+  reserveAddress: string;
+  symbol: string;
+  currentBalance: string;
+  estimatedEarnings: string;
+  earningsUSD: string;
+  apy: string;
+  lastUpdated: number;
+}
+
 // extiende tu tipo LendingStore:
 type LendingStore = {
   // ya existentes
@@ -40,6 +51,13 @@ type LendingStore = {
   formattedTotalDebtBase: string;
   formattedAvailableBorrowsBase: string;
   updateFormattedData: () => void;
+
+  // Earnings tracking
+  earningsData: EarningsData[];
+  totalEarningsUSD: string;
+  setEarningsData: (data: EarningsData[]) => void;
+  setTotalEarningsUSD: (total: string) => void;
+  refreshEarnings: () => void;
 };
 
 export const useLendingStore = create<LendingStore>((set, get) => ({
@@ -109,6 +127,16 @@ export const useLendingStore = create<LendingStore>((set, get) => ({
       formattedTotalDebtBase,
       formattedAvailableBorrowsBase,
     });
+  },
+
+  // Earnings tracking state
+  earningsData: [],
+  totalEarningsUSD: "0",
+  setEarningsData: (data: EarningsData[]) => set({ earningsData: data }),
+  setTotalEarningsUSD: (total: string) => set({ totalEarningsUSD: total }),
+  refreshEarnings: () => {
+    // This will trigger a refresh of earnings data
+    set(state => ({ refreshKey: state.refreshKey + 1 }));
   },
 }));
 
