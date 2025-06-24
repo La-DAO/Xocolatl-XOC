@@ -17,6 +17,36 @@ interface UseEarningsTrackerProps {
 }
 
 /**
+ * Helper function to get USD price for different token types
+ */
+const getUSDPrice = (reserve: ReserveData & { balance: string }): number => {
+  const symbol = reserve.symbol;
+
+  // USDC is pegged to USD (1:1)
+  if (symbol === "USDC") {
+    return 1.0;
+  }
+
+  // Mexican stablecoins - these are pegged to MXN, not USD
+  // We need to convert MXN to USD
+  if (symbol === "XOC" || symbol === "MXNe") {
+    // For now, using a rough MXN/USD rate (you might want to fetch this dynamically)
+    // As of 2024, 1 USD ≈ 17-18 MXN (this should be fetched from an API)
+    const mxnToUsdRate = 1 / 17.5; // Approximate rate
+    return mxnToUsdRate;
+  }
+
+  // For crypto assets (WETH, cbETH), use the price from the reserve data
+  // This comes from the oracle and is already in USD
+  if (symbol === "WETH" || symbol === "cbETH") {
+    return Number(reserve.priceInMarketReferenceCurrency) / 1e8;
+  }
+
+  // Default fallback - use the reserve's price data
+  return Number(reserve.priceInMarketReferenceCurrency) / 1e8;
+};
+
+/**
  * Custom hook to track estimated earnings for each supplied asset
  * Calculates earnings based on current aToken balance and APY rate
  * This provides an estimate of earnings since the assets were supplied
@@ -43,8 +73,8 @@ export const useEarningsTracker = ({ reservesWithBalances }: UseEarningsTrackerP
           // Calculate APY from liquidity rate
           const apy = Number(reserve.liquidityRate) / 1e25;
 
-          // Get price in USD
-          const priceInUSD = Number(reserve.priceInMarketReferenceCurrency) / 1e8;
+          // Get proper USD price for this specific token
+          const priceInUSD = getUSDPrice(reserve);
 
           // Calculate estimated earnings
           // For a more accurate calculation, we would need to track:

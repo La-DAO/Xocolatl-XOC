@@ -152,6 +152,8 @@
   "LendingProfileHealthFactorTooltip": "Este es el factor de salud de tu cuenta",
   "LendingProfileAvailableBorrows": "Préstamos Disponibles",
   "LendingProfileAvailableBorrowsTooltip": "Este es el valor total de todos tus préstamos disponibles en USD",
+  "LendingProfileProjectedEarnings": "Ganancias Anuales Proyectadas",
+  "LendingProfileProjectedEarningsTooltip": "Ganancias proyectadas de todos tus activos depositados a 12 meses",
   "LendingRefreshButton": "Actualizar la data",
   "LendingYourSuppliesTitle": "Tus depositos",
   "LendingYourSuppliesBalanceTooltip": "Este es el balance en USD de todos tus activos depositados",

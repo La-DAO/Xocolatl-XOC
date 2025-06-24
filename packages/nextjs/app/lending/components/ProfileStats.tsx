@@ -133,8 +133,8 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
           </div>
           <div className="text">
             <div className="text-sm text-gray-400">
-              {t("LendingProfileTotalEarnings")}
-              <span className="tooltip tooltip-info" data-tip={t("LendingProfileTotalEarningsTooltip")}>
+              {t("LendingProfileProjectedEarnings")}
+              <span className="tooltip tooltip-info" data-tip={t("LendingProfileProjectedEarningsTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
               </span>
             </div>

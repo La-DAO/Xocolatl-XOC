@@ -116,7 +116,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
           <div className="supplies-header-item w-20">{t("LendingYourSuppliesColumn2")}</div>
           <div className="supplies-header-item w-16 hidden sm:block">{t("LendingYourSuppliesColumn3")}</div>
           <div className="supplies-header-item w-18 hidden sm:block">{t("LendingYourSuppliesColumn4")}</div>
-          <div className="supplies-header-item w-20 hidden md:block">{t("LendingYourSuppliesEarnings")}</div>
+          <div className="supplies-header-item w-20 hidden md:block">Projected Annual Earnings</div>
           <div className="supplies-header-item w-16">{t("LendingYourSuppliesColumn5")}</div>
         </div>
 
@@ -126,51 +126,53 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
           const earnings = getEarningsForReserve(reserve.underlyingAsset as string);
 
           return (
-            <div key={index} className="table-content table-border-top asset-row flex justify-between py-3">
-              <div className="asset-row-item w-16 h-fit">
-                <p>{reserve.symbol}</p>
-              </div>
-              <div className="asset-row-item w-16 h-fit">
-                <p>
-                  <WalletBalance
-                    tokenAddress={reserve.aTokenAddress as Address}
-                    walletAddress={walletAddress as Address}
-                    onBalanceChange={handleBalanceChange}
-                  />
-                </p>
-              </div>
-              <div className="asset-row-item w-16 h-fit hidden sm:block">
-                <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
-              </div>
-              <div className="asset-row-item h-fit hidden sm:block">
-                <div>
-                  {reserve.usageAsCollateralEnabled ? (
-                    <span className="text-xl text-success font-bold">&#10003;</span>
+            <div key={index}>
+              <div className="table-content table-border-top asset-row flex justify-between py-3">
+                <div className="asset-row-item w-16 h-fit">
+                  <p>{reserve.symbol}</p>
+                </div>
+                <div className="asset-row-item w-16 h-fit">
+                  <p>
+                    <WalletBalance
+                      tokenAddress={reserve.aTokenAddress as Address}
+                      walletAddress={walletAddress as Address}
+                      onBalanceChange={handleBalanceChange}
+                    />
+                  </p>
+                </div>
+                <div className="asset-row-item w-16 h-fit hidden sm:block">
+                  <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
+                </div>
+                <div className="asset-row-item h-fit hidden sm:block">
+                  <div>
+                    {reserve.usageAsCollateralEnabled ? (
+                      <span className="text-xl text-success font-bold">&#10003;</span>
+                    ) : (
+                      <span className="text-xl text-error font-bold">&#10005;</span>
+                    )}
+                  </div>
+                </div>
+                <div className="asset-row-item w-24 h-fit hidden md:block">
+                  {earnings ? (
+                    <div className="text-right">
+                      <div className="text-success font-medium text-sm">${earnings.earningsUSD}</div>
+                      <div className="text-xs text-gray-500">
+                        {earnings.estimatedEarnings} {reserve.symbol}
+                      </div>
+                    </div>
                   ) : (
-                    <span className="text-xl text-error font-bold">&#10005;</span>
+                    <div className="text-gray-400 text-sm">-</div>
                   )}
                 </div>
-              </div>
-              <div className="asset-row-item w-24 h-fit hidden md:block">
-                {earnings ? (
-                  <div className="text-right">
-                    <div className="text-success font-medium text-sm">${earnings.earningsUSD}</div>
-                    <div className="text-xs text-gray-500">
-                      {earnings.estimatedEarnings} {reserve.symbol}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-gray-400 text-sm">-</div>
-                )}
-              </div>
-              <div className="asset-row-item w-16 h-fit mr-2">
-                <button
-                  onClick={() => handleWithdrawClick(reserve, balance)}
-                  disabled={isButtonDisabled}
-                  className={`${isButtonDisabled ? "disabled-btn" : "primary-btn"}`}
-                >
-                  {t("LendingWithdrawModalTitle")}
-                </button>
+                <div className="asset-row-item w-16 h-fit mr-2">
+                  <button
+                    onClick={() => handleWithdrawClick(reserve, balance)}
+                    disabled={isButtonDisabled}
+                    className={`${isButtonDisabled ? "disabled-btn" : "primary-btn"}`}
+                  >
+                    {t("LendingWithdrawModalTitle")}
+                  </button>
+                </div>
               </div>
             </div>
           );
@@ -179,7 +181,8 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
 
       {/* Earnings info note */}
       <div className="mt-3 p-2 bg-base-100 rounded text-xs text-primary dark:text-white">
-        {t("LendingYourSuppliesEarningsNote")}
+        Note: Projected annual earnings based on current balance and APY rates. These are estimates of what you would
+        earn if you maintain the same balance for one year.
       </div>
 
       {isModalOpen && selectedReserve && (
