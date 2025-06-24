@@ -112,10 +112,10 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
 
       <div className="supplies-container mt-4">
         <div className="table-header supplies-header py-3 flex justify-between tracking-wider">
-          <div className="supplies-header-item w-20">{t("LendingYourSuppliesColumn1")}</div>
+          <div className="supplies-header-item w-16">{t("LendingYourSuppliesColumn1")}</div>
           <div className="supplies-header-item w-20">{t("LendingYourSuppliesColumn2")}</div>
           <div className="supplies-header-item w-16 hidden sm:block">{t("LendingYourSuppliesColumn3")}</div>
-          <div className="supplies-header-item w-16 hidden sm:block">{t("LendingYourSuppliesColumn4")}</div>
+          <div className="supplies-header-item w-18 hidden sm:block">{t("LendingYourSuppliesColumn4")}</div>
           <div className="supplies-header-item w-20 hidden md:block">{t("LendingYourSuppliesEarnings")}</div>
           <div className="supplies-header-item w-16">{t("LendingYourSuppliesColumn5")}</div>
         </div>
@@ -127,10 +127,10 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
 
           return (
             <div key={index} className="table-content table-border-top asset-row flex justify-between py-3">
-              <div className="asset-row-item w-20 h-fit">
+              <div className="asset-row-item w-16 h-fit">
                 <p>{reserve.symbol}</p>
               </div>
-              <div className="asset-row-item w-20 h-fit">
+              <div className="asset-row-item w-16 h-fit">
                 <p>
                   <WalletBalance
                     tokenAddress={reserve.aTokenAddress as Address}
@@ -142,7 +142,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
               <div className="asset-row-item w-16 h-fit hidden sm:block">
                 <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
               </div>
-              <div className="asset-row-item w-1 h-fit hidden sm:block">
+              <div className="asset-row-item h-fit hidden sm:block">
                 <div>
                   {reserve.usageAsCollateralEnabled ? (
                     <span className="text-xl text-success font-bold">&#10003;</span>
@@ -151,7 +151,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
                   )}
                 </div>
               </div>
-              <div className="asset-row-item w-20 h-fit hidden md:block">
+              <div className="asset-row-item w-24 h-fit hidden md:block">
                 {earnings ? (
                   <div className="text-right">
                     <div className="text-success font-medium text-sm">${earnings.earningsUSD}</div>
@@ -178,7 +178,9 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
       </div>
 
       {/* Earnings info note */}
-      <div className="mt-3 p-2 bg-base-200 rounded text-xs text-gray-500">{t("LendingYourSuppliesEarningsNote")}</div>
+      <div className="mt-3 p-2 bg-base-100 rounded text-xs text-primary dark:text-white">
+        {t("LendingYourSuppliesEarningsNote")}
+      </div>
 
       {isModalOpen && selectedReserve && (
         <WithdrawModal
