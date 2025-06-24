@@ -142,7 +142,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
               <div className="asset-row-item w-16 h-fit hidden sm:block">
                 <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
               </div>
-              <div className="asset-row-item w-16 h-fit hidden sm:block">
+              <div className="asset-row-item w-1 h-fit hidden sm:block">
                 <div>
                   {reserve.usageAsCollateralEnabled ? (
                     <span className="text-xl text-success font-bold">&#10003;</span>
@@ -163,7 +163,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
                   <div className="text-gray-400 text-sm">-</div>
                 )}
               </div>
-              <div className="asset-row-item w-16 h-fit">
+              <div className="asset-row-item w-16 h-fit mr-2">
                 <button
                   onClick={() => handleWithdrawClick(reserve, balance)}
                   disabled={isButtonDisabled}
