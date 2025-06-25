@@ -5,6 +5,7 @@ import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
 import useGetUserReservesData from "@/hooks/useGetUserReservesData";
 import { useTotalBalance } from "@/hooks/useTotalBalance";
+import { useLendingStore } from "@/stores/lending-store";
 import { Address } from "viem";
 import { useTranslation } from "~~/app/context/LanguageContext";
 import { useTotalAPY } from "~~/hooks/useTotalAPY";
@@ -22,6 +23,7 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
   const { reservesData, isLoading: isLoadingReserves, isError: isErrorReserves } = useGetReservesData();
   const { userReservesData, isLoading: isLoadingUserReserves, isError: isErrorUserReserves } = useGetUserReservesData();
   const { address: walletAddress } = useAccountAddress();
+  const { formatBalanceWithCurrency } = useLendingStore();
 
   const [balances, setBalances] = useState<Record<string, string>>({});
   const [reservesWithBalances, setReservesWithBalances] = useState<any[]>([]);
@@ -60,6 +62,17 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
 
   const totalAPY = useTotalAPY(reservesWithBalances);
   const totalBalance = useTotalBalance(reservesWithBalances);
+
+  // Check if wallet is connected
+  const isWalletConnected = !!walletAddress;
+
+  if (!isWalletConnected) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-xl font-bold text-primary mb-3">{t("LendingProfileWelcomeMessage")}</div>
+      </div>
+    );
+  }
 
   if (isLoadingReserves || isLoadingUserReserves) {
     return <p className="text-amber-950">Loading...</p>;
@@ -110,7 +123,7 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
                 isButtonDisabled ? "hidden" : "block"
               }`}
             >
-              <div className="borrows-row-item w-24">
+              <div className="borrows-row-item w-24 text-lg font-bold">
                 <p>{reserve.symbol}</p>
               </div>
               <div className="borrows-row-item w-24">
@@ -119,6 +132,7 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
                     tokenAddress={reserve.variableDebtTokenAddress as Address}
                     walletAddress={walletAddress as Address}
                     onBalanceChange={handleVariableDebtChange}
+                    formatDisplay={balance => formatBalanceWithCurrency(balance, reserve.symbol)}
                   />
                 </p>
               </div>

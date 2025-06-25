@@ -144,6 +144,8 @@
   "CDPInfoPoint3": "Gastarlos directamente si se aceptan como método de pago.",
   "CDPClosing": "La flexibilidad de las stablecoins le permite gestionar sus activos con mayor eficacia, proporcionándole liquidez y estabilidad en mercados volátiles.",
 
+  "LendingProfileWelcome": "Bienvenido a Alux Protocol",
+  "LendingProfileWelcomeMessage": "Por favor conecta tu wallet para empezar a usar Alux Protocol",
   "LendingProfileNetWorth": "Valor Neto de tu Perfil",
   "LendingProfileNetWorthTooltip": "Este es el valor total de todos tus activos depositados en USD",
   "LendingProfileTotalDebt": "Total de tu Deuda",

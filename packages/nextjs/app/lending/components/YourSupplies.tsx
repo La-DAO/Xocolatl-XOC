@@ -22,7 +22,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
   const { reservesData, isLoading: isLoadingReserves, isError: isErrorReserves } = useGetReservesData();
   const { userReservesData, isLoading: isLoadingUserReserves, isError: isErrorUserReserves } = useGetUserReservesData();
   const { address: walletAddress } = useAccountAddress();
-  const { earningsData } = useLendingStore();
+  const { earningsData, formatBalanceWithCurrency } = useLendingStore();
 
   const [balances, setBalances] = useState<Record<string, string>>({});
   const [reservesWithBalances, setReservesWithBalances] = useState<any[]>([]);
@@ -68,6 +68,17 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
   const totalBalance = useTotalBalance(reservesWithBalances);
   const totalAPY = useTotalAPY(reservesWithBalances);
   const collateralTotalBalance = useCollateralTotalBalance(reservesWithBalances);
+
+  // Check if wallet is connected
+  const isWalletConnected = !!walletAddress;
+
+  if (!isWalletConnected) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-xl font-bold text-primary mb-3">Connect Your Wallet</div>
+      </div>
+    );
+  }
 
   if (isLoadingReserves || isLoadingUserReserves) {
     return <p className="text-amber-950">Loading...</p>;
@@ -128,7 +139,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
           return (
             <div key={index}>
               <div className="table-content table-border-top asset-row flex justify-between py-3">
-                <div className="asset-row-item w-16 h-fit">
+                <div className="asset-row-item w-16 h-fit text-lg font-bold">
                   <p>{reserve.symbol}</p>
                 </div>
                 <div className="asset-row-item w-16 h-fit">
@@ -137,6 +148,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
                       tokenAddress={reserve.aTokenAddress as Address}
                       walletAddress={walletAddress as Address}
                       onBalanceChange={handleBalanceChange}
+                      formatDisplay={balance => formatBalanceWithCurrency(balance, reserve.symbol)}
                     />
                   </p>
                 </div>
@@ -155,7 +167,9 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
                 <div className="asset-row-item w-24 h-fit hidden md:block">
                   {earnings ? (
                     <div className="text-right">
-                      <div className="text-success font-medium text-sm">${earnings.earningsUSD}</div>
+                      <div className="text-success font-medium text-sm">
+                        {formatBalanceWithCurrency(earnings.earningsUSD, reserve.symbol)}
+                      </div>
                       <div className="text-xs text-gray-500">
                         {earnings.estimatedEarnings} {reserve.symbol}
                       </div>

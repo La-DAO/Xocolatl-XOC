@@ -5,6 +5,7 @@ import { useTranslation } from "@/app/context/LanguageContext";
 import IsolatedStateComponent from "@/components/tags/IsolatedState";
 import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
+import { useLendingStore } from "@/stores/lending-store";
 import { ReserveData } from "@/types/types";
 import { Address } from "viem";
 
@@ -21,6 +22,7 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
     isError: isErrorReserveData,
   } = useGetReservesData();
   const { address: walletAddress } = useAccountAddress();
+  const { formatBalanceWithCurrency } = useLendingStore();
 
   // State management for balances, showing all assets, modal visibility, and selected reserve/balance
   const [balances, setBalances] = useState<Record<string, string>>({});
@@ -48,6 +50,9 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
     setIsModalOpen(true);
   };
 
+  // Check if wallet is connected
+  const isWalletConnected = !!walletAddress;
+
   return (
     <div className="mt-4">
       {/* Display loading message while fetching reserve data */}
@@ -55,8 +60,59 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
       {/* Display error message if there is an error fetching reserve data */}
       {isErrorReserveData && <p className="text-error">Error fetching data.</p>}
 
+      {/* Show mockup when wallet is not connected */}
+      {!isWalletConnected && !isLoadingReserveData && !isErrorReserveData && (
+        <div>
+          <div className="text-center py-6 mb-4">
+            <div className="text-xl font-bold text-primary mb-2">{t("LendingProfileWelcomeMessage")}</div>
+          </div>
+
+          {/* Mockup of available assets */}
+          <div className="assets-container">
+            <div className="table-header assets-header py-3 flex justify-between tracking-wider">
+              <div className="assets-header-item w-24">Asset</div>
+              <div className="assets-header-item w-24 hidden sm:block">Balance</div>
+              <div className="assets-header-item w-24 hidden sm:block">APY</div>
+              <div className="assets-header-item w-24">Collateral</div>
+              <div className="assets-header-item w-24">Action</div>
+            </div>
+
+            {filteredReserveData.slice(0, 5).map((reserve, index) => (
+              <div
+                key={index}
+                className="table-content table-border-top asset-row flex justify-between py-3 opacity-60"
+              >
+                <div className="asset-row-item w-24 h-fit text-lg font-bold">
+                  <p>{reserve.symbol}</p>
+                </div>
+                <div className="asset-row-item w-24 h-fit hidden sm:block">
+                  <p className="text-gray-400">-</p>
+                </div>
+                <div className="asset-row-item w-24 h-fit hidden sm:block">
+                  <p>{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
+                </div>
+                <div className="asset-row-item w-24 h-fit">
+                  <div>
+                    {reserve.usageAsCollateralEnabled ? (
+                      <span className="text-xl text-success font-bold">&#10003;</span>
+                    ) : (
+                      <IsolatedStateComponent message="Isolated" />
+                    )}
+                  </div>
+                </div>
+                <div className="asset-row-item w-24 h-fit">
+                  <button className="disabled-btn" disabled>
+                    Connect Wallet
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Display checkbox to toggle showing all assets or only those with a balance */}
-      {!isLoadingReserveData && !isErrorReserveData && (
+      {isWalletConnected && !isLoadingReserveData && !isErrorReserveData && (
         <div className="mb-4 w-fit">
           <label className="general-text-color cursor-pointer flex items-center">
             <input
@@ -71,7 +127,7 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
       )}
 
       {/* Display the assets table if wallet address is available and there is data */}
-      {walletAddress && filteredAndDisplayedReserveData.length > 0 && (
+      {isWalletConnected && filteredAndDisplayedReserveData.length > 0 && (
         <div className="assets-container">
           {/* Table headers */}
           <div className="table-header assets-header py-3 flex justify-between tracking-wider">
@@ -90,7 +146,7 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
             return (
               <div key={index} className="table-content table-border-top asset-row flex justify-between py-3">
                 <div
-                  className="asset-row-item w-24 h-fit cursor-pointer text-blue-600 hover:underline"
+                  className="asset-row-item w-24 h-fit cursor-pointer text-blue-600 hover:underline text-lg font-bold"
                   onClick={() => onReserveClick?.(reserve)}
                 >
                   <p>{reserve.symbol}</p>
@@ -101,6 +157,7 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
                       tokenAddress={reserve.underlyingAsset as Address}
                       walletAddress={walletAddress as Address}
                       onBalanceChange={handleBalanceChange}
+                      formatDisplay={balance => formatBalanceWithCurrency(balance, reserve.symbol)}
                     />
                   </p>
                 </div>
