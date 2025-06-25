@@ -83,8 +83,8 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
           <div className="text-2xl text-red-600 font-bold">Wrong network, please change to the Base network!</div>
         ) : !isWalletConnected ? (
           <div className="text-left py-8">
-            <div className="text-3xl font-bold text-primary mb-2">Welcome to Alux Protocol</div>
-            <div className="text-xl text-black">Please connect your wallet to start using Alux Protocol</div>
+            <div className="text-3xl font-bold text-primary mb-2">{t("LendingProfileWelcome")}</div>
+            <div className="text-xl text-black">{t("LendingProfileWelcomeMessage")}</div>
           </div>
         ) : (
           <>

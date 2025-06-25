@@ -67,7 +67,7 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
   if (!isWalletConnected) {
     return (
       <div className="text-center py-12">
-        <div className="text-xl font-bold text-primary mb-3">Connect Your Wallet</div>
+        <div className="text-xl font-bold text-primary mb-3">{t("LendingProfileWelcomeMessage")}</div>
       </div>
     );
   }

@@ -62,7 +62,7 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
       {!isWalletConnected && !isLoadingReserveData && !isErrorReserveData && (
         <div>
           <div className="text-center py-6 mb-4">
-            <div className="text-xl font-bold text-primary mb-2">Connect Your Wallet</div>
+            <div className="text-xl font-bold text-primary mb-2">{t("LendingProfileWelcomeMessage")}</div>
           </div>
 
           {/* Mockup of available assets */}
