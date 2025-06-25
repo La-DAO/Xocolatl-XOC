@@ -266,7 +266,16 @@ const Lending = () => {
       ) : (
         <>
           <div className="min-h-flex bg-white rounded-xl py-6 px-8 flex justify-between items-end profile-stats-section">
-            {isLoading ? (
+            {!address ? (
+              <ProfileStats
+                balance={0}
+                ltv={0}
+                healthFactor={0}
+                totalCollateralBase={0}
+                totalDebtBase={0}
+                availableBorrowsBase={0}
+              />
+            ) : isLoading ? (
               <div>Loading...</div>
             ) : isError ? (
               <div>Error loading data</div>
