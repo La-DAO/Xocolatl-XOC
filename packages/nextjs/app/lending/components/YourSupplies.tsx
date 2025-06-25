@@ -69,6 +69,17 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
   const totalAPY = useTotalAPY(reservesWithBalances);
   const collateralTotalBalance = useCollateralTotalBalance(reservesWithBalances);
 
+  // Check if wallet is connected
+  const isWalletConnected = !!walletAddress;
+
+  if (!isWalletConnected) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-xl font-bold text-primary mb-3">Connect Your Wallet</div>
+      </div>
+    );
+  }
+
   if (isLoadingReserves || isLoadingUserReserves) {
     return <p className="text-amber-950">Loading...</p>;
   }
