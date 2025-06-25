@@ -72,7 +72,7 @@ const AssetsToBorrow: React.FC = () => {
 
             return (
               <div key={index} className="table-content table-border-top asset-row flex justify-between py-3">
-                <div className="asset-row-item w-24 h-fit">
+                <div className="asset-row-item w-24 h-fit text-lg font-bold">
                   <p>{reserve.symbol}</p>
                 </div>
                 <div className="asset-row-item w-24 h-fit">

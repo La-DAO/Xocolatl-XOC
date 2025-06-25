@@ -121,7 +121,7 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
                 isButtonDisabled ? "hidden" : "block"
               }`}
             >
-              <div className="borrows-row-item w-24">
+              <div className="borrows-row-item w-24 text-lg font-bold">
                 <p>{reserve.symbol}</p>
               </div>
               <div className="borrows-row-item w-24">

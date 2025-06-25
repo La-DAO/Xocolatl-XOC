@@ -51,6 +51,27 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
   // Check if wallet is connected
   const isWalletConnected = !!walletAddress;
 
+  // Helper function to format balance with appropriate currency symbol
+  const formatBalanceWithCurrency = (balance: string, symbol: string) => {
+    const numBalance = parseFloat(balance);
+    if (isNaN(numBalance)) return "0";
+
+    switch (symbol) {
+      case "USDC":
+      case "USDT":
+        return `$${numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      case "WETH":
+      case "cbETH":
+      case "wstETH":
+        return `${numBalance.toLocaleString("en-US", { minimumFractionDigits: 4, maximumFractionDigits: 4 })} ETH`;
+      case "XOC":
+      case "MXNe":
+        return `$${numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN`;
+      default:
+        return numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 });
+    }
+  };
+
   return (
     <div className="mt-4">
       {/* Display loading message while fetching reserve data */}
@@ -80,7 +101,7 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
                 key={index}
                 className="table-content table-border-top asset-row flex justify-between py-3 opacity-60"
               >
-                <div className="asset-row-item w-24 h-fit">
+                <div className="asset-row-item w-24 h-fit text-lg font-bold">
                   <p>{reserve.symbol}</p>
                 </div>
                 <div className="asset-row-item w-24 h-fit hidden sm:block">
@@ -144,7 +165,7 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
             return (
               <div key={index} className="table-content table-border-top asset-row flex justify-between py-3">
                 <div
-                  className="asset-row-item w-24 h-fit cursor-pointer text-blue-600 hover:underline"
+                  className="asset-row-item w-24 h-fit cursor-pointer text-blue-600 hover:underline text-lg font-bold"
                   onClick={() => onReserveClick?.(reserve)}
                 >
                   <p>{reserve.symbol}</p>
@@ -155,6 +176,7 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
                       tokenAddress={reserve.underlyingAsset as Address}
                       walletAddress={walletAddress as Address}
                       onBalanceChange={handleBalanceChange}
+                      formatDisplay={balance => formatBalanceWithCurrency(balance, reserve.symbol)}
                     />
                   </p>
                 </div>

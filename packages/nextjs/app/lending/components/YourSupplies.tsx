@@ -99,6 +99,27 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
     return earningsData.find(earning => earning.reserveAddress === reserveAddress);
   };
 
+  // Helper function to format balance with appropriate currency symbol
+  const formatBalanceWithCurrency = (balance: string, symbol: string) => {
+    const numBalance = parseFloat(balance);
+    if (isNaN(numBalance)) return "0";
+
+    switch (symbol) {
+      case "USDC":
+      case "USDT":
+        return `$${numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      case "WETH":
+      case "cbETH":
+      case "wstETH":
+        return `${numBalance.toLocaleString("en-US", { minimumFractionDigits: 4, maximumFractionDigits: 4 })} ETH`;
+      case "XOC":
+      case "MXNe":
+        return `$${numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN`;
+      default:
+        return numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 });
+    }
+  };
+
   return (
     <div>
       <div className="flex mt-2 gap-2 text-xs">
@@ -139,7 +160,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
           return (
             <div key={index}>
               <div className="table-content table-border-top asset-row flex justify-between py-3">
-                <div className="asset-row-item w-16 h-fit">
+                <div className="asset-row-item w-16 h-fit text-lg font-bold">
                   <p>{reserve.symbol}</p>
                 </div>
                 <div className="asset-row-item w-16 h-fit">
@@ -148,6 +169,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
                       tokenAddress={reserve.aTokenAddress as Address}
                       walletAddress={walletAddress as Address}
                       onBalanceChange={handleBalanceChange}
+                      formatDisplay={balance => formatBalanceWithCurrency(balance, reserve.symbol)}
                     />
                   </p>
                 </div>
@@ -166,7 +188,9 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
                 <div className="asset-row-item w-24 h-fit hidden md:block">
                   {earnings ? (
                     <div className="text-right">
-                      <div className="text-success font-medium text-sm">${earnings.earningsUSD}</div>
+                      <div className="text-success font-medium text-sm">
+                        {formatBalanceWithCurrency(earnings.earningsUSD, reserve.symbol)}
+                      </div>
                       <div className="text-xs text-gray-500">
                         {earnings.estimatedEarnings} {reserve.symbol}
                       </div>
