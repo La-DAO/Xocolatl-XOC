@@ -22,7 +22,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
   const { reservesData, isLoading: isLoadingReserves, isError: isErrorReserves } = useGetReservesData();
   const { userReservesData, isLoading: isLoadingUserReserves, isError: isErrorUserReserves } = useGetUserReservesData();
   const { address: walletAddress } = useAccountAddress();
-  const { earningsData } = useLendingStore();
+  const { earningsData, formatBalanceWithCurrency } = useLendingStore();
 
   const [balances, setBalances] = useState<Record<string, string>>({});
   const [reservesWithBalances, setReservesWithBalances] = useState<any[]>([]);
@@ -75,7 +75,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
   if (!isWalletConnected) {
     return (
       <div className="text-center py-12">
-        <div className="text-xl font-bold text-primary mb-3">{t("LendingProfileWelcomeMessage")}</div>
+        <div className="text-xl font-bold text-primary mb-3">Connect Your Wallet</div>
       </div>
     );
   }
@@ -97,27 +97,6 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
   // Helper function to get earnings for a specific reserve
   const getEarningsForReserve = (reserveAddress: string) => {
     return earningsData.find(earning => earning.reserveAddress === reserveAddress);
-  };
-
-  // Helper function to format balance with appropriate currency symbol
-  const formatBalanceWithCurrency = (balance: string, symbol: string) => {
-    const numBalance = parseFloat(balance);
-    if (isNaN(numBalance)) return "0";
-
-    switch (symbol) {
-      case "USDC":
-      case "USDT":
-        return `$${numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-      case "WETH":
-      case "cbETH":
-      case "wstETH":
-        return `${numBalance.toLocaleString("en-US", { minimumFractionDigits: 4, maximumFractionDigits: 4 })} ETH`;
-      case "XOC":
-      case "MXNe":
-        return `$${numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN`;
-      default:
-        return numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 });
-    }
   };
 
   return (

@@ -5,6 +5,7 @@ import { useTranslation } from "@/app/context/LanguageContext";
 import IsolatedStateComponent from "@/components/tags/IsolatedState";
 import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
+import { useLendingStore } from "@/stores/lending-store";
 import { ReserveData } from "@/types/types";
 import { Address } from "viem";
 
@@ -21,6 +22,7 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
     isError: isErrorReserveData,
   } = useGetReservesData();
   const { address: walletAddress } = useAccountAddress();
+  const { formatBalanceWithCurrency } = useLendingStore();
 
   // State management for balances, showing all assets, modal visibility, and selected reserve/balance
   const [balances, setBalances] = useState<Record<string, string>>({});
@@ -50,27 +52,6 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
 
   // Check if wallet is connected
   const isWalletConnected = !!walletAddress;
-
-  // Helper function to format balance with appropriate currency symbol
-  const formatBalanceWithCurrency = (balance: string, symbol: string) => {
-    const numBalance = parseFloat(balance);
-    if (isNaN(numBalance)) return "0";
-
-    switch (symbol) {
-      case "USDC":
-      case "USDT":
-        return `$${numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-      case "WETH":
-      case "cbETH":
-      case "wstETH":
-        return `${numBalance.toLocaleString("en-US", { minimumFractionDigits: 4, maximumFractionDigits: 4 })} ETH`;
-      case "XOC":
-      case "MXNe":
-        return `$${numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN`;
-      default:
-        return numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 });
-    }
-  };
 
   return (
     <div className="mt-4">

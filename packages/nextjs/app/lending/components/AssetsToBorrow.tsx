@@ -3,6 +3,7 @@ import BorrowTransactionModal from "./modals/BorrowTransactionModal";
 import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
 import useGetUserReservesData from "@/hooks/useGetUserReservesData";
+import { useLendingStore } from "@/stores/lending-store";
 import { ReserveData } from "@/types/types";
 import { useTranslation } from "~~/app/context/LanguageContext";
 
@@ -11,18 +12,23 @@ const AssetsToBorrow: React.FC = () => {
   const { reservesData, isLoading: isLoadingReserveData, isError: isErrorReserveData } = useGetReservesData();
   const { userReservesData, isLoading: isLoadingUserReserves, isError: isErrorUserReserves } = useGetUserReservesData();
   const { address: walletAddress } = useAccountAddress();
+  const { formatBalanceWithCurrency } = useLendingStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReserve, setSelectedReserve] = useState<ReserveData | null>(null);
   const [selectedBalance, setSelectedBalance] = useState("");
-
-  const numberFormatter = useMemo(() => new Intl.NumberFormat("en-US", { style: "decimal" }), []);
 
   // Handle borrow button click
   const handleBorrowClick = (reserve: ReserveData, balance: string) => {
     setSelectedReserve(reserve);
     setSelectedBalance(balance);
     setIsModalOpen(true);
+  };
+
+  // Helper function to format available liquidity with currency symbol
+  const formatAvailableLiquidity = (reserve: ReserveData) => {
+    const availableLiquidity = (Number(reserve.availableLiquidity) / 10 ** Number(reserve.decimals)).toFixed(5);
+    return formatBalanceWithCurrency(availableLiquidity, reserve.symbol);
   };
 
   // Dynamic borrowable logic
@@ -65,8 +71,7 @@ const AssetsToBorrow: React.FC = () => {
           </div>
 
           {(assetsToBorrow ?? []).map((reserve, index) => {
-            const availableLiquidity = (Number(reserve.availableLiquidity) / 10 ** Number(reserve.decimals)).toFixed(5);
-            const formattedLiquidity = numberFormatter.format(Number(availableLiquidity));
+            const formattedLiquidity = formatAvailableLiquidity(reserve);
             const formattedBorrowRate = (Number(reserve.variableBorrowRate) / 1e25).toFixed(2);
             const isButtonDisabled = !walletAddress;
 
@@ -85,7 +90,7 @@ const AssetsToBorrow: React.FC = () => {
                   <button
                     className={`${isButtonDisabled ? "disabled-btn" : "primary-btn"}`}
                     disabled={isButtonDisabled}
-                    onClick={() => handleBorrowClick(reserve, availableLiquidity)}
+                    onClick={() => handleBorrowClick(reserve, formattedLiquidity)}
                   >
                     {t("LendingBorrowModalButton")}
                   </button>

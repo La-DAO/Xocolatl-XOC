@@ -58,6 +58,9 @@ type LendingStore = {
   setEarningsData: (data: EarningsData[]) => void;
   setTotalEarningsUSD: (total: string) => void;
   refreshEarnings: () => void;
+
+  // Currency formatting utility
+  formatBalanceWithCurrency: (balance: string, symbol: string) => string;
 };
 
 export const useLendingStore = create<LendingStore>((set, get) => ({
@@ -137,6 +140,27 @@ export const useLendingStore = create<LendingStore>((set, get) => ({
   refreshEarnings: () => {
     // This will trigger a refresh of earnings data
     set(state => ({ refreshKey: state.refreshKey + 1 }));
+  },
+
+  // Currency formatting utility
+  formatBalanceWithCurrency: (balance: string, symbol: string) => {
+    const numBalance = parseFloat(balance);
+    if (isNaN(numBalance)) return "0";
+
+    switch (symbol) {
+      case "USDC":
+      case "USDT":
+        return `$${numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      case "WETH":
+      case "cbETH":
+      case "wstETH":
+        return `${numBalance.toLocaleString("en-US", { minimumFractionDigits: 4, maximumFractionDigits: 4 })} ETH`;
+      case "XOC":
+      case "MXNe":
+        return `$${numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN`;
+      default:
+        return numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 });
+    }
   },
 }));
 
