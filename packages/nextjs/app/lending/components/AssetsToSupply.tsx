@@ -50,6 +50,27 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
     setIsModalOpen(true);
   };
 
+  // Function to get buy URL for different tokens
+  const getBuyTokenUrl = (tokenSymbol: string): string => {
+    const buyUrls: Record<string, string> = {
+      USDC: "https://app.uniswap.org/#/swap?outputCurrency=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913&exactField=output&exactAmount=1",
+      WETH: "https://app.uniswap.org/#/swap?outputCurrency=0x4200000000000000000000000000000000000006&exactField=output&exactAmount=1",
+      CBETH: "https://app.uniswap.org/#/swap?outputCurrency=0x2Ae3F1Ec7F1F5012CFEab0185bfc7aa3cf0DEc22",
+      XOC: "https://app.uniswap.org/#/swap?outputCurrency=0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf&exactField=output&exactAmount=1",
+      MXNe: "https://aerodrome.finance/swap?from=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913&to=0x269cae7dc59803e5c596c95756faeebb6030e0af&chain0=8453&chain1=8453",
+      CETES:
+        "https://aerodrome.finance/swap?from=0x269cae7dc59803e5c596c95756faeebb6030e0af&to=0x834df4c1d8f51be24322e39e4766697be015512f&chain0=8453&chain1=8453",
+      // Add more tokens as needed
+    };
+
+    return buyUrls[tokenSymbol] || "https://app.uniswap.org/";
+  };
+
+  const handleBuyToken = (reserve: ReserveData) => {
+    const buyUrl = getBuyTokenUrl(reserve.symbol);
+    window.open(buyUrl, "_blank");
+  };
+
   // Check if wallet is connected
   const isWalletConnected = !!walletAddress;
 
@@ -75,6 +96,7 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
               <div className="assets-header-item w-24 hidden sm:block">APY</div>
               <div className="assets-header-item w-24">Collateral</div>
               <div className="assets-header-item w-24">Action</div>
+              <div className="assets-header-item w-24">Buy</div>
             </div>
 
             {filteredReserveData.slice(0, 5).map((reserve, index) => (
@@ -103,6 +125,11 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
                 <div className="asset-row-item w-24 h-fit">
                   <button className="disabled-btn" disabled>
                     Connect Wallet
+                  </button>
+                </div>
+                <div className="asset-row-item w-24 h-fit">
+                  <button className="disabled-btn" disabled>
+                    Buy
                   </button>
                 </div>
               </div>
@@ -135,7 +162,8 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
             <div className="assets-header-item w-24 hidden sm:block">{t("LendingAssetsToSupplyColumn2")}</div>
             <div className="assets-header-item w-24 hidden sm:block">{t("LendingAssetsToSupplyColumn3")}</div>
             <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn4")}</div>
-            <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn5")}</div>
+            <div className="assets-header-item w-24"></div>
+            <div className="assets-header-item w-24"></div>
           </div>
 
           {/* Table rows */}
@@ -173,9 +201,14 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
                     )}
                   </div>
                 </div>
-                <div className="asset-row-item w-24 h-fit">
+                <div className="asset-row-item w-min h-fit">
+                  <button onClick={() => handleBuyToken(reserve)} className="secondary-btn">
+                    Buy
+                  </button>
+                </div>
+                <div className="asset-row-item w-min h-fit">
                   <button
-                    className={`${isButtonDisabled ? "disabled-btn" : "primary-btn"}`}
+                    className={`${isButtonDisabled ? "disabled-btn" : "primary-btn  hover:bg-green-600"}`}
                     disabled={isButtonDisabled}
                     onClick={() => handleSupplyClick(reserve, balance)}
                   >

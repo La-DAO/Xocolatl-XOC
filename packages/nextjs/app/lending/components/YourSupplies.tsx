@@ -128,7 +128,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
           <div className="supplies-header-item w-16 hidden sm:block">{t("LendingYourSuppliesColumn3")}</div>
           <div className="supplies-header-item w-18 hidden sm:block">{t("LendingYourSuppliesColumn4")}</div>
           <div className="supplies-header-item w-20 hidden md:block">Projected Annual Earnings</div>
-          <div className="supplies-header-item w-16">{t("LendingYourSuppliesColumn5")}</div>
+          <div className="supplies-header-item w-16"></div>
         </div>
 
         {reservesWithBalances.map((reserve, index) => {
@@ -168,7 +168,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
                   {earnings ? (
                     <div className="text-right">
                       <div className="text-success font-medium text-sm">
-                        {formatBalanceWithCurrency(earnings.earningsUSD, reserve.symbol)}
+                        {formatBalanceWithCurrency(earnings.earningsUSD, "USDC")}
                       </div>
                       <div className="text-xs text-gray-500">
                         {earnings.estimatedEarnings} {reserve.symbol}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import externalContracts from "@/contracts/externalContracts";
 import useAccountAddress from "@/hooks/useAccount";
 import useBorrow from "@/hooks/useBorrow";
 import { useLendingStore } from "@/stores/lending-store";
@@ -8,7 +9,7 @@ import { toWeiConverter } from "@/utils/toWeiConverter";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
-import { useChainId, useWaitForTransactionReceipt } from "wagmi";
+import { useChainId, useSimulateContract, useWaitForTransactionReceipt } from "wagmi";
 import { useTranslation } from "~~/app/context/LanguageContext";
 import { getBlockExplorerUrl } from "~~/app/utils/utils";
 
@@ -39,11 +40,39 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   const [data, setData] = useState<any>(null); // Reset data state
   const [isError, setIsError] = useState(false); // Reset isError state
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
+  const [simulationError, setSimulationError] = useState<string | null>(null);
+  const [isSimulating, setIsSimulating] = useState(false);
 
   const chainId = useChainId();
 
   // Hook for handling borrow transactions
   const { handleBorrow, isError: borrowError, error, borrowHash } = useBorrow();
+
+  // Fetch the user's wallet address
+  const { address: walletAddress } = useAccountAddress();
+
+  // Transaction simulation
+  const {
+    data: simulationData,
+    error: simulationErrorData,
+    refetch: refetchSimulation,
+  } = useSimulateContract({
+    abi: externalContracts[8453].Pool.abi,
+    address: externalContracts[8453].Pool.address,
+    functionName: "borrow",
+    args: [
+      reserve?.underlyingAsset as Address,
+      amount && parseFloat(amount) > 0
+        ? toWeiConverter(parseFloat(amount), reserve?.decimals ? Number(reserve.decimals) : 18)
+        : 0n,
+      interestRateMode,
+      0, // referralCode
+      walletAddress as Address,
+    ],
+    query: {
+      enabled: false, // Don't run automatically
+    },
+  });
 
   // Transaction confirmation tracking for borrow
   const {
@@ -53,9 +82,6 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   } = useWaitForTransactionReceipt({
     hash: borrowHash,
   });
-
-  // Fetch the user's wallet address
-  const { address: walletAddress } = useAccountAddress();
 
   // Fetch user account data for health factor and LTV
   const { userAccountData, refreshComponents } = useLendingStore();
@@ -168,6 +194,45 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     return typeof healthFactor === "number" ? healthFactor.toFixed(2) : healthFactor;
   };
   console.log("formatHealthFactorDisplay function:", formatHealthFactorDisplay);
+
+  // Effect to handle simulation results
+  useEffect(() => {
+    if (simulationData) {
+      console.log("Simulation successful:", simulationData);
+      setSimulationError(null);
+      setIsSimulating(false);
+    } else if (simulationErrorData) {
+      console.log("Simulation failed:", simulationErrorData);
+      const errorMessage = simulationErrorData.message || "Transaction simulation failed";
+
+      // Check for specific error codes
+      if (errorMessage.includes("36") || errorMessage.includes("insufficient collateral")) {
+        setSimulationError("There is not enough collateral to cover a new borrow");
+      } else if (
+        errorMessage.includes("liquidity") ||
+        errorMessage.includes("available") ||
+        errorMessage.includes("supply")
+      ) {
+        setSimulationError("Amount exceeds available liquidity");
+      } else {
+        setSimulationError("Transaction simulation failed. Please check your inputs.");
+      }
+      setIsSimulating(false);
+    }
+  }, [simulationData, simulationErrorData]);
+
+  // Auto-trigger simulation when amount changes
+  useEffect(() => {
+    if (amount && parseFloat(amount) > 0 && isValid && walletAddress && reserve) {
+      setIsSimulating(true);
+      setSimulationError(null);
+      // Trigger simulation
+      refetchSimulation();
+    } else {
+      setIsSimulating(false);
+      setSimulationError(null);
+    }
+  }, [amount, isValid, walletAddress, reserve, refetchSimulation]);
 
   useEffect(() => {
     validateAmount(amount);
@@ -309,8 +374,13 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     setErrorMessage("");
     setData(null);
     setIsError(false);
+    setSimulationError(null);
+    setIsSimulating(false);
     onClose(); // Call the original onClose handler
   };
+
+  // Check if borrow button should be disabled
+  const isBorrowDisabled = !isValid || isSimulating || !!simulationError;
 
   // Return null if the modal is not open or if the reserve data is not available
   if (!isOpen || !reserve) {
@@ -345,6 +415,8 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   </span>
                 </div>
                 {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
+                {simulationError && <p className="text-error text-xs">{simulationError}</p>}
+                {isSimulating && <p className="text-blue-600 text-xs">Simulating transaction...</p>}
               </div>
 
               {/* Health Factor & LTV Visualization */}
@@ -481,11 +553,11 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
               </div>
               <div className="flex justify-between gap-4">
                 <button
-                  className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                  className={`flex-grow-2 basis-2/3 ${!isBorrowDisabled ? "primary-btn" : "disabled-btn"}`}
                   onClick={handleBorrowClick}
-                  disabled={!isValid}
+                  disabled={isBorrowDisabled}
                 >
-                  {t("LendingBorrowModalButton")}
+                  {isSimulating ? "Simulating..." : t("LendingBorrowModalButton")}
                 </button>
                 <button onClick={handleClose} className="secondary-btn flex-grow-1 basis-1/3">
                   {t("LendingBorrowModalClose")}

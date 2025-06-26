@@ -110,7 +110,7 @@ const YourBorrows: React.FC<YourBorrowsProps> = ({ setBorrowsTotalBalance }) => 
           <div className="borrows-header-item w-24">{t("LendingYourBorrowsColumn2")}</div>
           <div className="borrows-header-item w-24 hidden sm:block">{t("LendingYourBorrowsColumn3")}</div>
           <div className="borrows-header-item w-24 hidden sm:block">{t("LendingYourBorrowsColumn4")}</div>
-          <div className="borrows-header-item w-24">{t("LendingYourBorrowsColumn5")}</div>
+          <div className="borrows-header-item w-24"></div>
         </div>
         {reservesWithBalances.map((reserve, index) => {
           const balance = reserve.balance;
