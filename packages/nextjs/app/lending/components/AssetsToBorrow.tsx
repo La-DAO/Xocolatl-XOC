@@ -67,7 +67,7 @@ const AssetsToBorrow: React.FC = () => {
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn1")}</div>
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn2")}</div>
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn3")}</div>
-            <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn4")}</div>
+            <div className="assets-header-item w-24"></div>
           </div>
 
           {(assetsToBorrow ?? []).map((reserve, index) => {
