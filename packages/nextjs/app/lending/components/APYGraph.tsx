@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -22,7 +22,20 @@ type APYGraphProps = {
 
 const APYGraph: React.FC<APYGraphProps> = ({ mode, tokenAddress }) => {
   const [timePeriod, setTimePeriod] = useState("1month");
+  const [isMobile, setIsMobile] = useState(false);
   const { data, isLoading } = useApyHistory(tokenAddress, timePeriod);
+
+  // Check if we're on mobile after component mounts
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const apyData = data || [];
 
@@ -54,7 +67,7 @@ const APYGraph: React.FC<APYGraphProps> = ({ mode, tokenAddress }) => {
           boxWidth: 12,
           padding: 8,
           font: {
-            size: window.innerWidth < 768 ? 10 : 12,
+            size: isMobile ? 10 : 12,
           },
         },
       },
@@ -62,7 +75,7 @@ const APYGraph: React.FC<APYGraphProps> = ({ mode, tokenAddress }) => {
         display: true,
         text: mode === "Supply" ? `${mode} APY` : `${mode} APR, variable`,
         font: {
-          size: window.innerWidth < 768 ? 14 : 16,
+          size: isMobile ? 14 : 16,
         },
       },
     },
@@ -72,21 +85,21 @@ const APYGraph: React.FC<APYGraphProps> = ({ mode, tokenAddress }) => {
           maxRotation: 45,
           minRotation: 45,
           font: {
-            size: window.innerWidth < 768 ? 8 : 10,
+            size: isMobile ? 8 : 10,
           },
         },
         grid: {
-          display: window.innerWidth < 768 ? false : true,
+          display: !isMobile,
         },
       },
       y: {
         ticks: {
           font: {
-            size: window.innerWidth < 768 ? 8 : 10,
+            size: isMobile ? 8 : 10,
           },
         },
         grid: {
-          display: window.innerWidth < 768 ? false : true,
+          display: !isMobile,
         },
       },
     },
@@ -96,11 +109,11 @@ const APYGraph: React.FC<APYGraphProps> = ({ mode, tokenAddress }) => {
     },
     elements: {
       point: {
-        radius: window.innerWidth < 768 ? 2 : 4,
-        hoverRadius: window.innerWidth < 768 ? 4 : 6,
+        radius: isMobile ? 2 : 4,
+        hoverRadius: isMobile ? 4 : 6,
       },
       line: {
-        borderWidth: window.innerWidth < 768 ? 1 : 2,
+        borderWidth: isMobile ? 1 : 2,
       },
     },
   };
