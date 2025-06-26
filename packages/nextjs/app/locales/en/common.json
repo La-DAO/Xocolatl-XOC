@@ -156,6 +156,7 @@
   "LendingYourSuppliesAPYTooltip": "This is the annual percentage yield (APY) accumulated from all your supplied assets",
   "LendingYourSuppliesCollateralTooltip": "This is your total collateral balance in USD",
   "LendingYourSuppliesZeroBalance": "Nothing supplied yet.",
+  "LendingCETESTooltip": "Gain +5 % APY via Etherfuse Stablebonds—tokenized gov bonds for secure, transparent returns on top of your lending yield.",
   "LendingYourSuppliesColumn1": "Assets",
   "LendingYourSuppliesColumn2": "Deposits",
   "LendingYourSuppliesColumn3": "APY",

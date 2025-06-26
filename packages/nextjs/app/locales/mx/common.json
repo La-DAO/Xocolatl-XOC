@@ -162,6 +162,7 @@
   "LendingYourSuppliesAPYTooltip": "Este es el interés anual porcentual (APY) acumulado de todos tus activos depositados",
   "LendingYourSuppliesCollateralTooltip": "Este es el balance en USD de todos tus activos depositados como colateral",
   "LendingYourSuppliesZeroBalance": "No tienes activos depositados",
+  "LendingCETESTooltip": "Gana +5 % APY a través de los Stablebonds de Etherfuse—bonos gubernamentales tokenizados para rendimientos seguros y transparentes sobre tu rendimiento de préstamo.",
   "LendingYourSuppliesColumn1": "Activos",
   "LendingYourSuppliesColumn2": "Depositos",
   "LendingYourSuppliesColumn3": "Interés",

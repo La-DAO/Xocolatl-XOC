@@ -143,10 +143,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
                   <p>
                     {reserve.symbol}
                     {reserve.symbol === "CETES" && (
-                      <span
-                        className="tooltip tooltip-info ml-1"
-                        data-tip="Gain +5 % APY via Etherfuse Stablebonds—tokenized gov bonds for secure, transparent returns on top of your lending yield."
-                      >
+                      <span className="tooltip tooltip-info ml-1" data-tip={t("LendingCETESTooltip")}>
                         <span className="text-info cursor-help">ⓘ</span>
                       </span>
                     )}
