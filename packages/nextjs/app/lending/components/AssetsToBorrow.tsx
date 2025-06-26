@@ -66,7 +66,7 @@ const AssetsToBorrow: React.FC = () => {
           <div className="table-header assets-header py-3 flex justify-between tracking-wider">
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn1")}</div>
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn2")}</div>
-            <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn3")}</div>
+            <div className="assets-header-item w-24 hidden sm:block">{t("LendingAssetsToBorrowColumn3")}</div>
             <div className="assets-header-item w-24"></div>
           </div>
 
@@ -83,7 +83,7 @@ const AssetsToBorrow: React.FC = () => {
                 <div className="asset-row-item w-24 h-fit">
                   <p>{formattedLiquidity}</p>
                 </div>
-                <div className="asset-row-item w-24 h-fit">
+                <div className="asset-row-item w-24 h-fit hidden sm:block">
                   <p>{formattedBorrowRate}%</p>
                 </div>
                 <div className="asset-row-item w-24 h-fit">
