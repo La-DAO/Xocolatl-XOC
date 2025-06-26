@@ -70,7 +70,7 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
         <div className="hidden lg:block h-6 border-l border-gray-300" />
 
         {/* Right: Metrics */}
-        <div className="flex flex-wrap justify-end gap-x-8 gap-y-4 text-sm w-full">
+        <div className="grid grid-cols-2 md:flex md:flex-wrap md:justify-end gap-4 md:gap-x-8 md:gap-y-4 text-sm w-full">
           <div>
             <p className="text-gray-500 text-sm">
               {t("ReserveInfoPanelReserveSize")}
