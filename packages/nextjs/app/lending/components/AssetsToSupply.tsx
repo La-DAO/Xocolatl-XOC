@@ -105,7 +105,17 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
                 className="table-content table-border-top asset-row flex justify-between py-3 opacity-60"
               >
                 <div className="asset-row-item w-24 h-fit text-lg font-bold">
-                  <p>{reserve.symbol}</p>
+                  <p>
+                    {reserve.symbol}
+                    {reserve.symbol === "CETES" && (
+                      <span
+                        className="tooltip tooltip-info ml-1"
+                        data-tip="Gain +5 % APY via Etherfuse Stablebonds—tokenized gov bonds for secure, transparent returns on top of your lending yield."
+                      >
+                        <span className="text-info cursor-help">ⓘ</span>
+                      </span>
+                    )}
+                  </p>
                 </div>
                 <div className="asset-row-item w-24 h-fit hidden sm:block">
                   <p className="text-gray-400">-</p>
@@ -177,7 +187,14 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
                   className="asset-row-item w-24 h-fit cursor-pointer text-blue-600 hover:underline text-lg font-bold"
                   onClick={() => onReserveClick?.(reserve)}
                 >
-                  <p>{reserve.symbol}</p>
+                  <p>
+                    {reserve.symbol}
+                    {reserve.symbol === "CETES" && (
+                      <span className="tooltip tooltip-info ml-1" data-tip={t("LendingCETESTooltip")}>
+                        <span className="text-info cursor-help">ⓘ</span>
+                      </span>
+                    )}
+                  </p>
                 </div>
                 <div className="asset-row-item w-24 h-fit hidden sm:block">
                   <p>

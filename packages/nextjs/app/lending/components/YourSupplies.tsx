@@ -123,7 +123,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
 
       <div className="supplies-container mt-4">
         <div className="table-header supplies-header py-3 flex justify-between tracking-wider">
-          <div className="supplies-header-item w-16">{t("LendingYourSuppliesColumn1")}</div>
+          <div className="supplies-header-item w-24">{t("LendingYourSuppliesColumn1")}</div>
           <div className="supplies-header-item w-20">{t("LendingYourSuppliesColumn2")}</div>
           <div className="supplies-header-item w-16 hidden sm:block">{t("LendingYourSuppliesColumn3")}</div>
           <div className="supplies-header-item w-18 hidden sm:block">{t("LendingYourSuppliesColumn4")}</div>
@@ -139,8 +139,15 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
           return (
             <div key={index}>
               <div className="table-content table-border-top asset-row flex justify-between py-3">
-                <div className="asset-row-item w-16 h-fit text-lg font-bold">
-                  <p>{reserve.symbol}</p>
+                <div className="asset-row-item w-24 h-fit text-lg font-bold">
+                  <p>
+                    {reserve.symbol}
+                    {reserve.symbol === "CETES" && (
+                      <span className="tooltip tooltip-info ml-1" data-tip={t("LendingCETESTooltip")}>
+                        <span className="text-info cursor-help">ⓘ</span>
+                      </span>
+                    )}
+                  </p>
                 </div>
                 <div className="asset-row-item w-16 h-fit">
                   <p>
