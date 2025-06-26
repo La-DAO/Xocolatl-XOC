@@ -168,7 +168,7 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
                   {earnings ? (
                     <div className="text-right">
                       <div className="text-success font-medium text-sm">
-                        {formatBalanceWithCurrency(earnings.earningsUSD, reserve.symbol)}
+                        {formatBalanceWithCurrency(earnings.earningsUSD, "USDC")}
                       </div>
                       <div className="text-xs text-gray-500">
                         {earnings.estimatedEarnings} {reserve.symbol}
