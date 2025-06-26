@@ -178,6 +178,7 @@
   "LendingAssetsToSupplyColumn3": "Interes",
   "LendingAssetsToSupplyColumn4": "Puede ser colateral?",
   "LendingAssetsToSupplyColumn5": "Acciones",
+  "LendingBuyTokenButton": "Comprar",
   "LendingYourBorrowsTitle": "Tus Prestamos",
   "LendingYourBorrowsBalanceTooltip": "Este es el balance en USD de todos tus activos prestados combinados",
   "LendingYourBorrowsAPYTooltip": "Este es el interés anual porcentual (APY) de todos tus activos prestados acumulado",

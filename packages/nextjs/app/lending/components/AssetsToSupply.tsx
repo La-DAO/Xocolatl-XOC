@@ -220,7 +220,7 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
                 </div>
                 <div className="asset-row-item w-min h-fit">
                   <button onClick={() => handleBuyToken(reserve)} className="secondary-btn">
-                    Buy
+                    {t("LendingBuyTokenButton")}
                   </button>
                 </div>
                 <div className="asset-row-item w-min h-fit">

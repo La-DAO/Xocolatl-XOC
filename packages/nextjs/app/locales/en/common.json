@@ -173,6 +173,7 @@
   "LendingAssetsToSupplyColumn4": "Can be collateral",
   "LendingAssetsToSupplyColumn5": "Earnings",
   "LendingAssetsToSupplyColumn6": "Actions",
+  "LendingBuyTokenButton": "Buy",
   "LendingYourBorrowsTitle": "Your Borrows",
   "LendingYourBorrowsBalanceTooltip": "This is the balance in USD of all your borrowed assets combined",
   "LendingYourBorrowsAPYTooltip": "This is the annual percentage yield (APY) from all your borrowed assets combined",
