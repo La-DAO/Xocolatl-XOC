@@ -88,9 +88,10 @@ const AssetsToBorrow: React.FC = () => {
                 </div>
                 <div className="asset-row-item w-24 h-fit">
                   <button
-                    className={`${isButtonDisabled ? "disabled-btn" : "primary-btn"}`}
-                    disabled={isButtonDisabled}
+                    className={`${isButtonDisabled || reserve.symbol === "CETES" ? "disabled-btn" : "primary-btn"}`}
+                    disabled={isButtonDisabled || reserve.symbol === "CETES"}
                     onClick={() => handleBorrowClick(reserve, formattedLiquidity)}
+                    title={reserve.symbol === "CETES" ? "CETES is not a borrowable asset in Alux" : ""}
                   >
                     {t("LendingBorrowModalButton")}
                   </button>
