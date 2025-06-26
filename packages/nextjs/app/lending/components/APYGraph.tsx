@@ -128,14 +128,14 @@ const APYGraph: React.FC<APYGraphProps> = ({ mode, tokenAddress }) => {
       <div className="flex justify-end gap-2 md:gap-4 mb-4">
         <button
           onClick={() => handleTimePeriodChange("1month")}
-          className={`btn btn-xs md:btn-sm ${timePeriod === "1month" ? "btn-primary" : "btn-outline"}`}
+          className={`btn btn-xs md:btn-sm ${timePeriod === "1month" ? "btn-primary text-white" : "btn-outline"}`}
         >
           <span className="hidden sm:inline">1 Month</span>
           <span className="sm:hidden">1M</span>
         </button>
         <button
           onClick={() => handleTimePeriodChange("6months")}
-          className={`btn btn-xs md:btn-sm ${timePeriod === "6months" ? "btn-primary" : "btn-outline"}`}
+          className={`btn btn-xs md:btn-sm ${timePeriod === "6months" ? "btn-primary text-white" : "btn-outline"}`}
         >
           <span className="hidden sm:inline">6 Months</span>
           <span className="sm:hidden">6M</span>
