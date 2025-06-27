@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { resolveErrorMessage } from "@/app/lending/constants/errors";
 import externalContracts from "@/contracts/externalContracts";
 import useAccountAddress from "@/hooks/useAccount";
 import useBorrow from "@/hooks/useBorrow";
 import { useLendingStore } from "@/stores/lending-store";
 import { ReserveData } from "@/types/types";
 import { toWeiConverter } from "@/utils/toWeiConverter";
-import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
+import { faClipboardCheck, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 import { useChainId, useSimulateContract, useWaitForTransactionReceipt } from "wagmi";
@@ -108,38 +109,6 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
 
   const currentLTV = userAccountData?.ltv ? (Number(userAccountData.ltv) * 1e15).toFixed(2) : "0.00";
 
-  // Calculate simulated values based on borrow amount
-  const calculateSimulatedValues = (borrowAmount: number) => {
-    if (!borrowAmount || borrowAmount <= 0 || !userAccountData) {
-      return {
-        newHealthFactor: currentHealthFactor,
-        newLTV: currentLTV,
-      };
-    }
-
-    // Simple simulation - replace with actual calculation logic
-    const currentTotalDebt = Number(userAccountData.totalDebtBase) * 1e10;
-    const currentTotalCollateral = Number(userAccountData.totalCollateralBase) * 1e10;
-    const newTotalDebt = currentTotalDebt + borrowAmount;
-
-    // Calculate new LTV (simplified)
-    const newLTV = currentTotalCollateral > 0 ? (newTotalDebt / currentTotalCollateral) * 100 : 0;
-
-    // Calculate new health factor (simplified)
-    let newHealthFactor = currentHealthFactor;
-    if (typeof currentHealthFactor === "number" && currentTotalDebt > 0) {
-      newHealthFactor = currentHealthFactor * (currentTotalDebt / newTotalDebt);
-    }
-
-    return {
-      newHealthFactor: typeof newHealthFactor === "number" ? Math.max(newHealthFactor, 1.0) : newHealthFactor,
-      newLTV: Math.min(newLTV, 95).toFixed(2),
-    };
-  };
-
-  const simulatedValues = calculateSimulatedValues(Number.parseFloat(amount) || 0);
-  console.log("simulatedValues:", simulatedValues);
-
   // Helper functions for color coding
   const getHealthFactorColor = (ratio: number | string) => {
     if (ratio === "∞" || isMaxUint256(ratio)) return "text-green-600";
@@ -148,14 +117,12 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     if (numRatio >= 1.5) return "text-yellow-600";
     return "text-red-600";
   };
-  console.log("getHealthFactorColor function:", getHealthFactorColor);
 
   const getHealthFactorProgress = (ratio: number | string) => {
     if (ratio === "∞" || isMaxUint256(ratio)) return 100;
     const numRatio = typeof ratio === "string" ? parseFloat(ratio) : ratio;
     return Math.min((numRatio / 3) * 100, 100);
   };
-  console.log("getHealthFactorProgress function:", getHealthFactorProgress);
 
   const getLTVColor = (ltv: number | string) => {
     const numLTV = typeof ltv === "string" ? parseFloat(ltv) : ltv;
@@ -163,7 +130,6 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     if (numLTV <= 75) return "text-yellow-600";
     return "text-red-600";
   };
-  console.log("getLTVColor function:", getLTVColor);
 
   const getProgressBarColor = (value: number | string, type: "health" | "ltv") => {
     if (type === "health") {
@@ -179,7 +145,6 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
       return "bg-red-500";
     }
   };
-  console.log("getProgressBarColor function:", getProgressBarColor);
 
   // Helper function to format health factor display
   const formatHealthFactorDisplay = (healthFactor: number | string) => {
@@ -193,30 +158,15 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     }
     return typeof healthFactor === "number" ? healthFactor.toFixed(2) : healthFactor;
   };
-  console.log("formatHealthFactorDisplay function:", formatHealthFactorDisplay);
 
   // Effect to handle simulation results
   useEffect(() => {
     if (simulationData) {
-      console.log("Simulation successful:", simulationData);
       setSimulationError(null);
       setIsSimulating(false);
     } else if (simulationErrorData) {
-      console.log("Simulation failed:", simulationErrorData);
-      const errorMessage = simulationErrorData.message || "Transaction simulation failed";
-
-      // Check for specific error codes
-      if (errorMessage.includes("36") || errorMessage.includes("insufficient collateral")) {
-        setSimulationError("There is not enough collateral to cover a new borrow");
-      } else if (
-        errorMessage.includes("liquidity") ||
-        errorMessage.includes("available") ||
-        errorMessage.includes("supply")
-      ) {
-        setSimulationError("Amount exceeds available liquidity");
-      } else {
-        setSimulationError("Transaction simulation failed. Please check your inputs.");
-      }
+      // Use the new error resolver
+      setSimulationError(resolveErrorMessage(simulationErrorData.message || "Transaction simulation failed"));
       setIsSimulating(false);
     }
   }, [simulationData, simulationErrorData]);
@@ -310,11 +260,25 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
     const alreadyBorrowed = reserve?.totalScaledVariableDebt
       ? Number(reserve.totalScaledVariableDebt) / 10 ** decimals
       : 0;
-    let maxAmount = parseFloat(balance);
+
+    // Parse balance and handle edge cases
+    const balanceValue = parseFloat(balance);
+    console.log("handleMaxClick - balance:", balance, "balanceValue:", balanceValue);
+
+    if (isNaN(balanceValue) || balanceValue <= 0) {
+      console.log("handleMaxClick - Invalid balance, setting to 0");
+      setAmount("0");
+      return;
+    }
+
+    let maxAmount = balanceValue;
 
     if (borrowCap !== null && borrowCap > 0) {
       maxAmount = Math.min(maxAmount, borrowCap - alreadyBorrowed);
     }
+
+    console.log("handleMaxClick - maxAmount:", maxAmount, "borrowCap:", borrowCap, "alreadyBorrowed:", alreadyBorrowed);
+
     setAmount(maxAmount > 0 ? maxAmount.toFixed(2) : "0");
   };
 
@@ -420,7 +384,7 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
               </div>
 
               {/* Health Factor & LTV Visualization */}
-              {/* <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div className="container-gray-borders flex flex-col gap-2">
                   <div className="flex items-center gap-1">
                     <label className="font-bold text-sm">Health Factor</label>
@@ -444,25 +408,6 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                         style={{ width: `${getHealthFactorProgress(currentHealthFactor)}%` }}
                       ></div>
                     </div>
-                    {Number.parseFloat(amount) > 0 && (
-                      <>
-                        <div className="flex justify-between items-center">
-                          <span className="text-xs text-gray-600">After</span>
-                          <span className={`font-bold ${getHealthFactorColor(simulatedValues.newHealthFactor)}`}>
-                            {formatHealthFactorDisplay(simulatedValues.newHealthFactor)}
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className={`h-2 rounded-full ${getProgressBarColor(
-                              simulatedValues.newHealthFactor,
-                              "health",
-                            )}`}
-                            style={{ width: `${getHealthFactorProgress(simulatedValues.newHealthFactor)}%` }}
-                          ></div>
-                        </div>
-                      </>
-                    )}
                   </div>
                 </div>
 
@@ -487,25 +432,9 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                         style={{ width: `${Math.min(parseFloat(currentLTV), 100)}%` }}
                       ></div>
                     </div>
-                    {Number.parseFloat(amount) > 0 && (
-                      <>
-                        <div className="flex justify-between items-center">
-                          <span className="text-xs text-gray-600">After</span>
-                          <span className={`font-bold ${getLTVColor(simulatedValues.newLTV)}`}>
-                            {simulatedValues.newLTV}%
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className={`h-2 rounded-full ${getProgressBarColor(simulatedValues.newLTV, "ltv")}`}
-                            style={{ width: `${Math.min(parseFloat(simulatedValues.newLTV), 100)}%` }}
-                          ></div>
-                        </div>
-                      </>
-                    )}
                   </div>
                 </div>
-              </div> */}
+              </div>
 
               <div className="container-gray-borders flex flex-col gap-2">
                 <label className="font-bold">{t("LendingBorrowModalTransactionOverview")}</label>

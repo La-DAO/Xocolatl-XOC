@@ -33,6 +33,11 @@ const AssetsToBorrow: React.FC = () => {
     return formatBalanceWithCurrency(availableLiquidity, reserve.symbol);
   };
 
+  // Helper function to get raw available liquidity value
+  const getRawAvailableLiquidity = (reserve: ReserveData) => {
+    return (Number(reserve.availableLiquidity) / 10 ** Number(reserve.decimals)).toString();
+  };
+
   // Dynamic borrowable logic
   const assetsToBorrow = useMemo(() => {
     const depositedAssets = new Set(
@@ -99,7 +104,7 @@ const AssetsToBorrow: React.FC = () => {
                   <button
                     className={`${isButtonDisabled || reserve.symbol === "CETES" ? "disabled-btn" : "primary-btn"}`}
                     disabled={isButtonDisabled || reserve.symbol === "CETES"}
-                    onClick={() => handleBorrowClick(reserve, formattedLiquidity)}
+                    onClick={() => handleBorrowClick(reserve, getRawAvailableLiquidity(reserve))}
                     title={reserve.symbol === "CETES" ? "CETES is not a borrowable asset in Alux" : ""}
                   >
                     {t("LendingBorrowModalButton")}
