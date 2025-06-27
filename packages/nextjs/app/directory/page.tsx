@@ -21,23 +21,23 @@ interface UseCase {
 
 const useCases: UseCase[] = [
   {
-    title: "AI Agents",
-    description: "Use AI agents with $XOC.",
-    link: "/agents",
+    title: "CETES",
+    description: "Government Bonds",
+    link: "/cetes",
     image: "/Miroodles - Color Comp.svg",
     benefits: [
-      "Automated Tasks: Use AI agents to automate tasks and save time.",
-      "Customizable: Customize your AI agents to your needs.",
-      "Community Driven: Join a community of AI agents users.",
-      "Secure: Use a secure and audited protocol.",
-      "Innovative Solutions: Benefit from innovative AI solutions.",
+      "Tokenized Government Bonds: Access Mexican government bonds through blockchain technology.",
+      "DeFi Integration: Use CETES as collateral in lending protocols and yield farming strategies.",
+      "Stable Returns: Benefit from government-backed stable returns in the Mexican DeFi ecosystem.",
+      "Liquidity Access: Trade and access liquidity for traditionally illiquid government bonds.",
+      "Mexican DeFi Innovation: Participate in the first tokenized government bonds in Mexican DeFi.",
     ],
     context:
-      "AI agents are a powerful tool for automating tasks and saving time. Use AI agents with $XOC to automate your tasks and save time.",
-    caseStudy1Link: "https://github.com/0xOucan/agentexoc",
-    caseStudy2Link: "https://github.com/La-DAO/agente-xoc",
-    caseStudy1Label: "Agente XOC (Oucan)",
-    caseStudy2Label: "Juan Dieguito",
+      "Tokenized CETES represent a revolutionary step in Mexican DeFi, bringing traditional government bonds to the blockchain. Deposit Mexican government bonds into Alux and earn interest with unprecedented liquidity and DeFi integration.",
+    caseStudy1Link: "https://www.etherfuse.com/stablebonds",
+    caseStudy2Link: "/lending",
+    caseStudy1Label: "Etherfuse Stablebonds",
+    caseStudy2Label: "Alux Protocol",
   },
   {
     title: "Everyday Currency",
