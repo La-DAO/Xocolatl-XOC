@@ -282,7 +282,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
         </h2>
         <div className="table-border-top">
           {!data && !isError && (
-            <div className="flex flex-col gap-6 mt-6">
+            <div className="flex flex-col gap-4 mt-4 sm:gap-6 sm:mt-6">
               <div className="container-gray-borders flex flex-col gap-2">
                 <label className="font-bold">{t("LendingSupplyModalLabel")}</label>
                 <div className="flex items-center">
@@ -352,15 +352,15 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   </button>
                 </div>
               </div>
-              <div className="flex justify-between gap-4">
+              <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-4">
                 {requiresApproval ? (
                   isApprovalLoading ? (
-                    <div className="flex-grow-2 basis-2/3 bg-warning text-base-100 text-center rounded-lg py-2 cursor-not-allowed">
+                    <div className="w-full bg-warning text-base-100 text-center rounded-lg py-2 cursor-not-allowed">
                       Waiting for approval...
                     </div>
                   ) : isApprovalSuccess ? (
                     <button
-                      className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                      className={`w-full ${isValid ? "primary-btn" : "disabled-btn"}`}
                       onClick={handleSupplyClick}
                       disabled={!isValid}
                     >
@@ -368,7 +368,7 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                     </button>
                   ) : (
                     <button
-                      className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                      className={`w-full ${isValid ? "primary-btn" : "disabled-btn"}`}
                       onClick={handleApproval}
                       disabled={!isValid || isApprovalPending}
                     >
@@ -377,14 +377,14 @@ const SupplyTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   )
                 ) : (
                   <button
-                    className={`flex-grow-2 basis-2/3 ${isValid ? "primary-btn" : "disabled-btn"}`}
+                    className={`w-full ${isValid ? "primary-btn" : "disabled-btn"}`}
                     onClick={handleSupplyClick}
                     disabled={!isValid}
                   >
                     {t("LendingSupplyModalButton")}
                   </button>
                 )}
-                <button onClick={handleClose} className="secondary-btn flex-grow-1 basis-1/3">
+                <button onClick={handleClose} className="secondary-btn w-full">
                   {t("LendingSupplyModalClose")}
                 </button>
               </div>

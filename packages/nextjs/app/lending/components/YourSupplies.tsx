@@ -8,6 +8,8 @@ import useGetReservesData from "@/hooks/useGetReservesData";
 import useGetUserReservesData from "@/hooks/useGetUserReservesData";
 import { useTotalBalance } from "@/hooks/useTotalBalance";
 import { useLendingStore } from "@/stores/lending-store";
+import { faWandSparkles } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 import { useTranslation } from "~~/app/context/LanguageContext";
 import { useTotalAPY } from "~~/hooks/useTotalAPY";
@@ -144,7 +146,9 @@ const YourSupplies: React.FC<YourSuppliesProps> = ({ setAllBalancesZero, setSupp
                     {reserve.symbol}
                     {reserve.symbol === "CETES" && (
                       <span className="tooltip tooltip-info ml-1" data-tip={t("LendingCETESTooltip")}>
-                        <span className="text-info cursor-help">ⓘ</span>
+                        <span className="text-success cursor-help">
+                          <FontAwesomeIcon icon={faWandSparkles} />
+                        </span>
                       </span>
                     )}
                   </p>

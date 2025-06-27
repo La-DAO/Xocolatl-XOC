@@ -60,54 +60,58 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
       </h1>
 
       {/* Reserve Overview Row */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 pb-4">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-2 lg:gap-4 pb-2 lg:pb-4">
         {/* Left: Reserve Symbol */}
         <div className="flex items-center gap-2">
-          <h2 className="text-xl lg:text-2xl font-semibold mb-3 lg:mb-4 text-primary">{reserve.symbol}</h2>
+          <h2 className="text-lg lg:text-2xl font-semibold mb-1 lg:mb-4 text-primary">{reserve.symbol}</h2>
         </div>
 
         {/* Vertical Divider (hidden on small screens) */}
         <div className="hidden lg:block h-6 border-l border-gray-300" />
 
         {/* Right: Metrics */}
-        <div className="grid grid-cols-2 md:flex md:flex-wrap md:justify-end gap-4 md:gap-x-8 md:gap-y-4 text-sm w-full">
+        <div className="grid grid-cols-2 gap-2 lg:flex lg:flex-wrap lg:justify-end lg:gap-x-8 lg:gap-y-4 text-xs lg:text-sm w-full">
           <div>
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-xs lg:text-sm">
               {t("ReserveInfoPanelReserveSize")}
               <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelReserveSizeTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
               </span>
             </p>
-            <p className="text-primary font-bold">
+            <p className="text-primary font-bold text-xs lg:text-sm">
               {reserveSizeLoading ? "Loading..." : `${reserveSize} ${reserve.symbol}`}
             </p>
           </div>
           <div>
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-xs lg:text-sm">
               {t("ReserveInfoPanelSupplyAPY")}
               <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelSupplyAPYTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
               </span>
             </p>
-            <p className="text-primary font-bold">{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
+            <p className="text-primary font-bold text-xs lg:text-sm">
+              {(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%
+            </p>
           </div>
           <div>
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-xs lg:text-sm">
               {t("ReserveInfoPanelOraclePrice")}
               <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelOraclePriceTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
               </span>
             </p>
-            <p className="text-primary font-bold">{formatOraclePrice(reserve.priceInMarketReferenceCurrency)}</p>
+            <p className="text-primary font-bold text-xs lg:text-sm">
+              {formatOraclePrice(reserve.priceInMarketReferenceCurrency)}
+            </p>
           </div>
           <div>
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-xs lg:text-sm">
               {t("ReserveInfoPanelAvailableLiquidity")}
               <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelAvailableLiquidityTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
               </span>
             </p>
-            <p className="text-primary font-bold">
+            <p className="text-primary font-bold text-xs lg:text-sm">
               {formatTokenAmount(reserve.availableLiquidity, reserve.decimals, reserve.symbol)}
             </p>
           </div>
@@ -235,7 +239,9 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
                   <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
                 </span>
               </p>
-              <p className="text-lg font-bold text-primary">{variableBorrowAPY}%</p>
+              <p className="text-lg font-bold text-primary">
+                {reserve.symbol === "CETES" ? "Not Borrowable" : `${variableBorrowAPY}%`}
+              </p>
             </div>
             <div className="border border-gray-300 rounded-md p-4">
               <p className="text-xs text-gray-500">
@@ -245,7 +251,11 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
                 </span>
               </p>
               <p className="text-lg font-bold text-primary">
-                {reserve.borrowCap ? `${Math.floor(Number(reserve.borrowCap)).toLocaleString("en-US")}` : "Unlimited"}
+                {reserve.symbol === "CETES"
+                  ? "Not Borrowable"
+                  : reserve.borrowCap
+                  ? `${Math.floor(Number(reserve.borrowCap)).toLocaleString("en-US")}`
+                  : "Unlimited"}
               </p>
             </div>
           </div>

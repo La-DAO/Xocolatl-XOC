@@ -7,6 +7,8 @@ import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
 import { useLendingStore } from "@/stores/lending-store";
 import { ReserveData } from "@/types/types";
+import { faWandSparkles } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 
 interface AssetsToSupplyProps {
@@ -191,7 +193,9 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
                     {reserve.symbol}
                     {reserve.symbol === "CETES" && (
                       <span className="tooltip tooltip-info ml-1" data-tip={t("LendingCETESTooltip")}>
-                        <span className="text-info cursor-help">ⓘ</span>
+                        <span className="text-success cursor-help">
+                          <FontAwesomeIcon icon={faWandSparkles} />
+                        </span>
                       </span>
                     )}
                   </p>
