@@ -53,7 +53,7 @@ const useCases: UseCase[] = [
     ],
     context:
       "As a stable and widely accepted currency, $XOC is perfect for everyday transactions. Enjoy low fees, fast transactions, and global reach with $XOC as your everyday currency.",
-    caseStudy1Link: "https://www.chipipay.com/en",
+    caseStudy1Link: "https://servicios.chipipay.com/services/recargas",
     caseStudy2Link: "https://studio.manifold.xyz/",
     caseStudy1Label: "Chipi Pay",
     caseStudy2Label: "Manifold",
