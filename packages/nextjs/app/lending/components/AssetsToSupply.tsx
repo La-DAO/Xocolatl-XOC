@@ -7,6 +7,8 @@ import useAccountAddress from "@/hooks/useAccount";
 import useGetReservesData from "@/hooks/useGetReservesData";
 import { useLendingStore } from "@/stores/lending-store";
 import { ReserveData } from "@/types/types";
+import { faWandSparkles } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 
 interface AssetsToSupplyProps {
@@ -168,9 +170,9 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
         <div className="assets-container">
           {/* Table headers */}
           <div className="table-header assets-header py-3 flex justify-between tracking-wider">
-            <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn1")}</div>
-            <div className="assets-header-item w-24 hidden sm:block">{t("LendingAssetsToSupplyColumn2")}</div>
-            <div className="assets-header-item w-24 hidden sm:block">{t("LendingAssetsToSupplyColumn3")}</div>
+            <div className="assets-header-item w-28">{t("LendingAssetsToSupplyColumn1")}</div>
+            <div className="assets-header-item w-32 hidden sm:block">{t("LendingAssetsToSupplyColumn2")}</div>
+            <div className="assets-header-item w-32 ml-2 hidden sm:block">{t("LendingAssetsToSupplyColumn3")}</div>
             <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn4")}</div>
             <div className="assets-header-item w-24"></div>
             <div className="assets-header-item w-24"></div>
@@ -191,7 +193,9 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
                     {reserve.symbol}
                     {reserve.symbol === "CETES" && (
                       <span className="tooltip tooltip-info ml-1" data-tip={t("LendingCETESTooltip")}>
-                        <span className="text-info cursor-help">ⓘ</span>
+                        <span className="text-success cursor-help">
+                          <FontAwesomeIcon icon={faWandSparkles} />
+                        </span>
                       </span>
                     )}
                   </p>

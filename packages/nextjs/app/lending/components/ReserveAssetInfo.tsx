@@ -3,17 +3,21 @@ import APYGraph from "./APYGraph";
 import { useTranslation } from "@/app/context/LanguageContext";
 import useReserveSize from "@/hooks/useReserveSize";
 import { ReserveData } from "@/types/types";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useChainId } from "wagmi";
 import { getAddrBlockExplorerUrl } from "~~/app/utils/utils";
 
 interface Props {
   reserve: ReserveData;
+  allReserves?: ReserveData[] | null;
+  onReserveChange?: (reserve: ReserveData) => void;
 }
 
-const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
+const ReserveAssetInfo: React.FC<Props> = ({ reserve, allReserves, onReserveChange }) => {
   const { t } = useTranslation();
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   const chainId = useChainId();
   const explorer = getAddrBlockExplorerUrl(chainId);
@@ -53,61 +57,113 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
     return `$${formatted.toFixed(2)} USD`;
   };
 
+  const handleReserveSelect = (selectedReserve: ReserveData) => {
+    onReserveChange?.(selectedReserve);
+    setIsDropdownOpen(false);
+  };
+
+  // Close dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="p-6 flex flex-col gap-6 table-background rounded-xl">
-      <h1 className="text-2xl lg:text-3xl font-bold mb-4 lg:mb-6 text-center lg:text-left text-primary">
-        {t("ReserveInfoPanelTitle")}
-      </h1>
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <h1 className="text-2xl lg:text-3xl font-bold text-center lg:text-left text-primary">
+          {t("ReserveInfoPanelTitle")}
+        </h1>
+      </div>
 
       {/* Reserve Overview Row */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 pb-4">
-        {/* Left: Reserve Symbol */}
-        <div className="flex items-center gap-2">
-          <h2 className="text-xl lg:text-2xl font-semibold mb-3 lg:mb-4 text-primary">{reserve.symbol}</h2>
-        </div>
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-2 lg:gap-4 pb-2 lg:pb-4">
+        {/* Reserve Selector Dropdown */}
+        {allReserves && allReserves.length > 0 && (
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm lg:text-base"
+            >
+              <span className="font-semibold text-primary">{reserve.symbol}</span>
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                className={`transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            {isDropdownOpen && (
+              <div className="absolute top-full right-0 mt-1 w-40 lg:w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+                {allReserves.map((reserveOption, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleReserveSelect(reserveOption)}
+                    className={`w-full text-left px-3 py-2 hover:bg-gray-100 transition-colors text-sm lg:text-base ${
+                      reserveOption.symbol === reserve.symbol ? "bg-primary text-white" : ""
+                    }`}
+                  >
+                    {reserveOption.symbol}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Vertical Divider (hidden on small screens) */}
         <div className="hidden lg:block h-6 border-l border-gray-300" />
 
         {/* Right: Metrics */}
-        <div className="grid grid-cols-2 md:flex md:flex-wrap md:justify-end gap-4 md:gap-x-8 md:gap-y-4 text-sm w-full">
+        <div className="grid grid-cols-2 gap-2 lg:flex lg:flex-wrap lg:justify-end lg:gap-x-8 lg:gap-y-4 text-xs lg:text-sm w-full">
           <div>
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-xs lg:text-sm">
               {t("ReserveInfoPanelReserveSize")}
               <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelReserveSizeTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
               </span>
             </p>
-            <p className="text-primary font-bold">
+            <p className="text-primary font-bold text-xs lg:text-sm">
               {reserveSizeLoading ? "Loading..." : `${reserveSize} ${reserve.symbol}`}
             </p>
           </div>
           <div>
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-xs lg:text-sm">
               {t("ReserveInfoPanelSupplyAPY")}
               <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelSupplyAPYTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
               </span>
             </p>
-            <p className="text-primary font-bold">{(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%</p>
+            <p className="text-primary font-bold text-xs lg:text-sm">
+              {(Number(reserve.liquidityRate) / 1e25).toFixed(2)}%
+            </p>
           </div>
           <div>
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-xs lg:text-sm">
               {t("ReserveInfoPanelOraclePrice")}
               <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelOraclePriceTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
               </span>
             </p>
-            <p className="text-primary font-bold">{formatOraclePrice(reserve.priceInMarketReferenceCurrency)}</p>
+            <p className="text-primary font-bold text-xs lg:text-sm">
+              {formatOraclePrice(reserve.priceInMarketReferenceCurrency)}
+            </p>
           </div>
           <div>
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-xs lg:text-sm">
               {t("ReserveInfoPanelAvailableLiquidity")}
               <span className="tooltip tooltip-info" data-tip={t("ReserveInfoPanelAvailableLiquidityTooltip")}>
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
               </span>
             </p>
-            <p className="text-primary font-bold">
+            <p className="text-primary font-bold text-xs lg:text-sm">
               {formatTokenAmount(reserve.availableLiquidity, reserve.decimals, reserve.symbol)}
             </p>
           </div>
@@ -235,7 +291,9 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
                   <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
                 </span>
               </p>
-              <p className="text-lg font-bold text-primary">{variableBorrowAPY}%</p>
+              <p className="text-lg font-bold text-primary">
+                {reserve.symbol === "CETES" ? "Not Borrowable" : `${variableBorrowAPY}%`}
+              </p>
             </div>
             <div className="border border-gray-300 rounded-md p-4">
               <p className="text-xs text-gray-500">
@@ -245,7 +303,11 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
                 </span>
               </p>
               <p className="text-lg font-bold text-primary">
-                {reserve.borrowCap ? `${Math.floor(Number(reserve.borrowCap)).toLocaleString("en-US")}` : "Unlimited"}
+                {reserve.symbol === "CETES"
+                  ? "Not Borrowable"
+                  : reserve.borrowCap
+                  ? `${Math.floor(Number(reserve.borrowCap)).toLocaleString("en-US")}`
+                  : "Unlimited"}
               </p>
             </div>
           </div>

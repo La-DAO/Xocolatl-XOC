@@ -5,6 +5,8 @@ import useGetReservesData from "@/hooks/useGetReservesData";
 import useGetUserReservesData from "@/hooks/useGetUserReservesData";
 import { useLendingStore } from "@/stores/lending-store";
 import { ReserveData } from "@/types/types";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslation } from "~~/app/context/LanguageContext";
 
 const AssetsToBorrow: React.FC = () => {
@@ -78,7 +80,14 @@ const AssetsToBorrow: React.FC = () => {
             return (
               <div key={index} className="table-content table-border-top asset-row flex justify-between py-3">
                 <div className="asset-row-item w-24 h-fit text-lg font-bold">
-                  <p>{reserve.symbol}</p>
+                  <p>
+                    {reserve.symbol}
+                    {reserve.symbol === "CETES" && (
+                      <span className="tooltip tooltip-info ml-1" data-tip="CETES is not a borrowable asset in Alux">
+                        <FontAwesomeIcon icon={faInfoCircle} className="text-gray-400 cursor-pointer" />
+                      </span>
+                    )}
+                  </p>
                 </div>
                 <div className="asset-row-item w-24 h-fit">
                   <p>{formattedLiquidity}</p>

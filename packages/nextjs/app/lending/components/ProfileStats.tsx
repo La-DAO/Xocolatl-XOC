@@ -77,78 +77,72 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
   const isWalletConnected = !!walletAddress;
 
   return (
-    <header className="bg-inherit dark:bg-inherit flex flex-col space-y-2 w-full md:w-fit">
+    <header className="bg-inherit dark:bg-inherit flex flex-col space-y-1 md:space-y-2 w-full md:w-fit">
       <div>
         {networkErrorMessage ? (
-          <div className="text-2xl text-red-600 font-bold">Wrong network, please change to the Base network!</div>
+          <div className="text-lg md:text-2xl text-red-600 font-bold">
+            Wrong network, please change to the Base network!
+          </div>
         ) : !isWalletConnected ? (
-          <div className="text-left py-8">
-            <div className="text-3xl font-bold text-primary mb-2">{t("LendingProfileWelcome")}</div>
-            <div className="text-xl text-black">{t("LendingProfileWelcomeMessage")}</div>
+          <div className="text-left py-4 md:py-8">
+            <div className="text-xl md:text-3xl font-bold text-primary mb-1 md:mb-2">{t("LendingProfileWelcome")}</div>
+            <div className="text-sm md:text-xl text-black">{t("LendingProfileWelcomeMessage")}</div>
           </div>
         ) : (
           <>
-            <div className="flex items-center space-x-2 mb-2">
-              <div className="text-2xl">
-                <Image src={BaseLogo} alt="Base Logo" className="h-8 w-8" />
+            <div className="flex items-center space-x-2 mb-1 md:mb-2">
+              <div className="text-lg md:text-2xl">
+                <Image src={BaseLogo} alt="Base Logo" className="h-6 w-6 md:h-8 md:w-8" />
               </div>
               <div>
-                <div className="text-2xl text-primary font-semibold">Base Market</div>
+                <div className="text-lg md:text-2xl text-primary font-semibold">Base Market</div>
               </div>
             </div>
-            <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-8">
+            <div className="grid grid-cols-2 md:flex md:flex-row items-start md:items-center gap-2 md:gap-0 md:space-x-4 lg:space-x-8">
               <div className="text">
-                <div className="text-sm text-gray-400">
+                <div className="text-xs md:text-sm text-gray-400">
                   {t("LendingProfileNetWorth")}
                   <span className="tooltip tooltip-info" data-tip={t("LendingProfileNetWorthTooltip")}>
                     <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
                   </span>
                 </div>
-                <div className="text-lg text-accent font-semibold">${data.netWorth}</div>
+                <div className="text-sm md:text-lg text-accent font-semibold">${data.netWorth}</div>
               </div>
-              {/*           <div className="text">
-                <div className="text-sm text-gray-400">Total Collateral</div>
-                <div className="text-lg text-accent font-semibold">${totalCollateralBase}</div>
-              </div> */}
               <div className="text">
-                <div className="text-sm text-gray-400">
+                <div className="text-xs md:text-sm text-gray-400">
                   {t("LendingProfileTotalDebt")}
                   <span className="tooltip tooltip-info" data-tip={t("LendingProfileTotalDebtTooltip")}>
                     <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
                   </span>
                 </div>
-                <div className="text-lg text-accent font-semibold">${data.totalDebtBase}</div>
+                <div className="text-sm md:text-lg text-accent font-semibold">${data.totalDebtBase}</div>
               </div>
-              {/* <div className="text">
-                <div className="text-sm text-gray-400">LTV</div>
-                <div className="text-lg text-accent font-semibold">{data.ltv}</div>
-              </div> */}
               <div className="text">
-                <div className="text-sm text-gray-400">
+                <div className="text-xs md:text-sm text-gray-400">
                   {t("LendingProfileHealthFactor")}
                   <span className="tooltip tooltip-info" data-tip={t("LendingProfileHealthFactorTooltip")}>
                     <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
                   </span>
                 </div>
-                <div className="text-lg text-accent font-semibold">{data.healthFactor}</div>
+                <div className="text-sm md:text-lg text-accent font-semibold">{data.healthFactor}</div>
               </div>
               <div className="text">
-                <div className="text-sm text-gray-400">
+                <div className="text-xs md:text-sm text-gray-400">
                   {t("LendingProfileAvailableBorrows")}
                   <span className="tooltip tooltip-info" data-tip={t("LendingProfileAvailableBorrowsTooltip")}>
                     <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
                   </span>
                 </div>
-                <div className="text-lg text-accent font-semibold">${data.availableBorrowsBase}</div>
+                <div className="text-sm md:text-lg text-accent font-semibold">${data.availableBorrowsBase}</div>
               </div>
-              <div className="text">
-                <div className="text-sm text-gray-400">
+              <div className="text col-span-2 md:col-span-1">
+                <div className="text-xs md:text-sm text-gray-400">
                   {t("LendingProfileProjectedEarnings")}
                   <span className="tooltip tooltip-info" data-tip={t("LendingProfileProjectedEarningsTooltip")}>
                     <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
                   </span>
                 </div>
-                <div className="text-lg text-success font-semibold">${data.totalEarnings}</div>
+                <div className="text-sm md:text-lg text-success font-semibold">${data.totalEarnings}</div>
               </div>
             </div>
           </>
