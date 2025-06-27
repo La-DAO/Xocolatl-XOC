@@ -170,9 +170,9 @@ const AssetsToSupply: React.FC<AssetsToSupplyProps> = ({ onReserveClick }) => {
         <div className="assets-container">
           {/* Table headers */}
           <div className="table-header assets-header py-3 flex justify-between tracking-wider">
-            <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn1")}</div>
-            <div className="assets-header-item w-24 hidden sm:block">{t("LendingAssetsToSupplyColumn2")}</div>
-            <div className="assets-header-item w-24 hidden sm:block">{t("LendingAssetsToSupplyColumn3")}</div>
+            <div className="assets-header-item w-28">{t("LendingAssetsToSupplyColumn1")}</div>
+            <div className="assets-header-item w-32 hidden sm:block">{t("LendingAssetsToSupplyColumn2")}</div>
+            <div className="assets-header-item w-32 ml-2 hidden sm:block">{t("LendingAssetsToSupplyColumn3")}</div>
             <div className="assets-header-item w-24">{t("LendingAssetsToSupplyColumn4")}</div>
             <div className="assets-header-item w-24"></div>
             <div className="assets-header-item w-24"></div>

@@ -10,6 +10,7 @@ import ReserveAssetInfo from "./components/ReserveAssetInfo";
 import YourBorrows from "./components/YourBorrows";
 import YourSupplies from "./components/YourSupplies";
 import useAccountAddress from "@/hooks/useAccount";
+import useGetReservesData from "@/hooks/useGetReservesData";
 import { useLendingStore, useUserAccountDataSync } from "@/stores/lending-store";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -29,6 +30,9 @@ const Lending = () => {
   const [borrowsTotalBalance, setBorrowsTotalBalance] = useState(0);
 
   const { address } = useAccountAddress(); // Obtén la dirección del usuario
+
+  // Get all reserves data for the dropdown
+  const { reservesData: allReserves } = useGetReservesData();
 
   // Use the store for user account data
   const {
@@ -400,7 +404,13 @@ const Lending = () => {
           </div>
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="w-full lg:w-1/2">
-              {selectedReserveAsset && <ReserveAssetInfo reserve={selectedReserveAsset} />}
+              {selectedReserveAsset && (
+                <ReserveAssetInfo
+                  reserve={selectedReserveAsset}
+                  allReserves={allReserves}
+                  onReserveChange={setSelectedReserveAsset}
+                />
+              )}
             </div>
             <div className="w-full lg:w-1/2">
               <LendingInfo />

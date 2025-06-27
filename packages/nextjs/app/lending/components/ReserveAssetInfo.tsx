@@ -3,17 +3,21 @@ import APYGraph from "./APYGraph";
 import { useTranslation } from "@/app/context/LanguageContext";
 import useReserveSize from "@/hooks/useReserveSize";
 import { ReserveData } from "@/types/types";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useChainId } from "wagmi";
 import { getAddrBlockExplorerUrl } from "~~/app/utils/utils";
 
 interface Props {
   reserve: ReserveData;
+  allReserves?: ReserveData[] | null;
+  onReserveChange?: (reserve: ReserveData) => void;
 }
 
-const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
+const ReserveAssetInfo: React.FC<Props> = ({ reserve, allReserves, onReserveChange }) => {
   const { t } = useTranslation();
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   const chainId = useChainId();
   const explorer = getAddrBlockExplorerUrl(chainId);
@@ -53,18 +57,66 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve }) => {
     return `$${formatted.toFixed(2)} USD`;
   };
 
+  const handleReserveSelect = (selectedReserve: ReserveData) => {
+    onReserveChange?.(selectedReserve);
+    setIsDropdownOpen(false);
+  };
+
+  // Close dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="p-6 flex flex-col gap-6 table-background rounded-xl">
-      <h1 className="text-2xl lg:text-3xl font-bold mb-4 lg:mb-6 text-center lg:text-left text-primary">
-        {t("ReserveInfoPanelTitle")}
-      </h1>
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <h1 className="text-2xl lg:text-3xl font-bold text-center lg:text-left text-primary">
+          {t("ReserveInfoPanelTitle")}
+        </h1>
+      </div>
 
       {/* Reserve Overview Row */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-2 lg:gap-4 pb-2 lg:pb-4">
-        {/* Left: Reserve Symbol */}
-        <div className="flex items-center gap-2">
-          <h2 className="text-lg lg:text-2xl font-semibold mb-1 lg:mb-4 text-primary">{reserve.symbol}</h2>
-        </div>
+        {/* Reserve Selector Dropdown */}
+        {allReserves && allReserves.length > 0 && (
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm lg:text-base"
+            >
+              <span className="font-semibold text-primary">{reserve.symbol}</span>
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                className={`transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            {isDropdownOpen && (
+              <div className="absolute top-full right-0 mt-1 w-40 lg:w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+                {allReserves.map((reserveOption, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleReserveSelect(reserveOption)}
+                    className={`w-full text-left px-3 py-2 hover:bg-gray-100 transition-colors text-sm lg:text-base ${
+                      reserveOption.symbol === reserve.symbol ? "bg-primary text-white" : ""
+                    }`}
+                  >
+                    {reserveOption.symbol}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Vertical Divider (hidden on small screens) */}
         <div className="hidden lg:block h-6 border-l border-gray-300" />
