@@ -134,6 +134,16 @@ const Lending = () => {
               },
             },
             {
+              element: ".reserve-asset-info-section",
+              popover: {
+                title: "Asset Details",
+                description:
+                  "This panel shows detailed information about the selected asset, including supply/borrow rates, liquidity, risk parameters, and historical APY data. You can switch between different assets using the dropdown to compare their metrics.",
+                side: "top",
+                align: "center",
+              },
+            },
+            {
               element: ".profile-stats-section",
               popover: {
                 title: "Profile Overview",
@@ -164,7 +174,7 @@ const Lending = () => {
   return (
     <div className="flex flex-col w-4/5 m-auto gap-4">
       {/* Floating Tour Button */}
-      <div className="fixed top-1/2 right-4 transform -translate-y-1/2 z-50 mr-16">
+      <div className="fixed top-1/2 right-4 transform -translate-y-1/2 z-50 mr-4">
         <button
           onClick={() => {
             localStorage.removeItem("lending-tour-completed");
@@ -177,12 +187,12 @@ const Lending = () => {
               popoverOffset: 10,
               steps: [
                 {
-                  element: "body",
+                  element: ".profile-stats-section",
                   popover: {
                     title: "Welcome to Alux!",
                     description:
                       "Welcome to Alux, Mexico's on-chain lending protocol. Would you like a guided tour through our dapp?",
-                    side: "bottom",
+                    side: "top",
                     align: "center",
                     showButtons: ["next", "close"],
                     nextBtnText: "Yes, show me around!",
@@ -226,6 +236,16 @@ const Lending = () => {
                     description:
                       "All your active borrows will be displayed here. You can see your borrowed amounts, interest rates, and manage your positions.",
                     side: "bottom",
+                    align: "center",
+                  },
+                },
+                {
+                  element: ".reserve-asset-info-section",
+                  popover: {
+                    title: "Asset Details",
+                    description:
+                      "This panel shows detailed information about the selected asset, including supply/borrow rates, liquidity, risk parameters, and historical APY data. You can switch between different assets using the dropdown to compare their metrics.",
+                    side: "top",
                     align: "center",
                   },
                 },
@@ -405,11 +425,13 @@ const Lending = () => {
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="w-full lg:w-1/2">
               {selectedReserveAsset && (
-                <ReserveAssetInfo
-                  reserve={selectedReserveAsset}
-                  allReserves={allReserves}
-                  onReserveChange={setSelectedReserveAsset}
-                />
+                <div className="reserve-asset-info-section">
+                  <ReserveAssetInfo
+                    reserve={selectedReserveAsset}
+                    allReserves={allReserves}
+                    onReserveChange={setSelectedReserveAsset}
+                  />
+                </div>
               )}
             </div>
             <div className="w-full lg:w-1/2">
