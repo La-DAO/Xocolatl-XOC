@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { useTranslation } from "@/app/context/LanguageContext";
 import useAccountAddress from "@/hooks/useAccount";
+import { useDynamicNetWorth } from "@/hooks/useDynamicNetWorth";
 import BaseLogo from "@/public/Base-Logo.jpg";
 import { useLendingStore } from "@/stores/lending-store";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
@@ -53,8 +54,11 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
   const { address: walletAddress } = useAccountAddress();
   const { totalEarningsUSD } = useLendingStore();
 
+  // Use dynamic net worth calculation
+  const dynamicNetWorth = useDynamicNetWorth(balance);
+
   const data = {
-    netWorth: balance.toFixed(2),
+    netWorth: dynamicNetWorth.toFixed(2),
     ltv: ltv,
     healthFactor: formatHealthFactorDisplay(healthFactor),
     totalCollateralBase: totalCollateralBase,
@@ -106,7 +110,15 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
                     <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
                   </span>
                 </div>
-                <div className="text-sm md:text-lg text-accent font-semibold">${data.netWorth}</div>
+                <div className="text-sm md:text-lg text-accent font-semibold">
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(dynamicNetWorth)}
+                  <span className="text-xs text-success ml-1">●</span>
+                </div>
               </div>
               <div className="text">
                 <div className="text-xs md:text-sm text-gray-400">
@@ -115,7 +127,14 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
                     <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
                   </span>
                 </div>
-                <div className="text-sm md:text-lg text-accent font-semibold">${data.totalDebtBase}</div>
+                <div className="text-sm md:text-lg text-accent font-semibold">
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(data.totalDebtBase)}
+                </div>
               </div>
               <div className="text">
                 <div className="text-xs md:text-sm text-gray-400">
@@ -133,7 +152,14 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
                     <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
                   </span>
                 </div>
-                <div className="text-sm md:text-lg text-accent font-semibold">${data.availableBorrowsBase}</div>
+                <div className="text-sm md:text-lg text-accent font-semibold">
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(data.availableBorrowsBase)}
+                </div>
               </div>
               <div className="text col-span-2 md:col-span-1">
                 <div className="text-xs md:text-sm text-gray-400">
@@ -142,7 +168,14 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
                     <FontAwesomeIcon icon={faInfoCircle} className="ml-1 text-gray-400 cursor-pointer" />
                   </span>
                 </div>
-                <div className="text-sm md:text-lg text-success font-semibold">${data.totalEarnings}</div>
+                <div className="text-sm md:text-lg text-success font-semibold">
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(parseFloat(data.totalEarnings))}
+                </div>
               </div>
             </div>
           </>
