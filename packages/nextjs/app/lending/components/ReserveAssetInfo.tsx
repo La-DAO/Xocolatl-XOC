@@ -91,22 +91,22 @@ const ReserveAssetInfo: React.FC<Props> = ({ reserve, allReserves, onReserveChan
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm lg:text-base"
+              className="flex items-center gap-2 px-3 py-2 bg-white border border-base-300 rounded-lg hover:bg-base-200 hover:text-white transition-colors text-sm lg:text-base dark:text-primary dark:hover:bg-base-200 dark:hover:text-white"
             >
-              <span className="font-semibold text-primary">{reserve.symbol}</span>
+              <span className="font-semibold text-primary dark:hover:text-white">{reserve.symbol}</span>
               <FontAwesomeIcon
                 icon={faChevronDown}
-                className={`transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
+                className={`transition-transform ${isDropdownOpen ? "rotate-180 dark:text-primary" : ""}`}
               />
             </button>
 
             {isDropdownOpen && (
-              <div className="absolute top-full right-0 mt-1 w-40 lg:w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+              <div className="absolute top-full right-0 mt-1 w-40 lg:w-48 bg-base-100 border rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
                 {allReserves.map((reserveOption, index) => (
                   <button
                     key={index}
                     onClick={() => handleReserveSelect(reserveOption)}
-                    className={`w-full text-left px-3 py-2 hover:bg-gray-100 transition-colors text-sm lg:text-base ${
+                    className={`w-full text-left px-3 py-2 hover:bg-neutral hover:text-white dark:hover:text-primary transition-colors text-sm lg:text-base ${
                       reserveOption.symbol === reserve.symbol ? "bg-primary text-white" : ""
                     }`}
                   >
