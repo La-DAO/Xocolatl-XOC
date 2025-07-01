@@ -84,23 +84,6 @@ const FeaturesTab = () => {
                 </button>
               </div>
             </div>
-            <div
-              onClick={() => setCurrentTab("tabFour")}
-              className={`relative flex w-full cursor-pointer items-center gap-4 border border-stroke px-4 py-2 md:w-auto md:border-0 xl:px-10 xl:py-4 m-1 ${
-                currentTab === "tabFour"
-                  ? "border-4 border-accent bg-secondary dark:border-accent dark:bg-secondary rounded-full"
-                  : "hover:bg-secondary rounded-full hover:rounded-full"
-              }`}
-            >
-              <div className="flex h-10 w-10 text-2xl items-center justify-center dark:bg-blacksection">
-                <p className="font-medium text-primary dark:text-white">04</p>
-              </div>
-              <div className="text-xl md:w-3/5 lg:w-auto">
-                <button className="font-medium text-primary dark:text-white xl:text-regular">
-                  {t("featuresTab4")}
-                </button>
-              </div>
-            </div>
           </motion.div>
           {/* <!-- Tab Menues End --> */}
 
