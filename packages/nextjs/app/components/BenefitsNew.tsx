@@ -62,7 +62,7 @@ const BenefitsNew: React.FC = () => {
             <div className="w-full mt-5 leading-snug tracking-tighter">
               <ul className="space-y-4">
                 <li className="flex items-start mt-8 pl-8 pr-8 space-x-3">
-                  <div className="flex items-center justify-center flex-shrink-0 mt-1 bg-base-300 rounded-md w-11 h-11">
+                  <div className="hidden md:flex items-center justify-center flex-shrink-0 mt-1 bg-base-300 rounded-md w-11 h-11">
                     <FaceFrownIcon className="w-7 h-7 text-indigo-50" />
                   </div>
                   <div>
@@ -71,7 +71,7 @@ const BenefitsNew: React.FC = () => {
                   </div>
                 </li>
                 <li className="flex items-start mt-8 pl-8 pr-8 space-x-3">
-                  <div className="flex items-center justify-center flex-shrink-0 mt-1 bg-base-300 rounded-md w-11 h-11">
+                  <div className="hidden md:flex items-center justify-center flex-shrink-0 mt-1 bg-base-300 rounded-md w-11 h-11">
                     <CogIcon className="w-7 h-7 text-indigo-50" />
                   </div>
                   <div>
@@ -80,7 +80,7 @@ const BenefitsNew: React.FC = () => {
                   </div>
                 </li>
                 <li className="flex items-start mt-8 pl-8 pr-8 space-x-3">
-                  <div className="flex items-center justify-center flex-shrink-0 mt-1 bg-base-300 rounded-md w-11 h-11">
+                  <div className="hidden md:flex items-center justify-center flex-shrink-0 mt-1 bg-base-300 rounded-md w-11 h-11">
                     <EyeDropperIcon className="w-7 h-7 text-indigo-50" />
                   </div>
                   <div>
@@ -109,7 +109,7 @@ const BenefitsNew: React.FC = () => {
             <div className="w-full mt-5 leading-snug tracking-tighter">
               <ul className="space-y-4">
                 <li className="flex items-start mt-8 pl-8 pr-8 space-x-3">
-                  <div className="flex items-center justify-center flex-shrink-0 mt-1 bg-base-300 rounded-md w-11 h-11">
+                  <div className="hidden md:flex items-center justify-center flex-shrink-0 mt-1 bg-base-300 rounded-md w-11 h-11">
                     <CubeTransparentIcon className="w-7 h-7 text-indigo-50" />
                   </div>
                   <div>
@@ -118,7 +118,7 @@ const BenefitsNew: React.FC = () => {
                   </div>
                 </li>
                 <li className="flex items-start mt-8 pl-8 pr-8 space-x-3">
-                  <div className="flex items-center justify-center flex-shrink-0 mt-1 bg-base-300 rounded-md w-11 h-11">
+                  <div className="hidden md:flex items-center justify-center flex-shrink-0 mt-1 bg-base-300 rounded-md w-11 h-11">
                     <HandThumbUpIcon className="w-7 h-7 text-indigo-50" />
                   </div>
                   <div>
@@ -127,7 +127,7 @@ const BenefitsNew: React.FC = () => {
                   </div>
                 </li>
                 <li className="flex items-start mt-8 pl-8 pr-8 space-x-3">
-                  <div className="flex items-center justify-center flex-shrink-0 mt-1 bg-base-300 rounded-md w-11 h-11">
+                  <div className="hidden md:flex items-center justify-center flex-shrink-0 mt-1 bg-base-300 rounded-md w-11 h-11">
                     <LinkIcon className="w-7 h-7 text-indigo-50" />
                   </div>
                   <div>
@@ -139,7 +139,7 @@ const BenefitsNew: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className={`flex items-center justify-center w-full lg:w-1/2`}>
+        <div className={`flex items-center justify-center w-full lg:w-1/2 mt-8 lg:mt-0`}>
           <motion.div
             variants={{
               hidden: {

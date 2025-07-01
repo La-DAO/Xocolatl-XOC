@@ -72,7 +72,7 @@ const Hero = () => {
         </div>
       </Container>
       <Container>
-        <div className="flex flex-col justify-center mt-24 mb-14">
+        <div className="flex flex-col justify-center mt-24 mb-14 px-4 sm:px-0">
           <div className=" text-3xl text-center text-inherit dark:text-inherit mb-12">
             <h2>
               {t("mostLiquidStablecoin")} <span className="">.</span>
