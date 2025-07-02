@@ -88,6 +88,63 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   const { userAccountData, refreshComponents } = useLendingStore();
   console.log("userAccountData", userAccountData);
 
+  // Helper function to calculate how much user can borrow of specific asset
+  const calculateUserBorrowableAmount = (reserve: ReserveData) => {
+    // CETES is not borrowable, return special indicator
+    if (reserve.symbol === "CETES") {
+      return "❌";
+    }
+
+    if (!userAccountData?.availableBorrowsBase || !reserve.priceInMarketReferenceCurrency) {
+      return "0";
+    }
+
+    // availableBorrowsBase is in USD (market reference currency)
+    const availableBorrowsUSD = Number(userAccountData.availableBorrowsBase) * 1e10; // Convert from base units
+
+    // priceInMarketReferenceCurrency is the price of the asset in USD (with 8 decimals)
+    const assetPriceUSD = Number(reserve.priceInMarketReferenceCurrency) / 1e8;
+
+    if (assetPriceUSD === 0) {
+      return "0";
+    }
+
+    // Calculate how much of this asset the user can borrow
+    const borrowableAmount = availableBorrowsUSD / assetPriceUSD;
+    const formattedAmount = borrowableAmount.toFixed(6);
+
+    return formattedAmount;
+  };
+
+  // Helper function to format user borrowable amount with currency
+  const formatUserBorrowableAmount = (reserve: ReserveData) => {
+    const borrowableAmount = calculateUserBorrowableAmount(reserve);
+
+    // If it's CETES, return the red cross directly
+    if (borrowableAmount === "❌") {
+      return "❌";
+    }
+
+    // Use the same formatting logic as in the store
+    const numBalance = parseFloat(borrowableAmount);
+    if (isNaN(numBalance)) return "0";
+
+    switch (reserve.symbol) {
+      case "USDC":
+      case "USDT":
+        return `$${numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      case "WETH":
+      case "cbETH":
+      case "wstETH":
+        return `${numBalance.toLocaleString("en-US", { minimumFractionDigits: 4, maximumFractionDigits: 4 })} ETH`;
+      case "XOC":
+      case "MXNe":
+        return `$${numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN`;
+      default:
+        return numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 });
+    }
+  };
+
   const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${borrowHash}`;
 
   // Helper function to check if value is max uint256
@@ -263,7 +320,7 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
       : 0;
 
     // Parse balance and handle edge cases
-    const balanceValue = parseFloat(balance);
+    const balanceValue = Math.floor(parseFloat(balance));
     console.log("handleMaxClick - balance:", balance, "balanceValue:", balanceValue);
 
     if (isNaN(balanceValue) || balanceValue <= 0) {
@@ -374,9 +431,16 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   <span className="font-bold">{reserve.symbol}</span>
                 </div>
                 <div className="text-xs">
-                  {t("LendingBorrowModalBalance")}: {balance}{" "}
+                  {t("LendingBorrowModalBalance")}:{" "}
+                  {Number(balance).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 })}{" "}
                   <span className="font-bold hover:underline cursor-pointer" onClick={handleMaxClick}>
                     MAX
+                  </span>
+                </div>
+                <div className="text-xs">
+                  <span>You Can Borrow: </span>
+                  <span className={` ${formatUserBorrowableAmount(reserve) === "❌" ? "text-red-500" : ""}`}>
+                    {formatUserBorrowableAmount(reserve)}
                   </span>
                 </div>
                 {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
