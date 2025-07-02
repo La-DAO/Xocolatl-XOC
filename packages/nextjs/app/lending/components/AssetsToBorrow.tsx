@@ -14,7 +14,7 @@ const AssetsToBorrow: React.FC = () => {
   const { reservesData, isLoading: isLoadingReserveData, isError: isErrorReserveData } = useGetReservesData();
   const { userReservesData, isLoading: isLoadingUserReserves, isError: isErrorUserReserves } = useGetUserReservesData();
   const { address: walletAddress } = useAccountAddress();
-  const { formatBalanceWithCurrency } = useLendingStore();
+  const { formatBalanceWithCurrency, userAccountData } = useLendingStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReserve, setSelectedReserve] = useState<ReserveData | null>(null);
@@ -36,6 +36,67 @@ const AssetsToBorrow: React.FC = () => {
   // Helper function to get raw available liquidity value
   const getRawAvailableLiquidity = (reserve: ReserveData) => {
     return (Number(reserve.availableLiquidity) / 10 ** Number(reserve.decimals)).toString();
+  };
+
+  // Helper function to calculate how much user can borrow of specific asset
+  const calculateUserBorrowableAmount = (reserve: ReserveData) => {
+    console.log("=== calculateUserBorrowableAmount Debug ===");
+    console.log("reserve:", reserve);
+    console.log("userAccountData:", userAccountData);
+    console.log("availableBorrowsBase:", userAccountData?.availableBorrowsBase);
+    console.log("priceInMarketReferenceCurrency:", reserve.priceInMarketReferenceCurrency);
+
+    // CETES is not borrowable, return special indicator
+    if (reserve.symbol === "CETES") {
+      return "❌";
+    }
+
+    if (!userAccountData?.availableBorrowsBase || !reserve.priceInMarketReferenceCurrency) {
+      console.log("Early return - missing data");
+      return "0";
+    }
+
+    // availableBorrowsBase is in USD (market reference currency)
+    const availableBorrowsUSD = Number(userAccountData.availableBorrowsBase) * 1e10; // Convert from base units
+    console.log("availableBorrowsUSD (after conversion):", availableBorrowsUSD);
+
+    // priceInMarketReferenceCurrency is the price of the asset in USD (with 8 decimals)
+    const assetPriceUSD = Number(reserve.priceInMarketReferenceCurrency) / 1e8;
+    console.log("assetPriceUSD:", assetPriceUSD);
+
+    if (assetPriceUSD === 0) {
+      console.log("Asset price is 0, returning 0");
+      return "0";
+    }
+
+    // Calculate how much of this asset the user can borrow
+    const borrowableAmount = availableBorrowsUSD / assetPriceUSD;
+    console.log("borrowableAmount (before decimal conversion):", borrowableAmount);
+
+    // The borrowableAmount is already in the correct units, no need to divide by decimals again
+    // Just format it properly
+    const assetDecimals = Number(reserve.decimals);
+    console.log("assetDecimals:", assetDecimals);
+    const formattedAmount = borrowableAmount.toFixed(6);
+    console.log("final formattedAmount:", formattedAmount);
+
+    return formattedAmount;
+  };
+
+  // Helper function to format user borrowable amount with currency
+  const formatUserBorrowableAmount = (reserve: ReserveData) => {
+    console.log("=== formatUserBorrowableAmount Debug ===");
+    const borrowableAmount = calculateUserBorrowableAmount(reserve);
+    console.log("borrowableAmount from calculateUserBorrowableAmount:", borrowableAmount);
+
+    // If it's CETES, return the red cross directly
+    if (borrowableAmount === "❌") {
+      return "❌";
+    }
+
+    const formatted = formatBalanceWithCurrency(borrowableAmount, reserve.symbol);
+    console.log("final formatted result:", formatted);
+    return formatted;
   };
 
   // Dynamic borrowable logic
@@ -74,12 +135,14 @@ const AssetsToBorrow: React.FC = () => {
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn1")}</div>
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn2")}</div>
             <div className="assets-header-item w-24 hidden sm:block">{t("LendingAssetsToBorrowColumn3")}</div>
+            <div className="assets-header-item w-24 hidden md:block">You Can Borrow</div>
             <div className="assets-header-item w-24"></div>
           </div>
 
           {(assetsToBorrow ?? []).map((reserve, index) => {
             const formattedLiquidity = formatAvailableLiquidity(reserve);
             const formattedBorrowRate = (Number(reserve.variableBorrowRate) / 1e25).toFixed(2);
+            const userBorrowableAmount = formatUserBorrowableAmount(reserve);
             const isButtonDisabled = !walletAddress;
 
             return (
@@ -99,6 +162,15 @@ const AssetsToBorrow: React.FC = () => {
                 </div>
                 <div className="asset-row-item w-24 h-fit hidden sm:block">
                   <p>{formattedBorrowRate}%</p>
+                </div>
+                <div className="asset-row-item w-24 h-fit hidden md:block">
+                  <p
+                    className={`${
+                      userBorrowableAmount === "❌" ? "text-red-500 text-xl" : "text-green-600 font-semibold"
+                    }`}
+                  >
+                    {userBorrowableAmount}
+                  </p>
                 </div>
                 <div className="asset-row-item w-24 h-fit">
                   <button
