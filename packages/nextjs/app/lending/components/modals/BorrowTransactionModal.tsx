@@ -263,7 +263,7 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
       : 0;
 
     // Parse balance and handle edge cases
-    const balanceValue = Math.floor(parseFloat(balance));
+    const balanceValue = parseFloat(balance);
     console.log("handleMaxClick - balance:", balance, "balanceValue:", balanceValue);
 
     if (isNaN(balanceValue) || balanceValue <= 0) {
@@ -280,7 +280,7 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
 
     console.log("handleMaxClick - maxAmount:", maxAmount, "borrowCap:", borrowCap, "alreadyBorrowed:", alreadyBorrowed);
 
-    setAmount(maxAmount > 0 ? maxAmount.toFixed(2) : "0");
+    setAmount(maxAmount > 0 ? maxAmount.toFixed(6) : "0");
   };
 
   /**
@@ -381,7 +381,7 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   </span>
                 </div>
                 <div className="text-xs">
-                  <span>You Can Borrow: </span>
+                  <span> </span>
                   <span className={` ${formatUserBorrowableAmount(reserve) === "❌" ? "text-red-500" : ""}`}>
                     {formatUserBorrowableAmount(reserve)}
                   </span>
