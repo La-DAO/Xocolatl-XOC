@@ -14,7 +14,7 @@ const AssetsToBorrow: React.FC = () => {
   const { reservesData, isLoading: isLoadingReserveData, isError: isErrorReserveData } = useGetReservesData();
   const { userReservesData, isLoading: isLoadingUserReserves, isError: isErrorUserReserves } = useGetUserReservesData();
   const { address: walletAddress } = useAccountAddress();
-  const { formatBalanceWithCurrency, userAccountData } = useLendingStore();
+  const { formatBalanceWithCurrency, formatUserBorrowableAmount } = useLendingStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReserve, setSelectedReserve] = useState<ReserveData | null>(null);
@@ -36,48 +36,6 @@ const AssetsToBorrow: React.FC = () => {
   // Helper function to get raw available liquidity value
   const getRawAvailableLiquidity = (reserve: ReserveData) => {
     return (Number(reserve.availableLiquidity) / 10 ** Number(reserve.decimals)).toString();
-  };
-
-  // Helper function to calculate how much user can borrow of specific asset
-  const calculateUserBorrowableAmount = (reserve: ReserveData) => {
-    // CETES is not borrowable, return special indicator
-    if (reserve.symbol === "CETES") {
-      return "❌";
-    }
-
-    if (!userAccountData?.availableBorrowsBase || !reserve.priceInMarketReferenceCurrency) {
-      return "0";
-    }
-
-    // availableBorrowsBase is in USD (market reference currency)
-    const availableBorrowsUSD = Number(userAccountData.availableBorrowsBase) * 1e10; // Convert from base units
-
-    // priceInMarketReferenceCurrency is the price of the asset in USD (with 8 decimals)
-    const assetPriceUSD = Number(reserve.priceInMarketReferenceCurrency) / 1e8;
-
-    if (assetPriceUSD === 0) {
-      return "0";
-    }
-
-    // Calculate how much of this asset the user can borrow
-    const borrowableAmount = availableBorrowsUSD / assetPriceUSD;
-
-    const formattedAmount = borrowableAmount.toFixed(6);
-
-    return formattedAmount;
-  };
-
-  // Helper function to format user borrowable amount with currency
-  const formatUserBorrowableAmount = (reserve: ReserveData) => {
-    const borrowableAmount = calculateUserBorrowableAmount(reserve);
-
-    // If it's CETES, return the red cross directly
-    if (borrowableAmount === "❌") {
-      return "❌";
-    }
-
-    const formatted = formatBalanceWithCurrency(borrowableAmount, reserve.symbol);
-    return formatted;
   };
 
   // Dynamic borrowable logic

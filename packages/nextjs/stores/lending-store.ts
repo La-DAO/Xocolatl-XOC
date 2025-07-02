@@ -61,6 +61,12 @@ type LendingStore = {
 
   // Currency formatting utility
   formatBalanceWithCurrency: (balance: string, symbol: string) => string;
+
+  // Helper function to calculate how much user can borrow of specific asset
+  calculateUserBorrowableAmount: (reserve: any) => string;
+
+  // Helper function to format user borrowable amount with currency
+  formatUserBorrowableAmount: (reserve: any) => string;
 };
 
 export const useLendingStore = create<LendingStore>((set, get) => ({
@@ -161,6 +167,46 @@ export const useLendingStore = create<LendingStore>((set, get) => ({
       default:
         return numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 });
     }
+  },
+
+  // Helper function to calculate how much user can borrow of specific asset
+  calculateUserBorrowableAmount: (reserve: any) => {
+    // CETES is not borrowable, return special indicator
+    if (reserve.symbol === "CETES") {
+      return "❌";
+    }
+
+    if (!get().userAccountData?.availableBorrowsBase || !reserve.priceInMarketReferenceCurrency) {
+      return "0";
+    }
+
+    // availableBorrowsBase is in USD (market reference currency)
+    const availableBorrowsUSD = Number(get().userAccountData.availableBorrowsBase) * 1e10; // Convert from base units
+
+    // priceInMarketReferenceCurrency is the price of the asset in USD (with 8 decimals)
+    const assetPriceUSD = Number(reserve.priceInMarketReferenceCurrency) / 1e8;
+
+    if (assetPriceUSD === 0) {
+      return "0";
+    }
+
+    // Calculate how much of this asset the user can borrow
+    const borrowableAmount = availableBorrowsUSD / assetPriceUSD;
+    const formattedAmount = borrowableAmount.toFixed(6);
+
+    return formattedAmount;
+  },
+
+  // Helper function to format user borrowable amount with currency
+  formatUserBorrowableAmount: (reserve: any) => {
+    const borrowableAmount = get().calculateUserBorrowableAmount(reserve);
+
+    // If it's CETES, return the red cross directly
+    if (borrowableAmount === "❌") {
+      return "❌";
+    }
+
+    return get().formatBalanceWithCurrency(borrowableAmount, reserve.symbol);
   },
 }));
 

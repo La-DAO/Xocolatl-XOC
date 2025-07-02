@@ -85,65 +85,8 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   });
 
   // Fetch user account data for health factor and LTV
-  const { userAccountData, refreshComponents } = useLendingStore();
+  const { userAccountData, refreshComponents, formatUserBorrowableAmount } = useLendingStore();
   console.log("userAccountData", userAccountData);
-
-  // Helper function to calculate how much user can borrow of specific asset
-  const calculateUserBorrowableAmount = (reserve: ReserveData) => {
-    // CETES is not borrowable, return special indicator
-    if (reserve.symbol === "CETES") {
-      return "❌";
-    }
-
-    if (!userAccountData?.availableBorrowsBase || !reserve.priceInMarketReferenceCurrency) {
-      return "0";
-    }
-
-    // availableBorrowsBase is in USD (market reference currency)
-    const availableBorrowsUSD = Number(userAccountData.availableBorrowsBase) * 1e10; // Convert from base units
-
-    // priceInMarketReferenceCurrency is the price of the asset in USD (with 8 decimals)
-    const assetPriceUSD = Number(reserve.priceInMarketReferenceCurrency) / 1e8;
-
-    if (assetPriceUSD === 0) {
-      return "0";
-    }
-
-    // Calculate how much of this asset the user can borrow
-    const borrowableAmount = availableBorrowsUSD / assetPriceUSD;
-    const formattedAmount = borrowableAmount.toFixed(6);
-
-    return formattedAmount;
-  };
-
-  // Helper function to format user borrowable amount with currency
-  const formatUserBorrowableAmount = (reserve: ReserveData) => {
-    const borrowableAmount = calculateUserBorrowableAmount(reserve);
-
-    // If it's CETES, return the red cross directly
-    if (borrowableAmount === "❌") {
-      return "❌";
-    }
-
-    // Use the same formatting logic as in the store
-    const numBalance = parseFloat(borrowableAmount);
-    if (isNaN(numBalance)) return "0";
-
-    switch (reserve.symbol) {
-      case "USDC":
-      case "USDT":
-        return `$${numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-      case "WETH":
-      case "cbETH":
-      case "wstETH":
-        return `${numBalance.toLocaleString("en-US", { minimumFractionDigits: 4, maximumFractionDigits: 4 })} ETH`;
-      case "XOC":
-      case "MXNe":
-        return `$${numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN`;
-      default:
-        return numBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 });
-    }
-  };
 
   const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${borrowHash}`;
 
