@@ -74,7 +74,7 @@ const AssetsToBorrow: React.FC = () => {
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn1")}</div>
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn2")}</div>
             <div className="assets-header-item w-24 hidden sm:block">{t("LendingAssetsToBorrowColumn3")}</div>
-            <div className="assets-header-item w-24 hidden md:block">You Can Borrow</div>
+            <div className="assets-header-item w-24 hidden md:block">{t("LendingBorrowModalYouCanBorrow")}</div>
             <div className="assets-header-item w-24"></div>
           </div>
 
