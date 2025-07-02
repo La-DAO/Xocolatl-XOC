@@ -381,7 +381,7 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   </span>
                 </div>
                 <div className="text-xs">
-                  <span> </span>
+                  <span>{t("LendingBorrowModalYouCanBorrow")}: </span>
                   <span className={` ${formatUserBorrowableAmount(reserve) === "❌" ? "text-red-500" : ""}`}>
                     {formatUserBorrowableAmount(reserve)}
                   </span>

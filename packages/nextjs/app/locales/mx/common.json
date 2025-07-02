@@ -232,6 +232,7 @@
   "LendingBorrowModalTitle": "Pedir Prestado",
   "LendingBorrowModalLabel": "Cantidad a pedir prestado",
   "LendingBorrowModalBalance": "Liquidez disponible",
+  "LendingBorrowModalYouCanBorrow": "Puedes pedir prestado",
   "LendingBorrowModalTransactionOverview": "Vista General de la Transacción",
   "LendingBorrowModalTransactionBorrowAPY": "Interés por Pedir Prestado",
   "LendingBorrowModalButton": "Pedir Prestado",
