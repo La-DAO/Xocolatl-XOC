@@ -14,7 +14,7 @@ const AssetsToBorrow: React.FC = () => {
   const { reservesData, isLoading: isLoadingReserveData, isError: isErrorReserveData } = useGetReservesData();
   const { userReservesData, isLoading: isLoadingUserReserves, isError: isErrorUserReserves } = useGetUserReservesData();
   const { address: walletAddress } = useAccountAddress();
-  const { formatBalanceWithCurrency } = useLendingStore();
+  const { formatBalanceWithCurrency, formatUserBorrowableAmount } = useLendingStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReserve, setSelectedReserve] = useState<ReserveData | null>(null);
@@ -74,12 +74,22 @@ const AssetsToBorrow: React.FC = () => {
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn1")}</div>
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn2")}</div>
             <div className="assets-header-item w-24 hidden sm:block">{t("LendingAssetsToBorrowColumn3")}</div>
+            <div className="assets-header-item w-24 hidden md:block">
+              {t("LendingBorrowModalYouCanBorrow")}
+              <span
+                className="tooltip tooltip-info ml-1"
+                data-tip="You cannot borrow the same asset you have supplied. The amounts shown are approximate calculations based on your current collateral and market conditions."
+              >
+                <FontAwesomeIcon icon={faInfoCircle} className="text-gray-400 cursor-pointer" />
+              </span>
+            </div>
             <div className="assets-header-item w-24"></div>
           </div>
 
           {(assetsToBorrow ?? []).map((reserve, index) => {
             const formattedLiquidity = formatAvailableLiquidity(reserve);
             const formattedBorrowRate = (Number(reserve.variableBorrowRate) / 1e25).toFixed(2);
+            const userBorrowableAmount = formatUserBorrowableAmount(reserve);
             const isButtonDisabled = !walletAddress;
 
             return (
@@ -99,6 +109,15 @@ const AssetsToBorrow: React.FC = () => {
                 </div>
                 <div className="asset-row-item w-24 h-fit hidden sm:block">
                   <p>{formattedBorrowRate}%</p>
+                </div>
+                <div className="asset-row-item w-24 h-fit hidden md:block">
+                  <p
+                    className={`${
+                      userBorrowableAmount === "❌" ? "text-red-500 text-xl" : "text-green-600 font-semibold"
+                    }`}
+                  >
+                    {userBorrowableAmount}
+                  </p>
                 </div>
                 <div className="asset-row-item w-24 h-fit">
                   <button

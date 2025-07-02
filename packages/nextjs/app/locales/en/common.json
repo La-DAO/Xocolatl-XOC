@@ -227,6 +227,7 @@
   "LendingBorrowModalTitle": "Borrow",
   "LendingBorrowModalLabel": "Amount",
   "LendingBorrowModalBalance": "Available Liquidity",
+  "LendingBorrowModalYouCanBorrow": "You Can Borrow",
   "LendingBorrowModalTransactionOverview": "Transaction Overview",
   "LendingBorrowModalTransactionBorrowAPY": "Borrow APY",
   "LendingBorrowModalButton": "Borrow",

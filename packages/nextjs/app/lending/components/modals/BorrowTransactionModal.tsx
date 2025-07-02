@@ -85,7 +85,8 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
   });
 
   // Fetch user account data for health factor and LTV
-  const { userAccountData, refreshComponents } = useLendingStore();
+  const { userAccountData, refreshComponents, formatUserBorrowableAmount } = useLendingStore();
+  console.log("userAccountData", userAccountData);
 
   const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${borrowHash}`;
 
@@ -279,7 +280,7 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
 
     console.log("handleMaxClick - maxAmount:", maxAmount, "borrowCap:", borrowCap, "alreadyBorrowed:", alreadyBorrowed);
 
-    setAmount(maxAmount > 0 ? maxAmount.toFixed(2) : "0");
+    setAmount(maxAmount > 0 ? maxAmount.toFixed(6) : "0");
   };
 
   /**
@@ -373,9 +374,16 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
                   <span className="font-bold">{reserve.symbol}</span>
                 </div>
                 <div className="text-xs">
-                  {t("LendingBorrowModalBalance")}: {balance}{" "}
+                  {t("LendingBorrowModalBalance")}:{" "}
+                  {Number(balance).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 })}{" "}
                   <span className="font-bold hover:underline cursor-pointer" onClick={handleMaxClick}>
                     MAX
+                  </span>
+                </div>
+                <div className="text-xs">
+                  <span>{t("LendingBorrowModalYouCanBorrow")}: </span>
+                  <span className={` ${formatUserBorrowableAmount(reserve) === "❌" ? "text-red-500" : ""}`}>
+                    {formatUserBorrowableAmount(reserve)}
                   </span>
                 </div>
                 {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
