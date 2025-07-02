@@ -74,7 +74,15 @@ const AssetsToBorrow: React.FC = () => {
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn1")}</div>
             <div className="assets-header-item w-24">{t("LendingAssetsToBorrowColumn2")}</div>
             <div className="assets-header-item w-24 hidden sm:block">{t("LendingAssetsToBorrowColumn3")}</div>
-            <div className="assets-header-item w-24 hidden md:block">{t("LendingBorrowModalYouCanBorrow")}</div>
+            <div className="assets-header-item w-24 hidden md:block">
+              {t("LendingBorrowModalYouCanBorrow")}
+              <span
+                className="tooltip tooltip-info ml-1"
+                data-tip="You cannot borrow the same asset you have supplied. The amounts shown are approximate calculations based on your current collateral and market conditions."
+              >
+                <FontAwesomeIcon icon={faInfoCircle} className="text-gray-400 cursor-pointer" />
+              </span>
+            </div>
             <div className="assets-header-item w-24"></div>
           </div>
 
