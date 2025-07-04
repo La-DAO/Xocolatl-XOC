@@ -224,11 +224,8 @@ const CreateStreamModal: React.FC<CreateStreamModalProps> = ({ isOpen, onClose }
     const secondsInUnit = BigInt(TIME_UNITS[unit as keyof typeof TIME_UNITS]);
 
     // Calculate flow rate per second (amount / seconds)
-    // We multiply by 1e18 first to maintain precision during division
-    const flowRatePerSecond = (amountInWei * BigInt(1e18)) / secondsInUnit;
-
-    // Convert back to wei (divide by 1e18)
-    return flowRatePerSecond / BigInt(1e18);
+    const flowRatePerSecond = amountInWei / secondsInUnit;
+    return flowRatePerSecond;
   };
 
   const handleUpdateFlow = async () => {

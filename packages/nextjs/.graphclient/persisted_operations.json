@@ -1,0 +1,3 @@
+{
+  "f095dc743b12db9f14b941ae22ef1b8305f8b2749ba7f3a1ed7f05ebebe113c6": "query StreamsQuery($sender: String!) {\n  streams(where: {sender: $sender}) {\n    id\n    currentFlowRate\n    createdAtTimestamp\n    receiver {\n      id\n    }\n  }\n}\n\nquery IncomingStreamsQuery($receiver: String!) {\n  streams(where: {receiver: $receiver}) {\n    id\n    currentFlowRate\n    createdAtTimestamp\n    sender {\n      id\n    }\n  }\n}"
+}

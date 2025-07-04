@@ -38,6 +38,7 @@
     "usehooks-ts@^2.7.2": "patch:usehooks-ts@npm:^2.7.2#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch"
   },
   "devDependencies": {
+    "@graphprotocol/client-cli": "^3.0.7",
     "@types/react-slick": "^0",
     "@types/slick-carousel": "^1",
     "husky": "~8.0.3",
@@ -65,6 +66,7 @@
     "framer-motion": "^11.3.24",
     "framer-motion-3d": "^11.3.2",
     "fs": "^0.0.1-security",
+    "graphql": "^16.11.0",
     "lucide-react": "^0.483.0",
     "next-i18n-router": "^5.5.1",
     "react-chartjs-2": "^5.3.0",
