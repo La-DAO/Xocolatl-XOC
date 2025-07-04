@@ -9,3 +9,15 @@ query StreamsQuery($sender: String!) {
     }
   }
 }
+
+# Incoming streams query
+query IncomingStreamsQuery($receiver: String!) {
+  streams(where: { receiver: $receiver }) {
+    id
+    currentFlowRate
+    createdAtTimestamp
+    sender {
+      id
+    }
+  }
+}

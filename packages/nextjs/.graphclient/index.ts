@@ -21763,7 +21763,8 @@ const merger = new(BareMerger as any)({
         store: rootStore.child('bareMerger')
       })
 const documentHashMap = {
-        "931c753ca280632a2906af52c39675823049330750a227c14b3920cfee543ea6": StreamsQueryDocument
+        "f095dc743b12db9f14b941ae22ef1b8305f8b2749ba7f3a1ed7f05ebebe113c6": StreamsQueryDocument,
+"f095dc743b12db9f14b941ae22ef1b8305f8b2749ba7f3a1ed7f05ebebe113c6": IncomingStreamsQueryDocument
       }
 additionalEnvelopPlugins.push(usePersistedOperations({
         getPersistedOperation(key) {
@@ -21790,7 +21791,14 @@ additionalEnvelopPlugins.push(usePersistedOperations({
           return printWithCache(StreamsQueryDocument);
         },
         location: 'StreamsQueryDocument.graphql',
-        sha256Hash: '931c753ca280632a2906af52c39675823049330750a227c14b3920cfee543ea6'
+        sha256Hash: 'f095dc743b12db9f14b941ae22ef1b8305f8b2749ba7f3a1ed7f05ebebe113c6'
+      },{
+        document: IncomingStreamsQueryDocument,
+        get rawSDL() {
+          return printWithCache(IncomingStreamsQueryDocument);
+        },
+        location: 'IncomingStreamsQueryDocument.graphql',
+        sha256Hash: 'f095dc743b12db9f14b941ae22ef1b8305f8b2749ba7f3a1ed7f05ebebe113c6'
       }
     ];
     },
@@ -21855,6 +21863,16 @@ export type StreamsQueryQuery = { streams: Array<(
     & { receiver: Pick<Account, 'id'> }
   )> };
 
+export type IncomingStreamsQueryQueryVariables = Exact<{
+  receiver: Scalars['String']['input'];
+}>;
+
+
+export type IncomingStreamsQueryQuery = { streams: Array<(
+    Pick<Stream, 'id' | 'currentFlowRate' | 'createdAtTimestamp'>
+    & { sender: Pick<Account, 'id'> }
+  )> };
+
 
 export const StreamsQueryDocument = gql`
     query StreamsQuery($sender: String!) {
@@ -21868,6 +21886,19 @@ export const StreamsQueryDocument = gql`
   }
 }
     ` as unknown as DocumentNode<StreamsQueryQuery, StreamsQueryQueryVariables>;
+export const IncomingStreamsQueryDocument = gql`
+    query IncomingStreamsQuery($receiver: String!) {
+  streams(where: {receiver: $receiver}) {
+    id
+    currentFlowRate
+    createdAtTimestamp
+    sender {
+      id
+    }
+  }
+}
+    ` as unknown as DocumentNode<IncomingStreamsQueryQuery, IncomingStreamsQueryQueryVariables>;
+
 
 
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
@@ -21875,6 +21906,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
     StreamsQuery(variables: StreamsQueryQueryVariables, options?: C): Promise<StreamsQueryQuery> {
       return requester<StreamsQueryQuery, StreamsQueryQueryVariables>(StreamsQueryDocument, variables, options) as Promise<StreamsQueryQuery>;
+    },
+    IncomingStreamsQuery(variables: IncomingStreamsQueryQueryVariables, options?: C): Promise<IncomingStreamsQueryQuery> {
+      return requester<IncomingStreamsQueryQuery, IncomingStreamsQueryQueryVariables>(IncomingStreamsQueryDocument, variables, options) as Promise<IncomingStreamsQueryQuery>;
     }
   };
 }

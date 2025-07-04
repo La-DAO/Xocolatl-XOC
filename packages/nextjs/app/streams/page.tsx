@@ -11,7 +11,7 @@ import DeleteStreamModal from "./components/modals/DeleteStreamModal";
 import UpdateStreamModal from "./components/modals/UpdateStreamModal";
 import { ArrowRight, ArrowUpDown, Clock, Edit, Info, Plus, Trash2, TrendingUp, Users, Wallet } from "lucide-react";
 import { useAccount } from "wagmi";
-import { useLendingStore, useStreamsDataSync } from "~~/stores/lending-store";
+import { useIncomingStreamsDataSync, useLendingStore, useStreamsDataSync } from "~~/stores/lending-store";
 import { useStreamingStore, useUpdateFlowInfo, useUpdateSuperXocBalance } from "~~/stores/streaming-store";
 
 export default function StreamsPage() {
@@ -33,9 +33,17 @@ export default function StreamsPage() {
 
   // Sync streams data with store
   useStreamsDataSync(address || "");
+  useIncomingStreamsDataSync(address || "");
 
   // Get streams data from store
-  const { transformedStreams, streamsLoading, streamsError } = useLendingStore();
+  const {
+    transformedStreams,
+    streamsLoading,
+    streamsError,
+    transformedIncomingStreams,
+    incomingStreamsLoading,
+    incomingStreamsError,
+  } = useLendingStore();
 
   const { xocBalance, superXocBalance, flowInfo } = useStreamingStore();
 
@@ -66,6 +74,7 @@ export default function StreamsPage() {
     // Refresh streams data after creating a new stream
     setTimeout(() => {
       useLendingStore.getState().refreshStreams();
+      useLendingStore.getState().refreshIncomingStreams();
     }, 1000);
   };
 
@@ -80,6 +89,7 @@ export default function StreamsPage() {
     // Refresh streams data after deleting a stream
     setTimeout(() => {
       useLendingStore.getState().refreshStreams();
+      useLendingStore.getState().refreshIncomingStreams();
     }, 1000);
   };
 
@@ -93,6 +103,7 @@ export default function StreamsPage() {
     // Refresh streams data after updating a stream
     setTimeout(() => {
       useLendingStore.getState().refreshStreams();
+      useLendingStore.getState().refreshIncomingStreams();
     }, 1000);
   };
 
@@ -233,7 +244,7 @@ export default function StreamsPage() {
               {flowInfo && flowInfo.flowRate !== 0n ? (
                 <SuperXocFlowingBalance
                   balance={superXocBalance}
-                  flowRate={flowInfo.flowRate}
+                  flowRate={flowInfo.flowRate > 0n ? -flowInfo.flowRate : flowInfo.flowRate}
                   lastUpdated={flowInfo.lastUpdated}
                 />
               ) : (
@@ -446,23 +457,85 @@ export default function StreamsPage() {
 
           {activeTab === "incoming" && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t("StreamsIncomingStreams")}</h2>
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-neutral dark:text-white">{t("StreamsIncomingStreams")}</h2>
+              </div>
 
               <div className="card bg-white dark:bg-base-100 shadow-lg">
-                <div className="card-body text-center">
-                  <div className="space-y-4">
-                    <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto">
-                      <TrendingUp className="w-8 h-8 text-gray-400" />
+                <div className="card-body p-0">
+                  {incomingStreamsLoading && (
+                    <div className="p-6 text-center">
+                      <div className="loading loading-spinner loading-lg"></div>
+                      <p className="mt-4 text-gray-600 dark:text-gray-300">Loading incoming streams...</p>
                     </div>
-                    <div>
-                      <h3 className="font-semibold text-lg">{t("StreamsNoIncomingStreams")}</h3>
-                      <p className="text-gray-600 dark:text-gray-300">{t("StreamsNoIncomingStreamsDescription")}</p>
+                  )}
+
+                  {incomingStreamsError && (
+                    <div className="p-6 text-center">
+                      <div className="text-red-500 mb-4">
+                        <Info className="w-8 h-8 mx-auto mb-2" />
+                        <p className="font-semibold">Error loading incoming streams</p>
+                        <p className="text-sm">{incomingStreamsError.message}</p>
+                      </div>
+                      <button className="btn btn-outline btn-sm" onClick={() => window.location.reload()}>
+                        Try Again
+                      </button>
                     </div>
-                    <button className="btn btn-outline">
-                      {t("StreamsShareYourAddress")}
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </button>
-                  </div>
+                  )}
+
+                  {!incomingStreamsLoading && !incomingStreamsError && (
+                    <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                      {transformedIncomingStreams.length > 0 ? (
+                        transformedIncomingStreams.map(stream => (
+                          <div key={stream.id} className="p-6 flex items-center justify-between">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <span className="badge badge-primary">{stream.status}</span>
+                                <span className="font-medium">{stream.name}</span>
+                              </div>
+                              <p className="text-sm text-gray-600 dark:text-gray-300">
+                                From: {stream.to.slice(0, 6)}...{stream.to.slice(-4)}
+                              </p>
+                              <div className="flex items-center gap-4 text-sm text-gray-500">
+                                <span>
+                                  {stream.flowRate.toFixed(6)} {t("StreamsXOCMonth")}
+                                </span>
+                                <span>•</span>
+                                <span>
+                                  {t("StreamsStarted")}: {stream.startDate}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-gray-500">Incoming</span>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="p-6 text-center">
+                          <div className="space-y-4">
+                            <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto">
+                              <TrendingUp className="w-8 h-8 text-gray-400" />
+                            </div>
+                            <div>
+                              <h3 className="font-semibold text-lg">{t("StreamsNoIncomingStreams")}</h3>
+                              <p className="text-gray-600 dark:text-gray-300">
+                                {address
+                                  ? "You don't have any active incoming streams yet."
+                                  : "Connect your wallet to view your streams."}
+                              </p>
+                            </div>
+                            {!address && (
+                              <button className="btn btn-outline">
+                                {t("StreamsConnectWallet")}
+                                <ArrowRight className="w-4 h-4 ml-2" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
