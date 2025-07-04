@@ -9,19 +9,8 @@ import CreateStreamModal from "./components/Flows/CreateStreamModal";
 import SuperXocFlowingBalance from "./components/SuperXocFlowingBalance";
 import TokenConverter from "./components/Supertokens";
 import DeleteStreamModal from "./components/modals/DeleteStreamModal";
-import {
-  ArrowRight,
-  ArrowUpDown,
-  Clock,
-  Edit,
-  Info,
-  Pause,
-  Plus,
-  Trash2,
-  TrendingUp,
-  Users,
-  Wallet,
-} from "lucide-react";
+import UpdateStreamModal from "./components/modals/UpdateStreamModal";
+import { ArrowRight, ArrowUpDown, Clock, Edit, Info, Plus, Trash2, TrendingUp, Users, Wallet } from "lucide-react";
 import { useAccount } from "wagmi";
 import { useStreamingStore, useUpdateFlowInfo, useUpdateSuperXocBalance } from "~~/stores/streaming-store";
 
@@ -31,6 +20,8 @@ export default function StreamsPage() {
   const [isCreateStreamModalOpen, setIsCreateStreamModalOpen] = useState(false);
   const [isDeleteStreamModalOpen, setIsDeleteStreamModalOpen] = useState(false);
   const [selectedStreamForDeletion, setSelectedStreamForDeletion] = useState<any>(null);
+  const [isUpdateStreamModalOpen, setIsUpdateStreamModalOpen] = useState(false);
+  const [selectedStreamForUpdate, setSelectedStreamForUpdate] = useState<any>(null);
   const tokenConverterRef = useRef<HTMLDivElement>(null);
 
   // Store integration
@@ -95,6 +86,15 @@ export default function StreamsPage() {
   const handleCloseDeleteStreamModal = () => {
     setIsDeleteStreamModalOpen(false);
     setSelectedStreamForDeletion(null);
+  };
+
+  const handleOpenUpdateStreamModal = (stream: any) => {
+    setSelectedStreamForUpdate(stream);
+    setIsUpdateStreamModalOpen(true);
+  };
+  const handleCloseUpdateStreamModal = () => {
+    setIsUpdateStreamModalOpen(false);
+    setSelectedStreamForUpdate(null);
   };
 
   const handleWrapTokensClick = () => {
@@ -400,10 +400,10 @@ export default function StreamsPage() {
                               </div>
                             </div>
                             <div className="flex items-center gap-2">
-                              <button className="btn btn-outline btn-sm">
-                                <Pause className="w-4 h-4" />
-                              </button>
-                              <button className="btn btn-outline btn-sm">
+                              <button
+                                className="btn btn-outline btn-sm"
+                                onClick={() => handleOpenUpdateStreamModal(stream)}
+                              >
                                 <Edit className="w-4 h-4" />
                               </button>
                               <button
@@ -478,6 +478,12 @@ export default function StreamsPage() {
         isOpen={isDeleteStreamModalOpen}
         onClose={handleCloseDeleteStreamModal}
         stream={selectedStreamForDeletion}
+      />
+      {/* Update Stream Modal */}
+      <UpdateStreamModal
+        isOpen={isUpdateStreamModalOpen}
+        onClose={handleCloseUpdateStreamModal}
+        stream={selectedStreamForUpdate}
       />
     </div>
   );
