@@ -11,8 +11,13 @@ import DeleteStreamModal from "./components/modals/DeleteStreamModal";
 import UpdateStreamModal from "./components/modals/UpdateStreamModal";
 import { ArrowRight, ArrowUpDown, Clock, Edit, Info, Plus, Trash2, TrendingUp, Users, Wallet } from "lucide-react";
 import { useAccount } from "wagmi";
-import { useIncomingStreamsDataSync, useLendingStore, useStreamsDataSync } from "~~/stores/lending-store";
-import { useStreamingStore, useUpdateFlowInfo, useUpdateSuperXocBalance } from "~~/stores/streaming-store";
+import {
+  useIncomingStreamsDataSync,
+  useStreamingStore,
+  useStreamsDataSync,
+  useUpdateFlowInfo,
+  useUpdateSuperXocBalance,
+} from "~~/stores/streaming-store";
 
 export default function StreamsPage() {
   const { t } = useTranslation();
@@ -43,7 +48,7 @@ export default function StreamsPage() {
     transformedIncomingStreams,
     incomingStreamsLoading,
     incomingStreamsError,
-  } = useLendingStore();
+  } = useStreamingStore();
 
   const { xocBalance, superXocBalance, flowInfo } = useStreamingStore();
 
@@ -73,8 +78,8 @@ export default function StreamsPage() {
     setIsCreateStreamModalOpen(false);
     // Refresh streams data after creating a new stream
     setTimeout(() => {
-      useLendingStore.getState().refreshStreams();
-      useLendingStore.getState().refreshIncomingStreams();
+      useStreamingStore.getState().refreshStreams();
+      useStreamingStore.getState().refreshIncomingStreams();
     }, 1000);
   };
 
@@ -88,8 +93,8 @@ export default function StreamsPage() {
     setSelectedStreamForDeletion(null);
     // Refresh streams data after deleting a stream
     setTimeout(() => {
-      useLendingStore.getState().refreshStreams();
-      useLendingStore.getState().refreshIncomingStreams();
+      useStreamingStore.getState().refreshStreams();
+      useStreamingStore.getState().refreshIncomingStreams();
     }, 1000);
   };
 
@@ -102,8 +107,8 @@ export default function StreamsPage() {
     setSelectedStreamForUpdate(null);
     // Refresh streams data after updating a stream
     setTimeout(() => {
-      useLendingStore.getState().refreshStreams();
-      useLendingStore.getState().refreshIncomingStreams();
+      useStreamingStore.getState().refreshStreams();
+      useStreamingStore.getState().refreshIncomingStreams();
     }, 1000);
   };
 

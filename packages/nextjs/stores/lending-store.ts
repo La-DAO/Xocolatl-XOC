@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import { fillerLoadingReserve } from "@/app/lending/constants";
 import useGetUserAccountData from "@/hooks/useGetUserAccountData";
-import { useIncomingStreams } from "@/hooks/useIncomingStreams";
-import { useOutgoingStreams } from "@/hooks/useOutgoingStreams";
 import create from "zustand";
 import { ReserveData } from "~~/types/types";
 
@@ -26,17 +24,6 @@ interface EarningsData {
   earningsUSD: string;
   apy: string;
   lastUpdated: number;
-}
-
-// Stream data interface
-interface StreamData {
-  id: string;
-  name: string;
-  to: string;
-  flowRate: number;
-  startDate: string;
-  status: string;
-  rawData: any;
 }
 
 // extiende tu tipo LendingStore:
@@ -71,30 +58,6 @@ type LendingStore = {
   setEarningsData: (data: EarningsData[]) => void;
   setTotalEarningsUSD: (total: string) => void;
   refreshEarnings: () => void;
-
-  // Streams data
-  streamsData: any;
-  streamsLoading: boolean;
-  streamsError: Error | null;
-  setStreamsData: (data: any) => void;
-  setStreamsLoading: (loading: boolean) => void;
-  setStreamsError: (error: Error | null) => void;
-  refreshStreams: () => void;
-
-  // Incoming streams data
-  incomingStreamsData: any;
-  incomingStreamsLoading: boolean;
-  incomingStreamsError: Error | null;
-  setIncomingStreamsData: (data: any) => void;
-  setIncomingStreamsLoading: (loading: boolean) => void;
-  setIncomingStreamsError: (error: Error | null) => void;
-  refreshIncomingStreams: () => void;
-
-  // Transformed streams for display
-  transformedStreams: StreamData[];
-  transformedIncomingStreams: StreamData[];
-  updateTransformedStreams: () => void;
-  updateTransformedIncomingStreams: () => void;
 
   // Currency formatting utility
   formatBalanceWithCurrency: (balance: string, symbol: string) => string;
@@ -183,76 +146,6 @@ export const useLendingStore = create<LendingStore>((set, get) => ({
   refreshEarnings: () => {
     // This will trigger a refresh of earnings data
     set(state => ({ refreshKey: state.refreshKey + 1 }));
-  },
-
-  // Streams data state
-  streamsData: null,
-  streamsLoading: false,
-  streamsError: null,
-  setStreamsData: (data: any) => set({ streamsData: data }),
-  setStreamsLoading: (loading: boolean) => set({ streamsLoading: loading }),
-  setStreamsError: (error: Error | null) => set({ streamsError: error }),
-  refreshStreams: () => {
-    // This will trigger a refresh of streams data
-    set(state => ({ refreshKey: state.refreshKey + 1 }));
-  },
-
-  // Incoming streams data state
-  incomingStreamsData: null,
-  incomingStreamsLoading: false,
-  incomingStreamsError: null,
-  setIncomingStreamsData: (data: any) => set({ incomingStreamsData: data }),
-  setIncomingStreamsLoading: (loading: boolean) => set({ incomingStreamsLoading: loading }),
-  setIncomingStreamsError: (error: Error | null) => set({ incomingStreamsError: error }),
-  refreshIncomingStreams: () => {
-    // This will trigger a refresh of incoming streams data
-    set(state => ({ refreshKey: state.refreshKey + 1 }));
-  },
-
-  // Transformed streams for display
-  transformedStreams: [],
-  transformedIncomingStreams: [],
-  updateTransformedStreams: () => {
-    const { streamsData } = get();
-    if (!streamsData?.streams) {
-      set({ transformedStreams: [] });
-      return;
-    }
-
-    const transformed: StreamData[] = streamsData.streams
-      .filter((stream: any) => parseFloat(stream.currentFlowRate) > 0) // Only show active streams
-      .map((stream: any) => ({
-        id: stream.id,
-        name: `Stream ${stream.id.slice(-6)}`,
-        to: stream.receiver.id,
-        flowRate: (parseFloat(stream.currentFlowRate) / 1e18) * 2592000, // Convert from wei to ether and scale to monthly rate
-        startDate: new Date(parseInt(stream.createdAtTimestamp) * 1000).toLocaleDateString(),
-        status: parseFloat(stream.currentFlowRate) > 0 ? "Active" : "Inactive",
-        rawData: stream,
-      }));
-    set({ transformedStreams: transformed });
-  },
-
-  // Transformed incoming streams for display
-  updateTransformedIncomingStreams: () => {
-    const { incomingStreamsData } = get();
-    if (!incomingStreamsData?.streams) {
-      set({ transformedIncomingStreams: [] });
-      return;
-    }
-
-    const transformed: StreamData[] = incomingStreamsData.streams
-      .filter((stream: any) => parseFloat(stream.currentFlowRate) > 0) // Only show active streams
-      .map((stream: any) => ({
-        id: stream.id,
-        name: `Stream ${stream.id.slice(-6)}`,
-        to: stream.sender.id, // For incoming streams, we show the sender
-        flowRate: (parseFloat(stream.currentFlowRate) / 1e18) * 2592000, // Convert from wei to ether and scale to monthly rate
-        startDate: new Date(parseInt(stream.createdAtTimestamp) * 1000).toLocaleDateString(),
-        status: parseFloat(stream.currentFlowRate) > 0 ? "Active" : "Inactive",
-        rawData: stream,
-      }));
-    set({ transformedIncomingStreams: transformed });
   },
 
   // Currency formatting utility
@@ -344,51 +237,4 @@ export const useUserAccountDataSync = (userAddress: string) => {
     });
     return unsubscribe;
   }, [refetch]);
-};
-
-// Custom hook to sync streams data with the store
-export const useStreamsDataSync = (userAddress: string) => {
-  const { data: streamsData, loading: streamsLoading, error: streamsError } = useOutgoingStreams(userAddress);
-  const { setStreamsData, setStreamsLoading, setStreamsError, updateTransformedStreams } = useLendingStore();
-
-  useEffect(() => {
-    setStreamsLoading(streamsLoading);
-    setStreamsError(streamsError);
-  }, [streamsLoading, streamsError, setStreamsLoading, setStreamsError]);
-
-  useEffect(() => {
-    setStreamsData(streamsData);
-  }, [streamsData, setStreamsData]);
-
-  useEffect(() => {
-    updateTransformedStreams();
-  }, [streamsData, updateTransformedStreams]);
-};
-
-// Custom hook to sync incoming streams data with the store
-export const useIncomingStreamsDataSync = (userAddress: string) => {
-  const {
-    data: incomingStreamsData,
-    loading: incomingStreamsLoading,
-    error: incomingStreamsError,
-  } = useIncomingStreams(userAddress);
-  const {
-    setIncomingStreamsData,
-    setIncomingStreamsLoading,
-    setIncomingStreamsError,
-    updateTransformedIncomingStreams,
-  } = useLendingStore();
-
-  useEffect(() => {
-    setIncomingStreamsLoading(incomingStreamsLoading);
-    setIncomingStreamsError(incomingStreamsError);
-  }, [incomingStreamsLoading, incomingStreamsError, setIncomingStreamsLoading, setIncomingStreamsError]);
-
-  useEffect(() => {
-    setIncomingStreamsData(incomingStreamsData);
-  }, [incomingStreamsData, setIncomingStreamsData]);
-
-  useEffect(() => {
-    updateTransformedIncomingStreams();
-  }, [incomingStreamsData, updateTransformedIncomingStreams]);
 };
