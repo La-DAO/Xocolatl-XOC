@@ -225,7 +225,7 @@ export const useLendingStore = create<LendingStore>((set, get) => ({
         id: stream.id,
         name: `Stream ${stream.id.slice(-6)}`,
         to: stream.receiver.id,
-        flowRate: parseFloat(stream.currentFlowRate) / 1e18, // Convert from wei to ether
+        flowRate: (parseFloat(stream.currentFlowRate) / 1e18) * 2592000, // Convert from wei to ether and scale to monthly rate
         startDate: new Date(parseInt(stream.createdAtTimestamp) * 1000).toLocaleDateString(),
         status: parseFloat(stream.currentFlowRate) > 0 ? "Active" : "Inactive",
         rawData: stream,
@@ -247,7 +247,7 @@ export const useLendingStore = create<LendingStore>((set, get) => ({
         id: stream.id,
         name: `Stream ${stream.id.slice(-6)}`,
         to: stream.sender.id, // For incoming streams, we show the sender
-        flowRate: parseFloat(stream.currentFlowRate) / 1e18, // Convert from wei to ether
+        flowRate: (parseFloat(stream.currentFlowRate) / 1e18) * 2592000, // Convert from wei to ether and scale to monthly rate
         startDate: new Date(parseInt(stream.createdAtTimestamp) * 1000).toLocaleDateString(),
         status: parseFloat(stream.currentFlowRate) > 0 ? "Active" : "Inactive",
         rawData: stream,
