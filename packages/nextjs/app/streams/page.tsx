@@ -2,7 +2,6 @@
 
 import React, { useRef, useState } from "react";
 import Image from "next/image";
-import { useOutgoingStreams } from "../../hooks/useOutgoingStreams";
 import { useTranslation } from "../context/LanguageContext";
 import FlowingBalance from "./components/FlowingBalance";
 import CreateStreamModal from "./components/Flows/CreateStreamModal";
@@ -12,6 +11,7 @@ import DeleteStreamModal from "./components/modals/DeleteStreamModal";
 import UpdateStreamModal from "./components/modals/UpdateStreamModal";
 import { ArrowRight, ArrowUpDown, Clock, Edit, Info, Plus, Trash2, TrendingUp, Users, Wallet } from "lucide-react";
 import { useAccount } from "wagmi";
+import { useLendingStore, useStreamsDataSync } from "~~/stores/lending-store";
 import { useStreamingStore, useUpdateFlowInfo, useUpdateSuperXocBalance } from "~~/stores/streaming-store";
 
 export default function StreamsPage() {
@@ -30,7 +30,12 @@ export default function StreamsPage() {
 
   // Superfluid subgraph integration
   const { address } = useAccount();
-  const { data: streamsData, loading: streamsLoading, error: streamsError } = useOutgoingStreams(address);
+
+  // Sync streams data with store
+  useStreamsDataSync(address || "");
+
+  // Get streams data from store
+  const { transformedStreams, streamsLoading, streamsError } = useLendingStore();
 
   const { xocBalance, superXocBalance, flowInfo } = useStreamingStore();
 
@@ -52,30 +57,16 @@ export default function StreamsPage() {
     return new Date(Number(flowInfo.lastUpdated) * 1000);
   };
 
-  // Transform Superfluid data for display
-  const transformStreamsData = () => {
-    if (!streamsData?.streams) return [];
-
-    return streamsData.streams
-      .filter(stream => parseFloat(stream.currentFlowRate) > 0) // Only show active streams
-      .map(stream => ({
-        id: stream.id,
-        name: `Stream ${stream.id.slice(-6)}`,
-        to: stream.receiver.id,
-        flowRate: parseFloat(stream.currentFlowRate) / 1e18, // Convert from wei to ether
-        startDate: new Date(parseInt(stream.createdAtTimestamp) * 1000).toLocaleDateString(),
-        status: parseFloat(stream.currentFlowRate) > 0 ? "Active" : "Inactive",
-        rawData: stream,
-      }));
-  };
-  const realStreams = transformStreamsData();
-
   const handleOpenCreateStreamModal = () => {
     setIsCreateStreamModalOpen(true);
   };
 
   const handleCloseCreateStreamModal = () => {
     setIsCreateStreamModalOpen(false);
+    // Refresh streams data after creating a new stream
+    setTimeout(() => {
+      useLendingStore.getState().refreshStreams();
+    }, 1000);
   };
 
   const handleOpenDeleteStreamModal = (stream: any) => {
@@ -86,6 +77,10 @@ export default function StreamsPage() {
   const handleCloseDeleteStreamModal = () => {
     setIsDeleteStreamModalOpen(false);
     setSelectedStreamForDeletion(null);
+    // Refresh streams data after deleting a stream
+    setTimeout(() => {
+      useLendingStore.getState().refreshStreams();
+    }, 1000);
   };
 
   const handleOpenUpdateStreamModal = (stream: any) => {
@@ -95,6 +90,10 @@ export default function StreamsPage() {
   const handleCloseUpdateStreamModal = () => {
     setIsUpdateStreamModalOpen(false);
     setSelectedStreamForUpdate(null);
+    // Refresh streams data after updating a stream
+    setTimeout(() => {
+      useLendingStore.getState().refreshStreams();
+    }, 1000);
   };
 
   const handleWrapTokensClick = () => {
@@ -256,7 +255,7 @@ export default function StreamsPage() {
                 ) : streamsError ? (
                   "?"
                 ) : (
-                  realStreams.length
+                  transformedStreams.length
                 )}
               </div>
               <p className="text-xs text-gray-500">{t("StreamsOutgoing")}</p>
@@ -378,8 +377,8 @@ export default function StreamsPage() {
 
                   {!streamsLoading && !streamsError && (
                     <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                      {realStreams.length > 0 ? (
-                        realStreams.map(stream => (
+                      {transformedStreams.length > 0 ? (
+                        transformedStreams.map(stream => (
                           <div key={stream.id} className="p-6 flex items-center justify-between">
                             <div className="space-y-1">
                               <div className="flex items-center gap-2">
