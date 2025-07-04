@@ -1,0 +1,3 @@
+{
+  "931c753ca280632a2906af52c39675823049330750a227c14b3920cfee543ea6": "query StreamsQuery($sender: String!) {\n  streams(where: {sender: $sender}) {\n    id\n    currentFlowRate\n    createdAtTimestamp\n    receiver {\n      id\n    }\n  }\n}"
+}

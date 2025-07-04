@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import Image from "next/image";
+import { useOutgoingStreams } from "../../hooks/useOutgoingStreams";
 import { useTranslation } from "../context/LanguageContext";
 import FlowingBalance from "./components/FlowingBalance";
 import CreateStreamModal from "./components/Flows/CreateStreamModal";
@@ -20,6 +21,7 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
+import { useAccount } from "wagmi";
 import { useStreamingStore, useUpdateFlowInfo, useUpdateSuperXocBalance } from "~~/stores/streaming-store";
 
 export default function StreamsPage() {
@@ -31,6 +33,10 @@ export default function StreamsPage() {
   // Store integration
   useUpdateSuperXocBalance(); // This will update the store with Super XOC balance
   useUpdateFlowInfo(); // This will update the store with flow info
+
+  // Superfluid subgraph integration
+  const { address } = useAccount();
+  const { data: streamsData, loading: streamsLoading, error: streamsError } = useOutgoingStreams(address);
 
   const { xocBalance, superXocBalance, flowInfo } = useStreamingStore();
 
@@ -52,25 +58,22 @@ export default function StreamsPage() {
     return new Date(Number(flowInfo.lastUpdated) * 1000);
   };
 
-  // Mock data for demonstration
-  const mockStreams = [
-    {
-      id: "1",
-      name: "Employee #1",
-      to: "0x8765...4321",
-      flowRate: 100.25,
-      startDate: "1.1.2024",
+  // Transform Superfluid data for display
+  const transformStreamsData = () => {
+    if (!streamsData?.streams) return [];
+
+    return streamsData.streams.map(stream => ({
+      id: stream.id,
+      name: `Stream ${stream.id.slice(-6)}`,
+      to: stream.receiver.id,
+      flowRate: parseFloat(stream.currentFlowRate) / 1e18, // Convert from wei to ether
+      startDate: new Date(parseInt(stream.createdAtTimestamp) * 1000).toLocaleDateString(),
       status: "Active",
-    },
-    {
-      id: "2",
-      name: "Employee #2",
-      to: "0x2468...1357",
-      flowRate: 150.5,
-      startDate: "15.2.2024",
-      status: "Active",
-    },
-  ];
+      rawData: stream,
+    }));
+  };
+
+  const realStreams = transformStreamsData();
 
   const handleOpenCreateStreamModal = () => {
     setIsCreateStreamModalOpen(true);
@@ -233,7 +236,15 @@ export default function StreamsPage() {
                 <h3 className="card-title text-sm">{t("StreamsActiveStreams")}</h3>
                 <Users className="h-4 w-4 text-gray-500" />
               </div>
-              <div className="text-2xl font-bold">{flowInfo && flowInfo.flowRate !== 0n ? "1" : "0"}</div>
+              <div className="text-2xl font-bold">
+                {streamsLoading ? (
+                  <div className="loading loading-spinner loading-sm"></div>
+                ) : streamsError ? (
+                  "?"
+                ) : (
+                  realStreams.length
+                )}
+              </div>
               <p className="text-xs text-gray-500">{t("StreamsOutgoing")}</p>
             </div>
           </div>
@@ -331,39 +342,87 @@ export default function StreamsPage() {
 
               <div className="card bg-white dark:bg-base-100 shadow-lg">
                 <div className="card-body p-0">
-                  <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {mockStreams.map(stream => (
-                      <div key={stream.id} className="p-6 flex items-center justify-between">
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <span className="badge badge-secondary">{stream.status}</span>
-                            <span className="font-medium">{stream.name}</span>
-                          </div>
-                          <p className="text-sm text-gray-600 dark:text-gray-300">To: {stream.to}</p>
-                          <div className="flex items-center gap-4 text-sm text-gray-500">
-                            <span>
-                              {stream.flowRate} {t("StreamsXOCMonth")}
-                            </span>
-                            <span>•</span>
-                            <span>
-                              {t("StreamsStarted")}: {stream.startDate}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <button className="btn btn-outline btn-sm">
-                            <Pause className="w-4 h-4" />
-                          </button>
-                          <button className="btn btn-outline btn-sm">
-                            <Edit className="w-4 h-4" />
-                          </button>
-                          <button className="btn btn-outline btn-sm">
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
+                  {streamsLoading && (
+                    <div className="p-6 text-center">
+                      <div className="loading loading-spinner loading-lg"></div>
+                      <p className="mt-4 text-gray-600 dark:text-gray-300">Loading outgoing streams...</p>
+                    </div>
+                  )}
+
+                  {streamsError && (
+                    <div className="p-6 text-center">
+                      <div className="text-red-500 mb-4">
+                        <Info className="w-8 h-8 mx-auto mb-2" />
+                        <p className="font-semibold">Error loading streams</p>
+                        <p className="text-sm">{streamsError.message}</p>
                       </div>
-                    ))}
-                  </div>
+                      <button className="btn btn-outline btn-sm" onClick={() => window.location.reload()}>
+                        Try Again
+                      </button>
+                    </div>
+                  )}
+
+                  {!streamsLoading && !streamsError && (
+                    <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                      {realStreams.length > 0 ? (
+                        realStreams.map(stream => (
+                          <div key={stream.id} className="p-6 flex items-center justify-between">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <span className="badge badge-secondary">{stream.status}</span>
+                                <span className="font-medium">{stream.name}</span>
+                              </div>
+                              <p className="text-sm text-gray-600 dark:text-gray-300">
+                                To: {stream.to.slice(0, 6)}...{stream.to.slice(-4)}
+                              </p>
+                              <div className="flex items-center gap-4 text-sm text-gray-500">
+                                <span>
+                                  {stream.flowRate.toFixed(6)} {t("StreamsXOCMonth")}
+                                </span>
+                                <span>•</span>
+                                <span>
+                                  {t("StreamsStarted")}: {stream.startDate}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button className="btn btn-outline btn-sm">
+                                <Pause className="w-4 h-4" />
+                              </button>
+                              <button className="btn btn-outline btn-sm">
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button className="btn btn-outline btn-sm">
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="p-6 text-center">
+                          <div className="space-y-4">
+                            <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto">
+                              <TrendingUp className="w-8 h-8 text-gray-400" />
+                            </div>
+                            <div>
+                              <h3 className="font-semibold text-lg">{t("StreamsNoOutgoingStreams")}</h3>
+                              <p className="text-gray-600 dark:text-gray-300">
+                                {address
+                                  ? "You don't have any active outgoing streams yet."
+                                  : "Connect your wallet to view your streams."}
+                              </p>
+                            </div>
+                            {!address && (
+                              <button className="btn btn-outline">
+                                {t("StreamsConnectWallet")}
+                                <ArrowRight className="w-4 h-4 ml-2" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

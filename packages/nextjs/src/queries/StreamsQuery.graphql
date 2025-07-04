@@ -1,0 +1,11 @@
+# src/queries/StreamsQuery.graphql
+query StreamsQuery($sender: String!) {
+  streams(where: { sender: $sender }) {
+    id
+    currentFlowRate
+    createdAtTimestamp
+    receiver {
+      id
+    }
+  }
+}

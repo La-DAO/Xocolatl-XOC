@@ -1,0 +1,7 @@
+sources:
+  - name: superfluidBase
+    handler:
+      graphql:
+        endpoint: https://subgraph-endpoints.superfluid.dev/base-mainnet/protocol-v1
+documents:
+  - ./src/queries/StreamsQuery.graphql
