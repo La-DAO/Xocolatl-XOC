@@ -385,7 +385,13 @@ export default function StreamsPage() {
                         <p className="font-semibold">Error loading streams</p>
                         <p className="text-sm">{streamsError.message}</p>
                       </div>
-                      <button className="btn btn-outline btn-sm" onClick={() => window.location.reload()}>
+                      <button
+                        className="btn btn-outline btn-sm"
+                        onClick={() => {
+                          useStreamingStore.getState().refreshStreams();
+                          useStreamingStore.getState().refreshIncomingStreams();
+                        }}
+                      >
                         Try Again
                       </button>
                     </div>
@@ -482,7 +488,13 @@ export default function StreamsPage() {
                         <p className="font-semibold">Error loading incoming streams</p>
                         <p className="text-sm">{incomingStreamsError.message}</p>
                       </div>
-                      <button className="btn btn-outline btn-sm" onClick={() => window.location.reload()}>
+                      <button
+                        className="btn btn-outline btn-sm"
+                        onClick={() => {
+                          useStreamingStore.getState().refreshStreams();
+                          useStreamingStore.getState().refreshIncomingStreams();
+                        }}
+                      >
                         Try Again
                       </button>
                     </div>
