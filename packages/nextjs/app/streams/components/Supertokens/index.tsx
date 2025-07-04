@@ -1,14 +1,14 @@
 "use client";
 
-import type React from "react";
-import { useEffect, useState } from "react";
-import { ArrowDown, ChevronDown } from "lucide-react";
-import { type Address, parseEther } from "viem";
-import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import React, { useEffect, useState } from "react";
+import { ArrowDown, ChevronDown, Loader2 } from "lucide-react";
+import { type Address, Hash, parseEther } from "viem";
+import { useAccount, useReadContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { supertokenABI } from "~~/app/components/abis/Supertoken";
 import { ERC20ABI } from "~~/app/components/abis/erc20";
-import { spenderAddress, xocContract } from "~~/app/constants/contracts";
+import { xocContract } from "~~/app/constants/contracts";
 import { useBalanceOf } from "~~/hooks/useBalanceOf";
+import { useStreamingStore, useUpdateSuperXocBalance } from "~~/stores/streaming-store";
 
 const TokenConverter = () => {
   const { address: accountAddress } = useAccount();
@@ -16,31 +16,103 @@ const TokenConverter = () => {
   const [tokenAmount, setTokenAmount] = useState<string>("0.0");
   const [tokenError, setTokenError] = useState<string | null>(null);
   const [usdValue, setUsdValue] = useState<string>("$0.00");
+  const [isTransactionPending, setIsTransactionPending] = useState(false);
+  const [transactionStatus, setTransactionStatus] = useState<string>("");
 
   const xocBalance = useBalanceOf({ tokenAddress: xocContract, walletAddress: accountAddress as Address });
   const [xocAllowanceState, xocSetAllowanceState] = useState<string>("0");
   const [requiresApproval, setRequiresApproval] = useState(false);
 
   // Write contract hooks
-  const { writeContract: upgradeXOC } = useWriteContract();
-  const { writeContract: approveERC20 } = useWriteContract();
-  const { writeContract: downgradeSuperXOC } = useWriteContract();
+  const { writeContract: upgradeXOC, data: upgradeData } = useWriteContract();
+  const { writeContract: approveERC20, data: approveData } = useWriteContract();
+  const { writeContract: downgradeSuperXOC, data: downgradeData } = useWriteContract();
+
+  // Store refresh functions
+  const { refreshComponents } = useStreamingStore();
+  const { refreshBalancesManually } = useUpdateSuperXocBalance();
+
+  // Custom balance refresh function that directly updates the store
+  const forceBalanceRefresh = React.useCallback(() => {
+    console.log("Force refreshing balances after transaction...");
+    // Force immediate refresh
+    refreshBalancesManually();
+    refreshComponents();
+
+    // Additional refreshes with delays to ensure blockchain state is updated
+    setTimeout(() => {
+      console.log("Secondary balance refresh...");
+      refreshBalancesManually();
+      refreshComponents();
+    }, 2000);
+
+    setTimeout(() => {
+      console.log("Final balance refresh...");
+      refreshBalancesManually();
+      refreshComponents();
+    }, 5000);
+  }, [refreshBalancesManually, refreshComponents]);
+
+  // Transaction receipt hooks
+  const { isSuccess: isUpgradeSuccess, isError: isUpgradeError } = useWaitForTransactionReceipt({
+    hash: upgradeData as Hash,
+  });
+
+  const { isSuccess: isApproveSuccess, isError: isApproveError } = useWaitForTransactionReceipt({
+    hash: approveData as Hash,
+  });
+
+  const { isSuccess: isDowngradeSuccess, isError: isDowngradeError } = useWaitForTransactionReceipt({
+    hash: downgradeData as Hash,
+  });
+
+  // Handle transaction success/error states
+  useEffect(() => {
+    if (isUpgradeSuccess) {
+      console.log("Upgrade transaction successful");
+      setTransactionStatus("Wrap successful!");
+      setIsTransactionPending(false);
+      refreshComponents();
+      // Refresh balances after successful wrap
+      forceBalanceRefresh();
+    } else if (isUpgradeError) {
+      console.error("Upgrade transaction failed");
+      setTransactionStatus("Wrap failed!");
+      setIsTransactionPending(false);
+    }
+  }, [isUpgradeSuccess, isUpgradeError, refreshComponents, forceBalanceRefresh]);
+
+  useEffect(() => {
+    if (isDowngradeSuccess) {
+      console.log("Downgrade transaction successful");
+      setTransactionStatus("Unwrap successful!");
+      setIsTransactionPending(false);
+      refreshComponents();
+      // Refresh balances after successful unwrap
+      forceBalanceRefresh();
+    } else if (isDowngradeError) {
+      console.error("Downgrade transaction failed");
+      setTransactionStatus("Unwrap failed!");
+      setIsTransactionPending(false);
+    }
+  }, [isDowngradeSuccess, isDowngradeError, refreshComponents, forceBalanceRefresh]);
 
   const superXocBalance = useBalanceOf({
     tokenAddress: "0xedF89f2612a5B07FEF051e1a0444342B5410C405",
     walletAddress: accountAddress as Address,
   });
 
-  // Hook to read the XOC contract allowance
+  // Hook to read the XOC contract allowance for the supertoken contract
   const {
     data: xocAllowance,
     isError,
     isLoading,
+    refetch: refetchAllowance,
   } = useReadContract({
     address: xocContract,
     abi: ERC20ABI,
     functionName: "allowance",
-    args: [accountAddress, spenderAddress],
+    args: [accountAddress, "0xedF89f2612a5B07FEF051e1a0444342B5410C405"],
   });
 
   useEffect(() => {
@@ -59,11 +131,43 @@ const TokenConverter = () => {
       const xocAmountInWei = amount * 1e18;
       const xocAllowanceInWei = Number.parseFloat(xocAllowanceState) * 1e18;
       const needsApproval = xocAmountInWei > xocAllowanceInWei;
+      console.log("Approval check:", {
+        amount,
+        xocAmountInWei: xocAmountInWei.toString(),
+        xocAllowanceState,
+        xocAllowanceInWei: xocAllowanceInWei.toString(),
+        needsApproval,
+      });
       setRequiresApproval(needsApproval);
     } else {
       setRequiresApproval(false);
     }
   }, [tokenAmount, xocAllowanceState, tab]);
+
+  // Handle approval transaction success/error states
+  useEffect(() => {
+    if (isApproveSuccess) {
+      console.log("Approval transaction successful");
+      setTransactionStatus("Approval successful!");
+      setIsTransactionPending(false);
+      refreshComponents();
+
+      // Refetch allowance with multiple attempts to ensure it updates
+      refetchAllowance();
+      setTimeout(() => {
+        console.log("Refreshing allowance after delay...");
+        refetchAllowance();
+      }, 2000);
+      setTimeout(() => {
+        console.log("Final allowance refresh...");
+        refetchAllowance();
+      }, 5000);
+    } else if (isApproveError) {
+      console.error("Approval transaction failed");
+      setTransactionStatus("Approval failed!");
+      setIsTransactionPending(false);
+    }
+  }, [isApproveSuccess, isApproveError, refreshComponents, refetchAllowance]);
 
   const handleUpgrade = async () => {
     if (!accountAddress) {
@@ -73,15 +177,18 @@ const TokenConverter = () => {
     const amount = Number.parseFloat(tokenAmount) || 0;
     const xocAmountInWei = parseEther(amount.toString());
     try {
-      const tx = await upgradeXOC({
+      setIsTransactionPending(true);
+      setTransactionStatus("Wrapping tokens...");
+      await upgradeXOC({
         abi: supertokenABI,
         address: "0xedF89f2612a5B07FEF051e1a0444342B5410C405",
         functionName: "upgrade",
         args: [xocAmountInWei],
       });
-      console.log("Transaction submitted:", tx);
     } catch (error) {
       console.error("Error executing contract function:", error);
+      setTransactionStatus("Wrap failed!");
+      setIsTransactionPending(false);
     }
   };
 
@@ -89,16 +196,20 @@ const TokenConverter = () => {
     const amount = Number.parseFloat(tokenAmount) || 0;
     const xocAmountInWei = amount * 1e18;
     try {
+      setIsTransactionPending(true);
+      setTransactionStatus("Approving tokens...");
       if (xocAmountInWei > Number.parseFloat(xocAllowanceState)) {
         await approveERC20({
           abi: ERC20ABI,
           address: xocContract,
           functionName: "approve",
-          args: [spenderAddress, xocAmountInWei],
+          args: ["0xedF89f2612a5B07FEF051e1a0444342B5410C405", xocAmountInWei],
         });
       }
     } catch (err) {
       console.error("Error approving XOC tokens:", err);
+      setTransactionStatus("Approval failed!");
+      setIsTransactionPending(false);
     }
   };
 
@@ -110,15 +221,18 @@ const TokenConverter = () => {
     const amount = Number.parseFloat(tokenAmount) || 0;
     const xocAmountInWei = parseEther(amount.toString());
     try {
-      const tx = await downgradeSuperXOC({
+      setIsTransactionPending(true);
+      setTransactionStatus("Unwrapping tokens...");
+      await downgradeSuperXOC({
         abi: supertokenABI,
         address: "0xedF89f2612a5B07FEF051e1a0444342B5410C405",
         functionName: "downgrade",
         args: [xocAmountInWei],
       });
-      console.log("Downgrade transaction submitted:", tx);
     } catch (error) {
       console.error("Error executing downgrade function:", error);
+      setTransactionStatus("Unwrap failed!");
+      setIsTransactionPending(false);
     }
   };
 
@@ -268,11 +382,11 @@ const TokenConverter = () => {
       {/* Action button */}
       <button
         className={`w-full py-4 rounded-xl font-medium text-white transition-colors ${
-          tokenError || Number.parseFloat(tokenAmount) <= 0
+          tokenError || Number.parseFloat(tokenAmount) <= 0 || isTransactionPending
             ? "bg-gray-300 dark:bg-gray-600 cursor-not-allowed"
             : "bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700"
         }`}
-        disabled={!!tokenError || Number.parseFloat(tokenAmount) <= 0}
+        disabled={!!tokenError || Number.parseFloat(tokenAmount) <= 0 || isTransactionPending}
         onClick={() => {
           if (tab === "upgrade") {
             if (requiresApproval) {
@@ -285,7 +399,22 @@ const TokenConverter = () => {
           }
         }}
       >
-        {tokenError ? tokenError : tab === "upgrade" ? (requiresApproval ? "Approve" : "Wrap") : "Unwrap"}
+        {isTransactionPending ? (
+          <div className="flex items-center justify-center">
+            <Loader2 className="animate-spin mr-2" size={16} />
+            {transactionStatus}
+          </div>
+        ) : tokenError ? (
+          tokenError
+        ) : tab === "upgrade" ? (
+          requiresApproval ? (
+            "Approve"
+          ) : (
+            "Wrap"
+          )
+        ) : (
+          "Unwrap"
+        )}
       </button>
     </div>
   );

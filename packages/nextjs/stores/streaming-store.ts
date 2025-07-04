@@ -73,6 +73,7 @@ interface StreamingStoreState {
   // Refresh key for triggering re-fetches
   refreshKey: number;
   refreshComponents: () => void;
+  refreshBalances: () => void;
 }
 
 export const useStreamingStore = create<StreamingStoreState>(set => ({
@@ -161,12 +162,13 @@ export const useStreamingStore = create<StreamingStoreState>(set => ({
   // Initialize refresh key and components
   refreshKey: 0,
   refreshComponents: () => set(prev => ({ refreshKey: prev.refreshKey + 1 })),
+  refreshBalances: () => set(prev => ({ refreshKey: prev.refreshKey + 1 })),
 }));
 
 // Hook to update superXocBalance in the store
 export const useUpdateSuperXocBalance = () => {
   const { address: accountAddress } = useAccount();
-  const { setSuperXocBalance } = useStreamingStore();
+  const { setSuperXocBalance, refreshBalances } = useStreamingStore();
   const { setXocBalance } = useStreamingStore();
 
   const xocBalance = useBalanceOf({
@@ -191,6 +193,18 @@ export const useUpdateSuperXocBalance = () => {
       setSuperXocBalance(superXocBalance);
     }
   }, [superXocBalance, setSuperXocBalance]);
+
+  // Function to manually refresh balances by forcing a re-render
+  const refreshBalancesManually = React.useCallback(() => {
+    console.log("Manually refreshing balances...");
+    // Force a re-render by updating the refresh key multiple times
+    refreshBalances();
+    setTimeout(() => refreshBalances(), 500);
+    setTimeout(() => refreshBalances(), 1000);
+    setTimeout(() => refreshBalances(), 2000);
+  }, [refreshBalances]);
+
+  return { refreshBalancesManually };
 };
 
 // Hook to read and update flow info from contract
