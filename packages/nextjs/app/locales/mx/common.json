@@ -348,5 +348,17 @@
   "StreamsNoIncomingStreams": "No hay Flujos Entrantes",
   "StreamsNoIncomingStreamsDescription": "Aún no tienes ningún flujo de salario entrante activo.",
   "StreamsShareYourAddress": "Compartir tu Dirección",
-  "StreamsRealTimePayments": "Pagos en Tiempo Real"
+  "StreamsRealTimePayments": "Pagos en Tiempo Real",
+  "StreamsNoOutgoingStreams": "No hay Flujos Salientes",
+  "StreamsConnectWallet": "Conectar Billetera",
+  "StreamsDeleteStream": "Eliminar Flujo",
+  "StreamsDeleteWarning": "Esta acción no se puede deshacer. El flujo será eliminado permanentemente.",
+  "StreamsStreamName": "Nombre del Flujo",
+  "StreamsReceiver": "Receptor",
+  "StreamsFlowRate": "Tasa de Flujo",
+  "StreamsTypeConfirmation": "Escribe 'DELETE' para confirmar",
+  "StreamsTypeDeleteToConfirm": "Escribe DELETE para confirmar",
+  "StreamsCancel": "Cancelar",
+  "StreamsConfirmDelete": "Eliminar Flujo",
+  "StreamsDeleting": "Eliminando..."
 }

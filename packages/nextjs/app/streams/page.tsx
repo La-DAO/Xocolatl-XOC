@@ -8,6 +8,7 @@ import FlowingBalance from "./components/FlowingBalance";
 import CreateStreamModal from "./components/Flows/CreateStreamModal";
 import SuperXocFlowingBalance from "./components/SuperXocFlowingBalance";
 import TokenConverter from "./components/Supertokens";
+import DeleteStreamModal from "./components/modals/DeleteStreamModal";
 import {
   ArrowRight,
   ArrowUpDown,
@@ -28,6 +29,8 @@ export default function StreamsPage() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("overview");
   const [isCreateStreamModalOpen, setIsCreateStreamModalOpen] = useState(false);
+  const [isDeleteStreamModalOpen, setIsDeleteStreamModalOpen] = useState(false);
+  const [selectedStreamForDeletion, setSelectedStreamForDeletion] = useState<any>(null);
   const tokenConverterRef = useRef<HTMLDivElement>(null);
 
   // Store integration
@@ -62,17 +65,18 @@ export default function StreamsPage() {
   const transformStreamsData = () => {
     if (!streamsData?.streams) return [];
 
-    return streamsData.streams.map(stream => ({
-      id: stream.id,
-      name: `Stream ${stream.id.slice(-6)}`,
-      to: stream.receiver.id,
-      flowRate: parseFloat(stream.currentFlowRate) / 1e18, // Convert from wei to ether
-      startDate: new Date(parseInt(stream.createdAtTimestamp) * 1000).toLocaleDateString(),
-      status: "Active",
-      rawData: stream,
-    }));
+    return streamsData.streams
+      .filter(stream => parseFloat(stream.currentFlowRate) > 0) // Only show active streams
+      .map(stream => ({
+        id: stream.id,
+        name: `Stream ${stream.id.slice(-6)}`,
+        to: stream.receiver.id,
+        flowRate: parseFloat(stream.currentFlowRate) / 1e18, // Convert from wei to ether
+        startDate: new Date(parseInt(stream.createdAtTimestamp) * 1000).toLocaleDateString(),
+        status: parseFloat(stream.currentFlowRate) > 0 ? "Active" : "Inactive",
+        rawData: stream,
+      }));
   };
-
   const realStreams = transformStreamsData();
 
   const handleOpenCreateStreamModal = () => {
@@ -81,6 +85,16 @@ export default function StreamsPage() {
 
   const handleCloseCreateStreamModal = () => {
     setIsCreateStreamModalOpen(false);
+  };
+
+  const handleOpenDeleteStreamModal = (stream: any) => {
+    setSelectedStreamForDeletion(stream);
+    setIsDeleteStreamModalOpen(true);
+  };
+
+  const handleCloseDeleteStreamModal = () => {
+    setIsDeleteStreamModalOpen(false);
+    setSelectedStreamForDeletion(null);
   };
 
   const handleWrapTokensClick = () => {
@@ -392,7 +406,10 @@ export default function StreamsPage() {
                               <button className="btn btn-outline btn-sm">
                                 <Edit className="w-4 h-4" />
                               </button>
-                              <button className="btn btn-outline btn-sm">
+                              <button
+                                className="btn btn-outline btn-sm text-red-500 hover:text-red-700"
+                                onClick={() => handleOpenDeleteStreamModal(stream)}
+                              >
                                 <Trash2 className="w-4 h-4" />
                               </button>
                             </div>
@@ -456,6 +473,12 @@ export default function StreamsPage() {
 
       {/* Create Stream Modal */}
       <CreateStreamModal isOpen={isCreateStreamModalOpen} onClose={handleCloseCreateStreamModal} />
+      {/* Delete Stream Modal */}
+      <DeleteStreamModal
+        isOpen={isDeleteStreamModalOpen}
+        onClose={handleCloseDeleteStreamModal}
+        stream={selectedStreamForDeletion}
+      />
     </div>
   );
 }

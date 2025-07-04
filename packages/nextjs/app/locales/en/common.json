@@ -343,5 +343,17 @@
   "StreamsNoIncomingStreams": "No Incoming Streams",
   "StreamsNoIncomingStreamsDescription": "You don't have any active incoming salary streams yet.",
   "StreamsShareYourAddress": "Share Your Address",
-  "StreamsRealTimePayments": "Real-time Payments"
+  "StreamsRealTimePayments": "Real-time Payments",
+  "StreamsNoOutgoingStreams": "No Outgoing Streams",
+  "StreamsConnectWallet": "Connect Wallet",
+  "StreamsDeleteStream": "Delete Stream",
+  "StreamsDeleteWarning": "This action cannot be undone. The stream will be permanently deleted.",
+  "StreamsStreamName": "Stream Name",
+  "StreamsReceiver": "Receiver",
+  "StreamsFlowRate": "Flow Rate",
+  "StreamsTypeConfirmation": "Type 'DELETE' to confirm",
+  "StreamsTypeDeleteToConfirm": "Type DELETE to confirm",
+  "StreamsCancel": "Cancel",
+  "StreamsConfirmDelete": "Delete Stream",
+  "StreamsDeleting": "Deleting..."
 }
