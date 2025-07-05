@@ -276,15 +276,15 @@ export default function StreamsPage() {
                 <Users className="h-4 w-4 text-gray-500" />
               </div>
               <div className="text-2xl font-bold">
-                {streamsLoading ? (
+                {streamsLoading || incomingStreamsLoading ? (
                   <div className="loading loading-spinner loading-sm"></div>
-                ) : streamsError ? (
+                ) : streamsError || incomingStreamsError ? (
                   "?"
                 ) : (
-                  transformedStreams.length
+                  transformedStreams.length + transformedIncomingStreams.length
                 )}
               </div>
-              <p className="text-xs text-gray-500">{t("StreamsOutgoing")}</p>
+              <p className="text-xs text-gray-500">{t("StreamsTotalActive")}</p>
             </div>
           </div>
 
