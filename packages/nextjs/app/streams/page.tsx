@@ -185,7 +185,7 @@ export default function StreamsPage() {
         </div>
 
         {/* How It Works */}
-        <div className="card bg-white/80 dark:bg-base-100/80 backdrop-blur-sm shadow-lg">
+        <div className="card bg-white/80 dark:bg-base-100 backdrop-blur-sm shadow-lg">
           <div className="card-body">
             <h2 className="card-title flex items-center gap-2">
               <Info className="w-5 h-5" />
@@ -241,10 +241,10 @@ export default function StreamsPage() {
             <div className="card-body">
               <div className="flex items-center justify-between">
                 <h3 className="card-title text-sm">{t("StreamsXOCBalance")}</h3>
-                <Wallet className="h-4 w-4 text-gray-500" />
+                <Wallet className="h-4 w-4 text-gray-500 dark:text-white" />
               </div>
               <div className="text-2xl font-bold">{xocBalance}</div>
-              <p className="text-xs text-gray-500">{t("StreamsNativeToken")}</p>
+              <p className="text-xs text-gray-500 dark:text-white">{t("StreamsNativeToken")}</p>
             </div>
           </div>
 
@@ -252,7 +252,7 @@ export default function StreamsPage() {
             <div className="card-body">
               <div className="flex items-center justify-between">
                 <h3 className="card-title text-sm">{t("StreamsSuperXOCBalance")}</h3>
-                <TrendingUp className="h-4 w-4 text-gray-500" />
+                <TrendingUp className="h-4 w-4 text-gray-500 dark:text-white" />
               </div>
               {streamsLoading || incomingStreamsLoading ? (
                 <div className="loading loading-spinner loading-sm"></div>
@@ -265,7 +265,7 @@ export default function StreamsPage() {
               ) : (
                 <div className="text-2xl font-bold">{superXocBalance}</div>
               )}
-              <p className="text-xs text-gray-500">{t("StreamsStreamableToken")}</p>
+              <p className="text-xs text-gray-500 dark:text-white">{t("StreamsStreamableToken")}</p>
             </div>
           </div>
 
@@ -273,7 +273,7 @@ export default function StreamsPage() {
             <div className="card-body">
               <div className="flex items-center justify-between">
                 <h3 className="card-title text-sm">{t("StreamsActiveStreams")}</h3>
-                <Users className="h-4 w-4 text-gray-500" />
+                <Users className="h-4 w-4 text-gray-500 dark:text-white" />
               </div>
               <div className="text-2xl font-bold">
                 {streamsLoading || incomingStreamsLoading ? (
@@ -284,7 +284,7 @@ export default function StreamsPage() {
                   transformedStreams.length + transformedIncomingStreams.length
                 )}
               </div>
-              <p className="text-xs text-gray-500">{t("StreamsTotalActive")}</p>
+              <p className="text-xs text-gray-500 dark:text-white">{t("StreamsTotalActive")}</p>
             </div>
           </div>
 
@@ -292,7 +292,7 @@ export default function StreamsPage() {
             <div className="card-body">
               <div className="flex items-center justify-between">
                 <h3 className="card-title text-sm">{t("StreamsMonthlyFlow")}</h3>
-                <Clock className="h-4 w-4 text-gray-500" />
+                <Clock className="h-4 w-4 text-gray-500 dark:text-white" />
               </div>
               <div className="text-2xl font-bold">
                 {streamsLoading || incomingStreamsLoading ? (
@@ -301,7 +301,7 @@ export default function StreamsPage() {
                   calculateNetMonthlyFlow().toFixed(6)
                 )}
               </div>
-              <p className="text-xs text-gray-500">{t("StreamsXOCMonth")}</p>
+              <p className="text-xs text-gray-500 dark:text-white">{t("StreamsXOCMonth")}</p>
             </div>
           </div>
         </div>
@@ -310,19 +310,27 @@ export default function StreamsPage() {
         <div className="space-y-6">
           <div className="tabs tabs-boxed bg-white dark:bg-base-100 shadow-lg py-2 font-medium pb-4">
             <button
-              className={`tab ${activeTab === "overview" ? "tab-active h-10 !text-white bg-primary" : ""}`}
+              className={`tab ${
+                activeTab === "overview"
+                  ? "tab-active h-10 !text-white bg-neutral dark:bg-base-300 dark:text-black"
+                  : ""
+              }`}
               onClick={() => setActiveTab("overview")}
             >
               {t("StreamsOverview")}
             </button>
             <button
-              className={`tab ${activeTab === "outgoing" ? "tab-active h-10 !text-white bg-primary" : ""}`}
+              className={`tab ${
+                activeTab === "outgoing" ? "tab-active h-10 !text-white bg-neutral dark:bg-neutral dark:text-black" : ""
+              }`}
               onClick={() => setActiveTab("outgoing")}
             >
               {t("StreamsOutgoingStreams")}
             </button>
             <button
-              className={`tab ${activeTab === "incoming" ? "tab-active h-10 !text-white bg-primary" : ""}`}
+              className={`tab ${
+                activeTab === "incoming" ? "tab-active h-10 !text-white bg-neutral dark:bg-neutral dark:text-black" : ""
+              }`}
               onClick={() => setActiveTab("incoming")}
             >
               {t("StreamsIncomingStreams")}

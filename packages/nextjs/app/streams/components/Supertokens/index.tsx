@@ -294,7 +294,7 @@ const TokenConverter = () => {
         <button
           className={`px-6 py-2 rounded-full font-medium text-sm transition-colors ${
             tab === "upgrade"
-              ? "bg-primary dark:bg-secondary text-white dark:text-gray-400"
+              ? "bg-primary dark:bg-neutral text-white dark:text-primary"
               : "text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300"
           }`}
           onClick={() => setTab("upgrade")}
@@ -304,7 +304,7 @@ const TokenConverter = () => {
         <button
           className={`px-6 py-2 rounded-full font-medium text-sm transition-colors ${
             tab === "downgrade"
-              ? "bg-primary dark:bg-secondary text-white dark:text-gray-400"
+              ? "bg-primary dark:bg-neutral text-white dark:text-primary"
               : "text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300"
           }`}
           onClick={() => setTab("downgrade")}
@@ -314,16 +314,16 @@ const TokenConverter = () => {
       </div>
 
       {/* First input field */}
-      <div className="mb-2 bg-gray-50 dark:bg-secondary rounded-xl p-4">
+      <div className="mb-2 bg-gray-50 dark:bg-neutral rounded-xl p-4">
         <div className="flex justify-between items-center mb-2">
           <input
             type="text"
             value={tokenAmount}
             onChange={handleInputChange}
-            className="bg-transparent text-gray-900 dark:text-white text-4xl font-light w-full focus:outline-none"
+            className="bg-transparent text-gray-900 dark:text-primary text-4xl font-light w-full focus:outline-none"
             placeholder="0.0"
           />
-          <div className="flex items-center bg-gray-100 dark:bg-[#3a3a3a] rounded-lg px-3 py-2 text-gray-900 dark:text-white">
+          <div className="flex items-center bg-gray-100 dark:bg-base-200 rounded-lg px-3 py-2 text-gray-900 dark:text-white">
             <span className="mr-1">{tab === "upgrade" ? "XOC" : "sXOC"}</span>
             <ChevronDown size={16} />
           </div>
@@ -352,16 +352,16 @@ const TokenConverter = () => {
       </div>
 
       {/* Second input field */}
-      <div className="mt-2 mb-4 bg-gray-50 dark:bg-secondary rounded-xl p-4">
+      <div className="mt-2 mb-4 bg-gray-50 dark:bg-neutral rounded-xl p-4">
         <div className="flex justify-between items-center mb-2">
           <input
             type="text"
             value={tokenAmount}
             onChange={handleInputChange}
-            className="bg-transparent text-gray-900 dark:text-white text-4xl font-light w-full focus:outline-none"
+            className="bg-transparent text-gray-900 dark:text-primary text-4xl font-light w-full focus:outline-none"
             placeholder="0.0"
           />
-          <div className="flex items-center bg-gray-100 dark:bg-[#3a3a3a] rounded-lg px-3 py-2 text-gray-900 dark:text-white">
+          <div className="flex items-center bg-gray-100 dark:bg-base-200 rounded-lg px-3 py-2 text-gray-900 dark:text-white">
             <span className="mr-1">{tab === "upgrade" ? "sXOC" : "XOC"}</span>
             <ChevronDown size={16} />
           </div>
