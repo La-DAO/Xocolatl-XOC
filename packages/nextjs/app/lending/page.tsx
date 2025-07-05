@@ -54,6 +54,15 @@ const Lending = () => {
 
   const chainId = useChainId();
 
+  // ==========================================================
+  // == PERBAIKAN: REFRESH OTOMATIS SAAT GANTI JARINGAN ==
+  // ==========================================================
+  useEffect(() => {
+    console.log("Network changed, refreshing components...");
+    refreshComponents();
+  }, [chainId, refreshComponents]);
+  // ==========================================================
+
   // Function to get network error message based on chainId
   const getNetworkErrorMessage = () => {
     if (chainId !== 8453) {
