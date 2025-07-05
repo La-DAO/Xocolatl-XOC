@@ -513,7 +513,7 @@ export default function StreamsPage() {
                           <div key={stream.id} className="p-6 flex items-center justify-between">
                             <div className="space-y-1">
                               <div className="flex items-center gap-2">
-                                <span className="badge badge-primary">{stream.status}</span>
+                                <span className="badge badge-secondary">{stream.status}</span>
                                 <span className="font-medium">{stream.name}</span>
                               </div>
                               <p className="text-sm text-gray-600 dark:text-gray-300">
