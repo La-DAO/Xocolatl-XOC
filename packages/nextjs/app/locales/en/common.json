@@ -323,6 +323,7 @@
   "StreamsSuperXOCBalance": "SuperXOC Balance",
   "StreamsStreamableToken": "Streamable Token",
   "StreamsActiveStreams": "Active Streams",
+  "StreamsTotalActive": "Total Active",
   "StreamsOutgoing": "Outgoing",
   "StreamsMonthlyFlow": "Monthly Flow",
   "StreamsXOCMonth": "XOC/month",

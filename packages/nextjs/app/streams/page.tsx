@@ -168,7 +168,7 @@ export default function StreamsPage() {
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">{t("StreamsDescription")}</p>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
             <button
-              className="btn btn-primary bg-neutral dark:bg-base-100 text-white dark:text-white btn-lg hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 transition-all duration-300 hover:bg-success dark:hover:bg-success hover:text-primary dark:hover:text-white font-semibold"
+              className="btn btn-primary dark:bg-base-100 text-white dark:text-white btn-lg hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 transition-all duration-300 hover:bg-success dark:hover:bg-success hover:text-primary dark:hover:text-white font-semibold"
               onClick={handleOpenCreateStreamModal}
             >
               <Plus className="w-5 h-5 mr-2" />
@@ -310,19 +310,19 @@ export default function StreamsPage() {
         <div className="space-y-6">
           <div className="tabs tabs-boxed bg-white dark:bg-base-100 shadow-lg py-2 font-medium pb-4">
             <button
-              className={`tab ${activeTab === "overview" ? "tab-active h-10 !text-white" : ""}`}
+              className={`tab ${activeTab === "overview" ? "tab-active h-10 !text-white bg-primary" : ""}`}
               onClick={() => setActiveTab("overview")}
             >
               {t("StreamsOverview")}
             </button>
             <button
-              className={`tab ${activeTab === "outgoing" ? "tab-active h-10 !text-white" : ""}`}
+              className={`tab ${activeTab === "outgoing" ? "tab-active h-10 !text-white bg-primary" : ""}`}
               onClick={() => setActiveTab("outgoing")}
             >
               {t("StreamsOutgoingStreams")}
             </button>
             <button
-              className={`tab ${activeTab === "incoming" ? "tab-active h-10 !text-white" : ""}`}
+              className={`tab ${activeTab === "incoming" ? "tab-active h-10 !text-white bg-primary" : ""}`}
               onClick={() => setActiveTab("incoming")}
             >
               {t("StreamsIncomingStreams")}
