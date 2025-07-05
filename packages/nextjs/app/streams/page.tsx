@@ -187,7 +187,7 @@ export default function StreamsPage() {
               <div className="text-center space-y-4">
                 <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto overflow-hidden bg-gray-100 dark:bg-gray-800">
                   <Image
-                    src="/wrap token.png"
+                    src="/streams/supertoken-wrap.gif"
                     alt="Wrap Tokens"
                     width={128}
                     height={128}
@@ -200,7 +200,7 @@ export default function StreamsPage() {
               <div className="text-center space-y-4">
                 <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto overflow-hidden bg-gray-100 dark:bg-gray-800">
                   <Image
-                    src="/create a stream.png"
+                    src="/streams/token-stream.gif"
                     alt="Create Stream"
                     width={128}
                     height={128}
@@ -213,7 +213,7 @@ export default function StreamsPage() {
               <div className="text-center space-y-4">
                 <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto overflow-hidden bg-gray-100 dark:bg-gray-800">
                   <Image
-                    src="/real-time payments.png"
+                    src="/streams/real-time-payments.gif"
                     alt="Real Time Payments"
                     width={128}
                     height={128}
