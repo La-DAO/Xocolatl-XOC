@@ -3,7 +3,6 @@
 import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslation } from "../context/LanguageContext";
-import FlowingBalance from "./components/FlowingBalance";
 import CreateStreamModal from "./components/Flows/CreateStreamModal";
 import SuperXocFlowingBalance from "./components/SuperXocFlowingBalance";
 import TokenConverter from "./components/Supertokens";
@@ -52,22 +51,31 @@ export default function StreamsPage() {
 
   const { xocBalance, superXocBalance, flowInfo } = useStreamingStore();
 
-  // Calculate monthly flow rate for FlowingBalance
-  const calculateMonthlyFlowRate = () => {
-    if (!flowInfo || flowInfo.flowRate === 0n) return 0n;
+  // Calculate net monthly flow from streams data
+  const calculateNetMonthlyFlow = () => {
+    // Calculate total outgoing flow
+    const totalOutgoing = transformedStreams.reduce((sum, stream) => {
+      return sum + stream.flowRate;
+    }, 0);
 
-    // Convert flowRate from per-second to per-month
-    // flowRate is in wei per second, so multiply by seconds in a month
-    const secondsInMonth = 30 * 24 * 60 * 60; // 30 days
-    const monthlyFlowWei = flowInfo.flowRate * BigInt(secondsInMonth);
+    // Calculate total incoming flow
+    const totalIncoming = transformedIncomingStreams.reduce((sum, stream) => {
+      return sum + stream.flowRate;
+    }, 0);
 
-    return monthlyFlowWei;
+    // Net flow = incoming - outgoing (positive means net inflow, negative means net outflow)
+    const netFlow = totalIncoming - totalOutgoing;
+
+    return netFlow;
   };
 
-  // Get starting date from flowInfo or use current date
-  const getStartingDate = () => {
-    if (!flowInfo || flowInfo.lastUpdated === 0n) return new Date();
-    return new Date(Number(flowInfo.lastUpdated) * 1000);
+  // Convert monthly net flow to per-second flow rate for SuperXocFlowingBalance
+  const calculateNetFlowRate = () => {
+    const monthlyNetFlow = calculateNetMonthlyFlow();
+    // Convert monthly flow to per-second flow rate
+    const secondsInMonth = 30 * 24 * 60 * 60; // 30 days
+    const flowRatePerSecond = (monthlyNetFlow / secondsInMonth) * 1e18; // Convert to wei
+    return BigInt(Math.floor(flowRatePerSecond));
   };
 
   const handleOpenCreateStreamModal = () => {
@@ -160,7 +168,7 @@ export default function StreamsPage() {
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">{t("StreamsDescription")}</p>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
             <button
-              className="btn btn-primary bg-neutral dark:bg-base-100 text-white dark:text-white btn-lg hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 transition-all duration-300 hover:bg-success dark:hover:bg-success hover:text-primary dark:hover:text-white font-semibold"
+              className="btn btn-primary dark:bg-base-100 text-white dark:text-white btn-lg hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 transition-all duration-300 hover:bg-success dark:hover:bg-success hover:text-primary dark:hover:text-white font-semibold"
               onClick={handleOpenCreateStreamModal}
             >
               <Plus className="w-5 h-5 mr-2" />
@@ -177,7 +185,7 @@ export default function StreamsPage() {
         </div>
 
         {/* How It Works */}
-        <div className="card bg-white/80 dark:bg-base-100/80 backdrop-blur-sm shadow-lg">
+        <div className="card bg-white/80 dark:bg-base-100 backdrop-blur-sm shadow-lg">
           <div className="card-body">
             <h2 className="card-title flex items-center gap-2">
               <Info className="w-5 h-5" />
@@ -187,7 +195,7 @@ export default function StreamsPage() {
               <div className="text-center space-y-4">
                 <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto overflow-hidden bg-gray-100 dark:bg-gray-800">
                   <Image
-                    src="/wrap token.png"
+                    src="/streams/supertoken-wrap.gif"
                     alt="Wrap Tokens"
                     width={128}
                     height={128}
@@ -200,7 +208,7 @@ export default function StreamsPage() {
               <div className="text-center space-y-4">
                 <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto overflow-hidden bg-gray-100 dark:bg-gray-800">
                   <Image
-                    src="/create a stream.png"
+                    src="/streams/token-stream.gif"
                     alt="Create Stream"
                     width={128}
                     height={128}
@@ -213,7 +221,7 @@ export default function StreamsPage() {
               <div className="text-center space-y-4">
                 <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto overflow-hidden bg-gray-100 dark:bg-gray-800">
                   <Image
-                    src="/real-time payments.png"
+                    src="/streams/real-time-payments.gif"
                     alt="Real Time Payments"
                     width={128}
                     height={128}
@@ -233,10 +241,10 @@ export default function StreamsPage() {
             <div className="card-body">
               <div className="flex items-center justify-between">
                 <h3 className="card-title text-sm">{t("StreamsXOCBalance")}</h3>
-                <Wallet className="h-4 w-4 text-gray-500" />
+                <Wallet className="h-4 w-4 text-gray-500 dark:text-white" />
               </div>
               <div className="text-2xl font-bold">{xocBalance}</div>
-              <p className="text-xs text-gray-500">{t("StreamsNativeToken")}</p>
+              <p className="text-xs text-gray-500 dark:text-white">{t("StreamsNativeToken")}</p>
             </div>
           </div>
 
@@ -244,18 +252,20 @@ export default function StreamsPage() {
             <div className="card-body">
               <div className="flex items-center justify-between">
                 <h3 className="card-title text-sm">{t("StreamsSuperXOCBalance")}</h3>
-                <TrendingUp className="h-4 w-4 text-gray-500" />
+                <TrendingUp className="h-4 w-4 text-gray-500 dark:text-white" />
               </div>
-              {flowInfo && flowInfo.flowRate !== 0n ? (
+              {streamsLoading || incomingStreamsLoading ? (
+                <div className="loading loading-spinner loading-sm"></div>
+              ) : calculateNetMonthlyFlow() !== 0 ? (
                 <SuperXocFlowingBalance
                   balance={superXocBalance}
-                  flowRate={flowInfo.flowRate > 0n ? -flowInfo.flowRate : flowInfo.flowRate}
-                  lastUpdated={flowInfo.lastUpdated}
+                  flowRate={calculateNetFlowRate()}
+                  lastUpdated={flowInfo?.lastUpdated || BigInt(Math.floor(Date.now() / 1000))}
                 />
               ) : (
                 <div className="text-2xl font-bold">{superXocBalance}</div>
               )}
-              <p className="text-xs text-gray-500">{t("StreamsStreamableToken")}</p>
+              <p className="text-xs text-gray-500 dark:text-white">{t("StreamsStreamableToken")}</p>
             </div>
           </div>
 
@@ -263,18 +273,18 @@ export default function StreamsPage() {
             <div className="card-body">
               <div className="flex items-center justify-between">
                 <h3 className="card-title text-sm">{t("StreamsActiveStreams")}</h3>
-                <Users className="h-4 w-4 text-gray-500" />
+                <Users className="h-4 w-4 text-gray-500 dark:text-white" />
               </div>
               <div className="text-2xl font-bold">
-                {streamsLoading ? (
+                {streamsLoading || incomingStreamsLoading ? (
                   <div className="loading loading-spinner loading-sm"></div>
-                ) : streamsError ? (
+                ) : streamsError || incomingStreamsError ? (
                   "?"
                 ) : (
-                  transformedStreams.length
+                  transformedStreams.length + transformedIncomingStreams.length
                 )}
               </div>
-              <p className="text-xs text-gray-500">{t("StreamsOutgoing")}</p>
+              <p className="text-xs text-gray-500 dark:text-white">{t("StreamsTotalActive")}</p>
             </div>
           </div>
 
@@ -282,20 +292,16 @@ export default function StreamsPage() {
             <div className="card-body">
               <div className="flex items-center justify-between">
                 <h3 className="card-title text-sm">{t("StreamsMonthlyFlow")}</h3>
-                <Clock className="h-4 w-4 text-gray-500" />
+                <Clock className="h-4 w-4 text-gray-500 dark:text-white" />
               </div>
               <div className="text-2xl font-bold">
-                {flowInfo && flowInfo.flowRate !== 0n ? (
-                  <FlowingBalance
-                    startingBalance={0n}
-                    startingBalanceDate={getStartingDate()}
-                    flowRate={calculateMonthlyFlowRate()}
-                  />
+                {streamsLoading || incomingStreamsLoading ? (
+                  <div className="loading loading-spinner loading-sm"></div>
                 ) : (
-                  "0.00"
+                  calculateNetMonthlyFlow().toFixed(6)
                 )}
               </div>
-              <p className="text-xs text-gray-500">{t("StreamsXOCMonth")}</p>
+              <p className="text-xs text-gray-500 dark:text-white">{t("StreamsXOCMonth")}</p>
             </div>
           </div>
         </div>
@@ -304,19 +310,25 @@ export default function StreamsPage() {
         <div className="space-y-6">
           <div className="tabs tabs-boxed bg-white dark:bg-base-100 shadow-lg py-2 font-medium pb-4">
             <button
-              className={`tab ${activeTab === "overview" ? "tab-active h-10 !text-white" : ""}`}
+              className={`tab ${
+                activeTab === "overview" ? "tab-active h-10 !text-white bg-neutral dark:bg-neutral dark:text-black" : ""
+              }`}
               onClick={() => setActiveTab("overview")}
             >
               {t("StreamsOverview")}
             </button>
             <button
-              className={`tab ${activeTab === "outgoing" ? "tab-active h-10 !text-white" : ""}`}
+              className={`tab ${
+                activeTab === "outgoing" ? "tab-active h-10 !text-white bg-neutral dark:bg-neutral dark:text-black" : ""
+              }`}
               onClick={() => setActiveTab("outgoing")}
             >
               {t("StreamsOutgoingStreams")}
             </button>
             <button
-              className={`tab ${activeTab === "incoming" ? "tab-active h-10 !text-white" : ""}`}
+              className={`tab ${
+                activeTab === "incoming" ? "tab-active h-10 !text-white bg-neutral dark:bg-neutral dark:text-black" : ""
+              }`}
               onClick={() => setActiveTab("incoming")}
             >
               {t("StreamsIncomingStreams")}
@@ -338,7 +350,7 @@ export default function StreamsPage() {
                     <p className="text-gray-600 dark:text-gray-300">{t("StreamsQuickActionsDescription")}</p>
                     <div className="space-y-3">
                       <button
-                        className="btn btn-primary text-white w-full justify-start"
+                        className="btn btn-primary text-white w-full justify-start dark:bg-neutral dark:text-primary dark:hover:text-white"
                         onClick={handleOpenCreateStreamModal}
                       >
                         <Plus className="w-4 h-4 mr-2" />
@@ -507,7 +519,7 @@ export default function StreamsPage() {
                           <div key={stream.id} className="p-6 flex items-center justify-between">
                             <div className="space-y-1">
                               <div className="flex items-center gap-2">
-                                <span className="badge badge-primary">{stream.status}</span>
+                                <span className="badge badge-secondary">{stream.status}</span>
                                 <span className="font-medium">{stream.name}</span>
                               </div>
                               <p className="text-sm text-gray-600 dark:text-gray-300">

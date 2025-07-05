@@ -64,7 +64,7 @@ const useFlowingBalance = (startingBalance: bigint, startingBalanceDate: Date, f
       if (currentAnimationTimestamp - lastAnimationTimestamp > ANIMATION_MINIMUM_STEP_TIME) {
         const elapsedTimeInMilliseconds = BigInt(Date.now() - startingBalanceTime);
         // For SuperXOC balance, we subtract the flow (since it's outgoing)
-        const flowingBalance_ = startingBalance - (flowRate * elapsedTimeInMilliseconds) / BigInt(1000);
+        const flowingBalance_ = startingBalance + (flowRate * elapsedTimeInMilliseconds) / BigInt(1000);
 
         setFlowingBalance(flowingBalance_);
 
