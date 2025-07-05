@@ -311,9 +311,7 @@ export default function StreamsPage() {
           <div className="tabs tabs-boxed bg-white dark:bg-base-100 shadow-lg py-2 font-medium pb-4">
             <button
               className={`tab ${
-                activeTab === "overview"
-                  ? "tab-active h-10 !text-white bg-neutral dark:bg-base-300 dark:text-black"
-                  : ""
+                activeTab === "overview" ? "tab-active h-10 !text-white bg-neutral dark:bg-neutral dark:text-black" : ""
               }`}
               onClick={() => setActiveTab("overview")}
             >
@@ -352,7 +350,7 @@ export default function StreamsPage() {
                     <p className="text-gray-600 dark:text-gray-300">{t("StreamsQuickActionsDescription")}</p>
                     <div className="space-y-3">
                       <button
-                        className="btn btn-primary text-white w-full justify-start"
+                        className="btn btn-primary text-white w-full justify-start dark:bg-neutral dark:text-primary dark:hover:text-white"
                         onClick={handleOpenCreateStreamModal}
                       >
                         <Plus className="w-4 h-4 mr-2" />
