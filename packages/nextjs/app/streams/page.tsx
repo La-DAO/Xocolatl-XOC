@@ -3,7 +3,6 @@
 import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslation } from "../context/LanguageContext";
-import FlowingBalance from "./components/FlowingBalance";
 import CreateStreamModal from "./components/Flows/CreateStreamModal";
 import SuperXocFlowingBalance from "./components/SuperXocFlowingBalance";
 import TokenConverter from "./components/Supertokens";
@@ -52,22 +51,31 @@ export default function StreamsPage() {
 
   const { xocBalance, superXocBalance, flowInfo } = useStreamingStore();
 
-  // Calculate monthly flow rate for FlowingBalance
-  const calculateMonthlyFlowRate = () => {
-    if (!flowInfo || flowInfo.flowRate === 0n) return 0n;
+  // Calculate net monthly flow from streams data
+  const calculateNetMonthlyFlow = () => {
+    // Calculate total outgoing flow
+    const totalOutgoing = transformedStreams.reduce((sum, stream) => {
+      return sum + stream.flowRate;
+    }, 0);
 
-    // Convert flowRate from per-second to per-month
-    // flowRate is in wei per second, so multiply by seconds in a month
-    const secondsInMonth = 30 * 24 * 60 * 60; // 30 days
-    const monthlyFlowWei = flowInfo.flowRate * BigInt(secondsInMonth);
+    // Calculate total incoming flow
+    const totalIncoming = transformedIncomingStreams.reduce((sum, stream) => {
+      return sum + stream.flowRate;
+    }, 0);
 
-    return monthlyFlowWei;
+    // Net flow = incoming - outgoing (positive means net inflow, negative means net outflow)
+    const netFlow = totalIncoming - totalOutgoing;
+
+    return netFlow;
   };
 
-  // Get starting date from flowInfo or use current date
-  const getStartingDate = () => {
-    if (!flowInfo || flowInfo.lastUpdated === 0n) return new Date();
-    return new Date(Number(flowInfo.lastUpdated) * 1000);
+  // Convert monthly net flow to per-second flow rate for SuperXocFlowingBalance
+  const calculateNetFlowRate = () => {
+    const monthlyNetFlow = calculateNetMonthlyFlow();
+    // Convert monthly flow to per-second flow rate
+    const secondsInMonth = 30 * 24 * 60 * 60; // 30 days
+    const flowRatePerSecond = (monthlyNetFlow / secondsInMonth) * 1e18; // Convert to wei
+    return BigInt(Math.floor(flowRatePerSecond));
   };
 
   const handleOpenCreateStreamModal = () => {
@@ -246,11 +254,13 @@ export default function StreamsPage() {
                 <h3 className="card-title text-sm">{t("StreamsSuperXOCBalance")}</h3>
                 <TrendingUp className="h-4 w-4 text-gray-500" />
               </div>
-              {flowInfo && flowInfo.flowRate !== 0n ? (
+              {streamsLoading || incomingStreamsLoading ? (
+                <div className="loading loading-spinner loading-sm"></div>
+              ) : calculateNetMonthlyFlow() !== 0 ? (
                 <SuperXocFlowingBalance
                   balance={superXocBalance}
-                  flowRate={flowInfo.flowRate > 0n ? -flowInfo.flowRate : flowInfo.flowRate}
-                  lastUpdated={flowInfo.lastUpdated}
+                  flowRate={calculateNetFlowRate()}
+                  lastUpdated={flowInfo?.lastUpdated || BigInt(Math.floor(Date.now() / 1000))}
                 />
               ) : (
                 <div className="text-2xl font-bold">{superXocBalance}</div>
@@ -285,14 +295,10 @@ export default function StreamsPage() {
                 <Clock className="h-4 w-4 text-gray-500" />
               </div>
               <div className="text-2xl font-bold">
-                {flowInfo && flowInfo.flowRate !== 0n ? (
-                  <FlowingBalance
-                    startingBalance={0n}
-                    startingBalanceDate={getStartingDate()}
-                    flowRate={calculateMonthlyFlowRate()}
-                  />
+                {streamsLoading || incomingStreamsLoading ? (
+                  <div className="loading loading-spinner loading-sm"></div>
                 ) : (
-                  "0.00"
+                  calculateNetMonthlyFlow().toFixed(6)
                 )}
               </div>
               <p className="text-xs text-gray-500">{t("StreamsXOCMonth")}</p>
