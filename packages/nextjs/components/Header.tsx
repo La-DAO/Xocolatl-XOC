@@ -4,7 +4,7 @@ import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { faAnchor, faGlassWaterDroplet } from "@fortawesome/free-solid-svg-icons";
+import { faAnchor, faGlassWaterDroplet, faWater } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { BanknotesIcon, Bars3Icon, HomeIcon, UsersIcon } from "@heroicons/react/24/solid";
 import { useTranslation } from "~~/app/context/LanguageContext";
@@ -24,19 +24,24 @@ export const menuLinks: HeaderMenuLink[] = [
     icon: <HomeIcon className="h-4 w-4" />,
   },
   {
-    label: "Xocolatl",
+    label: "CDP",
     href: "/cdp",
     icon: <FontAwesomeIcon icon={faAnchor} />,
   },
   {
-    label: "Alux",
+    label: "Lending",
     href: "/lending",
     icon: <BanknotesIcon className="h-4 w-4" />,
   },
   {
-    label: "Xoktle",
+    label: "Pool",
     href: "/liquidity",
     icon: <FontAwesomeIcon icon={faGlassWaterDroplet} className="h-4 w-4" />,
+  },
+  {
+    label: "Stream",
+    href: "/streams",
+    icon: <FontAwesomeIcon icon={faWater} className="h-4 w-4" />,
   },
   {
     label: "Ecosystem",

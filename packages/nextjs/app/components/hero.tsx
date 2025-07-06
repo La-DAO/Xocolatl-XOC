@@ -54,6 +54,16 @@ const Hero = () => {
                   {t("earnXocButton")}
                 </button>
               </Link>
+              <Link href="/liquidity">
+                <button className="px-8 py-4 text-lg font-medium text-center text-white bg-primary dark:bg-base-100 rounded-btn hover:bg-base-300 hover:text-neutral dark:hover:bg-warning dark:hover:text-primary hover:ring-4 hover:ring-pink-500 hover:ring-opacity-75 hover:shadow-primary/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 dark:hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] dark:hover:scale-105 dark">
+                  {t("liquidityButton")}
+                </button>
+              </Link>
+              <Link href="/streams">
+                <button className="px-8 py-4 text-lg font-medium text-center text-white bg-primary dark:bg-base-100 rounded-btn hover:bg-base-300 hover:text-neutral dark:hover:bg-warning dark:hover:text-primary hover:ring-4 hover:ring-pink-500 hover:ring-opacity-75 hover:shadow-primary/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 dark:hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] dark:hover:scale-105 dark">
+                  {t("streamsButton")}
+                </button>
+              </Link>
             </div>
           </div>
         </div>
