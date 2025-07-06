@@ -7,6 +7,8 @@
   "aboutLinkText": "form of currency.",
   "earnXocButton": "Earn $XOC",
   "mintXocButton": "Mint $XOC",
+  "liquidityButton": "Pool $XOC",
+  "streamsButton": "Stream $XOC",
   "mostLiquidStablecoin": "$XOC is the most liquid stablecoin for the MXN currency.",
 
   "BenefitsComponentTitle": "This is our Pitch",
