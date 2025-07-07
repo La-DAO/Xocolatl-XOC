@@ -25,7 +25,6 @@ const ensRegex = /^[a-zA-Z0-9_-]+\.[a-zA-Z0-9-]+$/;
 // Utility function to check if input is ENS
 const isENS = (address = "") => {
   const result = ensRegex.test(address);
-  console.log("isENS check:", address, "result:", result);
   return result;
 };
 
@@ -66,7 +65,6 @@ const CreateStreamModal: React.FC<CreateStreamModalProps> = ({ isOpen, onClose }
       setIsTransactionSuccess(true);
       // Refetch flow info to update the store
       refetchFlowInfo();
-      console.log("Transaction successful! Flow info updated.");
     }
   }, [isTransactionReceiptSuccess, refetchFlowInfo]);
 
