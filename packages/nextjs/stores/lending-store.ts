@@ -42,6 +42,7 @@ type LendingStore = {
   setUserAccountData: (data: any) => void;
   setUserAccountLoading: (loading: boolean) => void;
   setUserAccountError: (error: boolean) => void;
+  resetUserData: () => void;
   refreshUserAccountData: () => void;
 
   // Formatted user account data
@@ -83,6 +84,17 @@ export const useLendingStore = create<LendingStore>((set, get) => ({
   setUserAccountData: data => set({ userAccountData: data }),
   setUserAccountLoading: loading => set({ userAccountLoading: loading }),
   setUserAccountError: error => set({ userAccountError: error }),
+  resetUserData: () =>
+    set({
+      userAccountData: null,
+      userAccountLoading: false,
+      userAccountError: false,
+      formattedHealthFactor: "∞",
+      formattedLTV: "0.0000",
+      formattedTotalCollateralBase: "0.0000",
+      formattedTotalDebtBase: "0.0000",
+      formattedAvailableBorrowsBase: "0.0000",
+    }),
   refreshUserAccountData: () => {
     // This will be called from the sync hook to trigger a refresh
     // The actual refresh is handled by the useUserAccountDataSync hook
@@ -217,7 +229,13 @@ export const useUserAccountDataSync = (userAddress: string) => {
 
   useEffect(() => {
     setUserAccountLoading(isLoading);
-    setUserAccountError(isError);
+    // Only set error if we're not loading and have an error
+    if (!isLoading && isError) {
+      setUserAccountError(isError);
+    } else if (isLoading) {
+      // Reset error state when loading starts
+      setUserAccountError(false);
+    }
   }, [isLoading, isError, setUserAccountLoading, setUserAccountError]);
 
   useEffect(() => {

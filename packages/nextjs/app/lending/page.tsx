@@ -30,6 +30,7 @@ const Lending = () => {
   const [borrowsTotalBalance, setBorrowsTotalBalance] = useState(0);
 
   const { address } = useAccountAddress(); // Obtén la dirección del usuario
+  const chainId = useChainId();
 
   // Get all reserves data for the dropdown
   const { reservesData: allReserves } = useGetReservesData();
@@ -37,7 +38,6 @@ const Lending = () => {
   // Use the store for user account data
   const {
     userAccountLoading: isLoading,
-    userAccountError: isError,
     formattedHealthFactor,
     formattedLTV,
     formattedTotalCollateralBase,
@@ -47,12 +47,25 @@ const Lending = () => {
     refreshComponents,
     selectedReserveAsset,
     setSelectedReserveAsset,
+    refreshUserAccountData,
+    refreshEarnings,
+    resetUserData,
   } = useLendingStore();
 
-  // Sync user account data with the store
-  useUserAccountDataSync(address || "");
+  // Sync user account data with the store - only when conditions are right
+  const shouldFetch = !!address && chainId === 8453;
+  useUserAccountDataSync(shouldFetch ? address : "");
 
-  const chainId = useChainId();
+  // Handle wallet and network changes
+  useEffect(() => {
+    if (!address || chainId !== 8453) {
+      resetUserData();
+      return;
+    }
+    // Trigger fresh data fetch when wallet connects or network switches to Base
+    refreshUserAccountData();
+    refreshEarnings();
+  }, [address, chainId, resetUserData, refreshUserAccountData, refreshEarnings]);
 
   // Function to get network error message based on chainId
   const getNetworkErrorMessage = () => {
@@ -170,6 +183,20 @@ const Lending = () => {
 
   // Calculate Net Worth balance
   const netWorth = suppliesTotalBalance - borrowsTotalBalance;
+
+  // Helper function to check if we have valid formatted data
+  const hasValidFormattedData = () => {
+    return (
+      formattedTotalCollateralBase &&
+      formattedTotalDebtBase &&
+      formattedAvailableBorrowsBase &&
+      formattedHealthFactor &&
+      formattedLTV &&
+      formattedTotalCollateralBase !== "0.0000" &&
+      formattedTotalDebtBase !== "0.0000" &&
+      formattedAvailableBorrowsBase !== "0.0000"
+    );
+  };
 
   return (
     <div className="flex flex-col w-4/5 m-auto gap-4">
@@ -299,10 +326,22 @@ const Lending = () => {
                 totalDebtBase={0}
                 availableBorrowsBase={0}
               />
-            ) : isLoading ? (
-              <div>Loading...</div>
-            ) : isError ? (
-              <div>Error loading data</div>
+            ) : chainId !== 8453 ? (
+              <ProfileStats
+                balance={0}
+                ltv={0}
+                healthFactor={0}
+                totalCollateralBase={0}
+                totalDebtBase={0}
+                availableBorrowsBase={0}
+              />
+            ) : isLoading || !hasValidFormattedData() ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="loading loading-spinner loading-lg"></div>
+                <span className="ml-3 text-gray-600">
+                  {chainId === 8453 ? "Loading account data..." : "Switching to Base network..."}
+                </span>
+              </div>
             ) : (
               <ProfileStats
                 balance={netWorth}
