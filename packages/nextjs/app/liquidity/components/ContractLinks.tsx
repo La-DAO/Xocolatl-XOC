@@ -9,7 +9,7 @@ const REAL_CONTRACT_ADDRESSES = {
   usdOracle0Ref: "0x67E0c5A89739a4679C5D838A0A235a71F3939196", // Oracle address
   usdOracle1Ref: "0x2AE959E633d0dF4044b8a43077333a813802a640", // Oracle address
   token0: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", // USDC
-  token1: "0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf ", // XOC
+  token1: "0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf", // XOC
 };
 
 export const ContractLinks = () => {
