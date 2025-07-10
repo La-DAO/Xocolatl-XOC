@@ -1,6 +1,8 @@
+import { ContractLinks } from "./components/ContractLinks";
 import LiquidityInfo from "./components/LiquidityInfo";
 import LiquidityWidget from "./components/LiquidityWidget";
-import OverviewWidget from "./components/OverviewWidget";
+import { PriceChart } from "./components/PriceChart";
+import { PriceMetrics } from "./components/PriceMetrics";
 import { NextPage } from "next";
 
 const LiquidityPage: NextPage = () => {
@@ -12,7 +14,11 @@ const LiquidityPage: NextPage = () => {
       {/* Container for Widgets */}
       <div className="w-4/5 mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
         <LiquidityWidget />
-        <OverviewWidget />
+        <PriceMetrics />
+      </div>
+      <div className="w-4/5 mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <PriceChart />
+        <ContractLinks />
       </div>
     </div>
   );
