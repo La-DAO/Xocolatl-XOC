@@ -48,7 +48,7 @@ export const PriceChart = () => {
   }
 
   return (
-    <div className="card bg-base-200 shadow-xl bg-primary dark:bg-neutral dark:text-primary">
+    <div className="card shadow-xl bg-primary dark:bg-neutral dark:text-primary">
       <div className="card-body">
         <h2 className="card-title">Price Chart</h2>
         <div className="relative h-64 bg-base-100 rounded-lg p-4">
