@@ -6,7 +6,7 @@ import { liquidityABI } from "~~/app/components/abis/liquidity";
 
 // Contract configuration
 const CONTRACT_ADDRESS = "0xD6DaB267b7C23EdB2ed5605d9f3f37420e88e291";
-const TOKEN0_DECIMALS = 8; // USDC has 8 decimals
+const TOKEN0_DECIMALS = 6; // USDC has 8 decimals
 const TOKEN1_DECIMALS = 18; // XOC has 18 decimals
 
 export const LiquidityCards = () => {
@@ -73,31 +73,63 @@ export const LiquidityCards = () => {
           <div className="grid grid-cols-1 gap-4">
             <div className="card bg-primary dark:bg-neutral border-success shadow-xl">
               <div className="card-body">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="card-title text-white dark:text-primary">Token 0 (MXNb)</h4>
-                    <p className="text-2xl font-bold text-white dark:text-primary">{liquidityData.token0Deployed}</p>
-                  </div>
-                  <div className="text-right">
-                    <div className="badge badge-success text-white dark:text-primary">Deployed</div>
-                    <p className="text-sm text-base-content mt-1">In Position</p>
-                  </div>
-                </div>
+                {/*
+                  Helper function to format as USD currency.
+                  You can move this outside the component if you want to reuse it elsewhere.
+                */}
+                {(() => {
+                  const formatUSD = (amount: string) =>
+                    new Intl.NumberFormat("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(Number(amount));
+                  return (
+                    <>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="card-title text-white dark:text-primary">Token 0 (USDC)</h4>
+                          <p className="text-2xl font-bold text-white dark:text-primary">
+                            {formatUSD(liquidityData.token0Deployed)}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <div className="badge badge-success text-primary dark:text-white">Deployed</div>
+                          <p className="text-sm text-white dark:text-primary mt-1">In Position</p>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
               </div>
             </div>
 
             <div className="card bg-primary dark:bg-neutral border-success shadow-xl">
               <div className="card-body">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="card-title text-white dark:text-primary">Token 1 (USDT0)</h4>
-                    <p className="text-2xl font-bold text-white dark:text-primary">{liquidityData.token1Deployed}</p>
-                  </div>
-                  <div className="text-right">
-                    <div className="badge badge-success text-white dark:text-primary">Deployed</div>
-                    <p className="text-sm text-base-content mt-1">In Position</p>
-                  </div>
-                </div>
+                {(() => {
+                  const formatUSD = (amount: string) =>
+                    new Intl.NumberFormat("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(Number(amount));
+                  return (
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="card-title text-white dark:text-primary">Token 1 (XOC)</h4>
+                        <p className="text-2xl font-bold text-white dark:text-primary">
+                          {formatUSD(liquidityData.token1Deployed)}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <div className="badge badge-success text-primary dark:text-white">Deployed</div>
+                        <p className="text-sm text-white dark:text-primary mt-1">In Position</p>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           </div>
@@ -109,31 +141,57 @@ export const LiquidityCards = () => {
           <div className="grid grid-cols-1 gap-4">
             <div className="card bg-secondary border-warning shadow-xl">
               <div className="card-body">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="card-title text-neutral dark:text-white">Token 0 (MXNb)</h4>
-                    <p className="text-2xl font-bold text-neutral dark:text-white">{liquidityData.token0Idle}</p>
-                  </div>
-                  <div className="text-right">
-                    <div className="badge badge-warning text-white dark:text-white">Idle</div>
-                    <p className="text-sm text-base-content mt-1 dark:text-primary">Available</p>
-                  </div>
-                </div>
+                {(() => {
+                  const formatUSD = (amount: string) =>
+                    new Intl.NumberFormat("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(Number(amount));
+                  return (
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="card-title text-neutral dark:text-white">Token 0 (USDC)</h4>
+                        <p className="text-2xl font-bold text-neutral dark:text-white">
+                          {formatUSD(liquidityData.token0Idle)}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <div className="badge badge-warning text-white dark:text-primary">Idle</div>
+                        <p className="text-sm text-primary dark:text-white mt-1">Available</p>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             </div>
 
             <div className="card bg-secondary border-warning shadow-xl">
               <div className="card-body">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="card-title text-neutral dark:text-white">Token 1 (USDT0)</h4>
-                    <p className="text-2xl font-bold text-neutral dark:text-white">{liquidityData.token1Idle}</p>
-                  </div>
-                  <div className="text-right">
-                    <div className="badge badge-warning text-white dark:text-primary">Idle</div>
-                    <p className="text-sm text-base-content mt-1  dark:text-primary">Available</p>
-                  </div>
-                </div>
+                {(() => {
+                  const formatUSD = (amount: string) =>
+                    new Intl.NumberFormat("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(Number(amount));
+                  return (
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="card-title text-neutral dark:text-white">Token 1 (XOC)</h4>
+                        <p className="text-2xl font-bold text-neutral dark:text-white">
+                          {formatUSD(liquidityData.token1Idle)}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <div className="badge badge-warning text-white dark:text-primary">Idle</div>
+                        <p className="text-sm text-primary dark:text-white mt-1">Available</p>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           </div>
@@ -148,13 +206,23 @@ export const LiquidityCards = () => {
             <div>
               <p className="text-md text-white dark:text-primary">Total Token 0</p>
               <p className="text-xl font-bold text-white dark:text-primary">
-                {(parseFloat(liquidityData.token0Deployed) + parseFloat(liquidityData.token0Idle)).toFixed(6)}
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(parseFloat(liquidityData.token0Deployed) + parseFloat(liquidityData.token0Idle))}
               </p>
             </div>
             <div>
               <p className="text-md text-white dark:text-primary">Total Token 1</p>
               <p className="text-xl font-bold text-white dark:text-primary">
-                {(parseFloat(liquidityData.token1Deployed) + parseFloat(liquidityData.token1Idle)).toFixed(6)}
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(parseFloat(liquidityData.token1Deployed) + parseFloat(liquidityData.token1Idle))}
               </p>
             </div>
             <div>
