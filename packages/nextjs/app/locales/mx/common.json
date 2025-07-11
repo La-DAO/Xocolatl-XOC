@@ -259,6 +259,7 @@
   "LendingRepayModalSuccessMessage": "El reembolso se ha realizado con éxito",
   "LendingRepayModalErrorPositive": "La cantidad debe ser un número positivo.",
   "LendingRepayModalErrorBalance": "Saldo insuficiente.",
+  "LendingRepayModalErrorBalanceWallet": "Saldo insuficiente en la billetera.",
   "LendingRepayModalProcessing": "Procesando...",
   "LendingRepayModalWaiting": "Esperando...",
   "LendingRepayModalExplore": "Verificar en el Block Explorer",

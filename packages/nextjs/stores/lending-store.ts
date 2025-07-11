@@ -121,45 +121,33 @@ export const useLendingStore = create<LendingStore>((set, get) => ({
       return;
     }
 
-    try {
-      const formattedHealthFactor = userAccountData?.healthFactor
-        ? isMaxUint256(userAccountData.healthFactor)
-          ? "∞"
-          : Number(userAccountData.healthFactor) / 1e18
-        : "∞";
+    const formattedHealthFactor = userAccountData?.healthFactor
+      ? isMaxUint256(userAccountData.healthFactor)
+        ? "∞"
+        : Number(userAccountData.healthFactor) / 1e18
+      : "∞";
 
-      const formattedLTV = userAccountData?.ltv ? (Number(userAccountData.ltv) * 1e15).toFixed(2) : "0.0000";
+    const formattedLTV = userAccountData?.ltv ? (Number(userAccountData.ltv) * 1e15).toFixed(2) : "0.0000";
 
-      const formattedTotalCollateralBase = userAccountData?.totalCollateralBase
-        ? (Number(userAccountData.totalCollateralBase) * 1e10).toFixed(3)
-        : "0.0000";
+    const formattedTotalCollateralBase = userAccountData?.totalCollateralBase
+      ? (Number(userAccountData.totalCollateralBase) * 1e10).toFixed(3)
+      : "0.0000";
 
-      const formattedTotalDebtBase = userAccountData?.totalDebtBase
-        ? (Number(userAccountData.totalDebtBase) * 1e10).toFixed(3)
-        : "0.0000";
+    const formattedTotalDebtBase = userAccountData?.totalDebtBase
+      ? (Number(userAccountData.totalDebtBase) * 1e10).toFixed(3)
+      : "0.0000";
 
-      const formattedAvailableBorrowsBase = userAccountData?.availableBorrowsBase
-        ? (Number(userAccountData.availableBorrowsBase) * 1e10).toFixed(3)
-        : "0.0000";
+    const formattedAvailableBorrowsBase = userAccountData?.availableBorrowsBase
+      ? (Number(userAccountData.availableBorrowsBase) * 1e10).toFixed(3)
+      : "0.0000";
 
-      set({
-        formattedHealthFactor,
-        formattedLTV,
-        formattedTotalCollateralBase,
-        formattedTotalDebtBase,
-        formattedAvailableBorrowsBase,
-      });
-    } catch (error) {
-      console.error("Error formatting user account data:", error);
-      // Set fallback values on error
-      set({
-        formattedHealthFactor: "∞",
-        formattedLTV: "0.0000",
-        formattedTotalCollateralBase: "0.0000",
-        formattedTotalDebtBase: "0.0000",
-        formattedAvailableBorrowsBase: "0.0000",
-      });
-    }
+    set({
+      formattedHealthFactor,
+      formattedLTV,
+      formattedTotalCollateralBase,
+      formattedTotalDebtBase,
+      formattedAvailableBorrowsBase,
+    });
   },
 
   // Earnings tracking state
@@ -240,51 +228,31 @@ export const useUserAccountDataSync = (userAddress: string) => {
   const { setUserAccountData, setUserAccountLoading, setUserAccountError, updateFormattedData } = useLendingStore();
 
   useEffect(() => {
-    // Reset loading state when userAddress is empty
-    if (!userAddress) {
-      setUserAccountLoading(false);
-      setUserAccountError(false);
-      setUserAccountData(null);
-      return;
-    }
-
     setUserAccountLoading(isLoading);
-
     // Only set error if we're not loading and have an error
     if (!isLoading && isError) {
       setUserAccountError(isError);
-      // Clear data on error to prevent stale data display
-      setUserAccountData(null);
     } else if (isLoading) {
       // Reset error state when loading starts
       setUserAccountError(false);
-    } else if (!isLoading && !isError) {
-      // Clear error state when loading completes successfully
-      setUserAccountError(false);
     }
-  }, [isLoading, isError, setUserAccountLoading, setUserAccountError, setUserAccountData, userAddress]);
+  }, [isLoading, isError, setUserAccountLoading, setUserAccountError]);
 
   useEffect(() => {
-    if (userAddress) {
-      setUserAccountData(userAccountData);
-    }
-  }, [userAccountData, setUserAccountData, userAddress]);
+    setUserAccountData(userAccountData);
+  }, [userAccountData, setUserAccountData]);
 
   useEffect(() => {
-    if (userAddress) {
-      updateFormattedData();
-    }
-  }, [userAccountData, updateFormattedData, userAddress]);
+    updateFormattedData();
+  }, [userAccountData, updateFormattedData]);
 
   // Listen for refresh requests and trigger refetch
   useEffect(() => {
-    if (!userAddress) return;
-
     const unsubscribe = useLendingStore.subscribe(() => {
       if (refetch) {
         refetch();
       }
     });
     return unsubscribe;
-  }, [refetch, userAddress]);
+  }, [refetch]);
 };
