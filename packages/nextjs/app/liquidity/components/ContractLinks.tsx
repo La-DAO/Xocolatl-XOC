@@ -31,7 +31,7 @@ export const ContractLinks = () => {
   return (
     <div className="card shadow-xl bg-primary dark:bg-neutral dark:text-primary">
       <div className="card-body">
-        <h3 className="card-title">
+        <h3 className="card-title text-white dark:text-primary">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
