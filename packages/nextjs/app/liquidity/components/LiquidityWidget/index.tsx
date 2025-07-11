@@ -282,7 +282,7 @@ const LiquidityWidget: React.FC = () => {
     ? "w-full py-3 bg-gray-500 text-2xl text-white font-semibold rounded-lg"
     : isWrongNetwork
     ? "w-full py-3 bg-red-500 text-2xl text-white font-semibold rounded-lg"
-    : "w-full py-3 bg-base-300 text-2xl text-white font-semibold rounded-lg";
+    : "w-full py-3 bg-base-100 text-2xl font-medium text-center text-white bg-primary dark:bg-base-100 rounded-btn hover:bg-base-300 hover:text-neutral dark:hover:bg-warning dark:hover:text-primary hover:ring-4 hover:ring-pink-500 hover:ring-opacity-75 hover:shadow-primary/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 dark:hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] dark:hover:scale-105 dark";
 
   return (
     <div className="card shadow-xl bg-primary dark:bg-neutral dark:text-primary">
@@ -304,7 +304,7 @@ const LiquidityWidget: React.FC = () => {
             <button
               onClick={() => handleActionChange("Deposit")}
               className={`flex-1 px-8 py-2 rounded-l-full ${
-                action === "Deposit" ? "bg-base-300 text-xl text-white" : "bg-gray-200 text-gray-800"
+                action === "Deposit" ? "bg-base-100 text-xl text-white" : "bg-gray-200 text-gray-800"
               }`}
             >
               {t("XoktleDepositSwitcher")}
@@ -312,7 +312,7 @@ const LiquidityWidget: React.FC = () => {
             <button
               onClick={() => handleActionChange("Withdraw")}
               className={`flex-1 px-8 py-2 rounded-r-full ${
-                action === "Withdraw" ? "bg-base-300 text-xl text-white" : "bg-gray-200 text-gray-800"
+                action === "Withdraw" ? "bg-base-100 text-xl text-white" : "bg-gray-200 text-gray-800"
               }`}
             >
               {t("XoktleWithdrawSwitcher")}
