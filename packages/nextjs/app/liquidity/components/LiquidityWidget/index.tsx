@@ -285,110 +285,130 @@ const LiquidityWidget: React.FC = () => {
     : "w-full py-3 bg-base-300 text-2xl text-white font-semibold rounded-lg";
 
   return (
-    <div className="w-full bg-white p-6 rounded-lg shadow-md mt-6">
-      <div className="mb-4">
-        <h2 className="text-xl font-semibold text-gray-800 mb-2">{t("XoktleLiquidityTitle")}</h2>
-        <hr className="border-t-2 border-gray-300 rounded-t-full" />
-      </div>
-
-      <div className="mb-6 flex justify-center">
-        <div className="flex">
-          <button
-            onClick={() => handleActionChange("Deposit")}
-            className={`px-6 py-2 rounded-l-full ${
-              action === "Deposit" ? "bg-base-300 text-xl text-white" : "bg-gray-200 text-gray-800"
-            }`}
-          >
-            {t("XoktleDepositSwitcher")}
-          </button>
-          <button
-            onClick={() => handleActionChange("Withdraw")}
-            className={`px-6 py-2 rounded-r-full ${
-              action === "Withdraw" ? "bg-base-300 text-xl text-white" : "bg-gray-200 text-gray-800"
-            }`}
-          >
-            {t("XoktleWithdrawSwitcher")}
-          </button>
-        </div>
-      </div>
-
-      {/* Conditionally render input fields based on the selected action */}
-      {action === "Deposit" ? (
-        <div className="space-y-4 mb-6">
-          <div>
-            <label className="block text-gray-700">{t("XoktleUSDCIndicate")}</label>
-            <input
-              type="number"
-              value={tokenA}
-              onChange={e => setTokenA(e.target.value)}
-              className="w-full p-2 border rounded-lg dark:bg-neutral dark:text-neutral-content"
-              placeholder={t("XoktleUSDCAmount")}
+    <div className="card shadow-xl bg-primary dark:bg-neutral dark:text-primary">
+      <div className="card-body">
+        <h3 className="card-title">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"
             />
-            <span className="text-gray-500 mr-1">{`${t("Balance")}: ${usdcBalance || 0}`}</span>
-            <span className="font-bold hover:underline cursor-pointer dark: text-primary" onClick={handleUSDCMaxClick}>
-              MAX
-            </span>
-            {usdcError && <p className="text-red-500 mt-2">{usdcError}</p>} {/* Display USDC balance error */}
-          </div>
+          </svg>
+          {t("XoktleLiquidityTitle")}
+        </h3>
 
-          <div>
-            <label className="block text-gray-700">{t("XoktleXOCIndicate")}</label>
-            <input
-              type="number"
-              value={tokenB}
-              onChange={e => setTokenB(e.target.value)}
-              className="w-full p-2 border rounded-lg dark:bg-neutral dark:text-neutral-content"
-              placeholder={t("XoktleXOCAmount")}
-            />
-            <span className="text-gray-500 mr-1">{`${t("Balance")}: ${xocBalance || 0}`}</span>
-            <span className="font-bold hover:underline cursor-pointer dark: text-primary" onClick={handleXOCMaxClick}>
-              MAX
-            </span>
-            {xocError && <p className="text-red-500 mt-2">{xocError}</p>} {/* Display XOC balance error */}
-          </div>
-        </div>
-      ) : (
-        <div className="space-y-4 mb-6">
-          <div>
-            <label className="block text-gray-700">{t("XoktleShareIndicate")}</label>
-            <input
-              type="number"
-              value={shareAmount} // This will represent the share amount to withdraw
-              onChange={e => setShareAmount(e.target.value)}
-              className="w-full p-2 border rounded-lg dark:bg-neutral dark:text-neutral-content"
-              placeholder={t("XoktleShareAmount")}
-            />
-            <span className="text-gray-500 mr-1">{`${t("Balance")}: ${
-              sharesBalance && typeof sharesBalance === "bigint" ? formatUnits(sharesBalance, 18) : 0
-            }`}</span>
-            <span
-              className="font-bold hover:underline cursor-pointer dark: text-primary"
-              onClick={handleSharesMaxClick}
+        <div className="mb-6 flex justify-center">
+          <div className="flex w-full max-w-full">
+            <button
+              onClick={() => handleActionChange("Deposit")}
+              className={`flex-1 px-8 py-2 rounded-l-full ${
+                action === "Deposit" ? "bg-base-300 text-xl text-white" : "bg-gray-200 text-gray-800"
+              }`}
             >
-              MAX
-            </span>
-            {sharesError && <p className="text-red-500 mt-2">{sharesError}</p>} {/* Display shares balance error */}
+              {t("XoktleDepositSwitcher")}
+            </button>
+            <button
+              onClick={() => handleActionChange("Withdraw")}
+              className={`flex-1 px-8 py-2 rounded-r-full ${
+                action === "Withdraw" ? "bg-base-300 text-xl text-white" : "bg-gray-200 text-gray-800"
+              }`}
+            >
+              {t("XoktleWithdrawSwitcher")}
+            </button>
           </div>
         </div>
-      )}
 
-      <button
-        className={buttonClass}
-        onClick={() => {
-          if (!approvalLoading) {
-            if (requiresApproval) {
-              handleApproval(); // Handle approval logic
-            } else if (action === "Deposit") {
-              handleDeposit(); // Handle deposit logic
-            } else if (action === "Withdraw") {
-              handleWithdrawal(); // Handle withdrawal logic
-            }
-          }
-        }}
-        disabled={approvalLoading} // Disable button during loading
-      >
-        {buttonLabel} {/* Dynamically display button label */}
-      </button>
+        {/* Conditionally render input fields based on the selected action */}
+        {action === "Deposit" ? (
+          <div className="space-y-4 mb-6">
+            <div>
+              <label className="block text-sm font-medium mb-2 text-white dark:text-primary">
+                {t("XoktleUSDCIndicate")}
+              </label>
+              <input
+                type="number"
+                value={tokenA}
+                onChange={e => setTokenA(e.target.value)}
+                className="w-full p-3 border rounded-lg bg-base-100 text-base-content"
+                placeholder={t("XoktleUSDCAmount")}
+              />
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-sm text-white dark:text-primary">{`${t("Balance")}: ${usdcBalance || 0}`}</span>
+                <span className="font-bold hover:underline cursor-pointer text-accent" onClick={handleUSDCMaxClick}>
+                  MAX
+                </span>
+              </div>
+              {usdcError && <p className="text-red-500 mt-2 text-sm">{usdcError}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2 text-white dark:text-primary">
+                {t("XoktleXOCIndicate")}
+              </label>
+              <input
+                type="number"
+                value={tokenB}
+                onChange={e => setTokenB(e.target.value)}
+                className="w-full p-3 border rounded-lg bg-base-100 text-base-content"
+                placeholder={t("XoktleXOCAmount")}
+              />
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-sm text-white dark:text-primary">{`${t("Balance")}: ${xocBalance || 0}`}</span>
+                <span className="font-bold hover:underline cursor-pointer text-accent" onClick={handleXOCMaxClick}>
+                  MAX
+                </span>
+              </div>
+              {xocError && <p className="text-red-500 mt-2 text-sm">{xocError}</p>}
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-4 mb-6">
+            <div>
+              <label className="block text-sm font-medium mb-2 text-white dark:text-primary">
+                {t("XoktleShareIndicate")}
+              </label>
+              <input
+                type="number"
+                value={shareAmount}
+                onChange={e => setShareAmount(e.target.value)}
+                className="w-full p-3 border rounded-lg bg-base-100 text-base-content"
+                placeholder={t("XoktleShareAmount")}
+              />
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-sm text-white dark:text-primary">{`${t("Balance")}: ${
+                  sharesBalance && typeof sharesBalance === "bigint" ? formatUnits(sharesBalance, 18) : 0
+                }`}</span>
+                <span className="font-bold hover:underline cursor-pointer text-accent" onClick={handleSharesMaxClick}>
+                  MAX
+                </span>
+              </div>
+              {sharesError && <p className="text-red-500 mt-2 text-sm">{sharesError}</p>}
+            </div>
+          </div>
+        )}
+
+        <div className="card-actions justify-end">
+          <button
+            className={buttonClass}
+            onClick={() => {
+              if (!approvalLoading) {
+                if (requiresApproval) {
+                  handleApproval();
+                } else if (action === "Deposit") {
+                  handleDeposit();
+                } else if (action === "Withdraw") {
+                  handleWithdrawal();
+                }
+              }
+            }}
+            disabled={approvalLoading}
+          >
+            {buttonLabel}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

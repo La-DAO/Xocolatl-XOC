@@ -63,8 +63,8 @@ const LiquidityInfo: React.FC = () => {
     }).format(amount);
   };
 
-  const formattedTokenA = tokenA !== null ? formatCurrency(tokenA, "USD") : null;
-  const formattedTokenB = tokenB !== null ? formatCurrency(tokenB, "MXN") : null;
+  const formattedTokenA = tokenA !== null ? formatCurrency(tokenA, "USD") : "-";
+  const formattedTokenB = tokenB !== null ? formatCurrency(tokenB, "MXN") : "-";
 
   return (
     <div className="w-full sm:w-4/5 mx-auto mt-8 p-6 bg-white shadow-md rounded-lg flex flex-col sm:flex-row items-center">

@@ -95,12 +95,14 @@ export const PriceMetrics = () => {
             Pool
           </h3>
           <p className="text-4xl font-bold text-white dark:text-primary">
-            {new Intl.NumberFormat("es-MX", {
-              style: "currency",
-              currency: "MXN",
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 6,
-            }).format(Number(priceData.poolPrice))}
+            {priceData.poolPrice && priceData.poolPrice !== "0"
+              ? new Intl.NumberFormat("es-MX", {
+                  style: "currency",
+                  currency: "MXN",
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 6,
+                }).format(Number(priceData.poolPrice))
+              : "MX$0.00"}
           </p>
         </div>
       </div>
@@ -138,12 +140,14 @@ export const PriceMetrics = () => {
             Oracle
           </h3>
           <p className="text-4xl font-bold text-white dark:text-primary">
-            {new Intl.NumberFormat("es-MX", {
-              style: "currency",
-              currency: "MXN",
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 6,
-            }).format(Number(priceData.oraclePrice))}
+            {priceData.oraclePrice && priceData.oraclePrice !== "0"
+              ? new Intl.NumberFormat("es-MX", {
+                  style: "currency",
+                  currency: "MXN",
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 6,
+                }).format(Number(priceData.oraclePrice))
+              : "MX$0.00"}
           </p>
         </div>
       </div>
@@ -153,12 +157,14 @@ export const PriceMetrics = () => {
         <div className="card-body p-3">
           <h3 className="card-title text-lg mb-1 text-white dark:text-primary">Difference</h3>
           <p className="text-4xl font-bold text-white dark:text-primary">
-            {new Intl.NumberFormat("es-MX", {
-              style: "currency",
-              currency: "MXN",
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 6,
-            }).format(priceData.priceDifference)}
+            {priceData.priceDifference && priceData.priceDifference !== 0
+              ? new Intl.NumberFormat("es-MX", {
+                  style: "currency",
+                  currency: "MXN",
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 6,
+                }).format(priceData.priceDifference)
+              : "MX$0.00"}
           </p>
         </div>
       </div>
