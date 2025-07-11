@@ -279,13 +279,13 @@ const LiquidityWidget: React.FC = () => {
     : action;
 
   const buttonClass = approvalLoading
-    ? "w-full py-3 bg-gray-500 text-2xl text-white font-semibold rounded-lg"
+    ? "w-full py-3 bg-gray-500 text-xl text-white font-semibold rounded-lg cursor-not-allowed"
     : isWrongNetwork
-    ? "w-full py-3 bg-red-500 text-2xl text-white font-semibold rounded-lg"
-    : "w-full py-3 bg-base-100 text-2xl font-medium text-center text-white bg-primary dark:bg-base-100 rounded-btn hover:bg-base-300 hover:text-neutral dark:hover:bg-warning dark:hover:text-primary hover:ring-4 hover:ring-pink-500 hover:ring-opacity-75 hover:shadow-primary/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 dark:hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] dark:hover:scale-105 dark";
+    ? "w-full py-3 bg-red-500 text-xl text-white font-semibold rounded-lg"
+    : "w-full py-3 bg-secondary text-xl font-semibold text-white rounded-lg hover:bg-warning hover:text-primary hover:border-2 hover:border-pink-200 hover:dark:border-pink-500 hover:scale-105 transition-all duration-300 hover:shadow-lg";
 
   return (
-    <div className="card shadow-xl bg-primary dark:bg-neutral dark:text-primary">
+    <div className="card shadow-xl bg-primary text-white dark:bg-neutral dark:text-primary">
       <div className="card-body">
         <h3 className="card-title">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -300,19 +300,23 @@ const LiquidityWidget: React.FC = () => {
         </h3>
 
         <div className="mb-6 flex justify-center">
-          <div className="flex w-full max-w-full">
+          <div className="flex w-full max-w-md bg-base-200 dark:bg-base-300 rounded-lg p-1">
             <button
               onClick={() => handleActionChange("Deposit")}
-              className={`flex-1 px-8 py-2 rounded-l-full ${
-                action === "Deposit" ? "bg-base-100 text-xl text-white" : "bg-gray-200 text-gray-800"
+              className={`flex-1 px-6 py-3 rounded-md transition-all duration-300 font-semibold ${
+                action === "Deposit"
+                  ? "bg-primary text-white shadow-lg scale-105"
+                  : "bg-secondary dark:bg-gray-200 dark:text-primary text-base-content hover:bg-warning hover:border-2 hover:border-pink-200 hover:dark:border-pink-500 hover:scale-105 transition-all duration-300 hover:shadow-lg"
               }`}
             >
               {t("XoktleDepositSwitcher")}
             </button>
             <button
               onClick={() => handleActionChange("Withdraw")}
-              className={`flex-1 px-8 py-2 rounded-r-full ${
-                action === "Withdraw" ? "bg-base-100 text-xl text-white" : "bg-gray-200 text-gray-800"
+              className={`flex-1 px-6 py-3 rounded-md transition-all duration-300 font-semibold ${
+                action === "Withdraw"
+                  ? "bg-primary text-white shadow-lg scale-105"
+                  : "bg-secondary dark:bg-gray-200 dark:text-primary text-base-content hover:bg-warning hover:border-2 hover:border-pink-200 hover:dark:border-pink-500 hover:scale-105 transition-all duration-300 hover:shadow-lg"
               }`}
             >
               {t("XoktleWithdrawSwitcher")}
