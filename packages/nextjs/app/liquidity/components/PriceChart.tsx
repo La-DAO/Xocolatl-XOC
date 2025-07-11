@@ -36,9 +36,9 @@ export const PriceChart = () => {
 
   if (isLoading) {
     return (
-      <div className="card bg-base-200 shadow-xl">
+      <div className="card bg-base-200 text-white shadow-xl">
         <div className="card-body">
-          <h2 className="card-title">Price Chart</h2>
+          <h2 className="card-title text-white">Price Chart</h2>
           <div className="flex items-center justify-center h-64">
             <span className="loading loading-spinner loading-lg"></span>
           </div>
@@ -50,7 +50,7 @@ export const PriceChart = () => {
   return (
     <div className="card shadow-xl bg-primary dark:bg-neutral dark:text-primary">
       <div className="card-body">
-        <h2 className="card-title">Price Chart</h2>
+        <h2 className="card-title text-white dark:text-primary">Price Chart</h2>
         <div className="relative h-64 bg-base-100 rounded-lg p-4">
           {/* Chart placeholder - replace with actual charting library */}
           <div className="h-full flex items-end justify-between">
