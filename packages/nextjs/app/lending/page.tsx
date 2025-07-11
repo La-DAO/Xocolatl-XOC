@@ -344,14 +344,6 @@ const Lending = () => {
               </div>
             ) : (
               (() => {
-                console.log("Passing data to ProfileStats:", {
-                  netWorth,
-                  formattedLTV,
-                  formattedHealthFactor,
-                  formattedTotalCollateralBase,
-                  formattedTotalDebtBase,
-                  formattedAvailableBorrowsBase,
-                });
                 return (
                   <ProfileStats
                     balance={netWorth}
