@@ -186,16 +186,16 @@ const Lending = () => {
 
   // Helper function to check if we have valid formatted data
   const hasValidFormattedData = () => {
-    return (
+    const isValid =
       formattedTotalCollateralBase &&
       formattedTotalDebtBase &&
       formattedAvailableBorrowsBase &&
       formattedHealthFactor &&
       formattedLTV &&
       formattedTotalCollateralBase !== "0.0000" &&
-      formattedTotalDebtBase !== "0.0000" &&
-      formattedAvailableBorrowsBase !== "0.0000"
-    );
+      formattedAvailableBorrowsBase !== "0.0000";
+
+    return isValid;
   };
 
   return (
@@ -343,14 +343,26 @@ const Lending = () => {
                 </span>
               </div>
             ) : (
-              <ProfileStats
-                balance={netWorth}
-                ltv={Number(formattedLTV)}
-                healthFactor={formattedHealthFactor}
-                totalCollateralBase={Number(formattedTotalCollateralBase)}
-                totalDebtBase={Number(formattedTotalDebtBase)}
-                availableBorrowsBase={Number(formattedAvailableBorrowsBase)}
-              />
+              (() => {
+                console.log("Passing data to ProfileStats:", {
+                  netWorth,
+                  formattedLTV,
+                  formattedHealthFactor,
+                  formattedTotalCollateralBase,
+                  formattedTotalDebtBase,
+                  formattedAvailableBorrowsBase,
+                });
+                return (
+                  <ProfileStats
+                    balance={netWorth}
+                    ltv={Number(formattedLTV)}
+                    healthFactor={formattedHealthFactor}
+                    totalCollateralBase={Number(formattedTotalCollateralBase)}
+                    totalDebtBase={Number(formattedTotalDebtBase)}
+                    availableBorrowsBase={Number(formattedAvailableBorrowsBase)}
+                  />
+                );
+              })()
             )}
             <div className="flex gap-2">
               <button onClick={refreshComponents} className="primary-btn h-fit w-fit">
