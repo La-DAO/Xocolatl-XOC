@@ -86,7 +86,6 @@ const BorrowTransactionModal: React.FC<ModalProps> = ({ isOpen, onClose, reserve
 
   // Fetch user account data for health factor and LTV
   const { userAccountData, refreshComponents, formatUserBorrowableAmount } = useLendingStore();
-  console.log("userAccountData", userAccountData);
 
   const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${borrowHash}`;
 
