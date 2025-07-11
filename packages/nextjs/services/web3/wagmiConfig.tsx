@@ -19,11 +19,7 @@ export const wagmiConfig = createConfig({
   client({ chain }) {
     return createClient({
       chain,
-      transport: http(getAlchemyHttpUrl(chain.id), {
-        timeout: 30000, // 30 second timeout
-        retryCount: 3,
-        retryDelay: 1000,
-      }),
+      transport: http(getAlchemyHttpUrl(chain.id)),
       ...(chain.id !== (hardhat as Chain).id
         ? {
             pollingInterval: scaffoldConfig.pollingInterval,

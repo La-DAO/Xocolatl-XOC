@@ -21,7 +21,6 @@ const useGetUserAccountData = (userAddress: string) => {
     data: result,
     isError: isFetchingError,
     refetch,
-    isLoading: isContractLoading,
   } = useReadContracts({
     contracts: [
       {
@@ -32,28 +31,10 @@ const useGetUserAccountData = (userAddress: string) => {
         chainId: 8453,
       },
     ],
-    query: {
-      enabled: !!userAddress,
-      retry: 3,
-      retryDelay: 1000,
-      staleTime: 30000, // 30 seconds
-      gcTime: 60000, // 1 minute
-    },
   });
 
   // Effect to handle the fetched data
   useEffect(() => {
-    // Reset states when userAddress changes
-    if (!userAddress) {
-      setUserAccountData(null);
-      setIsLoading(false);
-      setIsError(false);
-      return;
-    }
-
-    // Set loading state based on contract loading
-    setIsLoading(isContractLoading);
-
     if (result) {
       try {
         if (Array.isArray(result) && result.length > 0) {
@@ -81,14 +62,11 @@ const useGetUserAccountData = (userAddress: string) => {
             };
 
             setUserAccountData(formattedData);
-            setIsError(false);
           } else {
-            console.warn("Invalid result format from contract call");
-            setIsError(true);
+            throw new Error("Invalid result format");
           }
         } else {
-          console.warn("No result or invalid result from contract call");
-          setIsError(true);
+          throw new Error("No result or invalid result");
         }
       } catch (error) {
         console.error("Error processing data:", error);
@@ -101,13 +79,8 @@ const useGetUserAccountData = (userAddress: string) => {
       console.error("Error fetching data:", isFetchingError);
       setIsError(true);
       setIsLoading(false);
-    } else if (!isContractLoading && !result) {
-      // Handle case where no result is returned but loading is complete
-      console.warn("No data returned from contract call");
-      setIsError(true);
-      setIsLoading(false);
     }
-  }, [result, isFetchingError, isContractLoading, userAddress]);
+  }, [result, isFetchingError]);
 
   return { userAccountData, isLoading, isError, refetch };
 };

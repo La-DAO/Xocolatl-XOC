@@ -254,6 +254,7 @@
   "LendingRepayModalSuccessMessage": "Your transaction was sent successful.",
   "LendingRepayModalErrorPositive": "Amount must be a positive number.",
   "LendingRepayModalErrorBalance": "Insufficient balance.",
+  "LendingRepayModalErrorBalanceWallet": "Insufficient balance in wallet.",
   "LendingRepayModalProcessing": "Processing...",
   "LendingRepayModalWaiting": "Waiting...",
   "LendingRepayModalExplore": "Verify in Block Explorer",
