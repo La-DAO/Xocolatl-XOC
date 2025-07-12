@@ -1,6 +1,7 @@
 import { ContractLinks } from "./components/ContractLinks";
 import { LiquidityCards } from "./components/LiquidityCards";
 import LiquidityInfo from "./components/LiquidityInfo";
+import LiquidityInfoExplanation from "./components/LiquidityInfoExplanation";
 import LiquidityWidget from "./components/LiquidityWidget";
 import { PriceChart } from "./components/PriceChart";
 import { PriceMetrics } from "./components/PriceMetrics";
@@ -25,6 +26,11 @@ const LiquidityPage: NextPage = () => {
       {/* Bottom: PriceChart full width */}
       <div className="w-4/5 mt-6">
         <PriceChart />
+      </div>
+
+      {/* Information section at the bottom */}
+      <div className="w-4/5 mt-6">
+        <LiquidityInfoExplanation />
       </div>
     </div>
   );
