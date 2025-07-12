@@ -282,7 +282,7 @@ const LiquidityWidget: React.FC = () => {
     ? "w-full py-3 bg-gray-500 text-xl text-white font-semibold rounded-lg cursor-not-allowed"
     : isWrongNetwork
     ? "w-full py-3 bg-red-500 text-xl text-white font-semibold rounded-lg"
-    : "w-full py-3 bg-secondary text-xl font-semibold text-white rounded-lg hover:bg-warning hover:text-primary hover:border-2 hover:border-pink-200 hover:dark:border-pink-500 hover:scale-105 transition-all duration-300 hover:shadow-lg";
+    : "w-full py-3 bg-secondary dark:bg-base-100 text-xl font-semibold text-white rounded-lg hover:bg-warning hover:text-primary hover:border-2 hover:border-pink-200 hover:dark:border-pink-500 hover:scale-105 transition-all duration-300 hover:shadow-lg";
 
   return (
     <div className="card shadow-xl bg-primary text-white dark:bg-neutral dark:text-primary">
@@ -292,7 +292,7 @@ const LiquidityWidget: React.FC = () => {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2}
+              strokeWidth={1}
               d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"
             />
           </svg>
@@ -300,12 +300,12 @@ const LiquidityWidget: React.FC = () => {
         </h3>
 
         <div className="mb-6 flex justify-center">
-          <div className="flex w-full max-w-md bg-base-200 dark:bg-base-300 rounded-lg p-1">
+          <div className="flex w-full max-w-md bg-base-200 dark:bg-base-300 rounded-lg">
             <button
               onClick={() => handleActionChange("Deposit")}
-              className={`flex-1 px-6 py-3 rounded-md transition-all duration-300 font-semibold ${
+              className={`flex-1 px-6 py-3 border-1 rounded-md transition-all duration-300 font-semibold ${
                 action === "Deposit"
-                  ? "bg-primary text-white shadow-lg scale-105"
+                  ? "bg-primary border-2 dark:bg-base-100 text-white shadow-lg scale-105"
                   : "bg-secondary dark:bg-gray-200 dark:text-primary text-base-content hover:bg-warning hover:border-2 hover:border-pink-200 hover:dark:border-pink-500 hover:scale-105 transition-all duration-300 hover:shadow-lg"
               }`}
             >
@@ -315,7 +315,7 @@ const LiquidityWidget: React.FC = () => {
               onClick={() => handleActionChange("Withdraw")}
               className={`flex-1 px-6 py-3 rounded-md transition-all duration-300 font-semibold ${
                 action === "Withdraw"
-                  ? "bg-primary text-white shadow-lg scale-105"
+                  ? "bg-primary border-2 dark:bg-base-100 text-white shadow-lg scale-105"
                   : "bg-secondary dark:bg-gray-200 dark:text-primary text-base-content hover:bg-warning hover:border-2 hover:border-pink-200 hover:dark:border-pink-500 hover:scale-105 transition-all duration-300 hover:shadow-lg"
               }`}
             >
