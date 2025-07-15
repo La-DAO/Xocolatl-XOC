@@ -1,101 +1,208 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { generateMockPriceData } from "~~/app/utils/mockData";
+import React, { useEffect, useState } from "react";
+import {
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LineElement,
+  LinearScale,
+  PointElement,
+  Title,
+  Tooltip,
+} from "chart.js";
+import dayjs from "dayjs";
+import { Line } from "react-chartjs-2";
+import { usePriceHistory } from "~~/hooks/usePriceHistory";
 
-interface PriceData {
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+
+interface PriceDataPoint {
   timestamp: number;
   price: number;
 }
 
 export const PriceChart = () => {
-  const [priceData, setPriceData] = useState<PriceData[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [timePeriod, setTimePeriod] = useState<"1month" | "6months" | "1year">("1month");
+  const [isMobile, setIsMobile] = useState(false);
+  const [currentTime, setCurrentTime] = useState<string>("");
 
-  // Mock bounds - replace with real data when contracts are ready
-  const lowerPrice = 1.2;
-  const upperPrice = 1.8;
+  // Fetch price history from Supabase
+  const { data: priceHistoryData, isLoading } = usePriceHistory(timePeriod);
 
+  // Check if we're on mobile after component mounts and set current time
   useEffect(() => {
-    // Simulate price data fetching
-    const fetchPriceData = () => {
-      const data = generateMockPriceData();
-      setPriceData(data);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
     };
 
-    fetchPriceData();
-    setIsLoading(false);
+    const updateTime = () => {
+      setCurrentTime(new Date().toLocaleTimeString());
+    };
 
-    // Poll for new data every 15 seconds
-    const interval = setInterval(fetchPriceData, 15000);
+    checkMobile();
+    updateTime();
+    window.addEventListener("resize", checkMobile);
 
-    return () => clearInterval(interval);
+    // Update time every second
+    const timeInterval = setInterval(updateTime, 1000);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+      clearInterval(timeInterval);
+    };
   }, []);
 
-  const currentPrice = priceData[priceData.length - 1]?.price || 0;
+  // Convert Supabase data to chart format
+  const priceHistory: PriceDataPoint[] =
+    priceHistoryData?.map((item: any) => ({
+      timestamp: new Date(item.timestamp).getTime(),
+      price: item.price,
+    })) || [];
 
-  if (isLoading) {
-    return (
-      <div className="card bg-base-200 text-white shadow-xl">
-        <div className="card-body">
-          <h2 className="card-title text-white">Price Chart</h2>
-          <div className="flex items-center justify-center h-64">
-            <span className="loading loading-spinner loading-lg"></span>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Sample data based on time period to avoid overcrowding
+  const sampledData =
+    timePeriod === "1month"
+      ? priceHistory.slice(-30)
+      : timePeriod === "6months"
+      ? priceHistory.slice(-60)
+      : priceHistory.slice(-90);
+
+  const chartLabels = sampledData.map(d => dayjs(d.timestamp).format("MMM D, HH:mm"));
+
+  const chartValues = sampledData.map(d => d.price);
+
+  const currentPrice = chartValues[chartValues.length - 1] || 0;
+
+  const chartData = {
+    labels: chartLabels,
+    datasets: [
+      {
+        label: "Pool Price",
+        data: chartValues,
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        fill: true,
+        tension: 0.4,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "top" as const,
+        labels: {
+          boxWidth: 12,
+          padding: 8,
+          font: {
+            size: isMobile ? 10 : 12,
+          },
+        },
+      },
+      title: {
+        display: true,
+        text: "Pool Price History",
+        font: {
+          size: isMobile ? 14 : 16,
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          maxRotation: 45,
+          minRotation: 45,
+          font: {
+            size: isMobile ? 8 : 10,
+          },
+        },
+        grid: {
+          display: !isMobile,
+        },
+      },
+      y: {
+        ticks: {
+          font: {
+            size: isMobile ? 8 : 10,
+          },
+          callback: function (value: any) {
+            return `$${Number(value).toFixed(4)}`;
+          },
+        },
+        grid: {
+          display: !isMobile,
+        },
+      },
+    },
+    interaction: {
+      intersect: false,
+      mode: "index" as const,
+    },
+    elements: {
+      point: {
+        radius: isMobile ? 2 : 4,
+        hoverRadius: isMobile ? 4 : 6,
+      },
+      line: {
+        borderWidth: isMobile ? 1 : 2,
+      },
+    },
+  };
+
+  const handleTimePeriodChange = (period: "1month" | "6months" | "1year") => {
+    setTimePeriod(period);
+  };
 
   return (
-    <div className="card shadow-xl bg-primary dark:bg-neutral dark:text-primary">
+    <div className="card bg-base-200 shadow-xl">
       <div className="card-body">
-        <h2 className="card-title text-white dark:text-primary">Price Chart</h2>
-        <div className="relative h-64 bg-base-100 rounded-lg p-4">
-          {/* Chart placeholder - replace with actual charting library */}
-          <div className="h-full flex items-end justify-between">
-            {priceData.map((point, index) => (
-              <div
-                key={index}
-                className="bg-primary rounded-sm"
-                style={{
-                  width: "2px",
-                  height: `${(point.price / 2) * 100}%`,
-                  opacity: 0.7,
-                }}
-              />
-            ))}
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="card-title">Price Chart</h2>
+          <div className="flex gap-2">
+            <button
+              onClick={() => handleTimePeriodChange("1month")}
+              className={`btn btn-xs ${timePeriod === "1month" ? "btn-primary" : "btn-outline"}`}
+            >
+              1M
+            </button>
+            <button
+              onClick={() => handleTimePeriodChange("6months")}
+              className={`btn btn-xs ${timePeriod === "6months" ? "btn-primary" : "btn-outline"}`}
+            >
+              6M
+            </button>
+            <button
+              onClick={() => handleTimePeriodChange("1year")}
+              className={`btn btn-xs ${timePeriod === "1year" ? "btn-primary" : "btn-outline"}`}
+            >
+              1Y
+            </button>
           </div>
+        </div>
 
-          {/* Price bounds overlay */}
-          <div className="absolute inset-0 pointer-events-none dark:bg-contrast">
-            <div
-              className="absolute w-full border-t-2 border-success"
-              style={{ top: `${100 - (lowerPrice / 2) * 100}%` }}
-            >
-              <span className="bg-success text-success-content px-2 py-1 rounded text-xs">
-                Lower: ${lowerPrice.toFixed(4)}
-              </span>
+        <div className="h-64 md:h-80 lg:h-96">
+          {isLoading ? (
+            <div className="h-full flex items-center justify-center">
+              <span className="loading loading-spinner loading-lg"></span>
             </div>
-            <div
-              className="absolute w-full border-t-2 border-error"
-              style={{ top: `${100 - (upperPrice / 2) * 100}%` }}
-            >
-              <span className="bg-error text-error-content px-2 py-1 rounded text-xs">
-                Upper: ${upperPrice.toFixed(4)}
-              </span>
+          ) : priceHistory.length === 0 ? (
+            <div className="h-full flex items-center justify-center">
+              <p className="text-center text-base-content/70">No price data available</p>
             </div>
-          </div>
+          ) : (
+            <Line data={chartData} options={options} />
+          )}
         </div>
 
         <div className="flex justify-between items-center mt-4">
           <div className="text-sm">
-            <span className="text-base-content/70 dark:text-primary">Current Price: </span>
-            <span className="font-bold text-primary dark:text-primary">${currentPrice.toFixed(4)}</span>
+            <span className="text-base-content/70">Current Price: </span>
+            <span className="font-bold text-primary dark:text-white text-2xl">${currentPrice.toFixed(2)}</span>
           </div>
-          <div className="text-xs text-base-content/50 dark:text-primary">
-            Last updated: {new Date().toLocaleTimeString()}
-          </div>
+          <div className="text-xs text-base-content/50">Last updated: {currentTime || "..."}</div>
         </div>
       </div>
     </div>
