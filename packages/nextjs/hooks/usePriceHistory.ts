@@ -5,12 +5,6 @@ export function usePriceHistory() {
   return useQuery({
     queryKey: ["priceHistory"],
     queryFn: async () => {
-      // Debug environment variables
-      console.log("Environment variables:", {
-        NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-        NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? "SET" : "NOT SET",
-      });
-
       const response = await axios.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/price_history`, {
         headers: {
           apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -18,7 +12,7 @@ export function usePriceHistory() {
         params: {
           select: "fetch_spot,timestamp",
           order: "timestamp.asc",
-          limit: 1000, // or whatever limit you want
+          limit: 1000,
         },
       });
       return response.data as { fetch_spot: string; timestamp: string }[];
