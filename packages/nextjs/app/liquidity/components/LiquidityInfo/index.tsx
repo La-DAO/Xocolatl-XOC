@@ -32,8 +32,6 @@ const LiquidityInfo: React.FC = () => {
     }
   }, [totalReserves]);
 
-  console.log("Total Reserves", totalReserves);
-
   const formattedTotalReserves: number | null = totalReserves ? Number(totalReserves) / 10 ** 18 : null;
 
   const [tokenA, setTokenA] = useState<number | null>(null);

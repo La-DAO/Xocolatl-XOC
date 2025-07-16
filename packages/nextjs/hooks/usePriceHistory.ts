@@ -1,31 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import dayjs from "dayjs";
 
-export function usePriceHistory(timePeriod: "1month" | "6months" | "1year") {
+export function usePriceHistory() {
   return useQuery({
-    queryKey: ["priceHistory", timePeriod],
+    queryKey: ["priceHistory"],
     queryFn: async () => {
-      const now = dayjs();
-      const dateFrom = {
-        "1month": now.subtract(1, "month"),
-        "6months": now.subtract(6, "month"),
-        "1year": now.subtract(1, "year"),
-      }[timePeriod];
-
       const response = await axios.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/price_history`, {
         headers: {
           apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
         },
         params: {
-          select: "fetch_spot, timestamp",
-          timestamp: `gte.${dateFrom?.toISOString()}`,
+          select: "fetch_spot,timestamp",
           order: "timestamp.asc",
+          limit: 1000,
         },
       });
-
-      return response.data;
+      return response.data as { fetch_spot: string; timestamp: string }[];
     },
-    refetchInterval: 30000, // Refetch every 30 seconds
+    refetchInterval: false, // Disable automatic refetching
+    refetchOnWindowFocus: false, // Don't refetch when window gains focus
+    refetchOnMount: false, // Don't refetch when component mounts if data exists
+    refetchOnReconnect: false, // Don't refetch when reconnecting
+    staleTime: Infinity, // Data never becomes stale (manual refresh only)
+    gcTime: 3600000, // Cache data for 1 hour
   });
 }

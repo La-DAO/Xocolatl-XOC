@@ -28,7 +28,7 @@ export const PriceChart = () => {
   const [currentTime, setCurrentTime] = useState<string>("");
 
   // Fetch price history from Supabase
-  const { data: priceHistoryData, isLoading } = usePriceHistory(timePeriod);
+  const { data: priceHistoryData, isLoading } = usePriceHistory();
 
   // Check if we're on mobile after component mounts and set current time
   useEffect(() => {
@@ -44,8 +44,8 @@ export const PriceChart = () => {
     updateTime();
     window.addEventListener("resize", checkMobile);
 
-    // Update time every second
-    const timeInterval = setInterval(updateTime, 1000);
+    // Update time every 5 seconds instead of every second to reduce re-renders
+    const timeInterval = setInterval(updateTime, 5000);
 
     return () => {
       window.removeEventListener("resize", checkMobile);
@@ -54,25 +54,30 @@ export const PriceChart = () => {
   }, []);
 
   // Convert Supabase data to chart format
-  const priceHistory: PriceDataPoint[] =
-    priceHistoryData?.map((item: any) => ({
-      timestamp: new Date(item.timestamp).getTime(),
-      price: item.price,
-    })) || [];
+  const priceHistory: PriceDataPoint[] = React.useMemo(() => {
+    return (
+      priceHistoryData?.map((item: any) => ({
+        timestamp: new Date(item.timestamp).getTime(),
+        price: Number(item.fetch_spot),
+      })) || []
+    );
+  }, [priceHistoryData]);
 
   // Sample data based on time period to avoid overcrowding
-  const sampledData =
-    timePeriod === "1month"
-      ? priceHistory.slice(-30)
-      : timePeriod === "6months"
-      ? priceHistory.slice(-60)
-      : priceHistory.slice(-90);
+  const { chartLabels, chartValues, currentPrice } = React.useMemo(() => {
+    const sampledData =
+      timePeriod === "1month"
+        ? priceHistory.slice(-30)
+        : timePeriod === "6months"
+        ? priceHistory.slice(-60)
+        : priceHistory.slice(-90);
 
-  const chartLabels = sampledData.map(d => dayjs(d.timestamp).format("MMM D, HH:mm"));
+    const chartLabels = sampledData.map(d => dayjs(d.timestamp).format("MMM D, HH:mm"));
+    const chartValues = sampledData.map(d => d.price);
+    const currentPrice = chartValues[chartValues.length - 1] || 0;
 
-  const chartValues = sampledData.map(d => d.price);
-
-  const currentPrice = chartValues[chartValues.length - 1] || 0;
+    return { chartLabels, chartValues, currentPrice };
+  }, [priceHistory, timePeriod]);
 
   const chartData = {
     labels: chartLabels,
