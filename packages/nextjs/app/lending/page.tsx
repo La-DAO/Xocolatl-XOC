@@ -296,10 +296,10 @@ const Lending = () => {
             // Mark tour as completed
             localStorage.setItem("lending-tour-completed", "true");
           }}
-          className="bg-success dark:bg-success text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:bg-[#93C572]/80 transition-colors duration-200"
+          className="bg-primary dark:bg-neutral text-white dark:text-black rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:bg-[#93C572]/80 transition-colors duration-200"
           title="Start Guided Tour"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

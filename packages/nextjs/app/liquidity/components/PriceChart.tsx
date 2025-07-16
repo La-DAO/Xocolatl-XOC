@@ -57,8 +57,12 @@ export const PriceChart = () => {
   const priceHistory: PriceDataPoint[] =
     priceHistoryData?.map((item: any) => ({
       timestamp: new Date(item.timestamp).getTime(),
-      price: item.price,
+      price: item.fetch_spot,
     })) || [];
+
+  console.log("Price history data:", priceHistoryData);
+  console.log("Converted price history:", priceHistory);
+  console.log("Number of points:", priceHistory.length);
 
   // Sample data based on time period to avoid overcrowding
   const sampledData =
