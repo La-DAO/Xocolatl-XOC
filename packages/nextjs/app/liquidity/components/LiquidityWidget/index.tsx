@@ -51,9 +51,6 @@ const LiquidityWidget: React.FC = () => {
     args: [accountAddress], // Pass accountAddress as argument to balanceOf
   });
 
-  console.log("XOC Balance", xocBalance);
-  console.log("USDC Balance", usdcBalance);
-
   // Hook to read the XOC contract allowance
   const {
     data: xocAllowance,
@@ -241,8 +238,6 @@ const LiquidityWidget: React.FC = () => {
       }
     }
   }, [shareAmount, sharesBalance]);
-
-  console.log("Shares Balance", sharesBalance);
 
   // Function to set the maximum available balance for USDC
   const handleUSDCMaxClick = () => {
