@@ -76,7 +76,7 @@ export const PriceChart = () => {
     const chartValues = sampledData.map(d => d.price);
     const currentPrice = chartValues[chartValues.length - 1] || 0;
 
-    return { sampledData, chartLabels, chartValues, currentPrice };
+    return { chartLabels, chartValues, currentPrice };
   }, [priceHistory, timePeriod]);
 
   const chartData = {
