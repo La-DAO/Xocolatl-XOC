@@ -58,7 +58,7 @@ export const PriceChart = () => {
     return (
       priceHistoryData?.map((item: any) => ({
         timestamp: new Date(item.timestamp).getTime(),
-        price: Number(item.fetch_spot),
+        price: Number(item.fetch_spot) / 1e18, // Convert from wei to decimal format
       })) || []
     );
   }, [priceHistoryData]);
