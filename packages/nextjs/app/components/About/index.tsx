@@ -168,6 +168,15 @@ const About = () => {
                   {t("timelineDesc8")}
                 </div>
               </li>
+              <li>
+                <hr />
+                <div className="timeline-middle">{/* SVG icon */}</div>
+                <div className="timeline-start mb-10">
+                  <time className="font-mono italic">{t("timelineDate9")}</time>
+                  <div className="text-lg font-black">{t("timelineTitle9")}</div>
+                  {t("timelineDesc9")}
+                </div>
+              </li>
             </ul>
           </div>
         </div>

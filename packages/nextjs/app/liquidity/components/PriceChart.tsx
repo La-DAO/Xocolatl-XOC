@@ -169,19 +169,19 @@ export const PriceChart = () => {
           <div className="flex gap-2">
             <button
               onClick={() => handleTimePeriodChange("1month")}
-              className={`btn btn-xs ${timePeriod === "1month" ? "btn-primary" : "btn-outline"}`}
+              className={`btn btn-xs ${timePeriod === "1month" ? "btn-primary text-white" : "btn-outline"}`}
             >
               1M
             </button>
             <button
               onClick={() => handleTimePeriodChange("6months")}
-              className={`btn btn-xs ${timePeriod === "6months" ? "btn-primary" : "btn-outline"}`}
+              className={`btn btn-xs ${timePeriod === "6months" ? "btn-primary text-white" : "btn-outline"}`}
             >
               6M
             </button>
             <button
               onClick={() => handleTimePeriodChange("1year")}
-              className={`btn btn-xs ${timePeriod === "1year" ? "btn-primary" : "btn-outline"}`}
+              className={`btn btn-xs ${timePeriod === "1year" ? "btn-primary text-white" : "btn-outline"}`}
             >
               1Y
             </button>
