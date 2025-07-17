@@ -242,9 +242,27 @@ const Directory = () => {
   }; */
 
   return (
-    <div className="flex w-full mt-4 gap-4">
-      {/* Sidebar for categories */}
-      <div className="w-1/4 p-4 bg-base-100 rounded-xl text-xl text-primary dark:text-white">
+    <div className="flex flex-col lg:flex-row w-full mt-4 gap-4 mx-[4px]">
+      {/* Mobile: Compact filter section */}
+      <div className="lg:hidden w-full p-4 bg-base-100 rounded-xl">
+        <div className="flex flex-col gap-3">
+          <h2 className="text-xl font-bold text-primary dark:text-white">{t("Categories")}</h2>
+          <select
+            value={selectedCategory}
+            onChange={e => setSelectedCategory(e.target.value)}
+            className="select select-bordered w-full text-sm"
+          >
+            {categories.map((category, index) => (
+              <option key={index} value={category}>
+                {t(category)}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Desktop: Sidebar for categories */}
+      <div className="hidden lg:block w-1/4  py-4 bg-base-100 rounded-xl text-xl text-primary dark:text-white">
         <h2 className="text-3xl font-bold text-primary dark:text-white mb-4">{t("Categories")}</h2>
         <ul>
           {categories.map((category, index) => (
@@ -262,30 +280,30 @@ const Directory = () => {
       </div>
 
       {/* Main content area */}
-      <div className="flex flex-col w-3/4 gap-4">
+      <div className="flex flex-col w-full lg:w-3/4 gap-4">
         {/* Search bar */}
         <input
           type="text"
           placeholder={t("Search use-cases...")}
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
-          className="p-2  bg-base-300 dark:bg-base-100 text-white rounded-lg mb-4"
+          className="p-2 bg-base-300 dark:bg-base-100 text-white rounded-lg mb-4"
         />
 
         {/* Use-case cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
           {filteredUseCases.map((useCase, index) => (
             <div
               key={index}
               className="card flex flex-col justify-end items-end relative overflow-hidden rounded-xl cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:bg-base-300 dark:hover:bg-base-100 dark:hover:text-secondary dark:bg-neutral"
               onClick={() => openModal(useCase)}
-              style={{ height: "250px" }}
+              style={{ height: "200px", minHeight: "200px" }}
             >
               <Image src={useCase.image} alt={useCase.title} width={210} height={100} />
 
-              <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4">
-                <h2 className="text-xl font-semibold text-white mb-2">{t(useCase.title)}</h2>
-                <p className="text-gray-300">{t(useCase.description)}</p>
+              <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-3 lg:p-4">
+                <h2 className="text-lg lg:text-xl font-semibold text-white mb-1 lg:mb-2">{t(useCase.title)}</h2>
+                <p className="text-gray-300 text-sm lg:text-base">{t(useCase.description)}</p>
               </div>
             </div>
           ))}
@@ -294,35 +312,38 @@ const Directory = () => {
 
       {/* Modal */}
       {selectedUseCase && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg p-8 w-4/5 max-w-3xl relative grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button onClick={closeModal} className="absolute text-4xl top-4 right-4 text-gray-500 hover:text-gray-700">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
+          <div className="bg-white rounded-lg p-4 lg:p-8 w-full max-w-3xl max-h-[90vh] overflow-y-auto relative grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <button
+              onClick={closeModal}
+              className="absolute text-2xl lg:text-4xl top-2 lg:top-4 right-2 lg:right-4 text-gray-500 hover:text-gray-700 z-10"
+            >
               &times;
             </button>
             {/* Left Column */}
             <div className="flex flex-col">
-              <h1 className="text-4xl text-primary font-bold mb-4">{selectedUseCase.title}</h1>
-              <p className="mb-4 text-primary">{selectedUseCase.description}</p>
-              <div className="relative mb-4">
+              <h1 className="text-2xl lg:text-4xl text-primary font-bold mb-2 lg:mb-4">{selectedUseCase.title}</h1>
+              <p className="mb-2 lg:mb-4 text-primary text-sm lg:text-base">{selectedUseCase.description}</p>
+              <div className="relative mb-2 lg:mb-4">
                 <Image
                   src={selectedUseCase.image}
                   alt={selectedUseCase.title}
                   width={400}
                   height={200}
-                  objectFit="cover"
+                  className="w-full h-auto"
                 />
               </div>
             </div>
             {/* Right Column */}
             <div className="flex flex-col">
-              <p className="mb-4 text-primary mt-14">{selectedUseCase.context}</p>
-              <hr className="my-4" />
-              <h3 className="text-2xl font-bold text-primary mb-4">Benefits</h3>
-              <div className="flex justify-around mb-4">
+              <p className="mb-2 lg:mb-4 text-primary text-sm lg:text-base lg:mt-14">{selectedUseCase.context}</p>
+              <hr className="my-2 lg:my-4" />
+              <h3 className="text-xl lg:text-2xl font-bold text-primary mb-2 lg:mb-4">Benefits</h3>
+              <div className="flex justify-around mb-2 lg:mb-4 flex-wrap gap-2">
                 {selectedUseCase.benefits.map((benefit, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full cursor-pointer dark:hover:bg-base-100 dark:hover:text-white hover:bg-base-100 hover:text-primary hover:text-xl"
+                    className="flex items-center justify-center w-8 h-8 lg:w-10 lg:h-10 bg-primary text-white rounded-full cursor-pointer dark:hover:bg-base-100 dark:hover:text-white hover:bg-base-100 hover:text-primary hover:text-xl text-sm lg:text-base"
                     onClick={() => setActiveBenefit(index)}
                   >
                     {index + 1}
@@ -331,22 +352,22 @@ const Directory = () => {
               </div>
 
               {activeBenefit !== null && (
-                <div className="bg-gray-100 text-sm p-4 rounded-lg shadow-lg dark:text-primary">
+                <div className="bg-gray-100 text-xs lg:text-sm p-3 lg:p-4 rounded-lg shadow-lg dark:text-primary mb-2 lg:mb-4">
                   <p>{selectedUseCase.benefits[activeBenefit]}</p>
                 </div>
               )}
-              <hr className="my-4" />
-              <div className="grid grid-cols-1 gap-4">
+              <hr className="my-2 lg:my-4" />
+              <div className="grid grid-cols-1 gap-2 lg:gap-4">
                 <Link
                   href={selectedUseCase.caseStudy1Link}
-                  className="block bg-primary text-white text-center py-2 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-base-100 hover:text-primary dark:hover:bg-neutral dark:hover:text-primary dark:hover:border-2 dark:hover:border-primary"
+                  className="block bg-primary text-white text-center py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-base-100 hover:text-primary dark:hover:bg-neutral dark:hover:text-primary dark:hover:border-2 dark:hover:border-primary text-sm lg:text-base"
                   target="_blank"
                 >
                   {selectedUseCase.caseStudy1Label}
                 </Link>
                 <Link
                   href={selectedUseCase.caseStudy2Link}
-                  className="block bg-primary text-white text-center py-2 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-base-100 hover:text-primary dark:hover:bg-neutral dark:hover:text-primary dark:hover:border-2 dark:hover:border-primary"
+                  className="block bg-primary text-white text-center py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-base-100 hover:text-primary dark:hover:bg-neutral dark:hover:text-primary dark:hover:border-2 dark:hover:border-primary text-sm lg:text-base"
                   target="_blank"
                 >
                   {selectedUseCase.caseStudy2Label}
