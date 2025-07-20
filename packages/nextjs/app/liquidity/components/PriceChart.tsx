@@ -188,7 +188,7 @@ export const PriceChart = () => {
           </div>
         </div>
 
-        <div className="h-64 md:h-80 lg:h-96">
+        <div className="h-64 md:h-80 lg:h-96 bg-base-100 dark:bg-neutral rounded-xl p-2 transition-colors duration-200">
           {isLoading ? (
             <div className="h-full flex items-center justify-center">
               <span className="loading loading-spinner loading-lg"></span>
