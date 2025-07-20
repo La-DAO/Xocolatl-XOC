@@ -140,7 +140,7 @@ export const ContractLinks = () => {
         </div>
 
         <div className="card-actions justify-end mt-4">
-          <button className="btn btn-outline btn-sm">Copy All Addresses</button>
+          <button className="btn btn-outline btn-sm text-white dark:text-primary">Copy All Addresses</button>
         </div>
       </div>
     </div>
