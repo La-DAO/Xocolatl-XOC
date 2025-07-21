@@ -388,5 +388,7 @@
   "LiquidityInfoUsePoint1": "Earn trading fees from every swap that occurs in the pool.",
   "LiquidityInfoUsePoint2": "Contribute to the ecosystem's liquidity and help facilitate trading.",
   "LiquidityInfoUsePoint3": "Participate in the growth of the XOC stablecoin ecosystem.",
-  "LiquidityClosing": "Liquidity provision is a fundamental component of the DeFi ecosystem, enabling efficient trading and contributing to the overall stability and growth of the XOC stablecoin."
+  "LiquidityClosing": "Liquidity provision is a fundamental component of the DeFi ecosystem, enabling efficient trading and contributing to the overall stability and growth of the XOC stablecoin.",
+  "contractAddresses": "Contract Addresses",
+  "copyAllAddresses": "Copy All Addresses"
 }

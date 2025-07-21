@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "~~/app/context/LanguageContext";
 
 // Real contract addresses for Arbitrum mainnet
 const REAL_CONTRACT_ADDRESSES = {
@@ -14,7 +15,7 @@ const REAL_CONTRACT_ADDRESSES = {
 
 export const ContractLinks = () => {
   const [contracts, setContracts] = useState(REAL_CONTRACT_ADDRESSES);
-
+  const { t } = useTranslation();
   useEffect(() => {
     // Use real contract addresses
     setContracts(REAL_CONTRACT_ADDRESSES);
@@ -40,7 +41,7 @@ export const ContractLinks = () => {
               d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
             />
           </svg>
-          Contract Addresses
+          {t("contractAddresses")}
         </h3>
 
         <div className="space-y-3">
@@ -140,7 +141,7 @@ export const ContractLinks = () => {
         </div>
 
         <div className="card-actions justify-end mt-4">
-          <button className="btn btn-outline btn-sm text-white dark:text-primary">Copy All Addresses</button>
+          <button className="btn btn-outline btn-sm text-white dark:text-primary">{t("copyAllAddresses")}</button>
         </div>
       </div>
     </div>
