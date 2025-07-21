@@ -393,5 +393,7 @@
   "LiquidityInfoUsePoint1": "Gana comisiones de trading de cada intercambio que ocurre en el pool.",
   "LiquidityInfoUsePoint2": "Contribuye a la liquidez del ecosistema y ayuda a facilitar el trading.",
   "LiquidityInfoUsePoint3": "Participa en el crecimiento del ecosistema de la stablecoin XOC.",
-  "LiquidityClosing": "El suministro de liquidez es un componente fundamental del ecosistema DeFi, permitiendo trading eficiente y contribuyendo a la estabilidad general y crecimiento de la stablecoin XOC."
+  "LiquidityClosing": "El suministro de liquidez es un componente fundamental del ecosistema DeFi, permitiendo trading eficiente y contribuyendo a la estabilidad general y crecimiento de la stablecoin XOC.",
+  "contractAddresses": "Direcciones de Contrato",
+  "copyAllAddresses": "Copiar Todas las Direcciones"
 }
