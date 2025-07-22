@@ -69,6 +69,25 @@ const DepositModal: React.FC<DepositModalProps> = ({
     args: [walletAddress, houseOfReserveContract], // Only pass the address
   });
 
+  const {
+    deposit: handleDeposit,
+    isPending: isDepositPending,
+    isError: isDepositError,
+    error,
+    depositHash,
+  } = useDeposit(houseOfReserveContract as Address);
+
+  // Transaction confirmation tracking for deposit
+  const {
+    isLoading: isDepositConfirming,
+    isSuccess: isDepositConfirmed,
+    data: transactionReceipt,
+  } = useWaitForTransactionReceipt({
+    hash: depositHash,
+  });
+
+  const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${depositHash}`;
+
   useEffect(() => {
     if (isAssetAllowanceError) {
       console.error("Error fetching allowance");
@@ -78,16 +97,6 @@ const DepositModal: React.FC<DepositModalProps> = ({
       setAssetAllowanceState(allowanceInEther);
     }
   }, [assetAllowance, isAssetAllowanceError, isAssetAllowanceLoading]);
-
-  const {
-    deposit: handleDeposit,
-    isPending: isDepositPending,
-    isError: isDepositError,
-    error,
-    depositHash,
-  } = useDeposit(houseOfReserveContract as Address);
-
-  const blockExplorerUrl = `${getBlockExplorerUrl(chainId)}${depositHash}`;
 
   useEffect(() => {
     const assetAmount = parseFloat(amount) || 0;
@@ -120,6 +129,21 @@ const DepositModal: React.FC<DepositModalProps> = ({
       setData(depositHash);
     }
   }, [isDepositError, depositHash, error]);
+
+  // Handle transaction confirmation and refresh page data
+  useEffect(() => {
+    if (isDepositConfirmed && transactionReceipt) {
+      // Transaction confirmed successfully with receipt, wait a bit then refresh page data
+      const timer = setTimeout(() => {
+        // Refresh the page or trigger a data refresh here
+        console.log("Deposit transaction confirmed with receipt, refreshing page data", transactionReceipt);
+        // You can add a callback prop here to refresh parent component data
+        // onTransactionConfirmed?.();
+      }, 2000); // Wait 2 seconds to ensure blockchain state is updated
+
+      return () => clearTimeout(timer);
+    }
+  }, [isDepositConfirmed, transactionReceipt]);
 
   useEffect(() => {
     const assetAmount = parseFloat(amount) || 0;
@@ -371,8 +395,25 @@ const DepositModal: React.FC<DepositModalProps> = ({
                 width={250}
                 height={250}
               />
-              <h2 className="text-base sm:text-lg">All done!</h2>
-              <p className="text-xs sm:text-sm">Deposit transaction successful</p>
+              {isDepositConfirming ? (
+                <>
+                  <h2 className="text-base sm:text-lg">Transaction Submitted!</h2>
+                  <p className="text-xs sm:text-sm flex items-center justify-center gap-2">
+                    <span className="animate-spin">⏳</span>
+                    Waiting for confirmation...
+                  </p>
+                </>
+              ) : isDepositConfirmed ? (
+                <>
+                  <h2 className="text-base sm:text-lg">All done!</h2>
+                  <p className="text-xs sm:text-sm">Deposit transaction successful</p>
+                </>
+              ) : (
+                <>
+                  <h2 className="text-base sm:text-lg">Transaction Submitted!</h2>
+                  <p className="text-xs sm:text-sm">Your deposit transaction has been submitted to the network.</p>
+                </>
+              )}
               <div className="pb-3"></div>
               {blockExplorerUrl && (
                 <a href={blockExplorerUrl} target="_blank" rel="noreferrer" className="block link pb-3">
