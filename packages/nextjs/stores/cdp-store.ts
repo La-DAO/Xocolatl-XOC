@@ -182,18 +182,18 @@ export const useCDPStore = create<CDPStore>(set => ({
   },
 }));
 
+// Chain names mapping
+const chainNames: { [key: number]: string } = {
+  56: "Binance Smart Chain",
+  137: "Polygon",
+  8453: "Base",
+  10: "Optimism",
+};
+
 // Custom hook to sync CDP stats with the store
 export const useCDPStatsSync = () => {
   const chainId = useChainId();
   const { setCdpStats, setCdpStatsLoading, setCdpStatsError } = useCDPStore();
-
-  // Chain names mapping
-  const chainNames: { [key: number]: string } = {
-    56: "Binance Smart Chain",
-    137: "Polygon",
-    8453: "Base",
-    10: "Optimism",
-  };
 
   // Read total minted XOC
   const {
