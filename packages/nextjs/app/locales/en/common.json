@@ -383,7 +383,7 @@
   "LiquidityInfoPoint2": "Smart contract validation prevents invalid transactions and protects against manipulation.",
   "LiquidityInfoPoint3": "Automated price calculations maintain fair exchange rates based on supply and demand.",
   "LiquidityInfoPoint4": "Secure asset management with transparent on-chain verification of all transactions.",
-  "LiquidityInfoUseTitle": "Benefits of Liquidity Provision",
+  "LiquidityInfoUseTitle": "Benefits of Liquidity Provisioning",
   "LiquidityInfoUseSubTitle": "Providing liquidity offers several advantages:",
   "LiquidityInfoUsePoint1": "Earn trading fees from every swap that occurs in the pool.",
   "LiquidityInfoUsePoint2": "Contribute to the ecosystem's liquidity and help facilitate trading.",
