@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAccount, useReadContract } from "wagmi";
 import { liquidityABI } from "~~/app/components/abis/liquidity";
+import { useTranslation } from "~~/app/context/LanguageContext";
 
 // Token addresses and decimals
 const token0Address = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"; // USDC
@@ -11,6 +12,7 @@ const TOKEN1_DECIMALS = 18; // XOC has 18 decimals
 const CONTRACT_ADDRESS = "0xD6DaB267b7C23EdB2ed5605d9f3f37420e88e291"; // LiquidityManager contract address
 
 export const PriceMetrics = () => {
+  const { t } = useTranslation();
   const [priceData, setPriceData] = useState({
     oraclePrice: "0",
     poolPrice: "0",
@@ -92,7 +94,7 @@ export const PriceMetrics = () => {
                 d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
               />
             </svg>
-            Pool
+            {t("LiquidityPool")}
           </h3>
           <p className="text-4xl font-bold text-white dark:text-primary">
             {priceData.poolPrice && priceData.poolPrice !== "0"
@@ -119,7 +121,7 @@ export const PriceMetrics = () => {
                 d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
               />
             </svg>
-            Shares
+            {t("LiquidityShares")}
           </h3>
           <p className="text-4xl font-bold text-white dark:text-primary">{formattedShareBalance.toFixed(4)}</p>
         </div>
@@ -137,7 +139,7 @@ export const PriceMetrics = () => {
                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            Oracle
+            {t("LiquidityOracle")}
           </h3>
           <p className="text-4xl font-bold text-white dark:text-primary">
             {priceData.oraclePrice && priceData.oraclePrice !== "0"
@@ -155,7 +157,7 @@ export const PriceMetrics = () => {
       {/* Price Difference */}
       <div className="card shadow-sm bg-primary dark:bg-neutral dark:text-primary">
         <div className="card-body p-3">
-          <h3 className="card-title text-lg mb-1 text-white dark:text-primary">Difference</h3>
+          <h3 className="card-title text-lg mb-1 text-white dark:text-primary">{t("LiquidityDifference")}</h3>
           <p className="text-4xl font-bold text-white dark:text-primary">
             {priceData.priceDifference && priceData.priceDifference !== 0
               ? new Intl.NumberFormat("es-MX", {
