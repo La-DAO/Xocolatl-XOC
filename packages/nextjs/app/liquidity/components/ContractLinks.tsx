@@ -49,7 +49,7 @@ export const ContractLinks = () => {
           <div className="flex items-center justify-between p-3 bg-base-100 rounded-lg">
             <div className="flex items-center space-x-2">
               <div className="badge badge-primary border-accent text-sm text-white dark:text-white">Manager</div>
-              <span className="text-sm font-medium dark:text-white">Liquidity Manager</span>
+              <span className="text-sm font-medium dark:text-white">{t("liquidityManager")}</span>
             </div>
             <a
               href={getBaseScanUrl(contracts.lpManager)}
@@ -96,8 +96,8 @@ export const ContractLinks = () => {
           {/* Pool */}
           <div className="flex items-center justify-between p-3 bg-base-100 rounded-lg">
             <div className="flex items-center space-x-2">
-              <div className="badge badge-info border-accent text-sm dark:text-white">Pool</div>
-              <span className="text-sm font-medium dark:text-white">Pool Contract</span>
+              <div className="badge badge-info border-accent text-sm dark:text-white">{t("pool")}</div>
+              <span className="text-sm font-medium dark:text-white">{t("poolContract")}</span>
             </div>
             <a
               href={getBaseScanUrl(contracts.pool)}
@@ -112,8 +112,8 @@ export const ContractLinks = () => {
           {/* Oracle */}
           <div className="flex items-center justify-between p-3 bg-base-100 rounded-lg">
             <div className="flex items-center space-x-2">
-              <div className="badge badge-warning border-accent text-sm">Oracle</div>
-              <span className="text-sm font-medium dark:text-white">Price Oracle</span>
+              <div className="badge badge-warning border-accent text-sm">{t("oracle")}</div>
+              <span className="text-sm font-medium dark:text-white">{t("priceOracle")}</span>
             </div>
             <a
               href={getBaseScanUrl(contracts.usdOracle0Ref)}
@@ -126,8 +126,8 @@ export const ContractLinks = () => {
           </div>
           <div className="flex items-center justify-between p-3 bg-base-100 rounded-lg">
             <div className="flex items-center space-x-2">
-              <div className="badge badge-warning border-accent text-sm">Oracle</div>
-              <span className="text-sm font-medium dark:text-white">Price Oracle</span>
+              <div className="badge badge-warning border-accent text-sm">{t("oracle")}</div>
+              <span className="text-sm font-medium dark:text-white">{t("priceOracle")}</span>
             </div>
             <a
               href={getBaseScanUrl(contracts.usdOracle1Ref)}
