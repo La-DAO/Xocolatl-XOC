@@ -400,5 +400,8 @@
   "LiquidityPool": "Pool",
   "LiquidityShares": "Acciones",
   "LiquidityOracle": "Oráculo",
-  "LiquidityDifference": "Diferencia"
+  "LiquidityDifference": "Diferencia",
+  "LiquidityManager": "Gestor",
+  "LiquidityPoolContract": "Contrato del Pool",
+  "LiquidityPriceOracle": "Precio del Oráculo"
 }

@@ -395,5 +395,8 @@
   "LiquidityPool": "Pool",
   "LiquidityShares": "Shares",
   "LiquidityOracle": "Oracle",
-  "LiquidityDifference": "Difference"
+  "LiquidityDifference": "Difference",
+  "LiquidityManager": "Manager",
+  "LiquidityPoolContract": "Pool Contract",
+  "LiquidityPriceOracle": "Price Oracle"
 }
