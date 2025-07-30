@@ -7,6 +7,7 @@ import { Address } from "viem";
 import { useAccount, useChainId, useReadContract } from "wagmi";
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { houseOfCoinABI } from "~~/app/components/abis/houseofcoin";
+import { useTranslation } from "~~/app/context/LanguageContext";
 import { getBlockExplorerUrl } from "~~/app/utils/utils";
 
 interface MintModalProps {
@@ -27,6 +28,7 @@ const MintModal: React.FC<MintModalProps> = ({
   assetContract,
   houseOfCoinContract,
 }) => {
+  const { t } = useTranslation();
   const chainId = useChainId();
   const { address } = useAccount();
   const [amount, setAmount] = useState("");
@@ -175,8 +177,10 @@ const MintModal: React.FC<MintModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg p-6 dark:text-primary w-full max-w-md sm:max-w-lg md:max-w-2xl mx-4">
-        <h2 className="text-lg sm:text-xl font-bold mb-4">Mint $XOC</h2>
-        <p className="mb-4 text-sm sm:text-base">Reserve Asset: {assetName}</p>
+        <h2 className="text-lg sm:text-xl font-bold mb-4">{t("mintXOC")}</h2>
+        <p className="mb-4 text-sm sm:text-base">
+          {t("reserveAsset")}: {assetName}
+        </p>
 
         <div role="alert" className="alert mb-4">
           <svg
@@ -192,16 +196,13 @@ const MintModal: React.FC<MintModalProps> = ({
               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             ></path>
           </svg>
-          <span className="text-xs sm:text-sm">
-            Unlock the power of digital MXN pesos with XOC! Experience the future of mexican finance and help us build a
-            more inclusive and fair financial system for everyone.
-          </span>
+          <span className="text-xs sm:text-sm">{t("unlockThePowerOfDigitalMXNPesosWithXOC")}</span>
         </div>
 
         {!data && !isError && (
           <div className="flex flex-col gap-6 mt-6">
             <div className="container-gray-borders flex flex-col gap-2">
-              <label className="font-bold text-sm sm:text-base">Amount</label>
+              <label className="font-bold text-sm sm:text-base">{t("amount")}</label>
               <div className="flex items-center">
                 <input
                   type="number"
@@ -214,7 +215,7 @@ const MintModal: React.FC<MintModalProps> = ({
               </div>
               {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
               <p className="text-sm font-bold">
-                Minted Amount (including 1.5% fee)
+                {t("mintedAmount")}
                 <div
                   className="tooltip tooltip-primary hover:text-neutral  dark:hover:text-neutral"
                   data-tip="A 1.5% protocol fee will be incurred at minting. This fee goes directly to our DAO treasury to support ongoing development, maintenance, and security of the protocol."
@@ -230,13 +231,13 @@ const MintModal: React.FC<MintModalProps> = ({
               </div>
             </div>
             <div className="container-gray-borders flex flex-col gap-2">
-              <label className="font-bold text-sm sm:text-base">Poisition Overview</label>
+              <label className="font-bold text-sm sm:text-base">{t("positionOverview")}</label>
               <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span>Minting Power:</span>
+                <span>{t("mintingPower")}:</span>
                 <span className="font-bold">
                   <div
                     className="tooltip tooltip-primary hover:text-neutral  dark:hover:text-neutral"
-                    data-tip="The amount of $XOC you can still mint based on your deposited collateral amount. The more you mint the less healthy your position becomes."
+                    data-tip={t("mintingPowerTooltip")}
                   >
                     <InformationCircleIcon className="h-5 w-5 inline" />
                   </div>
@@ -244,11 +245,11 @@ const MintModal: React.FC<MintModalProps> = ({
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span>User Health Ratio:</span>
+                <span>{t("userHealthRatio")}:</span>
                 <span className="font-bold">
                   <div
                     className="tooltip tooltip-primary hover:text-neutral dark:hover:text-neutral"
-                    data-tip="A ratio of 1 means your borrowed amount equals your collateral. Values above 1 indicate a healthy position (the higher, the safer), while falling below 1 risks liquidation. For example, a ratio of 2 means you've borrowed 50% of your maximum, while 1.2 means you're at 83% of your limit."
+                    data-tip={t("userHealthRatioTooltip")}
                   >
                     <InformationCircleIcon className="h-5 w-5 inline" />
                   </div>
@@ -269,10 +270,10 @@ const MintModal: React.FC<MintModalProps> = ({
                 onClick={handleMintClick}
                 disabled={!isValid}
               >
-                Mint
+                {t("mint")}
               </button>
               <button onClick={handleClose} className="secondary-btn flex-grow sm:basis-1/3">
-                Cancel
+                {t("cancel")}
               </button>
             </div>
           </div>
@@ -293,11 +294,11 @@ const MintModal: React.FC<MintModalProps> = ({
                 {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
               </p>
               <span onClick={handleCopyError} className="cursor-pointer underline font-bold text-lg">
-                Copy the error.
+                {t("copyTheError")}
               </span>
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
-              Close
+              {t("close")}
             </button>
           </div>
         )}
@@ -317,12 +318,12 @@ const MintModal: React.FC<MintModalProps> = ({
               <div className="pb-3"></div>
               {blockExplorerUrl && (
                 <a href={blockExplorerUrl} target="_blank" rel="noreferrer" className="block link pb-3">
-                  Open in Block Explorer
+                  {t("openInBlockExplorer")}
                 </a>
               )}
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
-              Ok, close
+              {t("okClose")}
             </button>
           </div>
         )}

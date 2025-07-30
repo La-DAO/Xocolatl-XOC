@@ -431,5 +431,19 @@
   "DepositModalErrorGeneral": "Ocurrió un error al depositar el activo.",
   "DepositModalCopyError": "Copiar el error",
   "DepositModalOpenInBlockExplorer": "Abrir en el Block Explorer",
-  "DepositModalOkClose": "Ok, cerrar"
+  "DepositModalOkClose": "Ok, cerrar",
+
+  "MintModalTitle": "Acuñar",
+  "MintModalSubtitle": "Acuñar $XOC",
+  "MintModalReserveAsset": "Activo de la Reserva",
+  "MintModalUnlockThePowerOfDigitalMXNPesosWithXOC": "Desbloquea el poder de los pesos digitales MXN con XOC! Experimenta el futuro de la finanzas mexicanas y ayúdanos a construir un sistema financiero más inclusivo y justo para todos.",
+  "MintModalMintingPower": "Poder de Mintado",
+  "MintModalMintingPowerTooltip": "La cantidad de $XOC que puedes seguir mintando basado en la cantidad de garantías depositadas. Cuanto más mintes, menos saludable se vuelve tu posición.",
+  "MintModalUserHealthRatio": "Ratio de Salud del Usuario",
+  "MintModalUserHealthRatioTooltip": "Un ratio de 1 significa que tu cantidad prestada es igual a tu garantía. Valores por encima de 1 indican una posición saludable (más alto, más seguro), mientras que valores por debajo de 1 aumentan el riesgo de liquidación. Por ejemplo, un ratio de 2 significa que has prestado el 50% de tu límite, mientras que 1.2 significa que estás al 83% de tu límite.",
+  "MintModalMint": "Acuñar",
+  "MintModalCancel": "Cancelar",
+  "MintModalCopyTheError": "Copiar el error",
+  "MintModalOpenInBlockExplorer": "Abrir en el Block Explorer",
+  "MintModalOkClose": "Ok, cerrar"
 }
