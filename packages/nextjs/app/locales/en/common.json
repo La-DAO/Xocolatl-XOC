@@ -426,5 +426,19 @@
   "DepositModalErrorGeneral": "An error occurred while depositing the asset.",
   "DepositModalCopyError": "Copy the error",
   "DepositModalOpenInBlockExplorer": "Open in Block Explorer",
-  "DepositModalOkClose": "Ok, close"
+  "DepositModalOkClose": "Ok, close",
+
+  "MintModalTitle": "Mint",
+  "MintModalSubtitle": "Mint $XOC",
+  "MintModalReserveAsset": "Reserve Asset",
+  "MintModalUnlockThePowerOfDigitalMXNPesosWithXOC": "Unlock the power of digital MXN pesos with XOC! Experience the future of mexican finance and help us build a more inclusive and fair financial system for everyone.",
+  "MintModalMintingPower": "Minting Power",
+  "MintModalMintingPowerTooltip": "The amount of $XOC you can still mint based on your deposited collateral amount. The more you mint the less healthy your position becomes.",
+  "MintModalUserHealthRatio": "User Health Ratio",
+  "MintModalUserHealthRatioTooltip": "A ratio of 1 means your borrowed amount equals your collateral. Values above 1 indicate a healthy position (the higher, the safer), while falling below 1 risks liquidation. For example, a ratio of 2 means you've borrowed 50% of your maximum, while 1.2 means you're at 83% of your limit.",
+  "MintModalMint": "Mint",
+  "MintModalCancel": "Cancel",
+  "MintModalCopyTheError": "Copy the error",
+  "MintModalOpenInBlockExplorer": "Open in Block Explorer",
+  "MintModalOkClose": "Ok, close"
 }
