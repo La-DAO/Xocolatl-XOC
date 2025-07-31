@@ -445,5 +445,20 @@
   "MintModalCancel": "Cancelar",
   "MintModalCopyTheError": "Copiar el error",
   "MintModalOpenInBlockExplorer": "Abrir en el Block Explorer",
-  "MintModalOkClose": "Ok, cerrar"
+  "MintModalOkClose": "Ok, cerrar",
+
+  "RepayModalTitle": "Repagar",
+  "RepayModalSubtitle": "Repagar $XOC",
+  "RepayModalBurnYourDebt": "Quemar tu deuda 🔥",
+  "RepayModalPleaseEnsureThatYouHaveSufficientFundsToCoverTheRepaymentAmount": "Asegúrate de tener fondos suficientes para cubrir la cantidad de reembolso. Reembolsar $XOC quemará la cantidad especificada de tu saldo, reduciendo tu deuda. Asegúrate de verificar la cantidad antes de proceder.",
+  "RepayModalAmount": "Cantidad",
+  "RepayModalTransactionOverview": "Vista General de la Transacción",
+  "RepayModalTotalMintedAmount": "Cantidad Total Acuñada",
+  "RepayModalRepayAmount": "Cantidad a Repagar",
+  "RepayModalHouseOfCoinAddress": "Dirección del Contrato de la Casa de Monedas",
+  "RepayModalCancel": "Cancelar",
+  "RepayModalRepay": "Repagar",
+  "RepayModalCopyTheError": "Copiar el error",
+  "RepayModalOpenInBlockExplorer": "Abrir en el Block Explorer",
+  "RepayModalOkClose": "Ok, cerrar"
 }

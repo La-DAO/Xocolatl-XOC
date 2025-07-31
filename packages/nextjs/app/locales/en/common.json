@@ -440,5 +440,20 @@
   "MintModalCancel": "Cancel",
   "MintModalCopyTheError": "Copy the error",
   "MintModalOpenInBlockExplorer": "Open in Block Explorer",
-  "MintModalOkClose": "Ok, close"
+  "MintModalOkClose": "Ok, close",
+
+  "RepayModalTitle": "Repay",
+  "RepayModalSubtitle": "Repay $XOC",
+  "RepayModalBurnYourDebt": "Burn your debt 🔥",
+  "RepayModalPleaseEnsureThatYouHaveSufficientFundsToCoverTheRepaymentAmount": "Please ensure that you have sufficient funds to cover the repayment amount. Repaying $XOC will burn the specified amount from your balance, reducing your debt. Make sure to double-check the amount before proceeding.",
+  "RepayModalAmount": "Amount",
+  "RepayModalTransactionOverview": "Transaction Overview",
+  "RepayModalTotalMintedAmount": "Total Minted Amount",
+  "RepayModalRepayAmount": "Repay Amount",
+  "RepayModalHouseOfCoinAddress": "House Of Coin Address",
+  "RepayModalCancel": "Cancel",
+  "RepayModalRepay": "Repay",
+  "RepayModalCopyTheError": "Copy the error",
+  "RepayModalOpenInBlockExplorer": "Open in Block Explorer",
+  "RepayModalOkClose": "Ok, close"
 }
