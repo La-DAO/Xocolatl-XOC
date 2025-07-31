@@ -4,6 +4,7 @@ import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Address } from "viem";
 import { useChainId } from "wagmi";
+import { useTranslation } from "~~/app/context/LanguageContext";
 import { getBlockExplorerUrl } from "~~/app/utils/utils";
 import useRepayCPD from "~~/hooks/useRepayCDP";
 
@@ -22,6 +23,7 @@ const RepayModal: React.FC<RepayModalProps> = ({
   houseOfCoinContract,
   mintedAmount,
 }) => {
+  const { t } = useTranslation();
   const chainId = useChainId();
   const [amount, setAmount] = useState("");
   const [isValid, setIsValid] = useState(false);
@@ -106,8 +108,8 @@ const RepayModal: React.FC<RepayModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg p-6 dark:text-primary w-full max-w-md sm:max-w-lg md:max-w-2xl mx-4">
-        <h2 className="text-lg sm:text-xl font-bold mb-4">Repay $XOC</h2>
-        <p className="mb-4 text-sm sm:text-base">Burn your debt 🔥</p>
+        <h2 className="text-lg sm:text-xl font-bold mb-4">{t("repay")} $XOC</h2>
+        <p className="mb-4 text-sm sm:text-base">{t("burnYourDebt")}</p>
 
         <div role="alert" className="alert mb-4">
           <svg
@@ -124,16 +126,14 @@ const RepayModal: React.FC<RepayModalProps> = ({
             ></path>
           </svg>
           <span className="text-xs sm:text-sm">
-            Please ensure that you have sufficient funds to cover the repayment amount. Repaying $XOC will burn the
-            specified amount from your balance, reducing your debt. Make sure to double-check the amount before
-            proceeding.
+            {t("pleaseEnsureThatYouHaveSufficientFundsToCoverTheRepaymentAmount")}
           </span>
         </div>
 
         {!data && !isError && (
           <div className="flex flex-col gap-6 mt-6">
             <div className="container-gray-borders flex flex-col gap-2">
-              <label className="font-bold text-sm sm:text-base">Amount</label>
+              <label className="font-bold text-sm sm:text-base">{t("amount")}</label>
               <div className="flex items-center">
                 <input
                   type="number"
@@ -149,17 +149,17 @@ const RepayModal: React.FC<RepayModalProps> = ({
             </div>
 
             <div className="container-gray-borders flex flex-col gap-2">
-              <label className="font-bold text-sm sm:text-base">Transaction Overview</label>
+              <label className="font-bold text-sm sm:text-base">{t("transactionOverview")}</label>
               <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span>Total Minted Amount</span>
+                <span>{t("totalMintedAmount")}</span>
                 <span className="font-bold">{mintedAmount.toFixed(6)} $XOC</span>
               </div>
               <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span>Repay Amount</span>
+                <span>{t("repayAmount")}</span>
                 <span className="font-bold">{amount ? amount : 0} $XOC</span>
               </div>
               <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span>House Of Coin Address:</span>
+                <span>{t("houseOfCoinAddress")}:</span>
                 <span className="break-all">{houseOfCoinContract}</span>
               </div>
             </div>
@@ -170,10 +170,10 @@ const RepayModal: React.FC<RepayModalProps> = ({
                 onClick={handleRepayClick}
                 disabled={!isValid}
               >
-                Repay
+                {t("repay")}
               </button>
               <button onClick={handleClose} className="secondary-btn flex-grow sm:basis-1/3">
-                Cancel
+                {t("cancel")}
               </button>
             </div>
           </div>
@@ -194,11 +194,11 @@ const RepayModal: React.FC<RepayModalProps> = ({
                 {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
               </p>
               <span onClick={handleCopyError} className="cursor-pointer underline font-bold text-lg">
-                Copy the error.
+                {t("copyTheError")}
               </span>
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
-              Close
+              {t("close")}
             </button>
           </div>
         )}
@@ -218,12 +218,12 @@ const RepayModal: React.FC<RepayModalProps> = ({
               <div className="pb-3"></div>
               {blockExplorerUrl && (
                 <a href={blockExplorerUrl} target="_blank" rel="noreferrer" className="block link pb-3">
-                  Open in Block Explorer
+                  {t("openInBlockExplorer")}
                 </a>
               )}
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
-              Ok, close
+              {t("okClose")}
             </button>
           </div>
         )}
