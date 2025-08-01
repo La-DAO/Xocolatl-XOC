@@ -177,9 +177,9 @@ const MintModal: React.FC<MintModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg p-6 dark:text-primary w-full max-w-md sm:max-w-lg md:max-w-2xl mx-4">
-        <h2 className="text-lg sm:text-xl font-bold mb-4">{t("mintXOC")}</h2>
+        <h2 className="text-lg sm:text-xl font-bold mb-4">{t("MintModalTitle")}</h2>
         <p className="mb-4 text-sm sm:text-base">
-          {t("reserveAsset")}: {assetName}
+          {t("MintModalSubtitle")}: {assetName}
         </p>
 
         <div role="alert" className="alert mb-4">
@@ -196,13 +196,13 @@ const MintModal: React.FC<MintModalProps> = ({
               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             ></path>
           </svg>
-          <span className="text-xs sm:text-sm">{t("unlockThePowerOfDigitalMXNPesosWithXOC")}</span>
+          <span className="text-xs sm:text-sm">{t("MintModalUnlockThePowerOfDigitalMXNPesosWithXOC")}</span>
         </div>
 
         {!data && !isError && (
           <div className="flex flex-col gap-6 mt-6">
             <div className="container-gray-borders flex flex-col gap-2">
-              <label className="font-bold text-sm sm:text-base">{t("amount")}</label>
+              <label className="font-bold text-sm sm:text-base">{t("MintModalAmount")}</label>
               <div className="flex items-center">
                 <input
                   type="number"
@@ -215,7 +215,7 @@ const MintModal: React.FC<MintModalProps> = ({
               </div>
               {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
               <p className="text-sm font-bold">
-                {t("mintedAmount")}
+                {t("MintModalMintedAmount")}
                 <div
                   className="tooltip tooltip-primary hover:text-neutral  dark:hover:text-neutral"
                   data-tip="A 1.5% protocol fee will be incurred at minting. This fee goes directly to our DAO treasury to support ongoing development, maintenance, and security of the protocol."
@@ -231,9 +231,9 @@ const MintModal: React.FC<MintModalProps> = ({
               </div>
             </div>
             <div className="container-gray-borders flex flex-col gap-2">
-              <label className="font-bold text-sm sm:text-base">{t("positionOverview")}</label>
+              <label className="font-bold text-sm sm:text-base">{t("MintModalPositionOverview")}</label>
               <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span>{t("mintingPower")}:</span>
+                <span>{t("MintModalMintingPower")}:</span>
                 <span className="font-bold">
                   <div
                     className="tooltip tooltip-primary hover:text-neutral  dark:hover:text-neutral"
@@ -245,7 +245,7 @@ const MintModal: React.FC<MintModalProps> = ({
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span>{t("userHealthRatio")}:</span>
+                <span>{t("MintModalUserHealthRatio")}:</span>
                 <span className="font-bold">
                   <div
                     className="tooltip tooltip-primary hover:text-neutral dark:hover:text-neutral"
@@ -270,10 +270,10 @@ const MintModal: React.FC<MintModalProps> = ({
                 onClick={handleMintClick}
                 disabled={!isValid}
               >
-                {t("mint")}
+                {t("MintModalMint")}
               </button>
               <button onClick={handleClose} className="secondary-btn flex-grow sm:basis-1/3">
-                {t("cancel")}
+                {t("MintModalCancel")}
               </button>
             </div>
           </div>
@@ -294,11 +294,11 @@ const MintModal: React.FC<MintModalProps> = ({
                 {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
               </p>
               <span onClick={handleCopyError} className="cursor-pointer underline font-bold text-lg">
-                {t("copyTheError")}
+                {t("MintModalCopyTheError")}
               </span>
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
-              {t("close")}
+              {t("MintModalClose")}
             </button>
           </div>
         )}
@@ -313,17 +313,17 @@ const MintModal: React.FC<MintModalProps> = ({
                 width={250}
                 height={250}
               />
-              <h2 className="text-base sm:text-lg">All done!</h2>
-              <p className="text-xs sm:text-sm">Minting transaction successful</p>
+              <h2 className="text-base sm:text-lg">{t("MintModalSuccessTitle")}!</h2>
+              <p className="text-xs sm:text-sm">{t("MintModalSuccessMessage")}</p>
               <div className="pb-3"></div>
               {blockExplorerUrl && (
                 <a href={blockExplorerUrl} target="_blank" rel="noreferrer" className="block link pb-3">
-                  {t("openInBlockExplorer")}
+                  {t("MintModalOpenInBlockExplorer")}
                 </a>
               )}
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
-              {t("okClose")}
+              {t("MintModalOkClose")}
             </button>
           </div>
         )}
