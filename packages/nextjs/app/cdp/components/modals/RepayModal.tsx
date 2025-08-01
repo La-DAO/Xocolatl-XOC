@@ -108,8 +108,8 @@ const RepayModal: React.FC<RepayModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg p-6 dark:text-primary w-full max-w-md sm:max-w-lg md:max-w-2xl mx-4">
-        <h2 className="text-lg sm:text-xl font-bold mb-4">{t("repay")} $XOC</h2>
-        <p className="mb-4 text-sm sm:text-base">{t("burnYourDebt")}</p>
+        <h2 className="text-lg sm:text-xl font-bold mb-4">{t("RepayModalTitle")} $XOC</h2>
+        <p className="mb-4 text-sm sm:text-base">{t("RepayModalSubtitle")}</p>
 
         <div role="alert" className="alert mb-4">
           <svg
@@ -126,14 +126,14 @@ const RepayModal: React.FC<RepayModalProps> = ({
             ></path>
           </svg>
           <span className="text-xs sm:text-sm">
-            {t("pleaseEnsureThatYouHaveSufficientFundsToCoverTheRepaymentAmount")}
+            {t("RepayModalPleaseEnsureThatYouHaveSufficientFundsToCoverTheRepaymentAmount")}
           </span>
         </div>
 
         {!data && !isError && (
           <div className="flex flex-col gap-6 mt-6">
             <div className="container-gray-borders flex flex-col gap-2">
-              <label className="font-bold text-sm sm:text-base">{t("amount")}</label>
+              <label className="font-bold text-sm sm:text-base">{t("RepayModalAmount")}</label>
               <div className="flex items-center">
                 <input
                   type="number"
@@ -149,17 +149,17 @@ const RepayModal: React.FC<RepayModalProps> = ({
             </div>
 
             <div className="container-gray-borders flex flex-col gap-2">
-              <label className="font-bold text-sm sm:text-base">{t("transactionOverview")}</label>
+              <label className="font-bold text-sm sm:text-base">{t("RepayModalTransactionOverview")}</label>
               <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span>{t("totalMintedAmount")}</span>
+                <span>{t("RepayModalTotalMintedAmount")}</span>
                 <span className="font-bold">{mintedAmount.toFixed(6)} $XOC</span>
               </div>
               <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span>{t("repayAmount")}</span>
+                <span>{t("RepayModalRepayAmount")}</span>
                 <span className="font-bold">{amount ? amount : 0} $XOC</span>
               </div>
               <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span>{t("houseOfCoinAddress")}:</span>
+                <span>{t("RepayModalHouseOfCoinAddress")}:</span>
                 <span className="break-all">{houseOfCoinContract}</span>
               </div>
             </div>
@@ -170,10 +170,10 @@ const RepayModal: React.FC<RepayModalProps> = ({
                 onClick={handleRepayClick}
                 disabled={!isValid}
               >
-                {t("repay")}
+                {t("RepayModalRepay")}
               </button>
               <button onClick={handleClose} className="secondary-btn flex-grow sm:basis-1/3">
-                {t("cancel")}
+                {t("RepayModalCancel")}
               </button>
             </div>
           </div>
@@ -194,11 +194,11 @@ const RepayModal: React.FC<RepayModalProps> = ({
                 {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
               </p>
               <span onClick={handleCopyError} className="cursor-pointer underline font-bold text-lg">
-                {t("copyTheError")}
+                {t("RepayModalCopyTheError")}
               </span>
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
-              {t("close")}
+              {t("RepayModalClose")}
             </button>
           </div>
         )}
@@ -213,17 +213,17 @@ const RepayModal: React.FC<RepayModalProps> = ({
                 width={250}
                 height={250}
               />
-              <h2 className="text-base sm:text-lg">All done!</h2>
-              <p className="text-xs sm:text-sm">Deposit transaction successful</p>
+              <h2 className="text-base sm:text-lg">{t("RepayModalSuccessTitle")}!</h2>
+              <p className="text-xs sm:text-sm">{t("RepayModalSuccessMessage")}</p>
               <div className="pb-3"></div>
               {blockExplorerUrl && (
                 <a href={blockExplorerUrl} target="_blank" rel="noreferrer" className="block link pb-3">
-                  {t("openInBlockExplorer")}
+                  {t("RepayModalOpenInBlockExplorer")}
                 </a>
               )}
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
-              {t("okClose")}
+              {t("RepayModalOkClose")}
             </button>
           </div>
         )}
