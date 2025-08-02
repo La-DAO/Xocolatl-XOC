@@ -229,10 +229,10 @@ const DepositModal: React.FC<DepositModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg p-6 dark:text-primary w-full max-w-md sm:max-w-lg md:max-w-2xl mx-4">
         <h2 className="text-lg sm:text-xl font-bold mb-4 ml-1">
-          {t("deposit")} {assetName}
+          {t("DepositModalTitle")} {assetName}
         </h2>
         <p className="mb-4 ml-1 text-sm sm:text-base">
-          {t("depositToHouseOfReserve")} {assetName}
+          {t("DepositModalSubtitle")} {assetName}
         </p>
 
         <div role="alert" className="alert mb-4">
@@ -250,15 +250,15 @@ const DepositModal: React.FC<DepositModalProps> = ({
             ></path>
           </svg>
           <span className="text-xs sm:text-sm">
-            {t("thisIsStillABetaVersion")} <br />
-            {t("youWillNeedToApproveTheTransaction")}
+            {t("DepositModalThisIsStillABetaVersion")} <br />
+            {t("DepositModalYouWillNeedToApproveTheTransaction")}
           </span>
         </div>
 
         {!data && !isError && (
           <div className="flex flex-col gap-6 mt-6">
             <div className="container-gray-borders flex flex-col gap-2">
-              <label className="font-bold text-sm sm:text-base">{t("amount")}</label>
+              <label className="font-bold text-sm sm:text-base">{t("DepositModalAmount")}</label>
               <div className="flex items-center">
                 <input
                   type="number"
@@ -281,16 +281,16 @@ const DepositModal: React.FC<DepositModalProps> = ({
             </div>
 
             <div className="container-gray-borders flex flex-col gap-2">
-              <label className="font-bold text-sm sm:text-base">{t("transactionOverview")}</label>
+              <label className="font-bold text-sm sm:text-base">{t("DepositModalTransactionOverview")}</label>
               <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span>{t("youWillDeposit")}:</span>
+                <span>{t("DepositModalYouWillDeposit")}:</span>
                 <div className="flex items-center gap-1">
                   <span>{amount ? amount : 0}</span>
                   <span className="font-bold">{assetName}</span>
                 </div>
               </div>
               <div className="flex justify-between items-center text-xs sm:text-sm">
-                <p className="text-xs text-gray-500">{t("walletBalance")}:</p>
+                <p className="text-xs text-gray-500">{t("DepositModalWalletBalance")}:</p>
                 <div className="flex items-center gap-1">
                   <BalanceOf
                     tokenAddress={assetContract as Address}
@@ -301,7 +301,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
                 </div>
               </div>
               <div className="flex justify-between items-center text-xs sm:text-sm">
-                <p className="text-xs text-gray-500">{t("allowance")}:</p>
+                <p className="text-xs text-gray-500">{t("DepositModalAllowance")}:</p>
                 <div className="flex items-center gap-1">
                   <span>{assetAllowanceState}</span>
                   <span className="font-bold">{assetName}</span>
@@ -313,7 +313,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
               {requiresApproval ? (
                 isApprovalLoading ? (
                   <div className="flex-grow sm:basis-2/3 bg-warning text-base-100 text-center rounded-lg py-2 cursor-not-allowed">
-                    {t("waitingForApproval")}
+                    {t("DepositModalWaitingForApproval")}
                   </div>
                 ) : isApprovalSuccess ? (
                   // Automatically go to the Deposit button when the transaction is confirmed
@@ -322,7 +322,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
                     onClick={onDepositClick}
                     disabled={isDepositPending || !isValid || balanceError !== null}
                   >
-                    {isDepositPending ? t("processing") : t("deposit")}
+                    {isDepositPending ? t("DepositModalProcessing") : t("DepositModalDeposit")}
                   </button>
                 ) : (
                   <button
@@ -330,7 +330,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
                     onClick={handleApproval}
                     disabled={isApprovalPending || !requiresApproval}
                   >
-                    {isApprovalPending ? t("processing") : t("approve")}
+                    {isApprovalPending ? t("DepositModalProcessing") : t("DepositModalApprove")}
                   </button>
                 )
               ) : (
@@ -340,11 +340,11 @@ const DepositModal: React.FC<DepositModalProps> = ({
                   onClick={onDepositClick}
                   disabled={isDepositPending || !isValid || balanceError !== null}
                 >
-                  {isDepositPending ? t("processing") : t("deposit")}
+                  {isDepositPending ? t("DepositModalProcessing") : t("DepositModalDeposit")}
                 </button>
               )}
               <button onClick={handleClose} className="secondary-btn flex-grow sm:basis-1/3">
-                {t("close")}
+                {t("DepositModalClose")}
               </button>
             </div>
           </div>
@@ -361,15 +361,15 @@ const DepositModal: React.FC<DepositModalProps> = ({
                 height={250}
               />
               <p className="text-xs sm:text-sm">
-                Oops! Something went wrong.{" "}
+                {t("DepositModalOopsSomethingWentWrong")}
                 {showSuccessIcon && <FontAwesomeIcon icon={faClipboardCheck} className="text-lg ml-2" />}
               </p>
               <span onClick={handleCopyError} className="cursor-pointer underline font-bold text-lg">
-                {t("copyTheError")}
+                {t("DepositModalCopyMessage")}
               </span>
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
-              {t("close")}
+              {t("DepositModalClose")}
             </button>
           </div>
         )}
@@ -386,32 +386,34 @@ const DepositModal: React.FC<DepositModalProps> = ({
               />
               {isDepositConfirming ? (
                 <>
-                  <h2 className="text-base sm:text-lg">{t("transactionSubmitted")}</h2>
+                  <h2 className="text-base sm:text-lg">{t("DepositModalTransactionSubmitted")}</h2>
                   <p className="text-xs sm:text-sm flex items-center justify-center gap-2">
                     <span className="animate-spin">⏳</span>
-                    {t("waitingForConfirmation")}
+                    {t("DepositModalWaitingForConfirmation")}
                   </p>
                 </>
               ) : isDepositConfirmed ? (
                 <>
-                  <h2 className="text-base sm:text-lg">{t("allDone")}</h2>
-                  <p className="text-xs sm:text-sm">{t("depositTransactionSuccessful")}</p>
+                  <h2 className="text-base sm:text-lg">{t("DepositModalAllDone")}</h2>
+                  <p className="text-xs sm:text-sm">{t("DepositModalDepositTransactionSuccessful")}</p>
                 </>
               ) : (
                 <>
-                  <h2 className="text-base sm:text-lg">{t("transactionSubmitted")}</h2>
-                  <p className="text-xs sm:text-sm">{t("yourDepositTransactionHasBeenSubmittedToTheNetwork")}</p>
+                  <h2 className="text-base sm:text-lg">{t("DepositModalTransactionSubmitted")}</h2>
+                  <p className="text-xs sm:text-sm">
+                    {t("DepositModalYourDepositTransactionHasBeenSubmittedToTheNetwork")}
+                  </p>
                 </>
               )}
               <div className="pb-3"></div>
               {blockExplorerUrl && (
                 <a href={blockExplorerUrl} target="_blank" rel="noreferrer" className="block link pb-3">
-                  {t("openInBlockExplorer")}
+                  {t("DepositModalOpenInBlockExplorer")}
                 </a>
               )}
             </div>
             <button onClick={handleClose} className="primary-btn text-xs sm:text-sm">
-              {t("okClose")}
+              {t("DepositModalOkClose")}
             </button>
           </div>
         )}
