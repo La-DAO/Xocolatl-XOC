@@ -403,7 +403,7 @@
   "DepositModalTitle": "Deposit",
   "DepositModalSubtitle": "Deposit to House Of Reserve",
   "DepositModalThisIsStillABetaVersion": "This is still a Beta version, handle with care.",
-  "DepositModalYouWillNeedToApproveTheTransaction": "You will need to approve the transaction AND wait around 5-10 seconds before it goes through",
+  "DepositModalYouWillNeedToApproveTheTransaction": "You will need to approve the transaction AND wait until the button changes to 'Deposit'.",
   "DepositModalAmount": "Amount",
   "DepositModalTransactionOverview": "Transaction Overview",
   "DepositModalYouWillDeposit": "You will deposit:",
