@@ -474,7 +474,7 @@
   "WithdrawModalClose": "Cerrar",
   "WithdrawModalCancelMessage": "Cancelaste la transacción.",
   "WithdrawModalCopyMessage": "Copiado al portapapeles",
-  "WithdrawModalSuccessTitle": "Todo bien, al cien!",
+  "WithdrawModalSuccessTitle": "Todo bien, al cien cabron!",
   "WithdrawModalSuccessMessage": "La transacción se ha realizado con éxito",
   "WithdrawModalErrorPositive": "La cantidad debe ser un número positivo.",
   "WithdrawModalErrorBalance": "Saldo insuficiente.",
