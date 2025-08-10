@@ -473,7 +473,7 @@
   "WithdrawModalWithdraw": "Retirar",
   "WithdrawModalClose": "Cerrar",
   "WithdrawModalCancelMessage": "Cancelaste la transacción.",
-  "WithdrawModalCopyMessage": "Copiado al portapapeles",
+  "WithdrawModalCopyMessage": "Copiado",
   "WithdrawModalSuccessTitle": "Todo bien, al cien cabron!",
   "WithdrawModalSuccessMessage": "La transacción se ha realizado con éxito",
   "WithdrawModalErrorPositive": "La cantidad debe ser un número positivo.",
