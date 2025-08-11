@@ -14,7 +14,7 @@ const featuresTabData: FeatureTab[] = [
   {
     id: "tabTwo",
     title: "Money Lending Markets",
-    desc1: `Our money markets are a fork of the Aave contracts, which are the most battle-tested and resilient smart contracts in DeFi.`,
+    desc1: `Our money markets are a fork of the Aave contracts, which are the most battle-tested and resilient smart contracts in DeFi. We have deployed our contracts on the most popular L2 networks, including Arbitrum, Base, Ethereum Mainnet, Polygon, Optimism, Gnosis Chain, and more.`,
     desc2: `You can lend your $XOC to earn interest or borrow $XOC by providing collateral. The interest rates are determined by the supply and demand of the market.`,
     image: "/Currency Crush - Loan.svg",
     imageDark: "/Currency Crush - Loan.svg",
