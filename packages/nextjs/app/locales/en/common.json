@@ -479,5 +479,6 @@
   "WithdrawModalErrorGeneral": "An error occurred while withdrawing the asset.",
   "WithdrawModalCopyError": "Copy the error",
   "WithdrawModalOpenInBlockExplorer": "Open in Block Explorer",
-  "WithdrawModalOkClose": "Ok, close"
+  "WithdrawModalOkClose": "Ok, close",
+  "WithdrawModalYouWillNeedToApproveTheTransactionAndWaitAround510SecondsBeforeItGoesThrough": "You will need to approve the transaction AND wait until the button changes to 'Withdraw'."
 }

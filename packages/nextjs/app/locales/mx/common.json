@@ -484,5 +484,6 @@
   "WithdrawModalErrorGeneral": "Ocurrió un error al retirar el activo.",
   "WithdrawModalCopyError": "Copiar el error",
   "WithdrawModalOpenInBlockExplorer": "Abrir en el Block Explorer",
-  "WithdrawModalOkClose": "Ok, cerrar"
+  "WithdrawModalOkClose": "Ok, cerrar",
+  "WithdrawModalYouWillNeedToApproveTheTransactionAndWaitAround510SecondsBeforeItGoesThrough": "Necesitarás aprobar la transacción y esperar alrededor de 5-10 segundos antes de que pase"
 }
