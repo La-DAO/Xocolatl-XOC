@@ -54,11 +54,13 @@ const CDPStats: React.FC = () => {
   const config = contractData[chainId];
 
   // Build the wagmi-compatible contract read list
-  const houseOfReserveContracts = Object.entries(config.houseOfReserves).map(([, address]) => ({
-    address,
-    abi: houseOfReserveABI as Abi,
-    functionName: "totalDeposits",
-  }));
+  const houseOfReserveContracts = config
+    ? Object.entries(config.houseOfReserves).map(([, address]) => ({
+        address,
+        abi: houseOfReserveABI as Abi,
+        functionName: "totalDeposits",
+      }))
+    : [];
 
   // Call to fetch data from the House of Reserve contracts
   const { data: houseOfReserveData, isError: houseOfReserveError } = useReadContracts({
@@ -69,7 +71,7 @@ const CDPStats: React.FC = () => {
     })),
   });
 
-  const assetNames = Object.keys(config.houseOfReserves);
+  const assetNames = config ? Object.keys(config.houseOfReserves) : [];
 
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
@@ -99,6 +101,18 @@ const CDPStats: React.FC = () => {
     const explorerUrl = getTokenBlockExplorerUrl(chainId);
     window.open(explorerUrl, "_blank");
   };
+
+  // Safety check for unsupported chains
+  if (!config) {
+    return (
+      <header className="bg-white text-white px-4 py-4 md:px-12 md:py-8 flex flex-col space-y-2 w-4/5 md:w-4/5 m-auto rounded-2xl shadow-md">
+        <div className="text-center">
+          <div className="text-lg text-accent font-semibold">Unsupported Chain</div>
+          <div className="text-sm text-gray-400">This chain is not supported yet.</div>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="bg-white text-white px-4 py-4 md:px-12 md:py-8 flex flex-col space-y-2 w-4/5 md:w-4/5 m-auto rounded-2xl shadow-md">
