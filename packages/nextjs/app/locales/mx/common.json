@@ -483,7 +483,11 @@
   "WithdrawModalExplore": "Verificar en el Block Explorer",
   "WithdrawModalErrorGeneral": "Ocurrió un error al retirar el activo.",
   "WithdrawModalCopyError": "Copiar el error",
-  "WithdrawModalOpenInBlockExplorer": "Abrir en el Block Explorer",
+  "WithdrawModalOpenInBlockExplorer": "Abrir en el Explorador de Bloques",
   "WithdrawModalOkClose": "Ok, cerrar",
-  "WithdrawModalYouWillNeedToApproveTheTransactionAndWaitAround510SecondsBeforeItGoesThrough": "Necesitarás aprobar la transacción y esperar alrededor de 5-10 segundos antes de que pase"
+  "WithdrawModalYouWillNeedToApproveTheTransactionAndWaitAround510SecondsBeforeItGoesThrough": "Necesitarás aprobar la transacción Y esperar hasta que el botón cambie a 'Retirar'.",
+
+  "ZeroBalanceTitle": "Sin tokens disponibles",
+  "ZeroBalanceMessage": "Necesitas comprar tokens $XOC y/o $USDC primero para depositar en este pool de liquidez. Puedes comprar estos tokens en exchanges o DEXs soportados.",
+  "Buy Tokens First": "Comprar Tokens Primero"
 }
