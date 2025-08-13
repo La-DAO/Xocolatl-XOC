@@ -480,5 +480,11 @@
   "WithdrawModalCopyError": "Copy the error",
   "WithdrawModalOpenInBlockExplorer": "Open in Block Explorer",
   "WithdrawModalOkClose": "Ok, close",
-  "WithdrawModalYouWillNeedToApproveTheTransactionAndWaitAround510SecondsBeforeItGoesThrough": "You will need to approve the transaction AND wait until the button changes to 'Withdraw'."
+  "WithdrawModalYouWillNeedToApproveTheTransactionAndWaitAround510SecondsBeforeItGoesThrough": "You will need to approve the transaction AND wait around 5-10 seconds before it goes through",
+  
+  "LiquidityZeroBalanceTitle": "No tokens available in your wallet",
+  "LiquidityZeroBalanceMessage": "You need to buy $XOC and/or $USDC to deposit in this pool.",
+  "LiquidityZeroBalanceBuyXOC": "Buy $XOC",
+  "LiquidityZeroBalanceBuyUSDC": "Buy $USDC",
+  "LiquidityZeroBalanceLearnMore": "Learn how to get tokens"
 }

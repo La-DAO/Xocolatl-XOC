@@ -34,14 +34,23 @@ const LiquidityWidget: React.FC = () => {
 
   const [approvalLoading, setApprovalLoading] = useState(false); // New state to track loading
 
+  // State to track zero balance feedback
+  const [showZeroBalanceFeedback, setShowZeroBalanceFeedback] = useState(false);
+
   const { writeContract: deposit } = useWriteContract();
 
   const { writeContract: approveERC20 } = useWriteContract();
 
   const { writeContract: withdraw } = useWriteContract();
 
-  const xocBalance = useBalanceOf({ tokenAddress: xocContract, walletAddress: accountAddress as Address });
-  const usdcBalance = useBalanceOf({ tokenAddress: usdcContract, walletAddress: accountAddress as Address });
+  const xocBalance = useBalanceOf({
+    tokenAddress: xocContract,
+    walletAddress: accountAddress as Address,
+  });
+  const usdcBalance = useBalanceOf({
+    tokenAddress: usdcContract,
+    walletAddress: accountAddress as Address,
+  });
 
   // Fetch the balanceOf using the accountAddress
   const { data: sharesBalance } = useReadContract({
@@ -50,6 +59,12 @@ const LiquidityWidget: React.FC = () => {
     functionName: "balanceOf",
     args: [accountAddress], // Pass accountAddress as argument to balanceOf
   });
+
+  // Check for zero balances and show feedback
+  useEffect(() => {
+    const hasZeroBalances = (xocBalance === "0" || !xocBalance) && (usdcBalance === "0" || !usdcBalance);
+    setShowZeroBalanceFeedback(hasZeroBalances);
+  }, [xocBalance, usdcBalance]);
 
   // Hook to read the XOC contract allowance
   const {
@@ -269,6 +284,8 @@ const LiquidityWidget: React.FC = () => {
     ? t("Processing...") // Show "Processing" when loading
     : isWrongNetwork
     ? t("Wrong Network!")
+    : action === "Deposit" && showZeroBalanceFeedback
+    ? t("LiquidityZeroBalanceTitle") // Show "No tokens available" when user has zero balances
     : requiresApproval
     ? t("Approve")
     : action;
@@ -277,6 +294,8 @@ const LiquidityWidget: React.FC = () => {
     ? "w-full py-3 bg-gray-500 text-xl text-white font-semibold rounded-lg cursor-not-allowed"
     : isWrongNetwork
     ? "w-full py-3 bg-red-500 text-xl text-white font-semibold rounded-lg"
+    : action === "Deposit" && showZeroBalanceFeedback
+    ? "w-full py-3 bg-warning text-xl font-semibold text-primary rounded-lg cursor-not-allowed"
     : "w-full py-3 bg-secondary dark:bg-base-100 text-xl font-semibold text-white rounded-lg hover:bg-warning hover:text-primary hover:border-2 hover:border-pink-200 hover:dark:border-pink-500 hover:scale-105 transition-all duration-300 hover:shadow-lg";
 
   return (
@@ -293,6 +312,65 @@ const LiquidityWidget: React.FC = () => {
           </svg>
           {t("XoktleLiquidityTitle")}
         </h3>
+
+        {showZeroBalanceFeedback && (
+          <div className="alert alert-warning mb-6 border-2 border-warning shadow-lg animate-pulse">
+            <div className="flex flex-col space-y-4">
+              <div className="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-8 h-8 mr-3 text-warning"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+                  />
+                </svg>
+                <span className="font-bold text-lg">{t("LiquidityZeroBalanceTitle")}</span>
+              </div>
+              <p className="text-base font-medium">{t("LiquidityZeroBalanceMessage")}</p>
+              <div className="flex flex-wrap gap-3 mt-4">
+                <button
+                  className="btn btn-primary btn-md font-bold text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                  onClick={() => window.open(`https://app.uniswap.org/swap?outputCurrency=${xocContract}`, "_blank")}
+                >
+                  <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+                  </svg>
+                  {t("LiquidityZeroBalanceBuyXOC")}
+                </button>
+                <button
+                  className="btn btn-secondary btn-md font-bold text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                  onClick={() => window.open(`https://app.uniswap.org/swap?outputCurrency=${usdcContract}`, "_blank")}
+                >
+                  <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+                  </svg>
+                  {t("LiquidityZeroBalanceBuyUSDC")}
+                </button>
+                <button
+                  className="btn btn-md text-error hover:bg-error hover:text-primary font-semibold"
+                  onClick={() => window.open("https://docs.xocolatl.finance/getting-started", "_blank")}
+                >
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  {t("LiquidityZeroBalanceLearnMore")}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="mb-6 flex justify-center">
           <div className="flex w-full max-w-md bg-base-200 dark:bg-base-300 rounded-lg">
@@ -393,6 +471,12 @@ const LiquidityWidget: React.FC = () => {
             className={buttonClass}
             onClick={() => {
               if (!approvalLoading) {
+                // Check if user has zero balances and is trying to deposit
+                if (action === "Deposit" && showZeroBalanceFeedback) {
+                  // Show the zero balance feedback (it's already visible)
+                  return;
+                }
+
                 if (requiresApproval) {
                   handleApproval();
                 } else if (action === "Deposit") {
