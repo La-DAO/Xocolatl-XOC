@@ -43,8 +43,14 @@ const LiquidityWidget: React.FC = () => {
 
   const { writeContract: withdraw } = useWriteContract();
 
-  const xocBalance = useBalanceOf({ tokenAddress: xocContract, walletAddress: accountAddress as Address });
-  const usdcBalance = useBalanceOf({ tokenAddress: usdcContract, walletAddress: accountAddress as Address });
+  const xocBalance = useBalanceOf({
+    tokenAddress: xocContract,
+    walletAddress: accountAddress as Address,
+  });
+  const usdcBalance = useBalanceOf({
+    tokenAddress: usdcContract,
+    walletAddress: accountAddress as Address,
+  });
 
   // Fetch the balanceOf using the accountAddress
   const { data: sharesBalance } = useReadContract({
@@ -334,7 +340,7 @@ const LiquidityWidget: React.FC = () => {
                   onClick={() => window.open(`https://app.uniswap.org/swap?outputCurrency=${xocContract}`, "_blank")}
                 >
                   <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                   </svg>
                   {t("LiquidityZeroBalanceBuyXOC")}
                 </button>
@@ -343,16 +349,21 @@ const LiquidityWidget: React.FC = () => {
                   onClick={() => window.open(`https://app.uniswap.org/swap?outputCurrency=${usdcContract}`, "_blank")}
                 >
                   <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                   </svg>
                   {t("LiquidityZeroBalanceBuyUSDC")}
                 </button>
                 <button
-                  className="btn btn-md text-error hover:bg-warning hover:text-primary font-semibold"
+                  className="btn btn-md text-error hover:bg-error hover:text-primary font-semibold"
                   onClick={() => window.open("https://docs.xocolatl.finance/getting-started", "_blank")}
                 >
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                   {t("LiquidityZeroBalanceLearnMore")}
                 </button>
@@ -465,7 +476,7 @@ const LiquidityWidget: React.FC = () => {
                   // Show the zero balance feedback (it's already visible)
                   return;
                 }
-                
+
                 if (requiresApproval) {
                   handleApproval();
                 } else if (action === "Deposit") {
