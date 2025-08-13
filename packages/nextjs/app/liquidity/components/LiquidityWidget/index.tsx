@@ -35,7 +35,7 @@ const LiquidityWidget: React.FC = () => {
   const [approvalLoading, setApprovalLoading] = useState(false); // New state to track loading
 
   // State to track zero balance feedback
-  const [showZeroBalanceMessage, setShowZeroBalanceMessage] = useState(false);
+  const [showZeroBalanceFeedback, setShowZeroBalanceFeedback] = useState(false);
 
   const { writeContract: deposit } = useWriteContract();
 
@@ -53,6 +53,12 @@ const LiquidityWidget: React.FC = () => {
     functionName: "balanceOf",
     args: [accountAddress], // Pass accountAddress as argument to balanceOf
   });
+
+  // Check for zero balances and show feedback
+  useEffect(() => {
+    const hasZeroBalances = (xocBalance === "0" || !xocBalance) && (usdcBalance === "0" || !usdcBalance);
+    setShowZeroBalanceFeedback(hasZeroBalances);
+  }, [xocBalance, usdcBalance]);
 
   // Hook to read the XOC contract allowance
   const {
@@ -266,30 +272,14 @@ const LiquidityWidget: React.FC = () => {
     }
   };
 
-  // Helper function to check if user has zero balances
-  const hasZeroBalances = () => {
-    const usdcBalanceNum = parseFloat(usdcBalance || "0");
-    const xocBalanceNum = parseFloat(xocBalance || "0");
-    return usdcBalanceNum === 0 && xocBalanceNum === 0;
-  };
-
-  // Helper function to handle zero balance scenario
-  const handleZeroBalanceClick = () => {
-    setShowZeroBalanceMessage(true);
-    // Hide the message after 5 seconds
-    setTimeout(() => setShowZeroBalanceMessage(false), 5000);
-  };
-
   // Modify the button style and text based on chainId
   const isWrongNetwork = chainId !== 8453;
-  const hasZeroBalance = hasZeroBalances();
-  
   const buttonLabel = approvalLoading
     ? t("Processing...") // Show "Processing" when loading
     : isWrongNetwork
     ? t("Wrong Network!")
-    : hasZeroBalance && action === "Deposit"
-    ? t("Buy Tokens First")
+    : action === "Deposit" && showZeroBalanceFeedback
+    ? t("LiquidityZeroBalanceTitle") // Show "No tokens available" when user has zero balances
     : requiresApproval
     ? t("Approve")
     : action;
@@ -298,8 +288,8 @@ const LiquidityWidget: React.FC = () => {
     ? "w-full py-3 bg-gray-500 text-xl text-white font-semibold rounded-lg cursor-not-allowed"
     : isWrongNetwork
     ? "w-full py-3 bg-red-500 text-xl text-white font-semibold rounded-lg"
-    : hasZeroBalance && action === "Deposit"
-    ? "w-full py-3 bg-orange-500 text-xl text-white font-semibold rounded-lg hover:bg-orange-600 transition-all duration-300"
+    : action === "Deposit" && showZeroBalanceFeedback
+    ? "w-full py-3 bg-warning text-xl font-semibold text-primary rounded-lg cursor-not-allowed"
     : "w-full py-3 bg-secondary dark:bg-base-100 text-xl font-semibold text-white rounded-lg hover:bg-warning hover:text-primary hover:border-2 hover:border-pink-200 hover:dark:border-pink-500 hover:scale-105 transition-all duration-300 hover:shadow-lg";
 
   return (
@@ -316,6 +306,60 @@ const LiquidityWidget: React.FC = () => {
           </svg>
           {t("XoktleLiquidityTitle")}
         </h3>
+
+        {showZeroBalanceFeedback && (
+          <div className="alert alert-warning mb-6 border-2 border-warning shadow-lg animate-pulse">
+            <div className="flex flex-col space-y-4">
+              <div className="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-8 h-8 mr-3 text-warning"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+                  />
+                </svg>
+                <span className="font-bold text-lg">{t("LiquidityZeroBalanceTitle")}</span>
+              </div>
+              <p className="text-base font-medium">{t("LiquidityZeroBalanceMessage")}</p>
+              <div className="flex flex-wrap gap-3 mt-4">
+                <button
+                  className="btn btn-primary btn-md font-bold text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                  onClick={() => window.open(`https://app.uniswap.org/swap?outputCurrency=${xocContract}`, "_blank")}
+                >
+                  <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                  </svg>
+                  {t("LiquidityZeroBalanceBuyXOC")}
+                </button>
+                <button
+                  className="btn btn-secondary btn-md font-bold text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                  onClick={() => window.open(`https://app.uniswap.org/swap?outputCurrency=${usdcContract}`, "_blank")}
+                >
+                  <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                  </svg>
+                  {t("LiquidityZeroBalanceBuyUSDC")}
+                </button>
+                <button
+                  className="btn btn-md text-error hover:bg-warning hover:text-primary font-semibold"
+                  onClick={() => window.open("https://docs.xocolatl.finance/getting-started", "_blank")}
+                >
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {t("LiquidityZeroBalanceLearnMore")}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="mb-6 flex justify-center">
           <div className="flex w-full max-w-md bg-base-200 dark:bg-base-300 rounded-lg">
@@ -416,9 +460,13 @@ const LiquidityWidget: React.FC = () => {
             className={buttonClass}
             onClick={() => {
               if (!approvalLoading) {
-                if (hasZeroBalance && action === "Deposit") {
-                  handleZeroBalanceClick();
-                } else if (requiresApproval) {
+                // Check if user has zero balances and is trying to deposit
+                if (action === "Deposit" && showZeroBalanceFeedback) {
+                  // Show the zero balance feedback (it's already visible)
+                  return;
+                }
+                
+                if (requiresApproval) {
                   handleApproval();
                 } else if (action === "Deposit") {
                   handleDeposit();
@@ -432,21 +480,6 @@ const LiquidityWidget: React.FC = () => {
             {buttonLabel}
           </button>
         </div>
-
-        {/* Zero balance message */}
-        {showZeroBalanceMessage && (
-          <div className="mt-4 p-4 bg-orange-100 border border-orange-400 text-orange-700 rounded-lg">
-            <div className="flex items-start">
-              <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-              </svg>
-              <div>
-                <p className="font-medium">{t("ZeroBalanceTitle")}</p>
-                <p className="text-sm mt-1">{t("ZeroBalanceMessage")}</p>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
