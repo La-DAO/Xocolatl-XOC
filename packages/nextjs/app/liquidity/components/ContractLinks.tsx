@@ -139,7 +139,6 @@ export const ContractLinks = () => {
             </a>
           </div>
         </div>
-
       </div>
     </div>
   );
