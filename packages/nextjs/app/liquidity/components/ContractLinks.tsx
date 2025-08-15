@@ -26,7 +26,7 @@ export const ContractLinks = () => {
   };
 
   const getBaseScanUrl = (address: string) => {
-    return `https://basescan.io/address/${address}`;
+    return `https://basescan.org/address/${address}`;
   };
 
   return (
