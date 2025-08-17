@@ -28,7 +28,9 @@ export const PriceChart = () => {
   const [currentTime, setCurrentTime] = useState<string>("");
 
   // Fetch price history from Supabase
-  const { data: priceHistoryData, isLoading } = usePriceHistory();
+  const { data: priceHistoryData, isLoading } = usePriceHistory(
+    timePeriod === "1year" ? 5000 : timePeriod === "6months" ? 2000 : 1000
+  );
 
   // Check if we're on mobile after component mounts and set current time
   useEffect(() => {
@@ -65,14 +67,46 @@ export const PriceChart = () => {
 
   // Sample data based on time period to avoid overcrowding
   const { chartLabels, chartValues, currentPrice } = React.useMemo(() => {
-    const sampledData =
-      timePeriod === "1month"
-        ? priceHistory.slice(-30)
-        : timePeriod === "6months"
-        ? priceHistory.slice(-60)
-        : priceHistory.slice(-90);
+    if (!priceHistory.length) {
+      return { chartLabels: [], chartValues: [], currentPrice: 0 };
+    }
 
-    const chartLabels = sampledData.map(d => dayjs(d.timestamp).format("MMM D, HH:mm"));
+    const now = Date.now();
+    const oneMonthAgo = now - 30 * 24 * 60 * 60 * 1000;
+    const sixMonthsAgo = now - 6 * 30 * 24 * 60 * 60 * 1000;
+    const oneYearAgo = now - 365 * 24 * 60 * 60 * 1000;
+
+    // Filter data based on actual time period
+    let filteredData: PriceDataPoint[];
+    switch (timePeriod) {
+      case "1month":
+        filteredData = priceHistory.filter(d => d.timestamp >= oneMonthAgo);
+        break;
+      case "6months":
+        filteredData = priceHistory.filter(d => d.timestamp >= sixMonthsAgo);
+        break;
+      case "1year":
+        filteredData = priceHistory.filter(d => d.timestamp >= oneYearAgo);
+        break;
+      default:
+        filteredData = priceHistory;
+    }
+
+    // Sample data to avoid overcrowding (max 50 points for better performance)
+    const maxPoints = 50;
+    const step = Math.max(1, Math.floor(filteredData.length / maxPoints));
+    const sampledData = filteredData.filter((_, index) => index % step === 0);
+
+    const chartLabels = sampledData.map(d => {
+      if (timePeriod === "1month") {
+        return dayjs(d.timestamp).format("MMM D, HH:mm");
+      } else if (timePeriod === "6months") {
+        return dayjs(d.timestamp).format("MMM D");
+      } else {
+        return dayjs(d.timestamp).format("MMM YYYY");
+      }
+    });
+    
     const chartValues = sampledData.map(d => d.price);
     const currentPrice = chartValues[chartValues.length - 1] || 0;
 

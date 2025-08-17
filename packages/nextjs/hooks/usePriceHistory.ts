@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export function usePriceHistory() {
+export function usePriceHistory(limit: number = 1000) {
   return useQuery({
-    queryKey: ["priceHistory"],
+    queryKey: ["priceHistory", limit],
     queryFn: async () => {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/price_history`, {
         headers: {
@@ -12,7 +12,7 @@ export function usePriceHistory() {
         params: {
           select: "fetch_spot,timestamp",
           order: "timestamp.asc",
-          limit: 1000,
+          limit: limit,
         },
       });
       return response.data as { fetch_spot: string; timestamp: string }[];
