@@ -29,7 +29,7 @@ export const PriceChart = () => {
 
   // Fetch price history from Supabase
   const { data: priceHistoryData, isLoading } = usePriceHistory(
-    timePeriod === "1year" ? 5000 : timePeriod === "6months" ? 2000 : 1000
+    timePeriod === "1year" ? 5000 : timePeriod === "6months" ? 2000 : 1000,
   );
 
   // Check if we're on mobile after component mounts and set current time
@@ -106,7 +106,7 @@ export const PriceChart = () => {
         return dayjs(d.timestamp).format("MMM YYYY");
       }
     });
-    
+
     const chartValues = sampledData.map(d => d.price);
     const currentPrice = chartValues[chartValues.length - 1] || 0;
 
