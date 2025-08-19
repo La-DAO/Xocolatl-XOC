@@ -456,6 +456,9 @@
   "RepayModalCopyTheError": "Copy the error",
   "RepayModalOpenInBlockExplorer": "Open in Block Explorer",
   "RepayModalOkClose": "Ok, close",
+  "RepayModalClose": "Close",
+  "RepayModalSuccessTitle": "Success!",
+  "RepayModalSuccessMessage": "Your repayment transaction was successful.",
 
   "WithdrawModalTitle": "Withdraw",
   "WithdrawModalSubtitle": "Withdraw $XOC",
