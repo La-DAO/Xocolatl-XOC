@@ -1,6 +1,7 @@
 import { houseOfCoinABI } from "@/app/components/abis/houseofcoin";
-import { Address, parseEther } from "viem";
+import { Address } from "viem";
 import { useWriteContract } from "wagmi";
+import { toWeiConverter } from "@/utils/toWeiConverter";
 
 // import { houseOfCoinContract } from "~~/app/constants/contracts";
 
@@ -28,7 +29,7 @@ const useRepayCPD = () => {
         address: houseOfCoinContract as Address,
         abi: houseOfCoinABI,
         functionName: "paybackCoin",
-        args: [backedTokenID, parseEther(amount)],
+        args: [backedTokenID, toWeiConverter(parseFloat(amount), 18)],
       });
     } catch (err) {
       console.error("Error executing contract function:", err);
