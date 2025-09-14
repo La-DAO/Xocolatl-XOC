@@ -444,7 +444,7 @@
 
   "RepayModalTitle": "Repay",
   "RepayModalSubtitle": "Repay $XOC",
-  "RepayModalBurnYourDebt": "Burn your debt 🔥",
+  "RepayModalBurnYourDebt": "Burn/Repay your debt 🔥",
   "RepayModalPleaseEnsureThatYouHaveSufficientFundsToCoverTheRepaymentAmount": "Please ensure that you have sufficient funds to cover the repayment amount. Repaying $XOC will burn the specified amount from your balance, reducing your debt. Make sure to double-check the amount before proceeding.",
   "RepayModalAmount": "Amount",
   "RepayModalTransactionOverview": "Transaction Overview",
