@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "../context/LanguageContext";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Define an interface for the use-case objects
 interface UseCase {
@@ -17,6 +18,7 @@ interface UseCase {
   caseStudy2Link: string;
   caseStudy1Label: string;
   caseStudy2Label: string;
+  categories: string[];
 }
 
 const useCases: UseCase[] = [
@@ -38,6 +40,7 @@ const useCases: UseCase[] = [
     caseStudy2Link: "/lending",
     caseStudy1Label: "Etherfuse Stablebonds",
     caseStudy2Label: "Alux Protocol",
+    categories: ["Lending", "Liquidity"],
   },
   {
     title: "Everyday Currency",
@@ -57,6 +60,7 @@ const useCases: UseCase[] = [
     caseStudy2Link: "https://studio.manifold.xyz/",
     caseStudy1Label: "Chipi Pay",
     caseStudy2Label: "Manifold",
+    categories: ["Currency", "Payments"],
   },
   {
     title: "Governance",
@@ -76,6 +80,7 @@ const useCases: UseCase[] = [
     caseStudy2Link: "https://app.charmverse.io/ladao/empieza-aqu-257587953545364",
     caseStudy1Label: "DAOHaus",
     caseStudy2Label: "Charmverse",
+    categories: ["Governance"],
   },
   {
     title: "Lending",
@@ -95,6 +100,7 @@ const useCases: UseCase[] = [
     caseStudy2Link: "https://creditalent.vercel.app/",
     caseStudy1Label: "Alux Protocol",
     caseStudy2Label: "CrediTalent",
+    categories: ["Lending"],
   },
   {
     title: "Liquidity Providing",
@@ -115,6 +121,7 @@ const useCases: UseCase[] = [
       "https://aerodrome.finance/deposit?token0=0x269caE7Dc59803e5C596c95756faEeBb6030E0aF&token1=0xa411c9Aa00E020e4f88Bc19996d29c5B7ADB4ACf&type=0&chain=8453&factory=0x420DD381b31aEf6683db6B902084cB0FFECe40Da",
     caseStudy1Label: "Xoktle",
     caseStudy2Label: "Aerodrome",
+    categories: ["Liquidity"],
   },
   {
     title: "Liquidations",
@@ -134,6 +141,7 @@ const useCases: UseCase[] = [
     caseStudy2Link: "/case-study/liquidations-2",
     caseStudy1Label: "Liquidations Case Study 1",
     caseStudy2Label: "Liquidations Case Study 2",
+    categories: ["Liquidations", "Lending"],
   },
   {
     title: "Payments",
@@ -153,6 +161,7 @@ const useCases: UseCase[] = [
     caseStudy2Link: "/case-study/payments-2",
     caseStudy1Label: "Warplet (Farcaster's Wallet)",
     caseStudy2Label: "Coming soon",
+    categories: ["Payments", "Currency"],
   },
   {
     title: "Subscriptions",
@@ -172,6 +181,7 @@ const useCases: UseCase[] = [
     caseStudy2Link: "https://hypersub.xyz/",
     caseStudy1Label: "Unlock Protocol",
     caseStudy2Label: "Hypersub",
+    categories: ["Payments"],
   },
   {
     title: "Streaming",
@@ -191,19 +201,19 @@ const useCases: UseCase[] = [
     caseStudy2Link: "/case-study/streaming-2",
     caseStudy1Label: "Superfluid",
     caseStudy2Label: "Coming soon",
+    categories: ["Streaming", "Payments"],
   },
 ];
 
 const categories = [
   "All",
-  "AI Agents",
   "Lending",
   "Liquidity",
   "Liquidations",
   "Currency",
-  "Staking",
   "Governance",
   "Payments",
+  "Streaming",
 ];
 
 const Directory = () => {
@@ -215,19 +225,32 @@ const Directory = () => {
   //const [currentSlide, setCurrentSlide] = useState(0);
 
   const filteredUseCases = useCases.filter(useCase => {
-    const matchesCategory = selectedCategory === "All" || useCase.title.includes(selectedCategory);
-    const matchesSearch = useCase.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "All" || useCase.categories.includes(selectedCategory);
+    const matchesSearch =
+      useCase.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      useCase.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   const openModal = (useCase: UseCase) => {
     setSelectedUseCase(useCase);
+    setActiveBenefit(0);
   };
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setSelectedUseCase(null);
     setActiveBenefit(null);
-  };
+  }, []);
+
+  useEffect(() => {
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeModal();
+    };
+    if (selectedUseCase) {
+      window.addEventListener("keydown", onEsc);
+    }
+    return () => window.removeEventListener("keydown", onEsc);
+  }, [selectedUseCase, closeModal]);
 
   // const nextSlide = () => {
   //   if (selectedUseCase) {
@@ -242,141 +265,167 @@ const Directory = () => {
   }; */
 
   return (
-    <div className="flex flex-col lg:flex-row w-full mt-4 gap-4 mx-[4px]">
-      {/* Mobile: Compact filter section */}
-      <div className="lg:hidden w-full p-4 bg-base-100 rounded-xl">
-        <div className="flex flex-col gap-3">
+    <div className="flex flex-col w-full mt-4 gap-4 mx-[4px]">
+      {/* Category chips */}
+      <div className="w-full p-3 bg-base-100 rounded-xl">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
           <h2 className="text-xl font-bold text-primary dark:text-white">{t("Categories")}</h2>
-          <select
-            value={selectedCategory}
-            onChange={e => setSelectedCategory(e.target.value)}
-            className="select select-bordered w-full text-sm"
-          >
+          <input
+            type="text"
+            placeholder={t("Search use-cases...")}
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            className="p-2 bg-base-300 dark:bg-base-100 text-white rounded-lg w-full sm:w-60"
+            aria-label="Search"
+          />
+        </div>
+        <div className="mt-3 overflow-x-auto no-scrollbar">
+          <div className="flex gap-2 min-w-max">
             {categories.map((category, index) => (
-              <option key={index} value={category}>
+              <motion.button
+                key={index}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-3 py-1 rounded-full border text-sm transition-colors ${
+                  selectedCategory === category
+                    ? "bg-primary text-white border-primary"
+                    : "bg-base-200 border-base-300 text-primary"
+                }`}
+              >
                 {t(category)}
-              </option>
+              </motion.button>
             ))}
-          </select>
+          </div>
         </div>
       </div>
 
-      {/* Desktop: Sidebar for categories */}
-      <div className="hidden lg:block w-1/4  py-4 bg-base-100 rounded-xl text-xl text-primary dark:text-white">
-        <h2 className="text-3xl font-bold text-primary dark:text-white mb-4">{t("Categories")}</h2>
-        <ul>
-          {categories.map((category, index) => (
-            <li
-              key={index}
-              className={`cursor-pointer mb-2 ${
-                selectedCategory === category ? "font-bold text-3xl text-primary dark:text-white" : ""
-              }`}
-              onClick={() => setSelectedCategory(category)}
-            >
-              {t(category)}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Main content area */}
-      <div className="flex flex-col w-full lg:w-3/4 gap-4">
-        {/* Search bar */}
-        <input
-          type="text"
-          placeholder={t("Search use-cases...")}
-          value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
-          className="p-2 bg-base-300 dark:bg-base-100 text-white rounded-lg mb-4"
-        />
-
-        {/* Use-case cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-          {filteredUseCases.map((useCase, index) => (
-            <div
-              key={index}
-              className="card flex flex-col justify-end items-end relative overflow-hidden rounded-xl cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:bg-base-300 dark:hover:bg-base-100 dark:hover:text-secondary dark:bg-neutral"
-              onClick={() => openModal(useCase)}
-              style={{ height: "200px", minHeight: "200px" }}
-            >
-              <Image src={useCase.image} alt={useCase.title} width={210} height={100} />
-
-              <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-3 lg:p-4">
-                <h2 className="text-lg lg:text-xl font-semibold text-white mb-1 lg:mb-2">{t(useCase.title)}</h2>
-                <p className="text-gray-300 text-sm lg:text-base">{t(useCase.description)}</p>
-              </div>
+      {/* Card grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+        {filteredUseCases.map((useCase, index) => (
+          <motion.div
+            key={index}
+            whileHover={{ y: -4 }}
+            whileTap={{ scale: 0.98 }}
+            className="relative overflow-hidden rounded-xl cursor-pointer bg-neutral group"
+            onClick={() => openModal(useCase)}
+            style={{ height: "220px", minHeight: "220px" }}
+          >
+            <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Image src={useCase.image} alt={useCase.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
             </div>
-          ))}
-        </div>
+            <div className="absolute inset-[1px] rounded-xl bg-gradient-to-br from-base-200/70 to-base-100/90" />
+            <div className="relative z-10 h-full flex flex-col justify-end p-4">
+              <div className="flex gap-2 mb-2 flex-wrap">
+                {useCase.categories.slice(0, 3).map((cat, i) => (
+                  <span key={i} className="text-[10px] px-2 py-0.5 rounded-full bg-base-200 text-primary border border-base-300">
+                    {cat}
+                  </span>
+                ))}
+              </div>
+              <h2 className="text-lg lg:text-xl font-semibold text-white mb-1">{t(useCase.title)}</h2>
+              <p className="text-gray-200 text-sm line-clamp-2">{t(useCase.description)}</p>
+            </div>
+          </motion.div>
+        ))}
       </div>
 
       {/* Modal */}
-      {selectedUseCase && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
-          <div className="bg-white rounded-lg p-4 lg:p-8 w-full max-w-3xl max-h-[90vh] overflow-y-auto relative grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <button
-              onClick={closeModal}
-              className="absolute text-2xl lg:text-4xl top-2 lg:top-4 right-2 lg:right-4 text-gray-500 hover:text-gray-700 z-10"
+      <AnimatePresence>
+        {selectedUseCase && (
+          <motion.div
+            key="overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-4"
+            onClick={closeModal}
+            aria-modal="true"
+            role="dialog"
+          >
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 20, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 260, damping: 22 }}
+              className="bg-white rounded-xl p-4 lg:p-8 w-full max-w-3xl max-h-[90vh] overflow-y-auto relative grid grid-cols-1 lg:grid-cols-2 gap-4"
+              onClick={e => e.stopPropagation()}
             >
-              &times;
-            </button>
-            {/* Left Column */}
-            <div className="flex flex-col">
-              <h1 className="text-2xl lg:text-4xl text-primary font-bold mb-2 lg:mb-4">{selectedUseCase.title}</h1>
-              <p className="mb-2 lg:mb-4 text-primary text-sm lg:text-base">{selectedUseCase.description}</p>
-              <div className="relative mb-2 lg:mb-4">
-                <Image
-                  src={selectedUseCase.image}
-                  alt={selectedUseCase.title}
-                  width={400}
-                  height={200}
-                  className="w-full h-auto"
-                />
-              </div>
-            </div>
-            {/* Right Column */}
-            <div className="flex flex-col">
-              <p className="mb-2 lg:mb-4 text-primary text-sm lg:text-base lg:mt-14">{selectedUseCase.context}</p>
-              <hr className="my-2 lg:my-4" />
-              <h3 className="text-xl lg:text-2xl font-bold text-primary mb-2 lg:mb-4">Benefits</h3>
-              <div className="flex justify-around mb-2 lg:mb-4 flex-wrap gap-2">
-                {selectedUseCase.benefits.map((benefit, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-center w-8 h-8 lg:w-10 lg:h-10 bg-primary text-white rounded-full cursor-pointer dark:hover:bg-base-100 dark:hover:text-white hover:bg-base-100 hover:text-primary hover:text-xl text-sm lg:text-base"
-                    onClick={() => setActiveBenefit(index)}
-                  >
-                    {index + 1}
-                  </div>
-                ))}
-              </div>
-
-              {activeBenefit !== null && (
-                <div className="bg-gray-100 text-xs lg:text-sm p-3 lg:p-4 rounded-lg shadow-lg dark:text-primary mb-2 lg:mb-4">
-                  <p>{selectedUseCase.benefits[activeBenefit]}</p>
+              <button
+                onClick={closeModal}
+                className="absolute text-2xl lg:text-4xl top-2 lg:top-4 right-2 lg:right-4 text-gray-500 hover:text-gray-700 z-10"
+                aria-label="Close"
+              >
+                &times;
+              </button>
+              {/* Left Column */}
+              <div className="flex flex-col">
+                <h1 className="text-2xl lg:text-4xl text-primary font-bold mb-2 lg:mb-4">{selectedUseCase.title}</h1>
+                <p className="mb-2 lg:mb-4 text-primary text-sm lg:text-base">{selectedUseCase.description}</p>
+                <div className="relative mb-2 lg:mb-4">
+                  <Image
+                    src={selectedUseCase.image}
+                    alt={selectedUseCase.title}
+                    width={400}
+                    height={200}
+                    className="w-full h-auto rounded-lg"
+                  />
                 </div>
-              )}
-              <hr className="my-2 lg:my-4" />
-              <div className="grid grid-cols-1 gap-2 lg:gap-4">
-                <Link
-                  href={selectedUseCase.caseStudy1Link}
-                  className="block bg-primary text-white text-center py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-base-100 hover:text-primary dark:hover:bg-neutral dark:hover:text-primary dark:hover:border-2 dark:hover:border-primary text-sm lg:text-base"
-                  target="_blank"
-                >
-                  {selectedUseCase.caseStudy1Label}
-                </Link>
-                <Link
-                  href={selectedUseCase.caseStudy2Link}
-                  className="block bg-primary text-white text-center py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-base-100 hover:text-primary dark:hover:bg-neutral dark:hover:text-primary dark:hover:border-2 dark:hover:border-primary text-sm lg:text-base"
-                  target="_blank"
-                >
-                  {selectedUseCase.caseStudy2Label}
-                </Link>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
+              {/* Right Column */}
+              <div className="flex flex-col">
+                <p className="mb-2 lg:mb-4 text-primary text-sm lg:text-base lg:mt-14">{selectedUseCase.context}</p>
+                <hr className="my-2 lg:my-4" />
+                <h3 className="text-xl lg:text-2xl font-bold text-primary mb-2 lg:mb-4">Benefits</h3>
+                <div className="flex justify-start mb-2 lg:mb-4 flex-wrap gap-2">
+                  {selectedUseCase.benefits.map((_, index) => (
+                    <button
+                      key={index}
+                      className={`flex items-center justify-center w-8 h-8 lg:w-10 lg:h-10 rounded-full border text-sm lg:text-base ${
+                        activeBenefit === index
+                          ? "bg-primary text-white border-primary"
+                          : "bg-base-100 text-primary border-base-300"
+                      }`}
+                      onClick={() => setActiveBenefit(index)}
+                      aria-label={`Benefit ${index + 1}`}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+                </div>
+
+                {activeBenefit !== null && (
+                  <div className="bg-gray-100 text-xs lg:text-sm p-3 lg:p-4 rounded-lg shadow-lg dark:text-primary mb-2 lg:mb-4">
+                    <p>{selectedUseCase.benefits[activeBenefit]}</p>
+                  </div>
+                )}
+                <hr className="my-2 lg:my-4" />
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 lg:gap-4">
+                  <Link
+                    href={selectedUseCase.link}
+                    className="block bg-base-100 text-primary text-center py-2 px-4 rounded-lg border border-base-300 hover:bg-base-200 transition"
+                  >
+                    Open use case
+                  </Link>
+                  <Link
+                    href={selectedUseCase.caseStudy1Link}
+                    className="block bg-primary text-white text-center py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-base-100 hover:text-primary dark:hover:bg-neutral dark:hover:text-primary dark:hover:border-2 dark:hover:border-primary text-sm lg:text-base"
+                    target="_blank"
+                  >
+                    {selectedUseCase.caseStudy1Label}
+                  </Link>
+                  <Link
+                    href={selectedUseCase.caseStudy2Link}
+                    className="block bg-primary text-white text-center py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-base-100 hover:text-primary dark:hover:bg-neutral dark:hover:text-primary dark:hover:border-2 dark:hover:border-primary text-sm lg:text-base"
+                    target="_blank"
+                  >
+                    {selectedUseCase.caseStudy2Label}
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
