@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "../context/LanguageContext";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 // Define an interface for the use-case objects
 interface UseCase {
@@ -205,16 +205,7 @@ const useCases: UseCase[] = [
   },
 ];
 
-const categories = [
-  "All",
-  "Lending",
-  "Liquidity",
-  "Liquidations",
-  "Currency",
-  "Governance",
-  "Payments",
-  "Streaming",
-];
+const categories = ["All", "Lending", "Liquidity", "Liquidations", "Currency", "Governance", "Payments", "Streaming"];
 
 const Directory = () => {
   const { t } = useTranslation();
@@ -311,13 +302,22 @@ const Directory = () => {
             style={{ height: "220px", minHeight: "220px" }}
           >
             <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
-              <Image src={useCase.image} alt={useCase.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+              <Image
+                src={useCase.image}
+                alt={useCase.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-cover"
+              />
             </div>
             <div className="absolute inset-[1px] rounded-xl bg-gradient-to-br from-base-200/70 to-base-100/90" />
             <div className="relative z-10 h-full flex flex-col justify-end p-4">
               <div className="flex gap-2 mb-2 flex-wrap">
                 {useCase.categories.slice(0, 3).map((cat, i) => (
-                  <span key={i} className="text-[10px] px-2 py-0.5 rounded-full bg-base-200 text-primary border border-base-300">
+                  <span
+                    key={i}
+                    className="text-[10px] px-2 py-0.5 rounded-full bg-base-200 text-primary border border-base-300"
+                  >
                     {cat}
                   </span>
                 ))}
