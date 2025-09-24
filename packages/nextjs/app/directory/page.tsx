@@ -277,7 +277,7 @@ const Directory = () => {
                 key={index}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-3 py-1 rounded-full border text-sm transition-colors ${
+                className={`px-3 py-1 text-white rounded-full border text-sm transition-colors ${
                   selectedCategory === category
                     ? "bg-primary text-white border-primary"
                     : "bg-base-200 border-base-300 text-primary"
@@ -316,7 +316,7 @@ const Directory = () => {
                 {useCase.categories.slice(0, 3).map((cat, i) => (
                   <span
                     key={i}
-                    className="text-[10px] px-2 py-0.5 rounded-full bg-base-200 text-primary border border-base-300"
+                    className="text-[10px] text-white px-2 py-0.5 rounded-full bg-base-200 text-primary border border-base-300"
                   >
                     {cat}
                   </span>
