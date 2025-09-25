@@ -160,15 +160,15 @@ export default function StreamsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 dark:from-gray-900 dark:to-gray-800 p-4 md:p-8">
+    <div className="min-h-screen bg-base-200 p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Hero Section */}
         <div className="text-center space-y-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-neutral dark:text-white">{t("StreamsTitle")}</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">{t("StreamsDescription")}</p>
+          <h1 className="text-4xl md:text-5xl font-bold text-base-content">{t("StreamsTitle")}</h1>
+          <p className="text-xl text-base-content/70 max-w-3xl mx-auto">{t("StreamsDescription")}</p>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
             <button
-              className="btn btn-primary dark:bg-base-100 text-white dark:text-white btn-lg hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 transition-all duration-300 hover:bg-success dark:hover:bg-success hover:text-primary dark:hover:text-white font-semibold"
+              className="btn btn-primary btn-lg hover:shadow-[0_0_30px_rgba(210,105,30,0.6)] hover:scale-105 transition-all duration-300 font-semibold"
               onClick={handleOpenCreateStreamModal}
             >
               <Plus className="w-5 h-5 mr-2" />
@@ -185,7 +185,7 @@ export default function StreamsPage() {
         </div>
 
         {/* How It Works */}
-        <div className="card bg-white/80 dark:bg-base-100 backdrop-blur-sm shadow-lg">
+        <div className="card bg-base-100/80 backdrop-blur-sm shadow-lg">
           <div className="card-body">
             <h2 className="card-title flex items-center gap-2">
               <Info className="w-5 h-5" />
@@ -193,7 +193,7 @@ export default function StreamsPage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center space-y-4">
-                <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto overflow-hidden bg-gray-100 dark:bg-gray-800">
+                <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto overflow-hidden bg-base-200">
                   <Image
                     src="/streams/supertoken-wrap.gif"
                     alt="Wrap Tokens"
@@ -203,10 +203,10 @@ export default function StreamsPage() {
                   />
                 </div>
                 <h3 className="font-semibold">1. {t("StreamsWrapTokens")}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">{t("StreamsWrapTokensDescription")}</p>
+                <p className="text-sm text-base-content/70">{t("StreamsWrapTokensDescription")}</p>
               </div>
               <div className="text-center space-y-4">
-                <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto overflow-hidden bg-gray-100 dark:bg-gray-800">
+                <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto overflow-hidden bg-base-200">
                   <Image
                     src="/streams/token-stream.gif"
                     alt="Create Stream"
@@ -216,10 +216,10 @@ export default function StreamsPage() {
                   />
                 </div>
                 <h3 className="font-semibold">2. {t("StreamsCreateStream")}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">{t("StreamsCreateStreamDescription")}</p>
+                <p className="text-sm text-base-content/70">{t("StreamsCreateStreamDescription")}</p>
               </div>
               <div className="text-center space-y-4">
-                <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto overflow-hidden bg-gray-100 dark:bg-gray-800">
+                <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto overflow-hidden bg-base-200">
                   <Image
                     src="/streams/real-time-payments.gif"
                     alt="Real Time Payments"
@@ -229,7 +229,7 @@ export default function StreamsPage() {
                   />
                 </div>
                 <h3 className="font-semibold">3. {t("StreamsRealTimePayments")}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">{t("StreamsRealTimePaymentsDescription")}</p>
+                <p className="text-sm text-base-content/70">{t("StreamsRealTimePaymentsDescription")}</p>
               </div>
             </div>
           </div>
@@ -237,22 +237,22 @@ export default function StreamsPage() {
 
         {/* Stats Overview */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
-          <div className="card bg-white dark:bg-base-100 shadow-lg">
+          <div className="card bg-base-100 shadow-lg">
             <div className="card-body p-3 md:p-6">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="card-title text-xs md:text-sm">{t("StreamsXOCBalance")}</h3>
-                <Wallet className="h-3 w-3 md:h-4 md:w-4 text-gray-500 dark:text-white flex-shrink-0" />
+                <Wallet className="h-3 w-3 md:h-4 md:w-4 text-base-content/60 flex-shrink-0" />
               </div>
               <div className="text-lg md:text-2xl font-bold truncate">{xocBalance}</div>
-              <p className="text-xs text-gray-500 dark:text-white mt-1">{t("StreamsNativeToken")}</p>
+              <p className="text-xs text-base-content/60 mt-1">{t("StreamsNativeToken")}</p>
             </div>
           </div>
 
-          <div className="card bg-white dark:bg-base-100 shadow-lg">
+          <div className="card bg-base-100 shadow-lg">
             <div className="card-body p-3 md:p-6">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="card-title text-xs md:text-sm">{t("StreamsSuperXOCBalance")}</h3>
-                <TrendingUp className="h-3 w-3 md:h-4 md:w-4 text-gray-500 dark:text-white flex-shrink-0" />
+                <TrendingUp className="h-3 w-3 md:h-4 md:w-4 text-base-content/60 flex-shrink-0" />
               </div>
               {streamsLoading || incomingStreamsLoading ? (
                 <div className="loading loading-spinner loading-sm"></div>
@@ -267,15 +267,15 @@ export default function StreamsPage() {
               ) : (
                 <div className="text-lg md:text-2xl font-bold truncate">{superXocBalance}</div>
               )}
-              <p className="text-xs text-gray-500 dark:text-white mt-1">{t("StreamsStreamableToken")}</p>
+              <p className="text-xs text-base-content/60 mt-1">{t("StreamsStreamableToken")}</p>
             </div>
           </div>
 
-          <div className="card bg-white dark:bg-base-100 shadow-lg">
+          <div className="card bg-base-100 shadow-lg">
             <div className="card-body p-3 md:p-6">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="card-title text-xs md:text-sm">{t("StreamsActiveStreams")}</h3>
-                <Users className="h-3 w-3 md:h-4 md:w-4 text-gray-500 dark:text-white flex-shrink-0" />
+                <Users className="h-3 w-3 md:h-4 md:w-4 text-base-content/60 flex-shrink-0" />
               </div>
               <div className="text-lg md:text-2xl font-bold">
                 {streamsLoading || incomingStreamsLoading ? (
@@ -286,15 +286,15 @@ export default function StreamsPage() {
                   transformedStreams.length + transformedIncomingStreams.length
                 )}
               </div>
-              <p className="text-xs text-gray-500 dark:text-white mt-1">{t("StreamsTotalActive")}</p>
+              <p className="text-xs text-base-content/60 mt-1">{t("StreamsTotalActive")}</p>
             </div>
           </div>
 
-          <div className="card bg-white dark:bg-base-100 shadow-lg">
+          <div className="card bg-base-100 shadow-lg">
             <div className="card-body p-3 md:p-6">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="card-title text-xs md:text-sm">{t("StreamsMonthlyFlow")}</h3>
-                <Clock className="h-3 w-3 md:h-4 md:w-4 text-gray-500 dark:text-white flex-shrink-0" />
+                <Clock className="h-3 w-3 md:h-4 md:w-4 text-base-content/60 flex-shrink-0" />
               </div>
               <div className="text-lg md:text-2xl font-bold truncate">
                 {streamsLoading || incomingStreamsLoading ? (
@@ -303,7 +303,7 @@ export default function StreamsPage() {
                   calculateNetMonthlyFlow().toFixed(6)
                 )}
               </div>
-              <p className="text-xs text-gray-500 dark:text-white mt-1">{t("StreamsXOCMonth")}</p>
+              <p className="text-xs text-base-content/60 mt-1">{t("StreamsXOCMonth")}</p>
             </div>
           </div>
         </div>
@@ -311,33 +311,27 @@ export default function StreamsPage() {
         {/* Main Content Tabs */}
         <div className="space-y-4 md:space-y-6">
           {/* Mobile-optimized tabs */}
-          <div className="tabs tabs-boxed bg-white dark:bg-base-100 shadow-lg py-2 font-medium pb-4 overflow-x-auto">
+          <div className="tabs tabs-boxed bg-base-100 shadow-lg py-2 font-medium pb-4 overflow-x-auto">
             <div className="flex min-w-full">
               <button
-                className={`tab flex-1 min-w-0 px-3 md:px-6 py-2 text-sm md:text-base whitespace-nowrap ${
-                  activeTab === "overview"
-                    ? "tab-active h-10 !text-white bg-neutral dark:bg-neutral dark:text-black"
-                    : ""
+                className={`tab h-10 flex-1 min-w-0 px-3 md:px-6 py-2 text-sm md:text-base whitespace-nowrap ${
+                  activeTab === "overview" ? "tab-active" : ""
                 }`}
                 onClick={() => setActiveTab("overview")}
               >
                 {t("StreamsOverview")}
               </button>
               <button
-                className={`tab flex-1 min-w-0 px-3 md:px-6 py-2 text-sm md:text-base whitespace-nowrap ${
-                  activeTab === "outgoing"
-                    ? "tab-active h-10 !text-white bg-neutral dark:bg-neutral dark:text-black"
-                    : ""
+                className={`tab h-10 flex-1 min-w-0 px-3 md:px-6 py-2 text-sm md:text-base whitespace-nowrap ${
+                  activeTab === "outgoing" ? "tab-active" : ""
                 }`}
                 onClick={() => setActiveTab("outgoing")}
               >
                 {t("StreamsOutgoingStreams")}
               </button>
               <button
-                className={`tab flex-1 min-w-0 px-3 md:px-6 py-2 text-sm md:text-base whitespace-nowrap ${
-                  activeTab === "incoming"
-                    ? "tab-active h-10 !text-white bg-neutral dark:bg-neutral dark:text-black"
-                    : ""
+                className={`tab h-10 flex-1 min-w-0 px-3 md:px-6 py-2 text-sm md:text-base whitespace-nowrap ${
+                  activeTab === "incoming" ? "tab-active" : ""
                 }`}
                 onClick={() => setActiveTab("incoming")}
               >
@@ -355,15 +349,13 @@ export default function StreamsPage() {
                 </div>
 
                 {/* Quick Actions - Full width on mobile */}
-                <div className="card bg-white dark:bg-base-100 shadow-lg">
+                <div className="card bg-base-100 shadow-lg">
                   <div className="card-body p-4 md:p-6">
                     <h3 className="card-title text-lg md:text-xl">{t("StreamsQuickActions")}</h3>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm md:text-base">
-                      {t("StreamsQuickActionsDescription")}
-                    </p>
+                    <p className="text-base-content/70 text-sm md:text-base">{t("StreamsQuickActionsDescription")}</p>
                     <div className="space-y-3 mt-4">
                       <button
-                        className="btn btn-primary text-white w-full justify-start dark:bg-neutral dark:text-primary dark:hover:text-white h-12 md:h-10 text-sm md:text-base"
+                        className="btn btn-primary w-full justify-start h-12 md:h-10 text-sm md:text-base"
                         onClick={handleOpenCreateStreamModal}
                       >
                         <Plus className="w-4 h-4 mr-2 flex-shrink-0" />
@@ -387,11 +379,9 @@ export default function StreamsPage() {
           {activeTab === "outgoing" && (
             <div className="space-y-4 md:space-y-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h2 className="text-xl md:text-2xl font-bold text-neutral dark:text-white">
-                  {t("StreamsOutgoingStreams")}
-                </h2>
+                <h2 className="text-xl md:text-2xl font-bold text-base-content">{t("StreamsOutgoingStreams")}</h2>
                 <button
-                  className="btn btn-primary text-white w-full sm:w-auto h-12 md:h-10 text-sm md:text-base"
+                  className="btn btn-primary w-full sm:w-auto h-12 md:h-10 text-sm md:text-base"
                   onClick={handleOpenCreateStreamModal}
                 >
                   <Plus className="w-4 h-4 mr-2 flex-shrink-0" />
@@ -399,14 +389,12 @@ export default function StreamsPage() {
                 </button>
               </div>
 
-              <div className="card bg-white dark:bg-base-100 shadow-lg">
+              <div className="card bg-base-100 shadow-lg">
                 <div className="card-body p-0">
                   {streamsLoading && (
                     <div className="p-4 md:p-6 text-center">
                       <div className="loading loading-spinner loading-lg"></div>
-                      <p className="mt-4 text-gray-600 dark:text-gray-300 text-sm md:text-base">
-                        Loading outgoing streams...
-                      </p>
+                      <p className="mt-4 text-base-content/70 text-sm md:text-base">Loading outgoing streams...</p>
                     </div>
                   )}
 
@@ -430,7 +418,7 @@ export default function StreamsPage() {
                   )}
 
                   {!streamsLoading && !streamsError && (
-                    <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                    <div className="divide-y divide-base-200">
                       {transformedStreams.length > 0 ? (
                         transformedStreams.map(stream => (
                           <div key={stream.id} className="p-4 md:p-6">
@@ -440,10 +428,10 @@ export default function StreamsPage() {
                                   <span className="badge badge-secondary text-xs">{stream.status}</span>
                                   <span className="font-medium text-sm md:text-base truncate">{stream.name}</span>
                                 </div>
-                                <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 break-all">
+                                <p className="text-xs md:text-sm text-base-content/70 break-all">
                                   To: {stream.to.slice(0, 6)}...{stream.to.slice(-4)}
                                 </p>
-                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs md:text-sm text-gray-500">
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs md:text-sm text-base-content/60">
                                   <span className="font-medium">
                                     {stream.flowRate.toFixed(6)} {t("StreamsXOCMonth")}
                                   </span>
@@ -473,12 +461,12 @@ export default function StreamsPage() {
                       ) : (
                         <div className="p-4 md:p-6 text-center">
                           <div className="space-y-4">
-                            <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto">
-                              <TrendingUp className="w-8 h-8 text-gray-400" />
+                            <div className="w-16 h-16 bg-base-200 rounded-full flex items-center justify-center mx-auto">
+                              <TrendingUp className="w-8 h-8 text-base-content/40" />
                             </div>
                             <div>
                               <h3 className="font-semibold text-lg md:text-xl">{t("StreamsNoOutgoingStreams")}</h3>
-                              <p className="text-gray-600 dark:text-gray-300 text-sm md:text-base">
+                              <p className="text-base-content/70 text-sm md:text-base">
                                 {address
                                   ? "You don't have any active outgoing streams yet."
                                   : "Connect your wallet to view your streams."}
@@ -503,19 +491,15 @@ export default function StreamsPage() {
           {activeTab === "incoming" && (
             <div className="space-y-4 md:space-y-6">
               <div className="flex justify-between items-center">
-                <h2 className="text-xl md:text-2xl font-bold text-neutral dark:text-white">
-                  {t("StreamsIncomingStreams")}
-                </h2>
+                <h2 className="text-xl md:text-2xl font-bold text-base-content">{t("StreamsIncomingStreams")}</h2>
               </div>
 
-              <div className="card bg-white dark:bg-base-100 shadow-lg">
+              <div className="card bg-base-100 shadow-lg">
                 <div className="card-body p-0">
                   {incomingStreamsLoading && (
                     <div className="p-4 md:p-6 text-center">
                       <div className="loading loading-spinner loading-lg"></div>
-                      <p className="mt-4 text-gray-600 dark:text-gray-300 text-sm md:text-base">
-                        Loading incoming streams...
-                      </p>
+                      <p className="mt-4 text-base-content/70 text-sm md:text-base">Loading incoming streams...</p>
                     </div>
                   )}
 
@@ -539,7 +523,7 @@ export default function StreamsPage() {
                   )}
 
                   {!incomingStreamsLoading && !incomingStreamsError && (
-                    <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                    <div className="divide-y divide-base-200">
                       {transformedIncomingStreams.length > 0 ? (
                         transformedIncomingStreams.map(stream => (
                           <div key={stream.id} className="p-4 md:p-6">
@@ -549,10 +533,10 @@ export default function StreamsPage() {
                                   <span className="badge badge-secondary text-xs">{stream.status}</span>
                                   <span className="font-medium text-sm md:text-base truncate">{stream.name}</span>
                                 </div>
-                                <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 break-all">
+                                <p className="text-xs md:text-sm text-base-content/70 break-all">
                                   From: {stream.to.slice(0, 6)}...{stream.to.slice(-4)}
                                 </p>
-                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs md:text-sm text-gray-500">
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs md:text-sm text-base-content/60">
                                   <span className="font-medium">
                                     {stream.flowRate.toFixed(6)} {t("StreamsXOCMonth")}
                                   </span>
@@ -563,7 +547,7 @@ export default function StreamsPage() {
                                 </div>
                               </div>
                               <div className="flex items-center gap-2 flex-shrink-0">
-                                <span className="text-xs md:text-sm text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                                <span className="text-xs md:text-sm text-base-content/60 bg-base-200 px-2 py-1 rounded">
                                   Incoming
                                 </span>
                               </div>
@@ -573,12 +557,12 @@ export default function StreamsPage() {
                       ) : (
                         <div className="p-4 md:p-6 text-center">
                           <div className="space-y-4">
-                            <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto">
-                              <TrendingUp className="w-8 h-8 text-gray-400" />
+                            <div className="w-16 h-16 bg-base-200 rounded-full flex items-center justify-center mx-auto">
+                              <TrendingUp className="w-8 h-8 text-base-content/40" />
                             </div>
                             <div>
                               <h3 className="font-semibold text-lg md:text-xl">{t("StreamsNoIncomingStreams")}</h3>
-                              <p className="text-gray-600 dark:text-gray-300 text-sm md:text-base">
+                              <p className="text-base-content/70 text-sm md:text-base">
                                 {address
                                   ? "You don't have any active incoming streams yet."
                                   : "Connect your wallet to view your streams."}
