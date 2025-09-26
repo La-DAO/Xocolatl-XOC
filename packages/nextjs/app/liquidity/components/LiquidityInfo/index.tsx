@@ -65,7 +65,7 @@ const LiquidityInfo: React.FC = () => {
   const formattedTokenB = tokenB !== null ? formatCurrency(tokenB, "MXN") : "-";
 
   return (
-    <div className="card shadow-xl bg-primary text-white dark:bg-neutral dark:text-primary w-full md:w-3/4 mx-auto">
+    <div className="card shadow-xl table-background w-full md:w-3/4 mx-auto">
       <div className="card-body">
         <div className="flex flex-col lg:flex-row items-center gap-6">
           {/* Image Section */}
@@ -77,13 +77,13 @@ const LiquidityInfo: React.FC = () => {
           <div className="flex-grow text-center lg:text-left">
             {/* Title and Description */}
             <div className="mb-6">
-              <h3 className="card-title text-2xl mb-2">
+              <h3 className="card-title text-2xl mb-2 text-primary">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
                 {t("XoktleTitle")}
               </h3>
-              <p className="text-white/80 dark:text-primary/80">{t("XoktleDescription")}</p>
+              <p className="subtitles-gray-color">{t("XoktleDescription")}</p>
             </div>
 
             {networkErrorMessage && (
@@ -104,7 +104,7 @@ const LiquidityInfo: React.FC = () => {
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="card bg-base-100 text-base-content shadow-sm">
+              <div className="card table-background text-base-content shadow-sm">
                 <div className="card-body p-4">
                   <h4 className="card-title text-sm mb-2">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,7 +117,7 @@ const LiquidityInfo: React.FC = () => {
                     </svg>
                     {t("XoktleTotalShares")}
                   </h4>
-                  <p className="text-2xl font-bold text-primary dark:text-white">
+                  <p className="text-2xl font-bold text-primary">
                     {formattedTotalReserves
                       ? formattedTotalReserves.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " Shares"
                       : lpTokenLoading
@@ -127,7 +127,7 @@ const LiquidityInfo: React.FC = () => {
                 </div>
               </div>
 
-              <div className="card bg-base-100 text-base-content shadow-sm">
+              <div className="card table-background text-base-content shadow-sm">
                 <div className="card-body p-4">
                   <h4 className="card-title text-sm mb-2">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -140,13 +140,11 @@ const LiquidityInfo: React.FC = () => {
                     </svg>
                     USDC Deposits
                   </h4>
-                  <p className="text-2xl font-bold text-primary dark:text-white">
-                    {lpTokenLoading ? "Loading..." : formattedTokenA}
-                  </p>
+                  <p className="text-2xl font-bold text-primary">{lpTokenLoading ? "Loading..." : formattedTokenA}</p>
                 </div>
               </div>
 
-              <div className="card bg-base-100 text-base-content shadow-sm">
+              <div className="card table-background text-base-content shadow-sm">
                 <div className="card-body p-4">
                   <h4 className="card-title text-sm mb-2">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,9 +157,7 @@ const LiquidityInfo: React.FC = () => {
                     </svg>
                     XOC Deposits
                   </h4>
-                  <p className="text-2xl font-bold text-primary dark:text-white">
-                    {lpTokenLoading ? "Loading..." : formattedTokenB}
-                  </p>
+                  <p className="text-2xl font-bold text-primary">{lpTokenLoading ? "Loading..." : formattedTokenB}</p>
                 </div>
               </div>
             </div>
