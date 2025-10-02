@@ -1,27 +1,44 @@
 "use client";
 
-import React from "react";
-import CDPInfo from "./components/CDPInfo";
-import { useMintingStore } from "@/stores/minting-store";
+import React, { Suspense } from "react";
+import dynamic from "next/dynamic";
 import { NextPage } from "next";
-import CDPStats from "~~/app/cdp/components/CDPStats";
-import Deposits from "~~/app/cdp/components/Deposits";
+
+// Lightweight skeletons for initial paint
+const SectionSkeleton: React.FC = () => <div className="animate-pulse rounded-lg bg-base-200 h-24" />;
+
+// Dynamically import heavy components to reduce initial JS
+const CDPStats = dynamic(() => import("~~/app/cdp/components/CDPStats"), {
+  ssr: false,
+  loading: () => <SectionSkeleton />,
+});
+
+const Deposits = dynamic(() => import("~~/app/cdp/components/Deposits"), {
+  ssr: false,
+  loading: () => <SectionSkeleton />,
+});
+
+const CDPInfo = dynamic(() => import("./components/CDPInfo"), {
+  ssr: false,
+  loading: () => <SectionSkeleton />,
+});
 
 // Dashboard component that shows the user's lending and borrowing data
 const CDP: NextPage = () => {
-  const totalMinted = useMintingStore(state => state.totalMinted);
-  const setTotalMinted = useMintingStore(state => state.setTotalMinted);
-  console.log("Total Minted:", totalMinted);
-  console.log("Set Total Minted:", setTotalMinted);
-
   return (
     <div className="flex flex-col">
-      <CDPStats />
+      <Suspense fallback={<SectionSkeleton />}>
+        <CDPStats />
+      </Suspense>
       <div className="grid gap-4 w-4/5 m-auto mt-4">
-        <Deposits />
+        <Suspense fallback={<SectionSkeleton />}>
+          <Deposits />
+        </Suspense>
       </div>
       <div>
-        <CDPInfo />
+        <Suspense fallback={<SectionSkeleton />}>
+          <CDPInfo />
+        </Suspense>
       </div>
     </div>
   );
